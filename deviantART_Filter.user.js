@@ -1,508 +1,211 @@
-// ==UserScript==
-// @name        deviantART Filter
+﻿// ==UserScript==
+// @name        deviantART Filter Beta
 // @author      Ryan Thaut
 // @description Allows automatic filtering of deviations from certain users and/or in certain categories.
 // @namespace   http://repo.ryanthaut.com/userscripts/deviantart_filter
-// @updateURL   http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter.user.js
-// @downloadURL http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter.user.js
+// @updateURL   http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter_Beta.user.js
+// @downloadURL http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter_Beta.user.js
 // @include     http://*deviantart.com/*
-// @version     1.5.1
+// @version     0.2
 // @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @require     http://code.jquery.com/jquery-latest.min.js
 // ==/UserScript==
 
-var hiddenUsers = JSON.parse(GM_getValue('hiddenUsers', '[]'));
-var hiddenCategories = JSON.parse(GM_getValue('hiddenCategories', '[]'));
+var deviantARTFilter = function() {
+    console.group('construct');
 
-var isProfile = false;
-var isBrowse = false;
+    console.log('complete');
+    console.groupEnd();
 
-$(document).ready(init);
+    return this;
+};
+deviantARTFilter.prototype = {
+    constructor: deviantARTFilter,
 
-function init() {
-    GM_addStyle(getCSS());
-    if ($('body').hasClass('gruze')) {
-        isProfile = true;
-        processProfilePage()
-    } else {
-        isBrowse = true;
-        insertManageFiltersButton();
-        processBrowsePage();
-    }
-}
+    getHiddenUsers: function() {
+        return JSON.parse(GM_getValue('hiddenUsers', '[]'))
+    },
 
-function processBrowsePage() {
-    $('.browse-container').unbind('DOMNodeInserted', processBrowsePage);
-    insertDeviationLinks();
-    hideAllFilteredDeviations();
-    $('.browse-container').bind('DOMNodeInserted', processBrowsePage);
-}
+    getHiddenCategories: function() {
+        return JSON.parse(GM_getValue('hiddenCategories', '[]'))
+    },
 
-function processProfilePage() {
-    var container = $('#gmi-Gruser');
-    var userID = container.attr('gmi-id');
-    var userName = container.attr('gmi-name');
+    addControls: function() {
+        console.group('deviantARTFilter.addControls()');
 
-    var blocked = false;
-    for (var i = 0; i < hiddenUsers.length; i++) {
-        if (typeof hiddenUsers[i].userid !== 'undefined' && hiddenUsers[i].userid !== null && hiddenUsers[i].userid === userID) {
-            blocked = true;
-            break;
-        } else if (typeof hiddenUsers[i].username !== 'undefined' && hiddenUsers[i].username !== null && hiddenUsers[i].username.toLowerCase() === userName.toLowerCase()) {
-            blocked = true;
-            break;
+        console.log('Adding overhead menu item.');
+
+        var link = $('<a/>')
+            .html('Manage Filters')
+            .addClass('oh-l')
+            .on('click', $.proxy(this.manage, this));
+
+        var cell = $('<td>')
+            .addClass('oh-hasbutton oh-hashover oh-keep')
+            .attr('id', 'oh-menu-filters')
+            .append(link);
+
+        $('#oh-menu-deviant', '#overhead').after(cell);
+
+        console.log('Overhead menu item added.');
+
+        /*
+        var results = $('#browse-results');
+        if (results.length == 1) {
+            console.log('Processing Browse page.');
+            var query_params = $('#browse-results').attr('gmon-query_params');
+            if (query_params.length) {
+                query_params = JSON.parse(query_params);
+                console.log('Browse query', query_params);
+                if (query_params.category_path.length) {
+                    console.log('Adding category toggle link.');
+                }
+            }
         }
-    }
+        */
 
-    if (blocked) {
-        container.addClass('user-hidden');
-    }
+        console.log('Complete');
+        console.groupEnd();
+    },
 
-    insertManageUserLink(blocked);
-}
+    insertBaseCSS: function() {
+        console.group('deviantARTFilter.insertBaseCSS()');
 
-function insertManageUserLink(blocked) {
-    var action = (blocked) ? 'Unhide' : 'Hide';
-    var filterLink = $('<a/>')
-        .css({
-            cursor: 'pointer'
-        })
-        .html('<i class="icon"></i><span>' + action + ' User\'s Deviations</span><b></b>')
-        .addClass('gmbutton2 gmbutton2qn2r user-toggle-button')
-        .on('click', toggleUser);
+        var css = '';
 
-    $('.moarbuttons', '.catbar').prepend(filterLink);
-}
+        css += '#overhead #oh-menu-filters { background: #46584A; border-bottom: 1px solid #38463B; }';
+        css += '#overhead #oh-menu-filters a.oh-l { cursor: pointer; height: 49px; line-height: 50px; padding: 0 6px; }';
 
-function insertManageFiltersButton() {
-    var manageLink = $('<a/>')
-        .html('Manage Filters')
-        .addClass('browse-link-button manage-filters-trigger')
-        .on('click', manageFilters);
+        css += 'a.hide-user { cursor: pointer; position: absolute; height: 25px; line-height: 25px; width: 100%; left: 0px; top: 0px; z-index: 1; color: #FFFFFF; text-align: left; text-indent: -9999px; }';
+        css += '.tt-a:hover a.hide-user span { position: absolute; background: url("http://st.deviantart.net/minish/messages/close-message.gif") repeat 30px 0; height: 15px; width: 15px; right: 5px; top: 5px; }';
+        css += 'a.hide-user:hover { background: #A51818; text-indent: 10px; }';
 
-    $('.right-buttons', '.browse-top-bar').prepend(manageLink);
-    $('.right-buttons', '.browse-top-bar').css('max-width', $('.right-buttons', '.browse-top-bar').width() + manageLink.width());
-}
+        css += '.manage-filters-settings { padding: 1em; }';
+        css += '.manage-filters-settings label { line-height: 1.5em; vertical-align: top; }';
+        css += '.manage-filters-settings label small { color: #3B5A4A; }';
 
-function hideAllFilteredDeviations() {
-    for (var i = 0; i < hiddenUsers.length; i++) {
-        // legacy support from prior to storing users as objects
-        if (typeof hiddenUsers[i] !== 'object') {
-            hiddenUsers[i] = {
-                userid: hiddenUsers[i]
-            };
-        }
+        css += '.manage-filters-tabs { display: block; padding: 0.6em 0; }';
+        css += '.manage-filters-tab { background: #DDE6DA; border: 1px solid #92A399; border-radius: 5px 5px 0 0; cursor: pointer; font: 1.333em Trebuchet MS, sans-serif; margin-right: 0.5em; padding: 0.45em 1em; }';
+        css += '.manage-filters-tab:hover { text-decoration: none; }';
+        css += '.manage-filters-tab.active { background: #E9F0E6; border-bottom: 1px solid #E9F0E6; font-weight: bold; }';
 
-        hideDeviationsByUser(hiddenUsers[i].userid, hiddenUsers[i].username);
-    }
+        css += '.manage-filters-tab-content { background: #E9F0E6; border: 1px solid #92A399; margin-bottom: 1em; padding: 0.5em; }';
+        css += '.manage-filters-tab-content.hidden { display: none; }';
 
-    for (var i = 0; i < hiddenCategories.length; i++) {
-        hideDeviationsByCategory(hiddenCategories[i].longname);
-    }
+        css += '.manage-filters-table { border-collapse: collapse; margin: 0 auto; width: 100%; }';
+        css += '.manage-filters-table tr { border-bottom: 1px solid rgba(0, 0, 0, 0.15); }';
+        css += '.manage-filters-table tr:nth-child(2n) { background-color: rgba(255, 255, 255, 0.35); }';
+        css += '.manage-filters-table td { padding: 4px; text-align: left; }';
+        css += '.manage-filters-table th { border-bottom: 1px solid #8C9A88; padding: 4px; text-align: left; }';
 
-    if (!GM_getValue('placeholders', true)) {
-        $('body').addClass('no-placeholders');
-    }
-}
+        css += '.manage-filters-table input { background: transparent; border: 1px solid #92A399; box-shadow: inset 2px 2px 3px 0 rgba(0, 0, 0, 0.1); color: #3B5A4A; padding: 0.2em; width: 75%; }';
+        css += '.manage-filters-table input:focus { background: #FFFFFF; }';
+        css += '.manage-filters-table button { margin: 0; padding: 0.2em; }';
 
-function insertDeviationLinks() {
-    $('.browse-container .tt-a[processed!="yes"]').each(function() {
-        var userID = $(this).attr('userid');
-        var userName = $(this).attr('userName');
-        var categoryName = $(this).attr('category');
+        GM_addStyle(css);
 
-        if (!(userID === null && userName === null)) {
-            var toggleUserLink = $('<a/>')
-                .addClass('user-toggle')
-                .attr('href', 'http://' + userName + '.deviantart.com/')
-                .html('<span class="user-toggle-text">Hide User\'s Deviations</span>')
-                .on('click', toggleUser);
+        console.log('Complete');
+        console.groupEnd();
+    },
 
-            $(this).find('.details').append(toggleUserLink);
+    insertHiddenUsersCSS: function(users) {
+        console.group('deviantARTFilter.insertHiddenUsersCSS()');
+
+        console.log("Hiding user(s):", users);
+
+        if (GM_getValue('placeholders', true)) {
+            $('body').addClass('placeholders');
+        } else {
+            $('body').addClass('no-placeholders');
         }
 
-        $(this).find('.details').append($('<br/>'));
+        var css1 = '',  // no placeholders
+            css2 = '';  // placeholders
 
-        if (categoryName !== null) {
-            var toggleCategoryLink = $('<a/>')
-                .addClass('category-toggle')
-                .attr('href', 'http://www.deviantart.com/browse/all/' + categoryName)
-                .html('<span class="category-toggle-text">Hide Category\'s Deviations</span>')
-                .on('click', toggleCategory);
+        for (var i = 0; i < users.length; i++) {
+            if (typeof users[i].userid !== 'undefined' && users[i].userid !== null) {
+                css1 += 'body.no-placeholders *[userid="' + users[i].userid + '"], ';
+                css2 += 'body.placeholders *[userid="' + users[i].userid + '"] a.thumb:before, ';
+            }
 
-            $(this).find('.details').append(toggleCategoryLink);
+            if (typeof users[i].username !== 'undefined' && users[i].username !== null) {
+                css1 += 'body.no-placeholders *[username="' + users[i].username + '"], ';
+                css2 += 'body.placeholders *[username="' + users[i].username + '"] a.thumb:before, ';
+            }
         }
 
-        $(this).attr('processed', 'yes');
-    });
-}
-
-function toggleUser(e) {
-    e.preventDefault();
-    var container, userID, userName;
-    if (isProfile) {
-        container = $(this).parents('div#gmi-Gruser');
-        userID = container.attr('gmi-id');
-        userName = container.attr('gmi-name');
-    } else if (isBrowse) {
-        container = $(this).parents('div.tt-a');
-        userID = container.attr('userid');
-        userName = container.attr('username');
-    }
-
-    if (container.hasClass('user-hidden')) {
-        showUser(userID, userName);
-    } else {
-        hideUser(userID, userName);
-    }
-}
-
-function toggleCategory(e) {
-    e.preventDefault();
-    var container = $(this).parents('div.tt-a');
-    var category = container.attr('category');
-
-    if (container.hasClass('category-hidden')) {
-        showCategory(category);
-    } else {
-        hideCategory(category);
-    }
-}
-
-function isUserHidden(userID, userName) {
-    userID = (typeof userID === 'undefined') ? null : userID;
-    userName = (typeof userName === 'undefined') ? null : userName;
-    if ((userID === null || userID === '') && (userName === null || userName === ''))
-        return false;
-
-    for (var i = 0; i < hiddenUsers.length; i++) {
-        if (typeof hiddenUsers[i].userid !== 'undefined' && hiddenUsers[i].userid !== null && hiddenUsers[i].userid === userID) {
-            return true;
-        } else if (typeof hiddenUsers[i].username !== 'undefined' && hiddenUsers[i].username !== null && hiddenUsers[i].username.toLowerCase() === userName.toLowerCase()) {
-            return true;
+        if (css1.length > 0) {
+            // no placeholders
+            css1 = css1.replace(/, $/, '');
+            css1 += ' { display: none !important; }';
         }
-    }
 
-    return false;
-}
-
-function isCategoryHidden(category) {
-    category = (typeof category === 'undefined') ? null : category;
-    if (category === null || category === '')
-        return false;
-
-    for (var i = 0; i < hiddenCategories.length; i++) {
-        if (typeof hiddenCategories[i].longname !== 'undefined' && hiddenCategories[i].longname !== null && hiddenCategories[i].longname.toLowerCase() === category.toLowerCase()) {
-            return true;
+        if (css2.length > 0) {
+            // placeholders
+            css2 = css2.replace(/, $/, '');
+            css2 += ' { position: absolute; left: 0; top: 0; height: 100%; width: 100%; content: " "; background: #DDE6DA url("http://st.deviantart.net/misc/noentry-green.png") no-repeat center center; display: block; }';
         }
-    }
 
-    return false;
-}
+        GM_addStyle(css1 + "\n" + css2);
 
-function getDeviationsByUser(userID, userName) {
-    userID = (typeof userID === 'undefined') ? null : userID;
-    userName = (typeof userName === 'undefined') ? null : userName;
-    if ((userID === null || userID === '') && (userName === null || userName === ''))
-        return false;
+        console.log('Complete');
+        console.groupEnd();
+    },
 
-    if (isBrowse) {
-        if (userID !== null) {
-            return $('.browse-container').find('div.tt-a').filter(function() { return $(this).attr('userid') === userID; });
-        } else if (userName !== null) {
-            return $('.browse-container').find('div.tt-a').filter(function() { return $(this).attr('username').toLowerCase() === userName.toLowerCase(); });
-        }
-    } else if (isProfile) {
-        if (userID !== null) {
-            return $('#output').find('div#gmi-Gruser').filter(function() { return $(this).attr('gmi-id') === userID; });
-        } else if (userName !== null) {
-            return $('#output').find('div#gmi-Gruser').filter(function() { return $(this).attr('gmi-name').toLowerCase() === userName.toLowerCase(); });
-        }
-    }
-}
+    addEventSubsribers: function() {
+        console.group('deviantARTFilter.addEventSubsribers()');
 
-function getDeviationsByCategory(category) {
-    category = (typeof category === 'undefined') ? null : category;
-    if (category === null || category === '')
-        return false;
-
-    if (isBrowse) {
-        return $('.browse-container').find('div.tt-a').filter(function() { return $(this).attr('category').toLowerCase() === category.toLowerCase(); });
-    }
-}
-
-function manuallyHideUser() {
-    var userName = $('#manage-users-table input#username').val();
-    if (userName === '' || userName.length === 0)
-        userName = null;
-
-    var userID = $('#manage-users-table input#userid').val();
-    if (userID === '' || userID.length === 0)
-        userID = null;
-
-    hideUser(userID, userName);
-    $('#manage-users-table').remove();
-
-    var usersTable = buildFilteredUsersTable();
-    $('#manage-users-tab-content').append(usersTable);
-}
-
-function hideUser(userID, userName) {
-    userID = (typeof userID === 'undefined') ? null : userID;
-    userName = (typeof userName === 'undefined') ? null : userName;
-    if ((userID === null || userID === '') && (userName === null || userName === ''))
-        return false;
-
-    if (isUserHidden(userID, userName))
-        return false;
-
-    hiddenUsers.push({
-        userid:     userID,
-        username:   userName
-    });
-
-    GM_setValue('hiddenUsers', JSON.stringify(hiddenUsers));
-
-    return hideDeviationsByUser(userID, userName);
-}
-
-function showUser(userID, userName) {
-    userID = (typeof userID === 'undefined') ? null : userID;
-    userName = (typeof userName === 'undefined') ? null : userName;
-    if ((userID === null || userID === '') && (userName === null || userName === ''))
-        return false;
-
-    for (var i = 0; i < hiddenUsers.length; i++) {
-        if (userID !== null && hiddenUsers[i].userid === userID) {
-            hiddenUsers.splice(i, 1);
-        } else if (userName !== null || hiddenUsers[i].username.toLowerCase() === userName.toLowerCase()) {
-            hiddenUsers.splice(i, 1);
-        }
-    }
-
-    GM_setValue('hiddenUsers', JSON.stringify(hiddenUsers));
-
-    return showDeviationsByUser(userID, userName);
-}
-
-function hideDeviationsByUser(userID, userName) {
-    userID = (typeof userID === 'undefined') ? null : userID;
-    userName = (typeof userName === 'undefined') ? null : userName;
-    if ((userID === null || userID === '') && (userName === null || userName === ''))
-        return false;
-
-    var deviations = getDeviationsByUser(userID, userName);
-
-    if (isBrowse) {
-        deviations.addClass('user-hidden').find('span.user-toggle-text').html('Show User\'s Deviations');
-    } else if (isProfile) {
-        container.addClass('user-hidden').find('a.user-toggle-button > span').html('Show User\'s Deviations');
-    }
-
-    return true;
-}
-
-function showDeviationsByUser(userID, userName) {
-    userID = (typeof userID === 'undefined') ? null : userID;
-    userName = (typeof userName === 'undefined') ? null : userName;
-    if ((userID === null || userID === '') && (userName === null || userName === ''))
-        return false;
-
-    var deviations = getDeviationsByUser(userID, userName);
-
-    if (isBrowse) {
-        deviations.removeClass('user-hidden').find('span.user-toggle-text').html('Hide User\'s Deviations');
-    } else if (isProfile) {
-        container.removeClass('user-hidden').find('a.user-toggle-button > span').html('Hide User\'s Deviations');
-    }
-
-    return true;
-}
-
-function hideCategory(category) {
-    category = (typeof category === 'undefined') ? null : category;
-    if (category === null || category === '')
-        return false;
-
-    if (isCategoryHidden(category))
-        return false;
-
-    hiddenCategories.push({
-        longname: category
-    });
-
-    GM_setValue('hiddenCategories', JSON.stringify(hiddenCategories));
-
-    return hideDeviationsByCategory(category);
-}
-
-function showCategory(category) {
-    category = (typeof category === 'undefined') ? null : category;
-    if (category === null || category === '')
-        return false;
-
-    for (var i = 0; i < hiddenCategories.length; i++) {
-        if (hiddenCategories[i].longname.toLowerCase() === category.toLowerCase()) {
-            hiddenCategories.splice(i, 1);
-        }
-    }
-
-    GM_setValue('hiddenCategories', JSON.stringify(hiddenCategories));
-
-    return showDeviationsByCategory(category);
-}
-
-function hideDeviationsByCategory(category) {
-    category = (typeof category === 'undefined') ? null : category;
-    if (category === null || category === '')
-        return false;
-
-    var deviations = getDeviationsByCategory(category);
-    deviations.addClass('category-hidden').find('span.category-toggle-text').html('Show Category\'s Deviations');
-
-    return true;
-}
-
-function showDeviationsByCategory(category) {
-    category = (typeof category === 'undefined') ? null : category;
-    if (category === null || category === '')
-        return false;
-
-    var deviations = getDeviationsByCategory(category);
-    deviations.removeClass('category-hidden').find('span.category-toggle-text').html('Hide Category\'s Deviations');
-
-    return true;
-}
-
-function manageFilters() {
-    var form = $('<form/>')
-        .addClass('manage-filters-settings');
-
-    var fieldset = $('<fieldset/>')
-        .appendTo(form);
-
-    var legend = $('<legend/>')
-        .html('Settings')
-        .appendTo(fieldset);
-
-    var input = $('<input/>')
-        .attr('type', 'checkbox')
-        .attr('id', 'placeholders')
-        .attr('name', 'placeholders')
-        .attr('checked', GM_getValue('placeholders', true))
-        .on('change', function() {
-            GM_setValue('placeholders', !GM_getValue('placeholders', true));
-            $('body').toggleClass('no-placeholders');
-        })
-        .appendTo(fieldset);
-
-    var label = $('<label/>')
-        .attr('for', input.attr('id'))
-        .html(' Use placeholders for hidden deviations')
-        .append('<br/><small>(Disabling this will hide deviations completely)</small>')
-        .insertAfter(input);
-
-    var toggleUsersTable = $('<a/>')
-        .addClass('manage-filters-tab')
-        .addClass('active')
-        .html('Filtered Users')
-        .on('click', function() {
-            $(this).addClass('active')
-            $(this).siblings('a.manage-filters-tab').removeClass('active')
-            $('#manage-users-tab-content').removeClass('hidden');
-            $('#manage-categories-tab-content').addClass('hidden');
+        $('#browse-results').on('mouseover', 'div.tt-a', function() {
+            var thumb = $(this);
+            var control = $('a.hide-user', thumb);
+            if (!control.length) {
+                control = $('<a/>').addClass('hide-user').html('Hide User<span></span>');
+                control.attr('userid', thumb.attr('userid'));
+                control.attr('username', thumb.attr('username'));
+                thumb.find('a.thumb').before(control);
+            }
         });
 
-    var toggleCategoriesTable = $('<a/>')
-        .addClass('manage-filters-tab')
-        .html('Filtered Categories')
-        .on('click', function() {
-            $(this).addClass('active')
-            $(this).siblings('a.manage-filters-tab').removeClass('active')
-            $('#manage-users-tab-content').addClass('hidden');
-            $('#manage-categories-tab-content').removeClass('hidden');
-        });
+        $('#browse-results').on('click', 'a.hide-user', $.proxy(this.hideUserDeviationClickHandler, this));
 
-    var tabs = $('<div>')
-        .addClass('manage-filters-tabs')
-        .append(toggleUsersTable)
-        .append(toggleCategoriesTable);
+        console.log('Complete');
+        console.groupEnd();
+    },
 
-    var usersTabContent = $('<div/>')
-        .addClass('manage-filters-tab-content')
-        .attr('id', 'manage-users-tab-content');
+    hideUserButtonClickHandler: function(event) {
+        console.group('deviantARTFilter.hideUserButtonClickHandler()');
 
-    var categoriesTabContent = $('<div/>')
-        .addClass('manage-filters-tab-content')
-        .attr('id', 'manage-categories-tab-content')
-        .addClass('hidden');
+        var userid = $('input#userid').val();
+        var username = $('input#username').val();
 
-    var usersTable = buildFilteredUsersTable()
-        .appendTo(usersTabContent);
+        if (userid === '' && username === '')
+        {
+            alert('You must provide either a Username or User ID.');
+            return false;
+        }
 
-    var categoriesTable = buildFilteredCategoriesTable()
-        .appendTo(categoriesTabContent);
+        var user = new User(userid, username);
 
-//$('<pre/>').append(JSON.stringify(hiddenUsers, null, 4)).appendTo(usersTabContent);
-//$('<pre/>').append(JSON.stringify(hiddenCategories, null, 4)).appendTo(categoriesTabContent);
+        this.hideUser(user);
 
-    var content = $('<div/>')
-        .append(form)
-        .append(tabs)
-        .append(usersTabContent)
-        .append(categoriesTabContent)
-        .daModal({title: 'Manage deviantArt Filters', width: '50%', height: '75%', footnote: '"<a href="http://fav.me/d6uocct">deviantART Filter</a>" script by <a href="http://rthaut.deviantart.com/">rthaut</a>, <a href="http://lassekongo83.deviantart.com/journal/DeviantCrap-Filter-410429292">idea</a> from <a href="http://lassekongo83.deviantart.com/">lassekongo83</a>'});
-}
+        console.log("Inserting newly hidden user into table");
 
-function buildFilteredUsersTable() {
-    var usersTable = $('<table/>')
-        .addClass('manage-filters-table')
-        .attr('id', 'manage-users-table')
-        .append('<tr><th>Username</th><th>User ID</th><th>Action</th></tr>');
-
-    var userRow = $('<tr/>');
-
-    var userNameField = $('<input/>')
-        .attr('id', 'username')
-        .attr('name', 'username')
-        .attr('placeholder', 'Username (Optional)')
-        .attr('type', 'text')
-        .wrap('<td/>').parent()
-        .appendTo(userRow);
-
-    var userIDField = $('<input/>')
-        .attr('id', 'userid')
-        .attr('name', 'userid')
-        .attr('placeholder', 'User ID (Optional)')
-        .attr('type', 'text')
-        .wrap('<td/>').parent()
-        .appendTo(userRow);
-
-    var hideUserButton = $('<button/>')
-        .addClass('smbutton smbutton-red smbutton-shadow')
-        .attr('id', 'hide-user-button')
-        .html('Hide User')
-        .on('click', manuallyHideUser)
-        .wrap('<td/>').parent()
-        .appendTo(userRow);
-
-    usersTable.append(userRow);
-
-    for (var i = 0; i < hiddenUsers.length; i++) {
-        userRow = $('<tr/>');
+        // @TODO maybe just destroy the table and rebuild it?
+        // Or break out the for loop logic in buildFilteredUsersTable() to prevent code duplication
+        var userRow = $('<tr/>');
 
         // username column/link
-        if (typeof hiddenUsers[i].username !== 'undefined' && hiddenUsers[i].username !== null) {
-            userRow.append('<td><a class="external" href="http://' + hiddenUsers[i].username + '.deviantart.com/" target="_blank">' + hiddenUsers[i].username + '</a></td>');
+        if (username !== null) {
+            userRow.append('<td><a class="external" href="http://' + username + '.deviantart.com/" target="_blank">' + username + '</a></td>');
         } else {
             userRow.append('<td>---</td>');
         }
 
         // userid column
-        if (typeof hiddenUsers[i].userid !== 'undefined' && hiddenUsers[i].userid !== null) {
-            userRow.append('<td>' + hiddenUsers[i].userid + '</td>');
+        if (userid !== null) {
+            userRow.append('<td>' + userid + '</td>');
         } else {
             userRow.append('<td>---</td>');
         }
@@ -510,101 +213,470 @@ function buildFilteredUsersTable() {
         // unhide user column/link
         var unhideUserLink = $('<button/>')
             .addClass('smbutton smbutton-green smbutton-shadow')
-            .attr('userid', hiddenUsers[i].userid)
-            .attr('username', hiddenUsers[i].username)
+            .attr('userid', userid)
+            .attr('username', username)
             .html('Unhide User')
             .on('click', function() {
-                showUser($(this).attr('userid'), $(this).attr('username'));
+                //unhideUser($(this).attr('userid'), $(this).attr('username'));
                 $(this).parents('tr').hide().remove();
             })
             .wrap('<td/>').parent()
             .appendTo(userRow);
 
-        usersTable.append(userRow);
-    }
+        $('table#manage-users-table').append(userRow);
 
-    return usersTable;
-}
+        console.log('Complete');
+        console.groupEnd();
+    },
 
-function buildFilteredCategoriesTable() {
-    var categoriesTable = $('<table/>')
-        .addClass('manage-filters-table')
-        .attr('id', 'manage-categories-table')
-        .append('<tr><th>Category Name</th><th>Action</th></tr>');
+    unhideUserButtonClickHandler: function(event) {
+        console.group('deviantARTFilter.unhideUserButtonClickHandler()');
 
-    var categoryRow;
+        var target = $(event.target);
+        var user = new User(target.attr('userid'), target.attr('username'));
 
-    for (var i = 0; i < hiddenCategories.length; i++) {
-        categoryRow = $('<tr/>')
+        console.log('Created new User object', user);
 
-        // category name column/link
-        categoryRow.append('<td><a class="external" href="http://www.deviantart.com/browse/all/' + hiddenCategories[i].longname + '" target="_blank">' + hiddenCategories[i].longname + '</a></td>');
+        this.unhideUser(user);
 
-        // unhide category column/link
-        var unhideCategoryLink = $('<button/>')
-            .addClass('smbutton smbutton-green smbutton-shadow')
-            .attr('category', hiddenCategories[i].longname)
-            .html('Unhide Category')
-            .on('click', function() {
-                showCategory($(this).attr('category'));
-                $(this).parents('tr').hide().remove();
+        console.log("Removing newly unhidden user from table");
+
+        // @TODO maybe just destroy the table and rebuild it?
+        target.parents('tr').remove();
+
+        console.log('Complete');
+        console.groupEnd();
+    },
+
+    hideUserDeviationClickHandler: function(event) {
+        console.group('deviantARTFilter.hideUserDeviationClickHandler()');
+
+        var target = $(event.target);
+        var user = new User(target.attr('userid'), target.attr('username'));
+
+        console.log('Created new User object', user);
+
+        this.hideUser(user);
+
+        console.log('Complete');
+        console.groupEnd();
+    },
+
+    hideUser: function(user) {
+        console.group('deviantARTFilter.hideUser()');
+
+        if (user.isHidden) {
+            alert('This user ("' + user.username + '") is already hidden.');
+        } else {
+            if (user.hide()) {
+                this.insertHiddenUsersCSS([user]);
+            }
+        }
+
+        console.log('Complete');
+        console.groupEnd();
+    },
+
+    unhideUser: function(user) {
+        console.group('deviantARTFilter.unhideUser()');
+
+        if (user.unhide()) {
+            alert('Changes will take effect on next page load/refresh');
+            //this.removeHiddenUsersCSS([user]);
+        }
+
+        console.log('Complete');
+        console.groupEnd();
+    },
+
+    manage: function(event) {
+        console.group('deviantARTFilter.manage()');
+
+        var tabs = $('<div>')
+            .addClass('manage-filters-tabs');
+
+        var usersTab = $('<a/>')
+            .addClass('manage-filters-tab')
+            .addClass('active')
+            .attr('data-tab', 'manage-users-tab-content')
+            .html('Filtered Users')
+            .appendTo(tabs);
+
+        var categoriesTab = $('<a/>')
+            .addClass('manage-filters-tab')
+            .attr('data-tab', 'manage-categories-tab-content')
+            .html('Filtered Categories')
+            .appendTo(tabs);
+
+        var settingsTab = $('<a/>')
+            .addClass('manage-filters-tab')
+            .attr('data-tab', 'manage-settings-tab-content')
+            .html('Settings')
+            .appendTo(tabs);
+
+        var usersContent = $('<div/>')
+            .addClass('manage-filters-tab-content')
+            .attr('id', 'manage-users-tab-content');
+
+        var usersTable = this.buildFilteredUsersTable()
+            .appendTo(usersContent);
+
+        var categoriesContent = $('<div/>')
+            .addClass('manage-filters-tab-content')
+            .attr('id', 'manage-categories-tab-content')
+            .addClass('hidden');
+
+        var categoriesTable = this.buildFilteredCategoriesTable()
+            .appendTo(categoriesContent);
+
+        var settingsContent = $('<div/>')
+            .addClass('manage-filters-tab-content')
+            .attr('id', 'manage-settings-tab-content')
+            .addClass('hidden');
+
+        var settingsForm = $('<form/>')
+            .addClass('manage-filters-settings').
+            appendTo(settingsContent);
+
+        var placeholdersInput = $('<input/>')
+            .attr('type', 'checkbox')
+            .attr('id', 'placeholders')
+            .attr('name', 'placeholders')
+            .attr('checked', GM_getValue('placeholders', true))
+            .on('change', function() {
+                GM_setValue('placeholders', !GM_getValue('placeholders', true));
+                $('body').toggleClass('no-placeholders');
+                $('body').toggleClass('placeholders');
             })
+            .appendTo(settingsForm);
+
+        var placeholdersLabel = $('<label/>')
+            .attr('for', 'placeholders')
+            .html(' Use placeholders for hidden deviations')
+            .append('<br/><small>(Disabling this will hide deviations completely)</small>')
+            .insertAfter(placeholdersInput);
+
+        var content = $('<div/>')
+            .append(tabs)
+            .append(usersContent)
+            .append(categoriesContent)
+            .append(settingsContent)
+            .daModal({title: 'Manage deviantArt Filters', width: '50%', height: '75%', footnote: '"<a href="http://fav.me/d6uocct">deviantART Filter</a>" script by <a href="http://rthaut.deviantart.com/">rthaut</a>, <a href="http://lassekongo83.deviantart.com/journal/DeviantCrap-Filter-410429292">idea</a> from <a href="http://lassekongo83.deviantart.com/">lassekongo83</a>'});
+
+        $('a.manage-filters-tab').on('click', function() {
+            var tab = $(this).attr('data-tab');
+            $('a.manage-filters-tab').removeClass('active');
+            $('div.manage-filters-tab-content').addClass('hidden');
+            $(this).addClass('active');
+            $('#' + tab).removeClass('hidden');
+        });
+
+        console.log('Complete');
+        console.groupEnd();
+    },
+
+    setup: function() {
+        console.group('deviantARTFilter.setup()');
+
+        this.insertHiddenUsersCSS(this.getHiddenUsers());
+        this.addControls();
+        this.insertBaseCSS();
+        this.addEventSubsribers();
+
+        console.log('Complete');
+        console.groupEnd();
+    },
+
+    buildFilteredUsersTable: function() {
+        console.group('deviantARTFilter.buildFilteredUsersTable()');
+        var users = this.getHiddenUsers();
+        console.log('Building table for users:', users);
+
+        var usersTable = $('<table/>')
+            .addClass('manage-filters-table')
+            .attr('id', 'manage-users-table')
+            .append('<tr><th>Username</th><th>User ID</th><th>Action</th></tr>');
+
+        var userRow = $('<tr/>');
+
+        var userNameField = $('<input/>')
+            .attr('id', 'username')
+            .attr('name', 'username')
+            .attr('placeholder', 'Username (Optional)')
+            .attr('type', 'text')
             .wrap('<td/>').parent()
-            .appendTo(categoryRow);
+            .appendTo(userRow);
 
-        categoriesTable.append(categoryRow);
+        var userIDField = $('<input/>')
+            .attr('id', 'userid')
+            .attr('name', 'userid')
+            .attr('placeholder', 'User ID (Optional)')
+            .attr('type', 'text')
+            .wrap('<td/>').parent()
+            .appendTo(userRow);
+
+        var hideUserButton = $('<button/>')
+            .addClass('smbutton smbutton-red smbutton-shadow')
+            .attr('id', 'hide-user-button')
+            .html('Hide User')
+            .on('click', $.proxy(this.hideUserButtonClickHandler, this))
+            .wrap('<td/>').parent()
+            .appendTo(userRow);
+
+        usersTable.append(userRow);
+
+        for (var i = 0; i < users.length; i++) {
+            userRow = $('<tr/>');
+
+            // username column/link
+            if (typeof users[i].username !== 'undefined' && users[i].username !== null) {
+                userRow.append('<td><a class="external" href="http://' + users[i].username + '.deviantart.com/" target="_blank">' + users[i].username + '</a></td>');
+            } else {
+                userRow.append('<td>---</td>');
+            }
+
+            // userid column
+            if (typeof users[i].userid !== 'undefined' && users[i].userid !== null) {
+                userRow.append('<td>' + users[i].userid + '</td>');
+            } else {
+                userRow.append('<td>---</td>');
+            }
+
+            // unhide user column/link
+            var unhideUserLink = $('<button/>')
+                .addClass('smbutton smbutton-green smbutton-shadow')
+                .attr('userid', users[i].userid)
+                .attr('username', users[i].username)
+                .html('Unhide User')
+                .on('click', $.proxy(this.unhideUserButtonClickHandler, this))
+                .wrap('<td/>').parent()
+                .appendTo(userRow);
+
+            usersTable.append(userRow);
+        }
+
+        console.log('Complete');
+        console.groupEnd();
+
+        return usersTable;
+    },
+
+    buildFilteredCategoriesTable: function() {
+        console.group('deviantARTFilter.buildFilteredCategoriesTable()');
+        var categories = this.getHiddenCategories();
+        console.log('Building table for categories:', categories);
+
+        var categoriesTable = $('<table/>')
+            .addClass('manage-filters-table')
+            .attr('id', 'manage-categories-table')
+            .append('<tr><th>Category Name</th><th>Action</th></tr>');
+
+        var categoryRow;
+
+        for (var i = 0; i < categories.length; i++) {
+            categoryRow = $('<tr/>')
+
+            // category name column/link
+            categoryRow.append('<td><a class="external" href="http://www.deviantart.com/browse/all/' + categories[i].longname + '" target="_blank">' + categories[i].longname + '</a></td>');
+
+            // unhide category column/link
+            var unhideCategoryLink = $('<button/>')
+                .addClass('smbutton smbutton-green smbutton-shadow')
+                .attr('category', categories[i].longname)
+                .html('Unhide Category')
+                .on('click', function() {
+                    //showCategory($(this).attr('category'));
+                    $(this).parents('tr').hide().remove();
+                })
+                .wrap('<td/>').parent()
+                .appendTo(categoryRow);
+
+            categoriesTable.append(categoryRow);
+        }
+
+        console.log('Complete');
+        console.groupEnd();
+
+        return categoriesTable;
     }
+};
 
-    return categoriesTable;
-}
+/**
+ * Base object for filterable deviantART objects
+ */
+var filterObject = function() {
+    this.hiddenListName = '';
+    this.objectName = 'filterObject';
+    this.properties = [];
+};
+filterObject.prototype = {
+    constructor: filterObject,
 
-function getCSS() {
-    var css = '';
+    /**
+     * Determines if the filterObject is currently hidden
+     *
+     * @return bool If the filterObject is currently hidden
+     */
+    isHidden: function() {
+        console.group(this.objectName + '.isHidden()');
 
-    css += '.manage-filters-trigger { cursor: pointer; text-align: center; position: absolute; left: 150px; top: 2px; }';
+        var hidden = JSON.parse(GM_getValue(this.hiddenListName, '[]'));
+        var idx = this.findInArray(hidden);
+        var isHidden = (idx >= 0);
 
-    css += '.manage-filters-settings { margin-bottom: 1em !important; }';
-    css += '.manage-filters-settings fieldset { border: 1px solid #8C9A88; }';
-    css += '.manage-filters-settings legend { font: bold 1.333em Trebuchet MS, sans-serif; padding: 0 6px; }';
-    css += '.manage-filters-settings label { line-height: 1.5em; vertical-align: top; }';
-    css += '.manage-filters-settings label small { color: #3B5A4A; }';
+        if (isHidden) {
+            console.log(this.objectName + ' is hidden.');
+        } else {
+            console.log(this.objectName + ' is NOT hidden.');
+        }
 
-    css += '.manage-filters-tabs { display: block; padding: 0.6em 0; }';
-    css += '.manage-filters-tab { background: #DDE6DA; border: 1px solid #92A399; border-radius: 5px 5px 0 0; cursor: pointer; font: 1.333em Trebuchet MS, sans-serif; margin-right: 0.5em; padding: 0.45em 1em; }';
-    css += '.manage-filters-tab:hover { text-decoration: none; }';
-    css += '.manage-filters-tab.active { background: #E9F0E6; border-bottom: 1px solid #E9F0E6; font-weight: bold; }';
+        console.log('Complete');
+        console.groupEnd();
 
-    css += '.manage-filters-tab-content { background: #E9F0E6; border: 1px solid #92A399; margin-bottom: 1em; padding: 0.5em; }';
-    css += '.manage-filters-tab-content.hidden { display: none; }';
+        return isHidden;
+    },
 
-    css += '.manage-filters-table { border-collapse: collapse; margin: 0 auto; width: 100%; }';
-    css += '.manage-filters-table tr { border-bottom: 1px solid rgba(0, 0, 0, 0.15); }';
-    css += '.manage-filters-table tr:nth-child(2n) { background-color: rgba(255, 255, 255, 0.35); }';
-    css += '.manage-filters-table td { padding: 4px; text-align: left; }';
-    css += '.manage-filters-table th { border-bottom: 1px solid #8C9A88; padding: 4px; text-align: left; }';
+    /**
+     * Hides the filterObject by adding it from the stored list of hidden filterObjects
+     *
+     * @return bool If the filterObject was successfully hidden
+     */
+    hide: function() {
+        console.group(this.objectName + '.hide()');
 
-    css += '.manage-filters-table input { background: transparent; border: 1px solid #92A399; box-shadow: inset 2px 2px 3px 0 rgba(0, 0, 0, 0.1); color: #3B5A4A; padding: 0.2em; width: 75%; }';
-    css += '.manage-filters-table input:focus { background: #FFFFFF; }';
-    css += '.manage-filters-table button { margin: 0; padding: 0.2em; }';
+        if (this.isHidden()) {
+            console.log(this.objectName + ' is already hidden.');
+            return false;
+        }
 
-    // show/hide user's deviations button on a profile page
-    css += '#gmi-Gruser a.user-toggle-button i.icon { background-position: -960px 0; }';
-    css += '#gmi-Gruser.user-hidden a.user-toggle-button i.icon { background-position: -1720px 0; }';
+        var hidden = JSON.parse(GM_getValue(this.hiddenListName, '[]'));
+        var tmp = new Object();
+        for (var i = 0; i < this.properties.length; i++) {
+            tmp[this.properties[i]] = this[this.properties[i]];
+        }
+        hidden.push(tmp);
 
-    // hidden deviations on a browse page
-    css += '.user-hidden .thumb, .category-hidden .thumb { background: #DDE6DA url("http://st.deviantart.net/misc/noentry-green.png") no-repeat center center !important; }';
-    css += '.user-hidden .thumb > *, .category-hidden .thumb > * { visibility: hidden !important }';
+        GM_setValue(this.hiddenListName, JSON.stringify(hidden));
 
-    // fully remove hidden deviations on a browse page
-    css += '.no-placeholders .user-hidden, .no-placeholders .category-hidden { display: none !important; }';
+        console.log(hidden);
 
-    // hide user's deviations on a profile page
-    css += '.user-hidden #gruze-columns { display: none; }';
-    css += '.user-hidden #deviant { background: url("http://st.deviantart.net/misc/noentry-green.png") no-repeat scroll center center !important; }';
+        console.log('Complete');
+        console.groupEnd();
 
-    // insert the line breaks automatically before returning
-    return css.replace(/}/g, "}\n");
-}
+        return true;
+    },
+
+    /**
+     * Finds the filterObject in an array of filterObjects
+     *
+     * @param  array theArray The array of filterObjects to search
+     * @return int            The index of the filterObject in the array (-1 if not found)
+     */
+    findInArray: function(theArray) {
+        console.group(this.objectName + '.findInArray()');
+
+        console.log('Looping through ' + theArray.length + ' filterObjects.');
+        var idx = -1,
+            property;
+        for (var i = 0; i < theArray.length; i++) {
+            for (var j = 0; j < this.properties.length; j++) {
+                property = this.properties[j];
+                if (typeof theArray[i][property] !== 'undefined' && theArray[i][property] !== null) {
+                    if (theArray[i][property] === this[property]) {
+                        console.log('Found ' + this.objectName + ' by ' + property + ' at index ' + i + '.');
+                        idx = i;
+                        break;
+                    }
+                }
+            }
+        }
+
+        console.log('Returning: ' + idx);
+
+        console.log('Complete');
+        console.groupEnd();
+
+        return idx;
+    },
+
+    /**
+     * Unhides (shows) the filterObject by removing it from the stored list of hidden filterObjects
+     *
+     * @return bool If the filterObject was hidden initially
+     */
+    unhide: function() {
+        console.group(this.objectName + '.hide()');
+
+        if (!this.isHidden()) {
+            console.log(this.objectName + ' is not already hidden.');
+            return false;
+        }
+
+        var hidden = JSON.parse(GM_getValue(this.hiddenListName, '[]'));
+        var idx = this.findInArray(hidden);
+        var ret = (idx >= 0);
+
+        if (ret) {
+            hidden.splice(idx, 1);
+
+            console.log('Updating stored list of hidden ' + this.objectName + 's.');
+            GM_setValue(this.hiddenListName, JSON.stringify(hidden));
+        }
+
+        console.log('Complete');
+        console.groupEnd();
+
+        return ret;
+    }
+};
+
+/**
+ * Category object represents a deviantART category
+ * Extends filterObject
+ *
+ * @param string shortname The title of the category
+ * @param string longname  The URL path of the category
+ * @param array hierarchy The hierarchy structure to the category
+ */
+var Category = function(shortname, longname, hierarchy) {
+    filterObject.call(this);
+
+    this.hiddenListName = 'hiddenCategories';
+    this.objectName = 'Category';
+    this.properties = ['shortname', 'longname', 'hierarchy'];
+
+    this.shortname = shortname;
+    this.longname = longname;
+    this.hierarchy = hierarchy;
+};
+Category.prototype = new filterObject();
+Category.prototype.constructor = Category;
+
+/**
+ * User object represents a deviantART user (a.k.a. deviant)
+ * Extends filterObject
+ *
+ * @param string userid   The ID of the user (really an integer)
+ * @param string username The name of the user
+ */
+var User = function(userid, username) {
+    filterObject.call(this);
+
+    this.hiddenListName = 'hiddenUsers';
+    this.objectName = 'User';
+    this.properties = ['userid', 'username'];
+
+    this.userid = userid;
+    this.username = username;
+};
+User.prototype = new filterObject();
+User.prototype.constructor = User;
+
+
+(function() {
+    var daFilter = new deviantARTFilter();
+    daFilter.setup();
+})();
 
 
 /**
@@ -666,8 +738,8 @@ function getCSS() {
                 .attr('id', 'modal-content')
                 .css({
                     overflow:       'auto',
-                    padding:        '0 15px 15px',
-                    height:         'calc(100% - 56px - 70px)', // 56px: header; 70px: footer (buttons)
+                    padding:        '15px',
+                    height:         'calc(100% - 54px - 50px - 30px)', // 54px: header; 50px: footer (buttons); 30px: vertical padding
                     width:          'calc(100% - 30px)',        // 30px: horizontal padding
                 })
                 .appendTo(modal)
