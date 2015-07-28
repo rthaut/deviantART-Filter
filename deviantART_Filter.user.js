@@ -6,7 +6,7 @@
 // @updateURL   http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter_Beta.user.js
 // @downloadURL http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter_Beta.user.js
 // @include     http://*deviantart.com/*
-// @version     0.2
+// @version     0.3
 // @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -37,21 +37,20 @@ deviantARTFilter.prototype = {
 
         console.log('Adding overhead menu item.');
 
-        var link = $('<a/>')
+        var menuItem = $('<a/>')
             .html('Manage Filters')
             .addClass('oh-l')
             .on('click', $.proxy(this.manage, this));
 
-        var cell = $('<td>')
+        var menuCell = $('<td>')
             .addClass('oh-hasbutton oh-hashover oh-keep')
             .attr('id', 'oh-menu-filters')
-            .append(link);
+            .append(menuItem);
 
-        $('#oh-menu-deviant', '#overhead').after(cell);
+        $('#oh-menu-deviant', '#overhead').after(menuCell);
 
         console.log('Overhead menu item added.');
 
-        /*
         var results = $('#browse-results');
         if (results.length == 1) {
             console.log('Processing Browse page.');
@@ -59,12 +58,18 @@ deviantARTFilter.prototype = {
             if (query_params.length) {
                 query_params = JSON.parse(query_params);
                 console.log('Browse query', query_params);
-                if (query_params.category_path.length) {
+                if (typeof query_params.category_path !== 'undefined' && query_params.category_path.length) {
                     console.log('Adding category toggle link.');
+
+                    var hideCategoryLink = $('<a/>')
+                        .html('Hide Category')
+                        .addClass('hide-category')
+                        .on('click', $.proxy(this.hideCategoryClickHandler, this));
+
+                    $('.search-stats', '.browse-top-bar').append(hideCategoryLink);
                 }
             }
         }
-        */
 
         console.log('Complete');
         console.groupEnd();
@@ -72,6 +77,12 @@ deviantARTFilter.prototype = {
 
     insertBaseCSS: function() {
         console.group('deviantARTFilter.insertBaseCSS()');
+
+        if (GM_getValue('placeholders', true)) {
+            $('body').addClass('placeholders');
+        } else {
+            $('body').addClass('no-placeholders');
+        }
 
         var css = '';
 
@@ -81,6 +92,8 @@ deviantARTFilter.prototype = {
         css += 'a.hide-user { cursor: pointer; position: absolute; height: 25px; line-height: 25px; width: 100%; left: 0px; top: 0px; z-index: 1; color: #FFFFFF; text-align: left; text-indent: -9999px; }';
         css += '.tt-a:hover a.hide-user span { position: absolute; background: url("http://st.deviantart.net/minish/messages/close-message.gif") repeat 30px 0; height: 15px; width: 15px; right: 5px; top: 5px; }';
         css += 'a.hide-user:hover { background: #A51818; text-indent: 10px; }';
+
+        css += 'a.hide-category { color: #A51818; cursor: pointer; }';
 
         css += '.manage-filters-settings { padding: 1em; }';
         css += '.manage-filters-settings label { line-height: 1.5em; vertical-align: top; }';
@@ -115,12 +128,6 @@ deviantARTFilter.prototype = {
 
         console.log("Hiding user(s):", users);
 
-        if (GM_getValue('placeholders', true)) {
-            $('body').addClass('placeholders');
-        } else {
-            $('body').addClass('no-placeholders');
-        }
-
         var css1 = '',  // no placeholders
             css2 = '';  // placeholders
 
@@ -133,6 +140,39 @@ deviantARTFilter.prototype = {
             if (typeof users[i].username !== 'undefined' && users[i].username !== null) {
                 css1 += 'body.no-placeholders *[username="' + users[i].username + '"], ';
                 css2 += 'body.placeholders *[username="' + users[i].username + '"] a.thumb:before, ';
+            }
+        }
+
+        if (css1.length > 0) {
+            // no placeholders
+            css1 = css1.replace(/, $/, '');
+            css1 += ' { display: none !important; }';
+        }
+
+        if (css2.length > 0) {
+            // placeholders
+            css2 = css2.replace(/, $/, '');
+            css2 += ' { position: absolute; left: 0; top: 0; height: 100%; width: 100%; content: " "; background: #DDE6DA url("http://st.deviantart.net/misc/noentry-green.png") no-repeat center center; display: block; }';
+        }
+
+        GM_addStyle(css1 + "\n" + css2);
+
+        console.log('Complete');
+        console.groupEnd();
+    },
+
+    insertHiddenCategoriesCSS: function(categories) {
+        console.group('deviantARTFilter.insertHiddenCategoriesCSS()');
+
+        console.log("Hiding category(s):", categories);
+
+        var css1 = '',  // no placeholders
+            css2 = '';  // placeholders
+
+        for (var i = 0; i < categories.length; i++) {
+            if (typeof categories[i].longname !== 'undefined' && categories[i].longname !== null) {
+                css1 += 'body.no-placeholders *[category="' + categories[i].longname + '"], ';
+                css2 += 'body.placeholders *[category="' + categories[i].longname + '"] a.thumb:before, ';
             }
         }
 
@@ -265,7 +305,7 @@ deviantARTFilter.prototype = {
     hideUser: function(user) {
         console.group('deviantARTFilter.hideUser()');
 
-        if (user.isHidden) {
+        if (user.isHidden()) {
             alert('This user ("' + user.username + '") is already hidden.');
         } else {
             if (user.hide()) {
@@ -283,6 +323,80 @@ deviantARTFilter.prototype = {
         if (user.unhide()) {
             alert('Changes will take effect on next page load/refresh');
             //this.removeHiddenUsersCSS([user]);
+        }
+
+        console.log('Complete');
+        console.groupEnd();
+    },
+
+    unhideCategoryButtonClickHandler: function(event) {
+        console.group('deviantARTFilter.unhideCategoryButtonClickHandler()');
+
+        var target = $(event.target);
+        var category = new Category(target.attr('shortname'), target.attr('longname'), null);
+
+        console.log('Created new Category object', category);
+
+        this.unhideCategory(category);
+
+        console.log("Removing newly unhidden category from table");
+
+        // @TODO maybe just destroy the table and rebuild it?
+        target.parents('tr').remove();
+
+        console.log('Complete');
+        console.groupEnd();
+    },
+
+    hideCategoryClickHandler: function(event) {
+        console.group('deviantARTFilter.hideCategoryClickHandler()');
+
+        var query_params = JSON.parse($('#browse-results').attr('gmon-query_params'));
+
+        var hierarchy = [];
+        var hierItem = $('#browse-sidemenu .browse-facet-category a.selected');
+        var depth = parseInt(hierItem.attr('class').replace('cat-depth-', ''), 10);
+
+        var shortname = hierItem.text().trim();
+        var longname = query_params.category_path;
+
+        hierarchy.push(shortname);
+        for (var i = (depth - 1); i > 0; i--) {
+            hierItem = $('#browse-sidemenu .browse-facet-category a.cat-depth-' + i);
+            hierarchy.push(hierItem.text().trim());
+        }
+        hierarchy.reverse();
+
+        var category = new Category(shortname, longname, hierarchy);
+        console.log('Created new Category object', category);
+
+        this.hideCategory(category);
+
+        console.log('Complete');
+        console.groupEnd();
+    },
+
+    hideCategory: function(category) {
+        console.group('deviantARTFilter.hideCategory()');
+
+        if (category.isHidden()) {
+            alert('This category ("' + category.shortname + '") is already hidden.');
+        } else {
+            if (category.hide()) {
+                this.insertHiddenCategoriesCSS([category]);
+            }
+        }
+
+        console.log('Complete');
+        console.groupEnd();
+    },
+
+    unhideCategory: function(category) {
+        console.group('deviantARTFilter.unhideCategory()');
+
+        if (category.unhide()) {
+            alert('Changes will take effect on next page load/refresh');
+            //this.removeHiddenCategoriesCSS([category]);
         }
 
         console.log('Complete');
@@ -379,6 +493,7 @@ deviantARTFilter.prototype = {
         console.group('deviantARTFilter.setup()');
 
         this.insertHiddenUsersCSS(this.getHiddenUsers());
+        this.insertHiddenCategoriesCSS(this.getHiddenCategories());
         this.addControls();
         this.insertBaseCSS();
         this.addEventSubsribers();
@@ -442,7 +557,7 @@ deviantARTFilter.prototype = {
                 userRow.append('<td>---</td>');
             }
 
-            // unhide user column/link
+            // unhide user column/button
             var unhideUserLink = $('<button/>')
                 .addClass('smbutton smbutton-green smbutton-shadow')
                 .attr('userid', users[i].userid)
@@ -469,7 +584,7 @@ deviantARTFilter.prototype = {
         var categoriesTable = $('<table/>')
             .addClass('manage-filters-table')
             .attr('id', 'manage-categories-table')
-            .append('<tr><th>Category Name</th><th>Action</th></tr>');
+            .append('<tr><th>Category Name</th><th>Category Path</th><th>Action</th></tr>');
 
         var categoryRow;
 
@@ -477,17 +592,18 @@ deviantARTFilter.prototype = {
             categoryRow = $('<tr/>')
 
             // category name column/link
-            categoryRow.append('<td><a class="external" href="http://www.deviantart.com/browse/all/' + categories[i].longname + '" target="_blank">' + categories[i].longname + '</a></td>');
+            categoryRow.append('<td><a class="external" href="http://www.deviantart.com/browse/all/' + categories[i].longname + '" target="_blank">' + categories[i].shortname + '</a></td>');
 
-            // unhide category column/link
+            // category hierarchy column
+            categoryRow.append('<td>' + categories[i].hierarchy.join(' > ') + '</td>');
+
+            // unhide category column/button
             var unhideCategoryLink = $('<button/>')
                 .addClass('smbutton smbutton-green smbutton-shadow')
-                .attr('category', categories[i].longname)
+                .attr('shortname', categories[i].shortname)
+                .attr('longname', categories[i].longname)
                 .html('Unhide Category')
-                .on('click', function() {
-                    //showCategory($(this).attr('category'));
-                    $(this).parents('tr').hide().remove();
-                })
+                .on('click', $.proxy(this.unhideCategoryButtonClickHandler, this))
                 .wrap('<td/>').parent()
                 .appendTo(categoryRow);
 
