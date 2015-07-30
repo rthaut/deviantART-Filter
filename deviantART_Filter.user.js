@@ -1,4 +1,4 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @name        deviantART Filter Beta
 // @author      Ryan Thaut
 // @description Allows automatic filtering of deviations from certain users and/or in certain categories.
@@ -6,7 +6,7 @@
 // @updateURL   http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter_Beta.user.js
 // @downloadURL http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter_Beta.user.js
 // @include     http://*deviantart.com/*
-// @version     0.3
+// @version     0.4
 // @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -15,6 +15,9 @@
 
 var deviantARTFilter = function() {
     console.group('construct');
+
+    this.placeholders = GM_getValue('placeholders', true);
+    this.cascadingCategories = GM_getValue('cascadingCategories', true);
 
     console.log('complete');
     console.groupEnd();
@@ -78,12 +81,6 @@ deviantARTFilter.prototype = {
     insertBaseCSS: function() {
         console.group('deviantARTFilter.insertBaseCSS()');
 
-        if (GM_getValue('placeholders', true)) {
-            $('body').addClass('placeholders');
-        } else {
-            $('body').addClass('no-placeholders');
-        }
-
         var css = '';
 
         css += '#overhead #oh-menu-filters { background: #46584A; border-bottom: 1px solid #38463B; }';
@@ -96,6 +93,7 @@ deviantARTFilter.prototype = {
         css += 'a.hide-category { color: #A51818; cursor: pointer; }';
 
         css += '.manage-filters-settings { padding: 1em; }';
+        css += '.manage-filters-settings fieldset { border: 0; padding: 0; margin: 0 0 15px; display: block; margin-bottom: 1em; }';
         css += '.manage-filters-settings label { line-height: 1.5em; vertical-align: top; }';
         css += '.manage-filters-settings label small { color: #3B5A4A; }';
 
@@ -169,10 +167,11 @@ deviantARTFilter.prototype = {
         var css1 = '',  // no placeholders
             css2 = '';  // placeholders
 
+        var selector = (this.cascadingCategories) ? '^=' : '=';
         for (var i = 0; i < categories.length; i++) {
             if (typeof categories[i].longname !== 'undefined' && categories[i].longname !== null) {
-                css1 += 'body.no-placeholders *[category="' + categories[i].longname + '"], ';
-                css2 += 'body.placeholders *[category="' + categories[i].longname + '"] a.thumb:before, ';
+                css1 += 'body.no-placeholders *[category' + selector + '"' + categories[i].longname + '"], ';
+                css2 += 'body.placeholders *[category' + selector + '"' + categories[i].longname + '"] a.thumb:before, ';
             }
         }
 
@@ -403,6 +402,33 @@ deviantARTFilter.prototype = {
         console.groupEnd();
     },
 
+    toggleSettingChangeEventHandler: function(event) {
+        console.group('deviantARTFilter.toggleSettingChangeEventHandler()');
+
+        var target = $(event.target);
+        var setting = target.attr('name');
+
+        console.log('Toggling setting "' + setting + '".');
+
+        switch (setting) {
+            case 'placeholders':
+                this.placeholders = !this.placeholders;
+                GM_setValue('placeholders', this.placeholders);
+                $('body').toggleClass('no-placeholders');
+                $('body').toggleClass('placeholders');
+                break;
+
+            case 'cascadingCategories':
+                this.cascadingCategories = !this.cascadingCategories;
+                GM_setValue('cascadingCategories', this.cascadingCategories);
+                alert('Changes will take effect on next page load/refresh');
+                break;
+        }
+
+        console.log('Complete');
+        console.groupEnd();
+    },
+
     manage: function(event) {
         console.group('deviantARTFilter.manage()');
 
@@ -452,23 +478,37 @@ deviantARTFilter.prototype = {
             .addClass('manage-filters-settings').
             appendTo(settingsContent);
 
+        var placeholdersWrapper = $('<fieldset/>').appendTo(settingsForm);
+
         var placeholdersInput = $('<input/>')
             .attr('type', 'checkbox')
             .attr('id', 'placeholders')
             .attr('name', 'placeholders')
-            .attr('checked', GM_getValue('placeholders', true))
-            .on('change', function() {
-                GM_setValue('placeholders', !GM_getValue('placeholders', true));
-                $('body').toggleClass('no-placeholders');
-                $('body').toggleClass('placeholders');
-            })
-            .appendTo(settingsForm);
+            .attr('checked', this.placeholders)
+            .on('change', $.proxy(this.toggleSettingChangeEventHandler, this))
+            .appendTo(placeholdersWrapper);
 
         var placeholdersLabel = $('<label/>')
             .attr('for', 'placeholders')
             .html(' Use placeholders for hidden deviations')
             .append('<br/><small>(Disabling this will hide deviations completely)</small>')
-            .insertAfter(placeholdersInput);
+            .appendTo(placeholdersWrapper);
+
+        var cascadingCategoriesWrapper = $('<fieldset/>').appendTo(settingsForm);
+
+        var cascadingCategoriesInput = $('<input/>')
+            .attr('type', 'checkbox')
+            .attr('id', 'cascadingCategories')
+            .attr('name', 'cascadingCategories')
+            .attr('checked', this.cascadingCategories)
+            .on('change', $.proxy(this.toggleSettingChangeEventHandler, this))
+            .appendTo(cascadingCategoriesWrapper);
+
+        var cascadingCategoriesLabel = $('<label/>')
+            .attr('for', 'cascadingCategories')
+            .html(' Cascade filtered categories')
+            .append('<br/><small>(Disabling this will <strong>not</strong> hide deviations in sub-categories of hidden categories)</small>')
+            .appendTo(cascadingCategoriesWrapper);
 
         var content = $('<div/>')
             .append(tabs)
@@ -492,10 +532,16 @@ deviantARTFilter.prototype = {
     setup: function() {
         console.group('deviantARTFilter.setup()');
 
+        if (this.placeholders) {
+            $('body').addClass('placeholders');
+        } else {
+            $('body').addClass('no-placeholders');
+        }
+
+        this.insertBaseCSS();
         this.insertHiddenUsersCSS(this.getHiddenUsers());
         this.insertHiddenCategoriesCSS(this.getHiddenCategories());
         this.addControls();
-        this.insertBaseCSS();
         this.addEventSubsribers();
 
         console.log('Complete');
