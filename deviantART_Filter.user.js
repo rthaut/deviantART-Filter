@@ -6,7 +6,7 @@
 // @updateURL   http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter_Beta.user.js
 // @downloadURL http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter_Beta.user.js
 // @include     http://*deviantart.com/*
-// @version     0.4
+// @version     0.5
 // @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -669,7 +669,8 @@ deviantARTFilter.prototype = {
 var filterObject = function() {
     this.hiddenListName = '';
     this.objectName = 'filterObject';
-    this.properties = [];
+    this.objectProperties = [];
+    this.uniqueProperties = [];
 };
 filterObject.prototype = {
     constructor: filterObject,
@@ -713,8 +714,8 @@ filterObject.prototype = {
 
         var hidden = JSON.parse(GM_getValue(this.hiddenListName, '[]'));
         var tmp = new Object();
-        for (var i = 0; i < this.properties.length; i++) {
-            tmp[this.properties[i]] = this[this.properties[i]];
+        for (var i = 0; i < this.objectProperties.length; i++) {
+            tmp[this.objectProperties[i]] = this[this.objectProperties[i]];
         }
         hidden.push(tmp);
 
@@ -741,8 +742,8 @@ filterObject.prototype = {
         var idx = -1,
             property;
         for (var i = 0; i < theArray.length; i++) {
-            for (var j = 0; j < this.properties.length; j++) {
-                property = this.properties[j];
+            for (var j = 0; j < this.uniqueProperties.length; j++) {
+                property = this.uniqueProperties[j];
                 if (typeof theArray[i][property] !== 'undefined' && theArray[i][property] !== null) {
                     if (theArray[i][property] === this[property]) {
                         console.log('Found ' + this.objectName + ' by ' + property + ' at index ' + i + '.');
@@ -805,7 +806,8 @@ var Category = function(shortname, longname, hierarchy) {
 
     this.hiddenListName = 'hiddenCategories';
     this.objectName = 'Category';
-    this.properties = ['shortname', 'longname', 'hierarchy'];
+    this.objectProperties = ['shortname', 'longname', 'hierarchy'];
+    this.uniqueProperties = ['longname'];
 
     this.shortname = shortname;
     this.longname = longname;
@@ -826,7 +828,8 @@ var User = function(userid, username) {
 
     this.hiddenListName = 'hiddenUsers';
     this.objectName = 'User';
-    this.properties = ['userid', 'username'];
+    this.objectProperties = ['userid', 'username'];
+    this.uniqueProperties = ['userid', 'username'];
 
     this.userid = userid;
     this.username = username;
