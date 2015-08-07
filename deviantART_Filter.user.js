@@ -6,7 +6,7 @@
 // @updateURL   http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter_Beta.user.js
 // @downloadURL http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter_Beta.user.js
 // @include     http://*deviantart.com/*
-// @version     0.5
+// @version     2.0b6
 // @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -184,7 +184,7 @@ deviantARTFilter.prototype = {
         if (css2.length > 0) {
             // placeholders
             css2 = css2.replace(/, $/, '');
-            css2 += ' { position: absolute; left: 0; top: 0; height: 100%; width: 100%; content: " "; background: #DDE6DA url("http://st.deviantart.net/misc/noentry-green.png") no-repeat center center; display: block; }';
+            css2 += ' { position: absolute; left: 0; top: 0; height: 100%; width: 100%; content: " "; background: #DDE6DA url("http://st.deviantart.net/misc/noentry-green.png") no-repeat center center; display: block; z-index: 1; }';
         }
 
         GM_addStyle(css1 + "\n" + css2);
@@ -229,10 +229,9 @@ deviantARTFilter.prototype = {
 
         this.hideUser(user);
 
-        console.log("Inserting newly hidden user into table");
-
         // @TODO maybe just destroy the table and rebuild it?
         // Or break out the for loop logic in buildFilteredUsersTable() to prevent code duplication
+        console.log("Inserting newly hidden user into table");
         var userRow = $('<tr/>');
 
         // username column/link
@@ -276,12 +275,11 @@ deviantARTFilter.prototype = {
 
         console.log('Created new User object', user);
 
-        this.unhideUser(user);
-
-        console.log("Removing newly unhidden user from table");
-
-        // @TODO maybe just destroy the table and rebuild it?
-        target.parents('tr').remove();
+        if (this.unhideUser(user)) {
+            // @TODO maybe just destroy the table and rebuild it?
+            console.log("Removing newly unhidden user from table");
+            target.parents('tr').remove();
+        }
 
         console.log('Complete');
         console.groupEnd();
@@ -304,28 +302,37 @@ deviantARTFilter.prototype = {
     hideUser: function(user) {
         console.group('deviantARTFilter.hideUser()');
 
+        var ret = false;
+
         if (user.isHidden()) {
             alert('This user ("' + user.username + '") is already hidden.');
         } else {
             if (user.hide()) {
                 this.insertHiddenUsersCSS([user]);
+                ret = true;
             }
         }
 
         console.log('Complete');
         console.groupEnd();
+
+        return ret;
     },
 
     unhideUser: function(user) {
         console.group('deviantARTFilter.unhideUser()');
 
+        var ret = false;
+
         if (user.unhide()) {
             alert('Changes will take effect on next page load/refresh');
-            //this.removeHiddenUsersCSS([user]);
+            ret = true;
         }
 
         console.log('Complete');
         console.groupEnd();
+
+        return ret;
     },
 
     unhideCategoryButtonClickHandler: function(event) {
@@ -336,12 +343,11 @@ deviantARTFilter.prototype = {
 
         console.log('Created new Category object', category);
 
-        this.unhideCategory(category);
-
-        console.log("Removing newly unhidden category from table");
-
-        // @TODO maybe just destroy the table and rebuild it?
-        target.parents('tr').remove();
+        if (this.unhideCategory(category)) {
+            // @TODO maybe just destroy the table and rebuild it?
+            console.log("Removing newly unhidden category from table");
+            target.parents('tr').remove();
+        }
 
         console.log('Complete');
         console.groupEnd();
@@ -429,6 +435,29 @@ deviantARTFilter.prototype = {
         console.groupEnd();
     },
 
+    cleanObjectsClickEventHandler: function(event) {
+        console.group('deviantARTFilter.cleanObjectsClickEventHandler()');
+
+        event.preventDefault();
+
+        var target = $(event.target);
+        var object = target.attr('name');
+        var strict = (target.attr('strict') === 'true');
+
+        console.log('Cleaning ' + object + '.');
+
+        var changed = this.cleanHiddenObjects(object, strict);
+
+        if (changed) {
+            alert('Changes will take effect on next page load/refresh');
+        } else {
+            alert('Your hidden ' + object + ' are clean; no changes were made');
+        }
+
+        console.log('Complete');
+        console.groupEnd();
+    },
+
     manage: function(event) {
         console.group('deviantARTFilter.manage()');
 
@@ -510,12 +539,26 @@ deviantARTFilter.prototype = {
             .append('<br/><small>(Disabling this will <strong>not</strong> hide deviations in sub-categories of hidden categories)</small>')
             .appendTo(cascadingCategoriesWrapper);
 
+        var cleanUsersButton = $('<button/>')
+            .html('Clean Hidden Users')
+            .attr('name', 'users')
+            .attr('strict', false)
+            .on('click', $.proxy(this.cleanObjectsClickEventHandler, this))
+            .appendTo(settingsForm);
+
+        var cleanCategoriesButton = $('<button/>')
+            .html('Clean Hidden Categories')
+            .attr('name', 'categories')
+            .attr('strict', false)
+            .on('click', $.proxy(this.cleanObjectsClickEventHandler, this))
+            .appendTo(settingsForm);
+
         var content = $('<div/>')
             .append(tabs)
             .append(usersContent)
             .append(categoriesContent)
             .append(settingsContent)
-            .daModal({title: 'Manage deviantArt Filters', width: '50%', height: '75%', footnote: '"<a href="http://fav.me/d6uocct">deviantART Filter</a>" script by <a href="http://rthaut.deviantart.com/">rthaut</a>, <a href="http://lassekongo83.deviantart.com/journal/DeviantCrap-Filter-410429292">idea</a> from <a href="http://lassekongo83.deviantart.com/">lassekongo83</a>'});
+            .daModal({title: 'Manage deviantART Filters', width: '50%', height: '75%', footnote: '"<a href="http://fav.me/d6uocct">deviantART Filter</a>" script by <a href="http://rthaut.deviantart.com/">rthaut</a>, <a href="http://lassekongo83.deviantart.com/journal/DeviantCrap-Filter-410429292">idea</a> from <a href="http://lassekongo83.deviantart.com/">lassekongo83</a>'});
 
         $('a.manage-filters-tab').on('click', function() {
             var tab = $(this).attr('data-tab');
@@ -624,6 +667,13 @@ deviantARTFilter.prototype = {
 
     buildFilteredCategoriesTable: function() {
         console.group('deviantARTFilter.buildFilteredCategoriesTable()');
+
+        // since v2.0 categories need all at least "longname" and "shortname"
+        // but prior to v2.0 there was only "longname"
+        if (this.cleanHiddenObjects('categories', true)) {
+            alert("One or more of your hidden categories has been has been removed due to incompatibility with this version of the script.\n\nYou can re-hide categories by navigating to a category page and using the red link next to the category title.");
+        }
+
         var categories = this.getHiddenCategories();
         console.log('Building table for categories:', categories);
 
@@ -641,7 +691,11 @@ deviantARTFilter.prototype = {
             categoryRow.append('<td><a class="external" href="http://www.deviantart.com/browse/all/' + categories[i].longname + '" target="_blank">' + categories[i].shortname + '</a></td>');
 
             // category hierarchy column
-            categoryRow.append('<td>' + categories[i].hierarchy.join(' > ') + '</td>');
+            if (typeof categories[i].hierarchy !== 'undefined' && categories[i].hierarchy !== null) {
+                categoryRow.append('<td>' + categories[i].hierarchy.join(' > ') + '</td>');
+            } else {
+                categoryRow.append('<td>---</td>');
+            }
 
             // unhide category column/button
             var unhideCategoryLink = $('<button/>')
@@ -660,6 +714,60 @@ deviantARTFilter.prototype = {
         console.groupEnd();
 
         return categoriesTable;
+    },
+
+    cleanHiddenObjects: function(objectType, strictFiltering) {
+        console.group('deviantARTFilter.cleanHiddenObjects()');
+
+        var dirty = clean = [];
+        var object, list;
+        var changed = false;
+
+        switch (objectType) {
+            case 'users':
+                dirty = this.getHiddenUsers();
+                list = 'hiddenUsers';
+                break;
+            case 'categories':
+                dirty = this.getHiddenCategories();
+                list = 'hiddenCategories';
+                break;
+        }
+
+        for (var i = 0; i < dirty.length; i++) {
+            switch (objectType) {
+                case 'users':
+                    object = new User(dirty[i]['userid'], dirty[i]['username']);
+                    break;
+                case 'categories':
+                    object = new Category(dirty[i]['shortname'], dirty[i]['longname'], dirty[i]['hierarchy']);
+                    break;
+            }
+            if (strictFiltering) {
+                if (object.isComplete()) {
+                    clean.push(dirty[i]);
+                } else {
+                    changed = true;
+                }
+            } else {
+                if (object.isValid()) {
+                    clean.push(dirty[i]);
+                } else {
+                    changed = true;
+                }
+            }
+        }
+
+        console.log('Valid objects', dirty);
+
+        if (changed) {
+            GM_setValue(list, JSON.stringify(clean));
+        }
+
+        console.log('Complete');
+        console.groupEnd();
+
+        return changed;
     }
 };
 
@@ -676,9 +784,31 @@ filterObject.prototype = {
     constructor: filterObject,
 
     /**
+     * Determines if the filterObject has all stored properties populated
+     *
+     * @return bool
+     */
+    isComplete: function() {
+        console.group(this.objectName + '.isComplete()');
+        var ret = true;
+
+        for (var i = 0; i < this.objectProperties.length; i++) {
+            console.log(this.objectProperties[i], this[this.objectProperties[i]]);
+            ret = ret && (typeof this[this.objectProperties[i]] !== 'undefined' && this[this.objectProperties[i]] !== null);
+        }
+
+        console.log(ret);
+
+        console.log('Complete');
+        console.groupEnd();
+
+        return ret;
+    },
+
+    /**
      * Determines if the filterObject is currently hidden
      *
-     * @return bool If the filterObject is currently hidden
+     * @return bool
      */
     isHidden: function() {
         console.group(this.objectName + '.isHidden()');
@@ -700,6 +830,28 @@ filterObject.prototype = {
     },
 
     /**
+     * Determines if the filterObject has at least one stored property populated
+     *
+     * @return bool
+     */
+    isValid: function() {
+        console.group(this.objectName + '.isValid()');
+        var ret = false;
+
+        for (var i = 0; i < this.objectProperties.length; i++) {
+            console.log(this.objectProperties[i], this[this.objectProperties[i]]);
+            ret = ret || (typeof this[this.objectProperties[i]] !== 'undefined' && this[this.objectProperties[i]] !== null);
+        }
+
+        console.log(ret);
+
+        console.log('Complete');
+        console.groupEnd();
+
+        return ret;
+    },
+
+    /**
      * Hides the filterObject by adding it from the stored list of hidden filterObjects
      *
      * @return bool If the filterObject was successfully hidden
@@ -709,6 +861,9 @@ filterObject.prototype = {
 
         if (this.isHidden()) {
             console.log(this.objectName + ' is already hidden.');
+            return false;
+        } else if (!this.isValid()) {
+            console.log(this.objectName + ' is not valid.');
             return false;
         }
 
