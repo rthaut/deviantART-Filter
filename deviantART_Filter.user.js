@@ -13,14 +13,16 @@
 // @require     http://code.jquery.com/jquery-latest.min.js
 // ==/UserScript==
 
+var debug = false;
+
 var deviantARTFilter = function() {
-    console.group('construct');
+    if (debug) console.group('construct');
 
     this.placeholders = GM_getValue('placeholders', true);
     this.cascadingCategories = GM_getValue('cascadingCategories', true);
 
-    console.log('complete');
-    console.groupEnd();
+    if (debug) console.log('complete');
+    if (debug) console.groupEnd();
 
     return this;
 };
@@ -36,9 +38,9 @@ deviantARTFilter.prototype = {
     },
 
     addControls: function() {
-        console.group('deviantARTFilter.addControls()');
+        if (debug) console.group('deviantARTFilter.addControls()');
 
-        console.log('Adding overhead menu item.');
+        if (debug) console.log('Adding overhead menu item.');
 
         var menuItem = $('<a/>')
             .html('Manage Filters')
@@ -52,17 +54,17 @@ deviantARTFilter.prototype = {
 
         $('#oh-menu-deviant', '#overhead').after(menuCell);
 
-        console.log('Overhead menu item added.');
+        if (debug) console.log('Overhead menu item added.');
 
         var results = $('#browse-results');
         if (results.length == 1) {
-            console.log('Processing Browse page.');
+            if (debug) console.log('Processing Browse page.');
             var query_params = $('#browse-results').attr('gmon-query_params');
             if (query_params.length) {
                 query_params = JSON.parse(query_params);
-                console.log('Browse query', query_params);
+                if (debug) console.log('Browse query', query_params);
                 if (typeof query_params.category_path !== 'undefined' && query_params.category_path.length) {
-                    console.log('Adding category toggle link.');
+                    if (debug) console.log('Adding category toggle link.');
 
                     var hideCategoryLink = $('<a/>')
                         .html('Hide Category')
@@ -74,12 +76,12 @@ deviantARTFilter.prototype = {
             }
         }
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     insertBaseCSS: function() {
-        console.group('deviantARTFilter.insertBaseCSS()');
+        if (debug) console.group('deviantARTFilter.insertBaseCSS()');
 
         var css = '';
 
@@ -117,14 +119,14 @@ deviantARTFilter.prototype = {
 
         GM_addStyle(css);
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     insertHiddenUsersCSS: function(users) {
-        console.group('deviantARTFilter.insertHiddenUsersCSS()');
+        if (debug) console.group('deviantARTFilter.insertHiddenUsersCSS()');
 
-        console.log("Hiding user(s):", users);
+        if (debug) console.log("Hiding user(s):", users);
 
         var css1 = '',  // no placeholders
             css2 = '';  // placeholders
@@ -155,14 +157,14 @@ deviantARTFilter.prototype = {
 
         GM_addStyle(css1 + "\n" + css2);
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     insertHiddenCategoriesCSS: function(categories) {
-        console.group('deviantARTFilter.insertHiddenCategoriesCSS()');
+        if (debug) console.group('deviantARTFilter.insertHiddenCategoriesCSS()');
 
-        console.log("Hiding category(s):", categories);
+        if (debug) console.log("Hiding category(s):", categories);
 
         var css1 = '',  // no placeholders
             css2 = '';  // placeholders
@@ -189,12 +191,12 @@ deviantARTFilter.prototype = {
 
         GM_addStyle(css1 + "\n" + css2);
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     addEventSubsribers: function() {
-        console.group('deviantARTFilter.addEventSubsribers()');
+        if (debug) console.group('deviantARTFilter.addEventSubsribers()');
 
         $('#browse-results').on('mouseover', 'div.tt-a', function() {
             var thumb = $(this);
@@ -209,12 +211,12 @@ deviantARTFilter.prototype = {
 
         $('#browse-results').on('click', 'a.hide-user', $.proxy(this.hideUserDeviationClickHandler, this));
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     hideUserButtonClickHandler: function(event) {
-        console.group('deviantARTFilter.hideUserButtonClickHandler()');
+        if (debug) console.group('deviantARTFilter.hideUserButtonClickHandler()');
 
         var userid = $('input#userid').val();
         var username = $('input#username').val();
@@ -231,7 +233,7 @@ deviantARTFilter.prototype = {
 
         // @TODO maybe just destroy the table and rebuild it?
         // Or break out the for loop logic in buildFilteredUsersTable() to prevent code duplication
-        console.log("Inserting newly hidden user into table");
+        if (debug) console.log("Inserting newly hidden user into table");
         var userRow = $('<tr/>');
 
         // username column/link
@@ -263,44 +265,44 @@ deviantARTFilter.prototype = {
 
         $('table#manage-users-table').append(userRow);
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     unhideUserButtonClickHandler: function(event) {
-        console.group('deviantARTFilter.unhideUserButtonClickHandler()');
+        if (debug) console.group('deviantARTFilter.unhideUserButtonClickHandler()');
 
         var target = $(event.target);
         var user = new User(target.attr('userid'), target.attr('username'));
 
-        console.log('Created new User object', user);
+        if (debug) console.log('Created new User object', user);
 
         if (this.unhideUser(user)) {
             // @TODO maybe just destroy the table and rebuild it?
-            console.log("Removing newly unhidden user from table");
+            if (debug) console.log("Removing newly unhidden user from table");
             target.parents('tr').remove();
         }
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     hideUserDeviationClickHandler: function(event) {
-        console.group('deviantARTFilter.hideUserDeviationClickHandler()');
+        if (debug) console.group('deviantARTFilter.hideUserDeviationClickHandler()');
 
         var target = $(event.target);
         var user = new User(target.attr('userid'), target.attr('username'));
 
-        console.log('Created new User object', user);
+        if (debug) console.log('Created new User object', user);
 
         this.hideUser(user);
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     hideUser: function(user) {
-        console.group('deviantARTFilter.hideUser()');
+        if (debug) console.group('deviantARTFilter.hideUser()');
 
         var ret = false;
 
@@ -313,14 +315,14 @@ deviantARTFilter.prototype = {
             }
         }
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
 
         return ret;
     },
 
     unhideUser: function(user) {
-        console.group('deviantARTFilter.unhideUser()');
+        if (debug) console.group('deviantARTFilter.unhideUser()');
 
         var ret = false;
 
@@ -329,32 +331,32 @@ deviantARTFilter.prototype = {
             ret = true;
         }
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
 
         return ret;
     },
 
     unhideCategoryButtonClickHandler: function(event) {
-        console.group('deviantARTFilter.unhideCategoryButtonClickHandler()');
+        if (debug) console.group('deviantARTFilter.unhideCategoryButtonClickHandler()');
 
         var target = $(event.target);
         var category = new Category(target.attr('shortname'), target.attr('longname'), null);
 
-        console.log('Created new Category object', category);
+        if (debug) console.log('Created new Category object', category);
 
         if (this.unhideCategory(category)) {
             // @TODO maybe just destroy the table and rebuild it?
-            console.log("Removing newly unhidden category from table");
+            if (debug) console.log("Removing newly unhidden category from table");
             target.parents('tr').remove();
         }
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     hideCategoryClickHandler: function(event) {
-        console.group('deviantARTFilter.hideCategoryClickHandler()');
+        if (debug) console.group('deviantARTFilter.hideCategoryClickHandler()');
 
         var query_params = JSON.parse($('#browse-results').attr('gmon-query_params'));
 
@@ -373,16 +375,16 @@ deviantARTFilter.prototype = {
         hierarchy.reverse();
 
         var category = new Category(shortname, longname, hierarchy);
-        console.log('Created new Category object', category);
+        if (debug) console.log('Created new Category object', category);
 
         this.hideCategory(category);
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     hideCategory: function(category) {
-        console.group('deviantARTFilter.hideCategory()');
+        if (debug) console.group('deviantARTFilter.hideCategory()');
 
         if (category.isHidden()) {
             alert('This category ("' + category.shortname + '") is already hidden.');
@@ -392,29 +394,29 @@ deviantARTFilter.prototype = {
             }
         }
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     unhideCategory: function(category) {
-        console.group('deviantARTFilter.unhideCategory()');
+        if (debug) console.group('deviantARTFilter.unhideCategory()');
 
         if (category.unhide()) {
             alert('Changes will take effect on next page load/refresh');
             //this.removeHiddenCategoriesCSS([category]);
         }
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     toggleSettingChangeEventHandler: function(event) {
-        console.group('deviantARTFilter.toggleSettingChangeEventHandler()');
+        if (debug) console.group('deviantARTFilter.toggleSettingChangeEventHandler()');
 
         var target = $(event.target);
         var setting = target.attr('name');
 
-        console.log('Toggling setting "' + setting + '".');
+        if (debug) console.log('Toggling setting "' + setting + '".');
 
         switch (setting) {
             case 'placeholders':
@@ -431,12 +433,12 @@ deviantARTFilter.prototype = {
                 break;
         }
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     cleanObjectsClickEventHandler: function(event) {
-        console.group('deviantARTFilter.cleanObjectsClickEventHandler()');
+        if (debug) console.group('deviantARTFilter.cleanObjectsClickEventHandler()');
 
         event.preventDefault();
 
@@ -444,7 +446,7 @@ deviantARTFilter.prototype = {
         var object = target.attr('name');
         var strict = (target.attr('strict') === 'true');
 
-        console.log('Cleaning ' + object + '.');
+        if (debug) console.log('Cleaning ' + object + '.');
 
         var changed = this.cleanHiddenObjects(object, strict);
 
@@ -454,12 +456,12 @@ deviantARTFilter.prototype = {
             alert('Your hidden ' + object + ' are clean; no changes were made');
         }
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     manage: function(event) {
-        console.group('deviantARTFilter.manage()');
+        if (debug) console.group('deviantARTFilter.manage()');
 
         var tabs = $('<div>')
             .addClass('manage-filters-tabs');
@@ -568,12 +570,12 @@ deviantARTFilter.prototype = {
             $('#' + tab).removeClass('hidden');
         });
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     setup: function() {
-        console.group('deviantARTFilter.setup()');
+        if (debug) console.group('deviantARTFilter.setup()');
 
         if (this.placeholders) {
             $('body').addClass('placeholders');
@@ -587,14 +589,14 @@ deviantARTFilter.prototype = {
         this.addControls();
         this.addEventSubsribers();
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     },
 
     buildFilteredUsersTable: function() {
-        console.group('deviantARTFilter.buildFilteredUsersTable()');
+        if (debug) console.group('deviantARTFilter.buildFilteredUsersTable()');
         var users = this.getHiddenUsers();
-        console.log('Building table for users:', users);
+        if (debug) console.log('Building table for users:', users);
 
         var usersTable = $('<table/>')
             .addClass('manage-filters-table')
@@ -659,14 +661,14 @@ deviantARTFilter.prototype = {
             usersTable.append(userRow);
         }
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
 
         return usersTable;
     },
 
     buildFilteredCategoriesTable: function() {
-        console.group('deviantARTFilter.buildFilteredCategoriesTable()');
+        if (debug) console.group('deviantARTFilter.buildFilteredCategoriesTable()');
 
         // since v2.0 categories need all at least "longname" and "shortname"
         // but prior to v2.0 there was only "longname"
@@ -675,7 +677,7 @@ deviantARTFilter.prototype = {
         }
 
         var categories = this.getHiddenCategories();
-        console.log('Building table for categories:', categories);
+        if (debug) console.log('Building table for categories:', categories);
 
         var categoriesTable = $('<table/>')
             .addClass('manage-filters-table')
@@ -710,14 +712,14 @@ deviantARTFilter.prototype = {
             categoriesTable.append(categoryRow);
         }
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
 
         return categoriesTable;
     },
 
     cleanHiddenObjects: function(objectType, strictFiltering) {
-        console.group('deviantARTFilter.cleanHiddenObjects()');
+        if (debug) console.group('deviantARTFilter.cleanHiddenObjects()');
 
         var dirty = clean = [];
         var object, list;
@@ -758,14 +760,14 @@ deviantARTFilter.prototype = {
             }
         }
 
-        console.log('Valid objects', dirty);
+        if (debug) console.log('Valid objects', dirty);
 
         if (changed) {
             GM_setValue(list, JSON.stringify(clean));
         }
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
 
         return changed;
     }
@@ -789,18 +791,18 @@ filterObject.prototype = {
      * @return bool
      */
     isComplete: function() {
-        console.group(this.objectName + '.isComplete()');
+        if (debug) console.group(this.objectName + '.isComplete()');
         var ret = true;
 
         for (var i = 0; i < this.objectProperties.length; i++) {
-            console.log(this.objectProperties[i], this[this.objectProperties[i]]);
+            if (debug) console.log(this.objectProperties[i], this[this.objectProperties[i]]);
             ret = ret && (typeof this[this.objectProperties[i]] !== 'undefined' && this[this.objectProperties[i]] !== null);
         }
 
-        console.log(ret);
+        if (debug) console.log(ret);
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
 
         return ret;
     },
@@ -811,20 +813,20 @@ filterObject.prototype = {
      * @return bool
      */
     isHidden: function() {
-        console.group(this.objectName + '.isHidden()');
+        if (debug) console.group(this.objectName + '.isHidden()');
 
         var hidden = JSON.parse(GM_getValue(this.hiddenListName, '[]'));
         var idx = this.findInArray(hidden);
         var isHidden = (idx >= 0);
 
         if (isHidden) {
-            console.log(this.objectName + ' is hidden.');
+            if (debug) console.log(this.objectName + ' is hidden.');
         } else {
-            console.log(this.objectName + ' is NOT hidden.');
+            if (debug) console.log(this.objectName + ' is NOT hidden.');
         }
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
 
         return isHidden;
     },
@@ -835,18 +837,18 @@ filterObject.prototype = {
      * @return bool
      */
     isValid: function() {
-        console.group(this.objectName + '.isValid()');
+        if (debug) console.group(this.objectName + '.isValid()');
         var ret = false;
 
         for (var i = 0; i < this.objectProperties.length; i++) {
-            console.log(this.objectProperties[i], this[this.objectProperties[i]]);
+            if (debug) console.log(this.objectProperties[i], this[this.objectProperties[i]]);
             ret = ret || (typeof this[this.objectProperties[i]] !== 'undefined' && this[this.objectProperties[i]] !== null);
         }
 
-        console.log(ret);
+        if (debug) console.log(ret);
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
 
         return ret;
     },
@@ -857,13 +859,13 @@ filterObject.prototype = {
      * @return bool If the filterObject was successfully hidden
      */
     hide: function() {
-        console.group(this.objectName + '.hide()');
+        if (debug) console.group(this.objectName + '.hide()');
 
         if (this.isHidden()) {
-            console.log(this.objectName + ' is already hidden.');
+            if (debug) console.log(this.objectName + ' is already hidden.');
             return false;
         } else if (!this.isValid()) {
-            console.log(this.objectName + ' is not valid.');
+            if (debug) console.log(this.objectName + ' is not valid.');
             return false;
         }
 
@@ -876,10 +878,10 @@ filterObject.prototype = {
 
         GM_setValue(this.hiddenListName, JSON.stringify(hidden));
 
-        console.log(hidden);
+        if (debug) console.log(hidden);
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
 
         return true;
     },
@@ -891,9 +893,9 @@ filterObject.prototype = {
      * @return int            The index of the filterObject in the array (-1 if not found)
      */
     findInArray: function(theArray) {
-        console.group(this.objectName + '.findInArray()');
+        if (debug) console.group(this.objectName + '.findInArray()');
 
-        console.log('Looping through ' + theArray.length + ' filterObjects.');
+        if (debug) console.log('Looping through ' + theArray.length + ' filterObjects.');
         var idx = -1,
             property;
         for (var i = 0; i < theArray.length; i++) {
@@ -901,7 +903,7 @@ filterObject.prototype = {
                 property = this.uniqueProperties[j];
                 if (typeof theArray[i][property] !== 'undefined' && theArray[i][property] !== null) {
                     if (theArray[i][property] === this[property]) {
-                        console.log('Found ' + this.objectName + ' by ' + property + ' at index ' + i + '.');
+                        if (debug) console.log('Found ' + this.objectName + ' by ' + property + ' at index ' + i + '.');
                         idx = i;
                         break;
                     }
@@ -909,10 +911,10 @@ filterObject.prototype = {
             }
         }
 
-        console.log('Returning: ' + idx);
+        if (debug) console.log('Returning: ' + idx);
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
 
         return idx;
     },
@@ -923,10 +925,10 @@ filterObject.prototype = {
      * @return bool If the filterObject was hidden initially
      */
     unhide: function() {
-        console.group(this.objectName + '.hide()');
+        if (debug) console.group(this.objectName + '.hide()');
 
         if (!this.isHidden()) {
-            console.log(this.objectName + ' is not already hidden.');
+            if (debug) console.log(this.objectName + ' is not already hidden.');
             return false;
         }
 
@@ -937,12 +939,12 @@ filterObject.prototype = {
         if (ret) {
             hidden.splice(idx, 1);
 
-            console.log('Updating stored list of hidden ' + this.objectName + 's.');
+            if (debug) console.log('Updating stored list of hidden ' + this.objectName + 's.');
             GM_setValue(this.hiddenListName, JSON.stringify(hidden));
         }
 
-        console.log('Complete');
-        console.groupEnd();
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
 
         return ret;
     }
