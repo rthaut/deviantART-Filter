@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name        deviantART Filter
+// @name        deviantART Filter Beta
 // @author      Ryan Thaut
 // @description Allows automatic filtering of deviations from certain users and/or in certain categories.
 // @namespace   http://repo.ryanthaut.com/userscripts/deviantart_filter
-// @updateURL   http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter.meta.js
-// @downloadURL http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter.user.js
+// @updateURL   http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter_Beta.meta.js
+// @downloadURL http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter_Beta.user.js
 // @include     http://*deviantart.com/*
-// @version     2.0
+// @version     2.1b1
 // @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -117,6 +117,10 @@ deviantARTFilter.prototype = {
         css += '.manage-filters-table input:focus { background: #FFFFFF; }';
         css += '.manage-filters-table button { margin: 0; padding: 0.2em; }';
 
+        css += 'fieldset.import-export-fieldset { border: 1px solid #8C9A88; margin-top: 1em; padding: 1em; }';
+        css += 'fieldset.import-export-fieldset legend { font-weight: bold; padding: 0 1em; }';
+        css += '.manage-filters-settings textarea { background-color: rgba(255, 255, 255, 0.35); border: 1px solid #8C9A88; display: block; height: 200px; width: 98%; padding: 1%; margin-top: 1em; }'
+
         GM_addStyle(css);
 
         if (debug) console.log('Complete');
@@ -221,9 +225,9 @@ deviantARTFilter.prototype = {
         var userid = $('input#userid').val();
         var username = $('input#username').val();
 
-        if (userid === '' && username === '')
+        if (username === '' || username === null)
         {
-            alert('You must provide either a Username or User ID.');
+            alert('You must provide a Username.');
             return false;
         }
 
@@ -386,28 +390,37 @@ deviantARTFilter.prototype = {
     hideCategory: function(category) {
         if (debug) console.group('deviantARTFilter.hideCategory()');
 
+        var ret = false;
+
         if (category.isHidden()) {
             alert('This category ("' + category.shortname + '") is already hidden.');
         } else {
             if (category.hide()) {
                 this.insertHiddenCategoriesCSS([category]);
+                ret = true;
             }
         }
 
         if (debug) console.log('Complete');
         if (debug) console.groupEnd();
+
+        return ret;
     },
 
     unhideCategory: function(category) {
         if (debug) console.group('deviantARTFilter.unhideCategory()');
 
+        var ret = false;
+
         if (category.unhide()) {
             alert('Changes will take effect on next page load/refresh');
-            //this.removeHiddenCategoriesCSS([category]);
+            ret = true;
         }
 
         if (debug) console.log('Complete');
         if (debug) console.groupEnd();
+
+        return ret;
     },
 
     toggleSettingChangeEventHandler: function(event) {
@@ -454,6 +467,56 @@ deviantARTFilter.prototype = {
             alert('Changes will take effect on next page load/refresh');
         } else {
             alert('Your hidden ' + object + ' are clean; no changes were made');
+        }
+
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
+    },
+
+    exportFiltersClickEventHandler: function(event) {
+        if (debug) console.group('deviantARTFilter.exportFiltersClickEventHandler()');
+
+        event.preventDefault();
+
+        var filters = this.exportFilters();
+        $('#filtersTextBox').val(JSON.stringify(filters));
+
+        $('#importFiltersButton').prop('disabled', true).addClass('disabledbutton');
+
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
+    },
+
+    importFiltersClickEventHandler: function(event) {
+        if (debug) console.group('deviantARTFilter.importFiltersClickEventHandler()');
+
+        event.preventDefault();
+
+        if ($('#filtersTextBox').val().length > 0) {
+            try {
+                this.importFilters(JSON.parse($('#filtersTextBox').val()));
+            } catch (ex) {
+                alert('Unable to parse filters');
+            }
+        } else {
+            alert('Nothing to import');
+        }
+
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
+    },
+
+    importExportFilterChangeEventHandler: function(event) {
+        if (debug) console.group('deviantARTFilter.importExportFilterChangeEventHandler()');
+
+        if ($('#filtersTextBox').val().length > 0) {
+            if (debug) console.log('Textarea has content; only allowing import');
+            $('#exportFiltersButton').prop('disabled', true).addClass('disabledbutton');
+            $('#importFiltersButton').prop('disabled', false).removeClass('disabledbutton');
+        } else {
+            if (debug) console.log('Textarea has no content; only allowing export');
+            $('#exportFiltersButton').prop('disabled', false).removeClass('disabledbutton');
+            $('#importFiltersButton').prop('disabled', true).addClass('disabledbutton');
         }
 
         if (debug) console.log('Complete');
@@ -555,6 +618,43 @@ deviantARTFilter.prototype = {
             .on('click', $.proxy(this.cleanObjectsClickEventHandler, this))
             .appendTo(settingsForm);
 
+        var importExportFieldset = $('<fieldset/>')
+            .addClass('import-export-fieldset')
+            .appendTo(settingsForm);
+
+        var importExportLegend = $('<legend/>')
+            .html('Export/Import Filters')
+            .appendTo(importExportFieldset);
+
+        var importExportHint = $('<span/>')
+            .attr('id', 'importExportHint')
+            .html('<b>Instructions</b>:<br/>- Click the "Export Filters" button to output your filters into JSON in the text box below.<br/>- Click the "Import Filters" button to load filters from the JSON in the text box below.<br/>')
+            .appendTo(importExportFieldset);
+
+        var exportButton = $('<button/>')
+            .addClass('smbutton smbutton-size-large smbutton-blue smbutton-shadow')
+            .attr('id', 'exportFiltersButton')
+            .html('Export Filters')
+            .on('click', $.proxy(this.exportFiltersClickEventHandler, this))
+            .appendTo(importExportFieldset);
+
+        var separator = $('<span/>')
+            .html('&nbsp;&nbsp;&nbsp;')
+            .appendTo(importExportFieldset);
+
+        var importButton = $('<button/>')
+            .addClass('smbutton smbutton-size-large smbutton-blue smbutton-shadow disabledbutton')
+            .attr('id', 'importFiltersButton')
+            .prop('disabled', true)
+            .html('Import Filters')
+            .on('click', $.proxy(this.importFiltersClickEventHandler, this))
+            .appendTo(importExportFieldset);
+
+        var importExportTextbox = $('<textarea>')
+            .attr('id', 'filtersTextBox')
+            .on('change keyup paste', $.proxy(this.importExportFilterChangeEventHandler, this))
+            .appendTo(importExportFieldset);
+
         var content = $('<div/>')
             .append(tabs)
             .append(usersContent)
@@ -608,7 +708,7 @@ deviantARTFilter.prototype = {
         var userNameField = $('<input/>')
             .attr('id', 'username')
             .attr('name', 'username')
-            .attr('placeholder', 'Username (Optional)')
+            .attr('placeholder', 'Username (Case-Sensitive)')
             .attr('type', 'text')
             .wrap('<td/>').parent()
             .appendTo(userRow);
@@ -770,6 +870,67 @@ deviantARTFilter.prototype = {
         if (debug) console.groupEnd();
 
         return changed;
+    },
+
+    exportFilters: function() {
+        if (debug) console.group('deviantARTFilter.exportFilters()');
+
+        var filters = { };
+
+        var categories = this.getHiddenCategories();
+        var users = this.getHiddenUsers();
+
+        if (typeof categories !== 'undefined' && categories !== null) {
+            filters['categories'] = categories;
+        }
+
+        if (typeof users !== 'undefined' && users !== null) {
+            filters['users'] = users;
+        }
+
+        if (debug) console.log('filters', filters);
+
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
+
+        return filters;
+    },
+
+    importFilters: function(filters) {
+        if (debug) console.group('deviantARTFilter.importFilters()');
+
+        if (debug) console.log('filters', filters);
+
+        var category, user
+            importedCategories = 0,
+            importerdUsers = 0;
+
+        if (typeof filters['categories'] !== 'undefined' && filters['categories'] !== null) {
+            var categories = filters['categories'];
+            if (debug) console.log('Hiding categories', categories);
+            for (var i = 0; i < categories.length; i++) {
+                category = new Category(categories[i]['shortname'], categories[i]['longname'], categories[i]['hierarchy']);
+                if (category.hide()) {
+                    importedCategories++;
+                }
+            }
+        }
+
+        if (typeof filters['users'] !== 'undefined' && filters['users'] !== null) {
+            var users = filters['users'];
+            if (debug) console.log('Hiding users', users);
+            for (var i = 0; i < users.length; i++) {
+                user = new User(users[i]['userid'], users[i]['username']);
+                if (user.hide()) {
+                    importerdUsers++;
+                }
+            }
+        }
+
+        alert("Successfully imported " + importedCategories + " categories and " + importerdUsers + " users.\n\nChanges will take effect on next page load/refresh.");
+
+        if (debug) console.log('Complete');
+        if (debug) console.groupEnd();
     }
 };
 
@@ -861,29 +1022,32 @@ filterObject.prototype = {
     hide: function() {
         if (debug) console.group(this.objectName + '.hide()');
 
+        var hide = true;
         if (this.isHidden()) {
             if (debug) console.log(this.objectName + ' is already hidden.');
-            return false;
+            hide = false;
         } else if (!this.isValid()) {
             if (debug) console.log(this.objectName + ' is not valid.');
-            return false;
+            hide = false;
         }
 
-        var hidden = JSON.parse(GM_getValue(this.hiddenListName, '[]'));
-        var tmp = new Object();
-        for (var i = 0; i < this.objectProperties.length; i++) {
-            tmp[this.objectProperties[i]] = this[this.objectProperties[i]];
+        if (hide) {
+            var hidden = JSON.parse(GM_getValue(this.hiddenListName, '[]'));
+            var tmp = new Object();
+            for (var i = 0; i < this.objectProperties.length; i++) {
+                tmp[this.objectProperties[i]] = this[this.objectProperties[i]];
+            }
+            hidden.push(tmp);
+
+            GM_setValue(this.hiddenListName, JSON.stringify(hidden));
+
+            if (debug) console.log(hidden);
         }
-        hidden.push(tmp);
-
-        GM_setValue(this.hiddenListName, JSON.stringify(hidden));
-
-        if (debug) console.log(hidden);
 
         if (debug) console.log('Complete');
         if (debug) console.groupEnd();
 
-        return true;
+        return hide;
     },
 
     /**
