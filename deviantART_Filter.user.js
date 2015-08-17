@@ -6,7 +6,7 @@
 // @updateURL   http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter_Beta.meta.js
 // @downloadURL http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter_Beta.user.js
 // @include     http://*deviantart.com/*
-// @version     2.1b1
+// @version     2.1b2
 // @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -117,9 +117,10 @@ deviantARTFilter.prototype = {
         css += '.manage-filters-table input:focus { background: #FFFFFF; }';
         css += '.manage-filters-table button { margin: 0; padding: 0.2em; }';
 
-        css += 'fieldset.import-export-fieldset { border: 1px solid #8C9A88; margin-top: 1em; padding: 1em; }';
-        css += 'fieldset.import-export-fieldset legend { font-weight: bold; padding: 0 1em; }';
-        css += '.manage-filters-settings textarea { background-color: rgba(255, 255, 255, 0.35); border: 1px solid #8C9A88; display: block; height: 200px; width: 98%; padding: 1%; margin-top: 1em; }'
+        css += '.manage-filters-settings fieldset { border: 1px solid #8C9A88; margin-top: 1em; padding: 1em; }';
+        css += '.manage-filters-settings fieldset legend { font-weight: bold; padding: 0 1em; }';
+        css += '.manage-filters-settings fieldset p { margin: 0 0 1em; }';
+        css += '.manage-filters-settings textarea { background-color: rgba(255, 255, 255, 0.35); border: 1px solid #8C9A88; display: block; height: 200px; width: 98%; padding: 1%; margin-top: 1em; resize: vertical; }'
 
         GM_addStyle(css);
 
@@ -233,41 +234,41 @@ deviantARTFilter.prototype = {
 
         var user = new User(userid, username);
 
-        this.hideUser(user);
+        if (this.hideUser(user)) {
+            // @TODO maybe just destroy the table and rebuild it?
+            // Or break out the for loop logic in buildFilteredUsersTable() to prevent code duplication
+            if (debug) console.log("Inserting newly hidden user into table");
+            var userRow = $('<tr/>');
 
-        // @TODO maybe just destroy the table and rebuild it?
-        // Or break out the for loop logic in buildFilteredUsersTable() to prevent code duplication
-        if (debug) console.log("Inserting newly hidden user into table");
-        var userRow = $('<tr/>');
+            // username column/link
+            if (username !== null) {
+                userRow.append('<td><a class="external" href="http://' + username + '.deviantart.com/" target="_blank">' + username + '</a></td>');
+            } else {
+                userRow.append('<td>---</td>');
+            }
 
-        // username column/link
-        if (username !== null) {
-            userRow.append('<td><a class="external" href="http://' + username + '.deviantart.com/" target="_blank">' + username + '</a></td>');
-        } else {
-            userRow.append('<td>---</td>');
+            // userid column
+            if (userid !== null) {
+                userRow.append('<td>' + userid + '</td>');
+            } else {
+                userRow.append('<td>---</td>');
+            }
+
+            // unhide user column/link
+            var unhideUserLink = $('<button/>')
+                .addClass('smbutton smbutton-green smbutton-shadow')
+                .attr('userid', userid)
+                .attr('username', username)
+                .html('Unhide User')
+                .on('click', function() {
+                    //unhideUser($(this).attr('userid'), $(this).attr('username'));
+                    $(this).parents('tr').hide().remove();
+                })
+                .wrap('<td/>').parent()
+                .appendTo(userRow);
+
+            $('table#manage-users-table').append(userRow);
         }
-
-        // userid column
-        if (userid !== null) {
-            userRow.append('<td>' + userid + '</td>');
-        } else {
-            userRow.append('<td>---</td>');
-        }
-
-        // unhide user column/link
-        var unhideUserLink = $('<button/>')
-            .addClass('smbutton smbutton-green smbutton-shadow')
-            .attr('userid', userid)
-            .attr('username', username)
-            .html('Unhide User')
-            .on('click', function() {
-                //unhideUser($(this).attr('userid'), $(this).attr('username'));
-                $(this).parents('tr').hide().remove();
-            })
-            .wrap('<td/>').parent()
-            .appendTo(userRow);
-
-        $('table#manage-users-table').append(userRow);
 
         if (debug) console.log('Complete');
         if (debug) console.groupEnd();
@@ -331,7 +332,7 @@ deviantARTFilter.prototype = {
         var ret = false;
 
         if (user.unhide()) {
-            alert('Changes will take effect on next page load/refresh');
+            alert('Changes will take effect on next page load/refresh.');
             ret = true;
         }
 
@@ -413,7 +414,7 @@ deviantARTFilter.prototype = {
         var ret = false;
 
         if (category.unhide()) {
-            alert('Changes will take effect on next page load/refresh');
+            alert('Changes will take effect on next page load/refresh.');
             ret = true;
         }
 
@@ -442,7 +443,7 @@ deviantARTFilter.prototype = {
             case 'cascadingCategories':
                 this.cascadingCategories = !this.cascadingCategories;
                 GM_setValue('cascadingCategories', this.cascadingCategories);
-                alert('Changes will take effect on next page load/refresh');
+                alert('Changes will take effect on next page load/refresh.');
                 break;
         }
 
@@ -464,9 +465,9 @@ deviantARTFilter.prototype = {
         var changed = this.cleanHiddenObjects(object, strict);
 
         if (changed) {
-            alert('Changes will take effect on next page load/refresh');
+            alert('Changes will take effect on next page load/refresh.');
         } else {
-            alert('Your hidden ' + object + ' are clean; no changes were made');
+            alert('Your hidden ' + object + ' are clean; no changes were made.');
         }
 
         if (debug) console.log('Complete');
@@ -496,10 +497,10 @@ deviantARTFilter.prototype = {
             try {
                 this.importFilters(JSON.parse($('#filtersTextBox').val()));
             } catch (ex) {
-                alert('Unable to parse filters');
+                alert('Unable to parse filters from JSON.');
             }
         } else {
-            alert('Nothing to import');
+            alert('Nothing to import.');
         }
 
         if (debug) console.log('Complete');
@@ -572,7 +573,16 @@ deviantARTFilter.prototype = {
             .addClass('manage-filters-settings').
             appendTo(settingsContent);
 
-        var placeholdersWrapper = $('<fieldset/>').appendTo(settingsForm);
+        var basicSettingsFieldset = $('<fieldset/>')
+            .addClass('basic-settings-fieldset')
+            .appendTo(settingsForm);
+
+        var basicSettingsLegend = $('<legend/>')
+            .html('Basic Settings')
+            .appendTo(basicSettingsFieldset);
+
+        var placeholdersWrapper = $('<p/>')
+            .appendTo(basicSettingsFieldset);
 
         var placeholdersInput = $('<input/>')
             .attr('type', 'checkbox')
@@ -588,7 +598,8 @@ deviantARTFilter.prototype = {
             .append('<br/><small>(Disabling this will hide deviations completely)</small>')
             .appendTo(placeholdersWrapper);
 
-        var cascadingCategoriesWrapper = $('<fieldset/>').appendTo(settingsForm);
+        var cascadingCategoriesWrapper = $('<p/>')
+            .appendTo(basicSettingsFieldset);
 
         var cascadingCategoriesInput = $('<input/>')
             .attr('type', 'checkbox')
@@ -604,19 +615,33 @@ deviantARTFilter.prototype = {
             .append('<br/><small>(Disabling this will <strong>not</strong> hide deviations in sub-categories of hidden categories)</small>')
             .appendTo(cascadingCategoriesWrapper);
 
+        var cleanFiltersFieldset = $('<fieldset/>')
+            .addClass('clean-filters-fieldset')
+            .appendTo(settingsForm);
+
+        var cleanFiltersLegend = $('<legend/>')
+            .html('Clean Old/Broken Filters')
+            .appendTo(cleanFiltersFieldset);
+
         var cleanUsersButton = $('<button/>')
+            .addClass('smbutton smbutton-size-default smbutton-shadow')
             .html('Clean Hidden Users')
             .attr('name', 'users')
             .attr('strict', false)
             .on('click', $.proxy(this.cleanObjectsClickEventHandler, this))
-            .appendTo(settingsForm);
+            .appendTo(cleanFiltersFieldset);
+
+        var separator1 = $('<span/>')
+            .html('&nbsp;&nbsp;&nbsp;')
+            .appendTo(cleanFiltersFieldset);
 
         var cleanCategoriesButton = $('<button/>')
+            .addClass('smbutton smbutton-size-default smbutton-shadow')
             .html('Clean Hidden Categories')
             .attr('name', 'categories')
             .attr('strict', false)
             .on('click', $.proxy(this.cleanObjectsClickEventHandler, this))
-            .appendTo(settingsForm);
+            .appendTo(cleanFiltersFieldset);
 
         var importExportFieldset = $('<fieldset/>')
             .addClass('import-export-fieldset')
@@ -632,18 +657,18 @@ deviantARTFilter.prototype = {
             .appendTo(importExportFieldset);
 
         var exportButton = $('<button/>')
-            .addClass('smbutton smbutton-size-large smbutton-blue smbutton-shadow')
+            .addClass('smbutton smbutton-size-default smbutton-blue smbutton-shadow')
             .attr('id', 'exportFiltersButton')
             .html('Export Filters')
             .on('click', $.proxy(this.exportFiltersClickEventHandler, this))
             .appendTo(importExportFieldset);
 
-        var separator = $('<span/>')
+        var separator2 = $('<span/>')
             .html('&nbsp;&nbsp;&nbsp;')
             .appendTo(importExportFieldset);
 
         var importButton = $('<button/>')
-            .addClass('smbutton smbutton-size-large smbutton-blue smbutton-shadow disabledbutton')
+            .addClass('smbutton smbutton-size-default smbutton-blue smbutton-shadow disabledbutton')
             .attr('id', 'importFiltersButton')
             .prop('disabled', true)
             .html('Import Filters')
@@ -902,32 +927,57 @@ deviantARTFilter.prototype = {
         if (debug) console.log('filters', filters);
 
         var category, user
-            importedCategories = 0,
-            importerdUsers = 0;
+            importedCategories = {"Total" : 0, "Success" : 0, "Existing" : 0, "Invalid" : 0},
+            importedUsers = {"Total" : 0, "Success" : 0, "Existing" : 0, "Invalid" : 0};
 
         if (typeof filters['categories'] !== 'undefined' && filters['categories'] !== null) {
             var categories = filters['categories'];
+            importedCategories.Total = categories.length;
             if (debug) console.log('Hiding categories', categories);
             for (var i = 0; i < categories.length; i++) {
                 category = new Category(categories[i]['shortname'], categories[i]['longname'], categories[i]['hierarchy']);
-                if (category.hide()) {
-                    importedCategories++;
+                if (!category.isValid()) {
+                    importedCategories.Invalid++;
+                } else if (category.isHidden()) {
+                    importedCategories.Existing++;
+                } else if (category.hide()) {
+                    importedCategories.Success++;
                 }
             }
         }
 
         if (typeof filters['users'] !== 'undefined' && filters['users'] !== null) {
             var users = filters['users'];
+            importedUsers.Total = users.length;
             if (debug) console.log('Hiding users', users);
             for (var i = 0; i < users.length; i++) {
                 user = new User(users[i]['userid'], users[i]['username']);
-                if (user.hide()) {
-                    importerdUsers++;
+                if (!user.isValid()) {
+                    importedUsers.Invalid++;
+                } else if (user.isHidden()) {
+                    importedUsers.Existing++;
+                } else if (user.hide()) {
+                    importedUsers.Success++;
                 }
             }
         }
 
-        alert("Successfully imported " + importedCategories + " categories and " + importerdUsers + " users.\n\nChanges will take effect on next page load/refresh.");
+        var results = "Import finished successfully.\n";
+        results += "\nCategories:\n";
+        for (var prop in importedCategories) {
+            if (importedCategories.hasOwnProperty(prop)) {
+                results += "- " + prop + ": " + importedCategories[prop] + "\n";
+            }
+        }
+
+        results += "\nUsers:\n";
+        for (var prop in importedUsers) {
+            if (importedUsers.hasOwnProperty(prop)) {
+                results += "- " + prop + ": " + importedUsers[prop] + "\n";
+            }
+        }
+
+        alert(results + "\n\nChanges will take effect on next page load/refresh.");
 
         if (debug) console.log('Complete');
         if (debug) console.groupEnd();
