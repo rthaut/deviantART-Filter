@@ -16,6 +16,13 @@
 </ul>
 
 <h2>Change Log</h2>
+<h4>19 August 2015 - <a href="http://repo.ryanthaut.com/userscripts/deviantart_filter/old_versions/deviantART_Filter-2.1.0.user.js">v2.1.0</a></h4>
+<ul>
+	<li><b>Added filter import and export functionality</b> to facilitate saving/migrating filters</li>
+	<li>Cleaned up settings</li>
+	<li>Prevented row removal when unhiding a user fails</li>
+</ul>
+
 <h4>11 August 2015 - <a href="http://repo.ryanthaut.com/userscripts/deviantart_filter/old_versions/deviantART_Filter-2.0.0.user.js">v2.0.0</a></h4>
 <ul>
 	<li><b>Complete rewrite of core filtering system</b>; script performance should be drastically improved</li>
