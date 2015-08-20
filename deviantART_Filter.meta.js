@@ -6,7 +6,7 @@
 // @updateURL   http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter.meta.js
 // @downloadURL http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter.user.js
 // @include     http://*deviantart.com/*
-// @version     2.0
+// @version     2.1
 // @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
