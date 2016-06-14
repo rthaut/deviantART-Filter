@@ -6,41 +6,60 @@
 // @updateURL   http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter.meta.js
 // @downloadURL http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter.user.js
 // @include     http://*deviantart.com/*
-// @version     2.1
+// @include     https://*deviantart.com/*
+// @version     3.0
 // @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @require     http://code.jquery.com/jquery-latest.min.js
 // ==/UserScript==
 
-var debug = false;
+"use strict";
 
-var deviantARTFilter = function() {
-    if (debug) console.group('construct');
+const DEBUG = false;
 
-    this.placeholders = GM_getValue('placeholders', true);
-    this.cascadingCategories = GM_getValue('cascadingCategories', true);
+const CORNER_LIGHT = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAaCAYAAADbhS54AAAAsUlEQVRIic3VPQuCYBSG4bvoA4fAIaKlpcHFoSASGpoaGgJDEMX//0dcEkTMXgPf8zxw7xdnOQCVYAUCiL5OirAcWCnCYj6zhrTLgIUiLKI1a0xTCswVYUc6swZVwAuYKcIOXZQC7NmHUoDtFWGPbyhr2FYRdh9CWcJCRdjtF8oCVgIbRdjVBeUbVgCBIuzsivIJy4G1GiwFdmNQPmAJsByLmhL2ZuBBuyyboAt/XqlZDcPEGXawh1sVAAAAAElFTkSuQmCC";
+const CORNER_DARK = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAaCAYAAADbhS54AAAAvklEQVRIic3OMQ7BcBxH8cdgQiQmu7W7zcQBnMAFXMAFxGoxdHWA3sAB7FaNhbGLSAxq0aRpilbT/+/7krd/AGLBbwgg8l4pwiKgpwhb8s4akv4CtBVhC1JZY5JDoKUIm5PJGhQDR6CpCJtlUQqwA9BQhE3yUNaw/SeUNWykCAu+oaxgT8BThO1+oSxgD2CoCNsWQbmG3YGBImxdFOUSFgF9NdgJGJdBuYD5QKcsqk7YGZj+A0q61vAG6FZBvQCzZyZfoGzu2QAAAABJRU5ErkJggg==";
 
-    if (debug) console.log('complete');
-    if (debug) console.groupEnd();
+function addStyleSheet(css = "") {
+    var style = document.createElement("style");
+    style.appendChild(document.createTextNode(css));
+    document.head.appendChild(style);
+    return style.sheet;
+}
 
-    return this;
-};
-deviantARTFilter.prototype = {
-    constructor: deviantARTFilter,
+function resetStyleSheet(sheet) {
+    while (sheet.cssRules.length > 0) {
+        sheet.deleteRule(0);
+    }
+}
 
-    getHiddenUsers: function() {
-        return JSON.parse(GM_getValue('hiddenUsers', '[]'))
-    },
+class deviantARTFilter {
+    constructor() {
+        this._filterSheet = null;
+        this._filterSheetIDX = -1;
+    }
 
-    getHiddenCategories: function() {
-        return JSON.parse(GM_getValue('hiddenCategories', '[]'))
-    },
+    get hiddenUsers() {
+        return JSON.parse(GM_getValue('hiddenUsers', '[]'));
+    }
 
-    addControls: function() {
-        if (debug) console.group('deviantARTFilter.addControls()');
+    set hiddenUsers(users) {
+        GM_setValue('hiddenUsers', JSON.stringify(users));
+    }
 
-        if (debug) console.log('Adding overhead menu item.');
+    get usePlaceholders() {
+        return GM_getValue('usePlaceholders', true);
+    }
+
+    set usePlaceholders(val) {
+        GM_setValue('usePlaceholders', val);
+    }
+
+    addControls() {
+        if (DEBUG) console.group('deviantARTFilter.addControls()');
+
+        if (DEBUG) console.log('Adding overhead menu item.');
 
         var menuItem = $('<a/>')
             .html('Manage Filters')
@@ -54,45 +73,24 @@ deviantARTFilter.prototype = {
 
         $('#oh-menu-deviant', '#overhead').after(menuCell);
 
-        if (debug) console.log('Overhead menu item added.');
+        if (DEBUG) console.log('Overhead menu item added.');
 
-        var results = $('#browse-results');
-        if (results.length == 1) {
-            if (debug) console.log('Processing Browse page.');
-            var query_params = $('#browse-results').attr('gmon-query_params');
-            if (query_params.length) {
-                query_params = JSON.parse(query_params);
-                if (debug) console.log('Browse query', query_params);
-                if (typeof query_params.category_path !== 'undefined' && query_params.category_path.length) {
-                    if (debug) console.log('Adding category toggle link.');
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
 
-                    var hideCategoryLink = $('<a/>')
-                        .html('Hide Category')
-                        .addClass('hide-category')
-                        .on('click', $.proxy(this.hideCategoryClickHandler, this));
-
-                    $('.search-stats', '.browse-top-bar').append(hideCategoryLink);
-                }
-            }
-        }
-
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
-
-    insertBaseCSS: function() {
-        if (debug) console.group('deviantARTFilter.insertBaseCSS()');
+    insertBaseCSS() {
+        if (DEBUG) console.group('deviantARTFilter.insertBaseCSS()');
 
         var css = '';
 
         css += '#overhead #oh-menu-filters { background: #46584A; border-bottom: 1px solid #38463B; }';
         css += '#overhead #oh-menu-filters a.oh-l { cursor: pointer; height: 49px; line-height: 50px; padding: 0 6px; }';
 
-        css += 'a.hide-user { cursor: pointer; position: absolute; height: 25px; line-height: 25px; width: 100%; left: 0px; top: 0px; z-index: 1; color: #FFFFFF; text-align: left; text-indent: -9999px; }';
-        css += '.tt-a:hover a.hide-user span { position: absolute; background: url("http://st.deviantart.net/minish/messages/close-message.gif") repeat 30px 0; height: 15px; width: 15px; right: 5px; top: 5px; }';
-        css += 'a.hide-user:hover { background: #A51818; text-indent: 10px; }';
-
-        css += 'a.hide-category { color: #A51818; cursor: pointer; }';
+        css += '.torpedo-container .thumb .hide-user-corner { position: absolute; z-index: 10; top: 0; left: 0; width: 38px; height: 26px; background-image: url(' + CORNER_LIGHT + '); background-position: right; opacity: 0; display: flex; align-items: center; text-indent: 5px; font-family: DA-brandicons; font-size: 16px; font-weight: bold; line-height: 1; color: #EAF2EE; cursor: pointer; transition: all .2s cubic-bezier(0,0,.58,1); white-space: nowrap; }';
+        css += '.torpedo-container .thumb .hide-user-corner:hover { background-image: url(' + CORNER_DARK + '); color: #D32800; }';
+        css += '.torpedo-container .thumb:hover .hide-user-corner { opacity: 1; }';
+        css += '.torpedo-container .thumb .hide-user-corner::after { content: "\\e632"; margin-right: 5px; display: inline; }';
 
         css += '.manage-filters-settings { padding: 1em; }';
         css += '.manage-filters-settings fieldset { border: 0; padding: 0; margin: 0 0 15px; display: block; margin-bottom: 1em; }';
@@ -122,337 +120,182 @@ deviantARTFilter.prototype = {
         css += '.manage-filters-settings fieldset p { margin: 0 0 1em; }';
         css += '.manage-filters-settings textarea { background-color: rgba(255, 255, 255, 0.35); border: 1px solid #8C9A88; display: block; height: 200px; width: 98%; padding: 1%; margin-top: 1em; resize: vertical; }'
 
-        GM_addStyle(css);
+        var sheet = addStyleSheet(css);
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
 
-    insertHiddenUsersCSS: function(users) {
-        if (debug) console.group('deviantARTFilter.insertHiddenUsersCSS()');
+    insertHiddenUsersCSS(users) {
+        if (DEBUG) console.group('deviantARTFilter.insertHiddenUsersCSS()');
 
-        if (debug) console.log("Hiding user(s):", users);
+        var selector = '.torpedo-container .thumb';
+        var invisibleCSS = 'display: none !important;';
+        var placeholderCSS = 'position: absolute; left: 0; top: 0; height: 100%; width: 100%; content: " "; background: #DDE6DA url("http://st.deviantart.net/misc/noentry-green.png") no-repeat center center; display: block; z-index: 10;';
 
-        var css1 = '',  // no placeholders
-            css2 = '';  // placeholders
-
-        for (var i = 0; i < users.length; i++) {
-            if (typeof users[i].userid !== 'undefined' && users[i].userid !== null) {
-                css1 += 'body.no-placeholders *[userid="' + users[i].userid + '"], ';
-                css2 += 'body.placeholders *[userid="' + users[i].userid + '"] a.thumb:before, ';
+        if (users.length > 0) {
+            if (DEBUG) console.log("Hiding user(s):");
+            if (this._filterSheet == null) {
+                this._filterSheet = addStyleSheet();
             }
 
-            if (typeof users[i].username !== 'undefined' && users[i].username !== null) {
-                css1 += 'body.no-placeholders *[username="' + users[i].username + '"], ';
-                css2 += 'body.placeholders *[username="' + users[i].username + '"] a.thumb:before, ';
-            }
-        }
-
-        if (css1.length > 0) {
-            // no placeholders
-            css1 = css1.replace(/, $/, '');
-            css1 += ' { display: none !important; }';
-        }
-
-        if (css2.length > 0) {
-            // placeholders
-            css2 = css2.replace(/, $/, '');
-            css2 += ' { position: absolute; left: 0; top: 0; height: 100%; width: 100%; content: " "; background: #DDE6DA url("http://st.deviantart.net/misc/noentry-green.png") no-repeat center center; display: block; }';
-        }
-
-        GM_addStyle(css1 + "\n" + css2);
-
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
-
-    insertHiddenCategoriesCSS: function(categories) {
-        if (debug) console.group('deviantARTFilter.insertHiddenCategoriesCSS()');
-
-        if (debug) console.log("Hiding category(s):", categories);
-
-        var css1 = '',  // no placeholders
-            css2 = '';  // placeholders
-
-        var selector = (this.cascadingCategories) ? '^=' : '=';
-        for (var i = 0; i < categories.length; i++) {
-            if (typeof categories[i].longname !== 'undefined' && categories[i].longname !== null) {
-                css1 += 'body.no-placeholders *[category' + selector + '"' + categories[i].longname + '"], ';
-                css2 += 'body.placeholders *[category' + selector + '"' + categories[i].longname + '"] a.thumb:before, ';
+            for (var i = 0; i < users.length; i++) {
+                if (typeof users[i].username !== 'undefined' && users[i].username !== null) {
+                    this._filterSheet.insertRule('body.no-placeholders ' + selector + '[href*="//' + users[i].username + '.deviantart.com"] { ' + invisibleCSS + ' }', 0);
+                    this._filterSheet.insertRule('body.placeholders ' + selector + ' a.torpedo-thumb-link[href*="//' + users[i].username + '.deviantart.com"]::before { ' + placeholderCSS + ' }', 0);
+                }
             }
         }
 
-        if (css1.length > 0) {
-            // no placeholders
-            css1 = css1.replace(/, $/, '');
-            css1 += ' { display: none !important; }';
-        }
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
 
-        if (css2.length > 0) {
-            // placeholders
-            css2 = css2.replace(/, $/, '');
-            css2 += ' { position: absolute; left: 0; top: 0; height: 100%; width: 100%; content: " "; background: #DDE6DA url("http://st.deviantart.net/misc/noentry-green.png") no-repeat center center; display: block; z-index: 1; }';
-        }
+    addEventSubsribers() {
+        if (DEBUG) console.group('deviantARTFilter.addEventSubsribers()');
 
-        GM_addStyle(css1 + "\n" + css2);
+        $('.torpedo-container').on('mouseover', 'span.thumb', function() {
+            var regex = /^https?:\/\/([^\.]+)\.deviantart\.com/i;
+            var match;
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
-
-    addEventSubsribers: function() {
-        if (debug) console.group('deviantARTFilter.addEventSubsribers()');
-
-        $('#browse-results').on('mouseover', 'div.tt-a', function() {
             var thumb = $(this);
-            var control = $('a.hide-user', thumb);
+            var control = $('span.hide-user-corner', thumb);
             if (!control.length) {
-                control = $('<a/>').addClass('hide-user').html('Hide User<span></span>');
-                control.attr('userid', thumb.attr('userid'));
-                control.attr('username', thumb.attr('username'));
-                thumb.find('a.thumb').before(control);
+                match = regex.exec(thumb.attr('href'));
+                control = $('<span/>').addClass('hide-user-corner');
+                control.attr('username', match[1]);
+                thumb.find('a.torpedo-thumb-link').append(control);
             }
         });
 
-        $('#browse-results').on('click', 'a.hide-user', $.proxy(this.hideUserDeviationClickHandler, this));
+        $('.torpedo-container').on('click', 'span.hide-user-corner', $.proxy(this.toggleUserDeviationClickHandler, this));
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
 
-    hideUserButtonClickHandler: function(event) {
-        if (debug) console.group('deviantARTFilter.hideUserButtonClickHandler()');
+    hideUserButtonClickHandler(event) {
+        if (DEBUG) console.group('deviantARTFilter.hideUserButtonClickHandler()');
 
-        var userid = $('input#userid').val();
         var username = $('input#username').val();
 
-        if (username === '' || username === null)
-        {
+        if (username === '' || username === null) {
             alert('You must provide a Username.');
             return false;
         }
 
-        var user = new User(userid, username);
+        var user = new User(username);
 
         if (this.hideUser(user)) {
-            // @TODO maybe just destroy the table and rebuild it?
-            // Or break out the for loop logic in buildFilteredUsersTable() to prevent code duplication
-            if (debug) console.log("Inserting newly hidden user into table");
-            var userRow = $('<tr/>');
+            $('#manage-users-tab-content').empty().append(this.buildFilteredUsersTable());
 
-            // username column/link
-            if (username !== null) {
-                userRow.append('<td><a class="external" href="http://' + username + '.deviantart.com/" target="_blank">' + username + '</a></td>');
-            } else {
-                userRow.append('<td>---</td>');
-            }
-
-            // userid column
-            if (userid !== null) {
-                userRow.append('<td>' + userid + '</td>');
-            } else {
-                userRow.append('<td>---</td>');
-            }
-
-            // unhide user column/link
-            var unhideUserLink = $('<button/>')
-                .addClass('smbutton smbutton-green smbutton-shadow')
-                .attr('userid', userid)
-                .attr('username', username)
-                .html('Unhide User')
-                .on('click', function() {
-                    //unhideUser($(this).attr('userid'), $(this).attr('username'));
-                    $(this).parents('tr').hide().remove();
-                })
-                .wrap('<td/>').parent()
-                .appendTo(userRow);
-
-            $('table#manage-users-table').append(userRow);
+            resetStyleSheet(this._filterSheet);
+            this.insertHiddenUsersCSS(this.hiddenUsers);
         }
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
 
-    unhideUserButtonClickHandler: function(event) {
-        if (debug) console.group('deviantARTFilter.unhideUserButtonClickHandler()');
+    unhideUserButtonClickHandler(event) {
+        if (DEBUG) console.group('deviantARTFilter.unhideUserButtonClickHandler()');
 
         var target = $(event.target);
-        var user = new User(target.attr('userid'), target.attr('username'));
+        var user = new User(target.attr('username'));
 
-        if (debug) console.log('Created new User object', user);
+        if (DEBUG) console.log('Created new User object', user);
 
         if (this.unhideUser(user)) {
-            // @TODO maybe just destroy the table and rebuild it?
-            if (debug) console.log("Removing newly unhidden user from table");
-            target.parents('tr').remove();
+            $('#manage-users-tab-content').empty().append(this.buildFilteredUsersTable());
+
+            resetStyleSheet(this._filterSheet);
+            this.insertHiddenUsersCSS(this.hiddenUsers);
         }
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
 
-    hideUserDeviationClickHandler: function(event) {
-        if (debug) console.group('deviantARTFilter.hideUserDeviationClickHandler()');
+    toggleUserDeviationClickHandler(event) {
+        if (DEBUG) console.group('deviantARTFilter.toggleUserDeviationClickHandler()');
 
         var target = $(event.target);
-        var user = new User(target.attr('userid'), target.attr('username'));
+        var user = new User(target.attr('username'));
 
-        if (debug) console.log('Created new User object', user);
+        if (DEBUG) console.log('Created new User object', user);
 
-        this.hideUser(user);
+        if (user.isHidden()) {
+            this.unhideUser(user);
+        } else {
+            this.hideUser(user);
+        }
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
 
-    hideUser: function(user) {
-        if (debug) console.group('deviantARTFilter.hideUser()');
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+
+        return false;
+    }
+
+    hideUser(user) {
+        if (DEBUG) console.group('deviantARTFilter.hideUser()');
 
         var ret = false;
 
-        if (user.isHidden()) {
-            alert('This user ("' + user.username + '") is already hidden.');
-        } else {
-            if (user.hide()) {
-                this.insertHiddenUsersCSS([user]);
-                ret = true;
-            }
+        if (user.hide()) {
+            resetStyleSheet(this._filterSheet);
+            this.insertHiddenUsersCSS(this.hiddenUsers);
+            ret = true;
         }
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
 
         return ret;
-    },
+    }
 
-    unhideUser: function(user) {
-        if (debug) console.group('deviantARTFilter.unhideUser()');
+    unhideUser(user) {
+        if (DEBUG) console.group('deviantARTFilter.unhideUser()');
 
         var ret = false;
 
         if (user.unhide()) {
-            alert('Changes will take effect on next page load/refresh.');
+            resetStyleSheet(this._filterSheet);
+            this.insertHiddenUsersCSS(this.hiddenUsers);
             ret = true;
         }
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
 
         return ret;
-    },
+    }
 
-    unhideCategoryButtonClickHandler: function(event) {
-        if (debug) console.group('deviantARTFilter.unhideCategoryButtonClickHandler()');
-
-        var target = $(event.target);
-        var category = new Category(target.attr('shortname'), target.attr('longname'), null);
-
-        if (debug) console.log('Created new Category object', category);
-
-        if (this.unhideCategory(category)) {
-            // @TODO maybe just destroy the table and rebuild it?
-            if (debug) console.log("Removing newly unhidden category from table");
-            target.parents('tr').remove();
-        }
-
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
-
-    hideCategoryClickHandler: function(event) {
-        if (debug) console.group('deviantARTFilter.hideCategoryClickHandler()');
-
-        var query_params = JSON.parse($('#browse-results').attr('gmon-query_params'));
-
-        var hierarchy = [];
-        var hierItem = $('#browse-sidemenu .browse-facet-category a.selected');
-        var depth = parseInt(hierItem.attr('class').replace('cat-depth-', ''), 10);
-
-        var shortname = hierItem.text().trim();
-        var longname = query_params.category_path;
-
-        hierarchy.push(shortname);
-        for (var i = (depth - 1); i > 0; i--) {
-            hierItem = $('#browse-sidemenu .browse-facet-category a.cat-depth-' + i);
-            hierarchy.push(hierItem.text().trim());
-        }
-        hierarchy.reverse();
-
-        var category = new Category(shortname, longname, hierarchy);
-        if (debug) console.log('Created new Category object', category);
-
-        this.hideCategory(category);
-
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
-
-    hideCategory: function(category) {
-        if (debug) console.group('deviantARTFilter.hideCategory()');
-
-        var ret = false;
-
-        if (category.isHidden()) {
-            alert('This category ("' + category.shortname + '") is already hidden.');
-        } else {
-            if (category.hide()) {
-                this.insertHiddenCategoriesCSS([category]);
-                ret = true;
-            }
-        }
-
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-
-        return ret;
-    },
-
-    unhideCategory: function(category) {
-        if (debug) console.group('deviantARTFilter.unhideCategory()');
-
-        var ret = false;
-
-        if (category.unhide()) {
-            alert('Changes will take effect on next page load/refresh.');
-            ret = true;
-        }
-
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-
-        return ret;
-    },
-
-    toggleSettingChangeEventHandler: function(event) {
-        if (debug) console.group('deviantARTFilter.toggleSettingChangeEventHandler()');
+    toggleSettingChangeEventHandler(event) {
+        if (DEBUG) console.group('deviantARTFilter.toggleSettingChangeEventHandler()');
 
         var target = $(event.target);
         var setting = target.attr('name');
 
-        if (debug) console.log('Toggling setting "' + setting + '".');
+        if (DEBUG) console.log('Toggling setting "' + setting + '".');
 
         switch (setting) {
             case 'placeholders':
-                this.placeholders = !this.placeholders;
-                GM_setValue('placeholders', this.placeholders);
+                this.usePlaceholders = !this.usePlaceholders;
                 $('body').toggleClass('no-placeholders');
                 $('body').toggleClass('placeholders');
-                break;
-
-            case 'cascadingCategories':
-                this.cascadingCategories = !this.cascadingCategories;
-                GM_setValue('cascadingCategories', this.cascadingCategories);
-                alert('Changes will take effect on next page load/refresh.');
-                break;
+            break;
         }
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
 
-    cleanObjectsClickEventHandler: function(event) {
-        if (debug) console.group('deviantARTFilter.cleanObjectsClickEventHandler()');
+    cleanObjectsClickEventHandler(event) {
+        if (DEBUG) console.group('deviantARTFilter.cleanObjectsClickEventHandler()');
 
         event.preventDefault();
 
@@ -460,22 +303,41 @@ deviantARTFilter.prototype = {
         var object = target.attr('name');
         var strict = (target.attr('strict') === 'true');
 
-        if (debug) console.log('Cleaning ' + object + '.');
+        if (DEBUG) console.log('Cleaning ' + object + '.');
 
         var changed = this.cleanHiddenObjects(object, strict);
 
         if (changed) {
-            alert('Changes will take effect on next page load/refresh.');
+            alert('Your hidden ' + object + ' have been cleaned.');
+            resetStyleSheet(this._filterSheet);
+            this.insertHiddenUsersCSS(this.hiddenUsers);
         } else {
             alert('Your hidden ' + object + ' are clean; no changes were made.');
         }
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
 
-    exportFiltersClickEventHandler: function(event) {
-        if (debug) console.group('deviantARTFilter.exportFiltersClickEventHandler()');
+    resetObjectsClickEventHandler(event) {
+        if (DEBUG) console.group('deviantARTFilter.resetObjectsClickEventHandler()');
+
+        event.preventDefault();
+
+        var target = $(event.target);
+        var object = target.attr('name');
+
+        if (DEBUG) console.log('Resetting ' + object + '.');
+
+        this.resetHiddenObjects(object);
+        alert('Your hidden ' + object + ' have been reset.');
+
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
+
+    exportFiltersClickEventHandler(event) {
+        if (DEBUG) console.group('deviantARTFilter.exportFiltersClickEventHandler()');
 
         event.preventDefault();
 
@@ -484,12 +346,12 @@ deviantARTFilter.prototype = {
 
         $('#importFiltersButton').prop('disabled', true).addClass('disabledbutton');
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
 
-    importFiltersClickEventHandler: function(event) {
-        if (debug) console.group('deviantARTFilter.importFiltersClickEventHandler()');
+    importFiltersClickEventHandler(event) {
+        if (DEBUG) console.group('deviantARTFilter.importFiltersClickEventHandler()');
 
         event.preventDefault();
 
@@ -503,29 +365,29 @@ deviantARTFilter.prototype = {
             alert('Nothing to import.');
         }
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
 
-    importExportFilterChangeEventHandler: function(event) {
-        if (debug) console.group('deviantARTFilter.importExportFilterChangeEventHandler()');
+    importExportFilterChangeEventHandler(event) {
+        if (DEBUG) console.group('deviantARTFilter.importExportFilterChangeEventHandler()');
 
         if ($('#filtersTextBox').val().length > 0) {
-            if (debug) console.log('Textarea has content; only allowing import');
+            if (DEBUG) console.log('Textarea has content; only allowing import');
             $('#exportFiltersButton').prop('disabled', true).addClass('disabledbutton');
             $('#importFiltersButton').prop('disabled', false).removeClass('disabledbutton');
         } else {
-            if (debug) console.log('Textarea has no content; only allowing export');
+            if (DEBUG) console.log('Textarea has no content; only allowing export');
             $('#exportFiltersButton').prop('disabled', false).removeClass('disabledbutton');
             $('#importFiltersButton').prop('disabled', true).addClass('disabledbutton');
         }
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
 
-    manage: function(event) {
-        if (debug) console.group('deviantARTFilter.manage()');
+    manage(event) {
+        if (DEBUG) console.group('deviantARTFilter.manage()');
 
         var tabs = $('<div>')
             .addClass('manage-filters-tabs');
@@ -535,12 +397,6 @@ deviantARTFilter.prototype = {
             .addClass('active')
             .attr('data-tab', 'manage-users-tab-content')
             .html('Filtered Users')
-            .appendTo(tabs);
-
-        var categoriesTab = $('<a/>')
-            .addClass('manage-filters-tab')
-            .attr('data-tab', 'manage-categories-tab-content')
-            .html('Filtered Categories')
             .appendTo(tabs);
 
         var settingsTab = $('<a/>')
@@ -555,14 +411,6 @@ deviantARTFilter.prototype = {
 
         var usersTable = this.buildFilteredUsersTable()
             .appendTo(usersContent);
-
-        var categoriesContent = $('<div/>')
-            .addClass('manage-filters-tab-content')
-            .attr('id', 'manage-categories-tab-content')
-            .addClass('hidden');
-
-        var categoriesTable = this.buildFilteredCategoriesTable()
-            .appendTo(categoriesContent);
 
         var settingsContent = $('<div/>')
             .addClass('manage-filters-tab-content')
@@ -588,7 +436,7 @@ deviantARTFilter.prototype = {
             .attr('type', 'checkbox')
             .attr('id', 'placeholders')
             .attr('name', 'placeholders')
-            .attr('checked', this.placeholders)
+            .attr('checked', this.usePlaceholders)
             .on('change', $.proxy(this.toggleSettingChangeEventHandler, this))
             .appendTo(placeholdersWrapper);
 
@@ -597,23 +445,6 @@ deviantARTFilter.prototype = {
             .html(' Use placeholders for hidden deviations')
             .append('<br/><small>(Disabling this will hide deviations completely)</small>')
             .appendTo(placeholdersWrapper);
-
-        var cascadingCategoriesWrapper = $('<p/>')
-            .appendTo(basicSettingsFieldset);
-
-        var cascadingCategoriesInput = $('<input/>')
-            .attr('type', 'checkbox')
-            .attr('id', 'cascadingCategories')
-            .attr('name', 'cascadingCategories')
-            .attr('checked', this.cascadingCategories)
-            .on('change', $.proxy(this.toggleSettingChangeEventHandler, this))
-            .appendTo(cascadingCategoriesWrapper);
-
-        var cascadingCategoriesLabel = $('<label/>')
-            .attr('for', 'cascadingCategories')
-            .html(' Cascade filtered categories')
-            .append('<br/><small>(Disabling this will <strong>not</strong> hide deviations in sub-categories of hidden categories)</small>')
-            .appendTo(cascadingCategoriesWrapper);
 
         var cleanFiltersFieldset = $('<fieldset/>')
             .addClass('clean-filters-fieldset')
@@ -635,13 +466,14 @@ deviantARTFilter.prototype = {
             .html('&nbsp;&nbsp;&nbsp;')
             .appendTo(cleanFiltersFieldset);
 
-        var cleanCategoriesButton = $('<button/>')
-            .addClass('smbutton smbutton-size-default smbutton-shadow')
-            .html('Clean Hidden Categories')
-            .attr('name', 'categories')
-            .attr('strict', false)
-            .on('click', $.proxy(this.cleanObjectsClickEventHandler, this))
-            .appendTo(cleanFiltersFieldset);
+        if (DEBUG) {
+            var emptyUsersButton = $('<button/>')
+                .addClass('smbutton smbutton-size-default smbutton-red smbutton-shadow')
+                .html('Reset Hidden Users')
+                .attr('name', 'users')
+                .on('click', $.proxy(this.resetObjectsClickEventHandler, this))
+                .appendTo(cleanFiltersFieldset);
+        }
 
         var importExportFieldset = $('<fieldset/>')
             .addClass('import-export-fieldset')
@@ -683,7 +515,6 @@ deviantARTFilter.prototype = {
         var content = $('<div/>')
             .append(tabs)
             .append(usersContent)
-            .append(categoriesContent)
             .append(settingsContent)
             .daModal({title: 'Manage deviantART Filters', width: '50%', height: '75%', footnote: '"<a href="http://fav.me/d6uocct">deviantART Filter</a>" script by <a href="http://rthaut.deviantart.com/">rthaut</a>, <a href="http://lassekongo83.deviantart.com/journal/DeviantCrap-Filter-410429292">idea</a> from <a href="http://lassekongo83.deviantart.com/">lassekongo83</a>'});
 
@@ -695,53 +526,47 @@ deviantARTFilter.prototype = {
             $('#' + tab).removeClass('hidden');
         });
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
 
-    setup: function() {
-        if (debug) console.group('deviantARTFilter.setup()');
+    run() {
+        if (DEBUG) console.group('deviantARTFilter.run()');
 
-        if (this.placeholders) {
+        if (this.usePlaceholders) {
             $('body').addClass('placeholders');
         } else {
             $('body').addClass('no-placeholders');
         }
 
         this.insertBaseCSS();
-        this.insertHiddenUsersCSS(this.getHiddenUsers());
-        this.insertHiddenCategoriesCSS(this.getHiddenCategories());
+        this.insertHiddenUsersCSS(this.hiddenUsers);
         this.addControls();
         this.addEventSubsribers();
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-    },
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
 
-    buildFilteredUsersTable: function() {
-        if (debug) console.group('deviantARTFilter.buildFilteredUsersTable()');
-        var users = this.getHiddenUsers();
-        if (debug) console.log('Building table for users:', users);
+    buildFilteredUsersTable() {
+        if (DEBUG) console.group('deviantARTFilter.buildFilteredUsersTable()');
+
+        this.cleanHiddenObjects('users', false);
+
+        var users = this.hiddenUsers;
+        if (DEBUG) console.log('Building table for users:', users);
 
         var usersTable = $('<table/>')
             .addClass('manage-filters-table')
             .attr('id', 'manage-users-table')
-            .append('<tr><th>Username</th><th>User ID</th><th>Action</th></tr>');
+            .append('<tr><th>Username</th><th>Action</th></tr>');
 
         var userRow = $('<tr/>');
 
         var userNameField = $('<input/>')
             .attr('id', 'username')
             .attr('name', 'username')
-            .attr('placeholder', 'Username (Case-Sensitive)')
-            .attr('type', 'text')
-            .wrap('<td/>').parent()
-            .appendTo(userRow);
-
-        var userIDField = $('<input/>')
-            .attr('id', 'userid')
-            .attr('name', 'userid')
-            .attr('placeholder', 'User ID (Optional)')
+            .attr('placeholder', 'Username')
             .attr('type', 'text')
             .wrap('<td/>').parent()
             .appendTo(userRow);
@@ -766,17 +591,9 @@ deviantARTFilter.prototype = {
                 userRow.append('<td>---</td>');
             }
 
-            // userid column
-            if (typeof users[i].userid !== 'undefined' && users[i].userid !== null) {
-                userRow.append('<td>' + users[i].userid + '</td>');
-            } else {
-                userRow.append('<td>---</td>');
-            }
-
             // unhide user column/button
             var unhideUserLink = $('<button/>')
                 .addClass('smbutton smbutton-green smbutton-shadow')
-                .attr('userid', users[i].userid)
                 .attr('username', users[i].username)
                 .html('Unhide User')
                 .on('click', $.proxy(this.unhideUserButtonClickHandler, this))
@@ -786,88 +603,35 @@ deviantARTFilter.prototype = {
             usersTable.append(userRow);
         }
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
 
         return usersTable;
-    },
+    }
 
-    buildFilteredCategoriesTable: function() {
-        if (debug) console.group('deviantARTFilter.buildFilteredCategoriesTable()');
+    cleanHiddenObjects(objectType, strictFiltering = false) {
+        if (DEBUG) console.group('deviantARTFilter.cleanHiddenObjects()');
 
-        // since v2.0 categories need all at least "longname" and "shortname"
-        // but prior to v2.0 there was only "longname"
-        if (this.cleanHiddenObjects('categories', true)) {
-            alert("One or more of your hidden categories has been has been removed due to incompatibility with this version of the script.\n\nYou can re-hide categories by navigating to a category page and using the red link next to the category title.");
-        }
-
-        var categories = this.getHiddenCategories();
-        if (debug) console.log('Building table for categories:', categories);
-
-        var categoriesTable = $('<table/>')
-            .addClass('manage-filters-table')
-            .attr('id', 'manage-categories-table')
-            .append('<tr><th>Category Name</th><th>Category Path</th><th>Action</th></tr>');
-
-        var categoryRow;
-
-        for (var i = 0; i < categories.length; i++) {
-            categoryRow = $('<tr/>')
-
-            // category name column/link
-            categoryRow.append('<td><a class="external" href="http://www.deviantart.com/browse/all/' + categories[i].longname + '" target="_blank">' + categories[i].shortname + '</a></td>');
-
-            // category hierarchy column
-            if (typeof categories[i].hierarchy !== 'undefined' && categories[i].hierarchy !== null) {
-                categoryRow.append('<td>' + categories[i].hierarchy.join(' > ') + '</td>');
-            } else {
-                categoryRow.append('<td>---</td>');
-            }
-
-            // unhide category column/button
-            var unhideCategoryLink = $('<button/>')
-                .addClass('smbutton smbutton-green smbutton-shadow')
-                .attr('shortname', categories[i].shortname)
-                .attr('longname', categories[i].longname)
-                .html('Unhide Category')
-                .on('click', $.proxy(this.unhideCategoryButtonClickHandler, this))
-                .wrap('<td/>').parent()
-                .appendTo(categoryRow);
-
-            categoriesTable.append(categoryRow);
-        }
-
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
-
-        return categoriesTable;
-    },
-
-    cleanHiddenObjects: function(objectType, strictFiltering) {
-        if (debug) console.group('deviantARTFilter.cleanHiddenObjects()');
-
-        var dirty = clean = [];
+        var dirty = [],
+            clean = [];
         var object, list;
         var changed = false;
 
         switch (objectType) {
             case 'users':
-                dirty = this.getHiddenUsers();
+                dirty = this.hiddenUsers;
                 list = 'hiddenUsers';
-                break;
-            case 'categories':
-                dirty = this.getHiddenCategories();
-                list = 'hiddenCategories';
-                break;
+            break;
         }
+
+        if (DEBUG) console.log('Dirty objects (' + list + ')', dirty);
 
         for (var i = 0; i < dirty.length; i++) {
             switch (objectType) {
                 case 'users':
-                    object = new User(dirty[i]['userid'], dirty[i]['username']);
-                    break;
-                case 'categories':
-                    object = new Category(dirty[i]['shortname'], dirty[i]['longname'], dirty[i]['hierarchy']);
+                    delete dirty[i]['userid'];
+                    dirty[i]['username'] = dirty[i]['username'].toLowerCase();
+                    object = new User(dirty[i]['username']);
                     break;
             }
             if (strictFiltering) {
@@ -885,73 +649,66 @@ deviantARTFilter.prototype = {
             }
         }
 
-        if (debug) console.log('Valid objects', dirty);
+        if (DEBUG) console.log('Valid objects', clean);
 
-        if (changed) {
-            GM_setValue(list, JSON.stringify(clean));
+        switch (objectType) {
+            case 'users':
+                this.hiddenUsers = clean;
+            break;
         }
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
 
         return changed;
-    },
+    }
 
-    exportFilters: function() {
-        if (debug) console.group('deviantARTFilter.exportFilters()');
+    resetHiddenObjects(objectType) {
+        if (DEBUG) console.group('deviantARTFilter.resetHiddenObjects()');
+
+        switch (objectType) {
+            case 'users':
+                this.hiddenUsers = [];
+            break;
+        }
+
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
+
+    exportFilters() {
+        if (DEBUG) console.group('deviantARTFilter.exportFilters()');
 
         var filters = { };
 
-        var categories = this.getHiddenCategories();
-        var users = this.getHiddenUsers();
-
-        if (typeof categories !== 'undefined' && categories !== null) {
-            filters['categories'] = categories;
-        }
+        var users = this.hiddenUsers;
 
         if (typeof users !== 'undefined' && users !== null) {
             filters['users'] = users;
         }
 
-        if (debug) console.log('filters', filters);
+        if (DEBUG) console.log('filters', filters);
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
 
         return filters;
-    },
+    }
 
-    importFilters: function(filters) {
-        if (debug) console.group('deviantARTFilter.importFilters()');
+    importFilters(filters) {
+        if (DEBUG) console.group('deviantARTFilter.importFilters()');
 
-        if (debug) console.log('filters', filters);
+        if (DEBUG) console.log('filters', filters);
 
-        var category, user
-            importedCategories = {"Total" : 0, "Success" : 0, "Existing" : 0, "Invalid" : 0},
+        var user,
             importedUsers = {"Total" : 0, "Success" : 0, "Existing" : 0, "Invalid" : 0};
-
-        if (typeof filters['categories'] !== 'undefined' && filters['categories'] !== null) {
-            var categories = filters['categories'];
-            importedCategories.Total = categories.length;
-            if (debug) console.log('Hiding categories', categories);
-            for (var i = 0; i < categories.length; i++) {
-                category = new Category(categories[i]['shortname'], categories[i]['longname'], categories[i]['hierarchy']);
-                if (!category.isValid()) {
-                    importedCategories.Invalid++;
-                } else if (category.isHidden()) {
-                    importedCategories.Existing++;
-                } else if (category.hide()) {
-                    importedCategories.Success++;
-                }
-            }
-        }
 
         if (typeof filters['users'] !== 'undefined' && filters['users'] !== null) {
             var users = filters['users'];
             importedUsers.Total = users.length;
-            if (debug) console.log('Hiding users', users);
+            if (DEBUG) console.log('Hiding users', users);
             for (var i = 0; i < users.length; i++) {
-                user = new User(users[i]['userid'], users[i]['username']);
+                user = new User(users[i]['username']);
                 if (!user.isValid()) {
                     importedUsers.Invalid++;
                 } else if (user.isHidden()) {
@@ -963,12 +720,6 @@ deviantARTFilter.prototype = {
         }
 
         var results = "Import finished successfully.\n";
-        results += "\nCategories:\n";
-        for (var prop in importedCategories) {
-            if (importedCategories.hasOwnProperty(prop)) {
-                results += "- " + prop + ": " + importedCategories[prop] + "\n";
-            }
-        }
 
         results += "\nUsers:\n";
         for (var prop in importedUsers) {
@@ -979,105 +730,104 @@ deviantARTFilter.prototype = {
 
         alert(results + "\n\nChanges will take effect on next page load/refresh.");
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
     }
-};
+}
 
 /**
  * Base object for filterable deviantART objects
  */
-var filterObject = function() {
-    this.hiddenListName = '';
-    this.objectName = 'filterObject';
-    this.objectProperties = [];
-    this.uniqueProperties = [];
-};
-filterObject.prototype = {
-    constructor: filterObject,
+class FilterObject {
+    constructor(hiddenListName = '', objectName = 'FilterObject', objectProperties = [], uniqueProperties = []) {
+        this.hiddenListName = hiddenListName;
+        this.objectName = objectName;
+        this.objectProperties = objectProperties;
+        this.uniqueProperties = uniqueProperties;
+    }
 
     /**
-     * Determines if the filterObject has all stored properties populated
+     * Determines if the FilterObject has all stored properties populated
      *
      * @return bool
      */
-    isComplete: function() {
-        if (debug) console.group(this.objectName + '.isComplete()');
+    isComplete() {
+        if (DEBUG) console.group(this.objectName + '.isComplete()');
         var ret = true;
 
         for (var i = 0; i < this.objectProperties.length; i++) {
-            if (debug) console.log(this.objectProperties[i], this[this.objectProperties[i]]);
+            if (DEBUG) console.log(this.objectProperties[i], this[this.objectProperties[i]]);
             ret = ret && (typeof this[this.objectProperties[i]] !== 'undefined' && this[this.objectProperties[i]] !== null);
         }
 
-        if (debug) console.log(ret);
+        if (DEBUG) console.log(ret);
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
 
         return ret;
-    },
+    }
 
     /**
-     * Determines if the filterObject is currently hidden
+     * Determines if the FilterObject is currently hidden
      *
      * @return bool
      */
-    isHidden: function() {
-        if (debug) console.group(this.objectName + '.isHidden()');
+    isHidden() {
+        if (DEBUG) console.group(this.objectName + '.isHidden()');
 
         var hidden = JSON.parse(GM_getValue(this.hiddenListName, '[]'));
         var idx = this.findInArray(hidden);
         var isHidden = (idx >= 0);
 
         if (isHidden) {
-            if (debug) console.log(this.objectName + ' is hidden.');
+            if (DEBUG) console.log(this.objectName + ' is hidden.');
         } else {
-            if (debug) console.log(this.objectName + ' is NOT hidden.');
+            if (DEBUG) console.log(this.objectName + ' is NOT hidden.');
         }
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
 
         return isHidden;
-    },
+    }
 
     /**
-     * Determines if the filterObject has at least one stored property populated
+     * Determines if the FilterObject has at least one stored property populated
      *
      * @return bool
      */
-    isValid: function() {
-        if (debug) console.group(this.objectName + '.isValid()');
+    isValid() {
+        if (DEBUG) console.group(this.objectName + '.isValid()');
         var ret = false;
 
         for (var i = 0; i < this.objectProperties.length; i++) {
-            if (debug) console.log(this.objectProperties[i], this[this.objectProperties[i]]);
+            if (DEBUG) console.log(this.objectProperties[i], this[this.objectProperties[i]]);
             ret = ret || (typeof this[this.objectProperties[i]] !== 'undefined' && this[this.objectProperties[i]] !== null);
         }
 
-        if (debug) console.log(ret);
+        if (DEBUG) console.log(ret);
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
 
         return ret;
-    },
+    }
 
     /**
-     * Hides the filterObject by adding it from the stored list of hidden filterObjects
+     * Hides the FilterObject by adding it from the stored list of hidden FilterObjects
      *
-     * @return bool If the filterObject was successfully hidden
+     * @return bool If the FilterObject was successfully hidden
      */
-    hide: function() {
-        if (debug) console.group(this.objectName + '.hide()');
+    hide() {
+        if (DEBUG) console.group(this.objectName + '.hide()');
 
         var hide = true;
         if (this.isHidden()) {
-            if (debug) console.log(this.objectName + ' is already hidden.');
+            if (DEBUG) console.log(this.objectName + ' is already hidden.');
             hide = false;
         } else if (!this.isValid()) {
-            if (debug) console.log(this.objectName + ' is not valid.');
+            if (DEBUG) console.log(this.objectName + ' is not valid.');
             hide = false;
         }
 
@@ -1091,25 +841,25 @@ filterObject.prototype = {
 
             GM_setValue(this.hiddenListName, JSON.stringify(hidden));
 
-            if (debug) console.log(hidden);
+            if (DEBUG) console.log(hidden);
         }
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
 
         return hide;
-    },
+    }
 
     /**
-     * Finds the filterObject in an array of filterObjects
+     * Finds the FilterObject in an array of FilterObjects
      *
-     * @param  array theArray The array of filterObjects to search
-     * @return int            The index of the filterObject in the array (-1 if not found)
+     * @param  array theArray The array of FilterObjects to search
+     * @return int            The index of the FilterObject in the array (-1 if not found)
      */
-    findInArray: function(theArray) {
-        if (debug) console.group(this.objectName + '.findInArray()');
+    findInArray(theArray) {
+        if (DEBUG) console.group(this.objectName + '.findInArray()');
 
-        if (debug) console.log('Looping through ' + theArray.length + ' filterObjects.');
+        if (DEBUG) console.log('Looping through ' + theArray.length + ' FilterObjects.');
         var idx = -1,
             property;
         for (var i = 0; i < theArray.length; i++) {
@@ -1117,7 +867,7 @@ filterObject.prototype = {
                 property = this.uniqueProperties[j];
                 if (typeof theArray[i][property] !== 'undefined' && theArray[i][property] !== null) {
                     if (theArray[i][property] === this[property]) {
-                        if (debug) console.log('Found ' + this.objectName + ' by ' + property + ' at index ' + i + '.');
+                        if (DEBUG) console.log('Found ' + this.objectName + ' by ' + property + ' at index ' + i + '.');
                         idx = i;
                         break;
                     }
@@ -1125,24 +875,24 @@ filterObject.prototype = {
             }
         }
 
-        if (debug) console.log('Returning: ' + idx);
+        if (DEBUG) console.log('Returning: ' + idx);
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
 
         return idx;
-    },
+    }
 
     /**
-     * Unhides (shows) the filterObject by removing it from the stored list of hidden filterObjects
+     * Unhides (shows) the FilterObject by removing it from the stored list of hidden FilterObjects
      *
-     * @return bool If the filterObject was hidden initially
+     * @return bool If the FilterObject was hidden initially
      */
-    unhide: function() {
-        if (debug) console.group(this.objectName + '.hide()');
+    unhide() {
+        if (DEBUG) console.group(this.objectName + '.hide()');
 
         if (!this.isHidden()) {
-            if (debug) console.log(this.objectName + ' is not already hidden.');
+            if (DEBUG) console.log(this.objectName + ' is not already hidden.');
             return false;
         }
 
@@ -1153,65 +903,34 @@ filterObject.prototype = {
         if (ret) {
             hidden.splice(idx, 1);
 
-            if (debug) console.log('Updating stored list of hidden ' + this.objectName + 's.');
+            if (DEBUG) console.log('Updating stored list of hidden ' + this.objectName + 's.');
             GM_setValue(this.hiddenListName, JSON.stringify(hidden));
         }
 
-        if (debug) console.log('Complete');
-        if (debug) console.groupEnd();
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
 
         return ret;
     }
-};
-
-/**
- * Category object represents a deviantART category
- * Extends filterObject
- *
- * @param string shortname The title of the category
- * @param string longname  The URL path of the category
- * @param array hierarchy The hierarchy structure to the category
- */
-var Category = function(shortname, longname, hierarchy) {
-    filterObject.call(this);
-
-    this.hiddenListName = 'hiddenCategories';
-    this.objectName = 'Category';
-    this.objectProperties = ['shortname', 'longname', 'hierarchy'];
-    this.uniqueProperties = ['longname'];
-
-    this.shortname = shortname;
-    this.longname = longname;
-    this.hierarchy = hierarchy;
-};
-Category.prototype = new filterObject();
-Category.prototype.constructor = Category;
+}
 
 /**
  * User object represents a deviantART user (a.k.a. deviant)
- * Extends filterObject
+ * Extends FilterObject
  *
- * @param string userid   The ID of the user (really an integer)
  * @param string username The name of the user
  */
-var User = function(userid, username) {
-    filterObject.call(this);
+class User extends FilterObject {
+    constructor(username) {
+        super('hiddenUsers', 'User', ['username'], ['username']);
 
-    this.hiddenListName = 'hiddenUsers';
-    this.objectName = 'User';
-    this.objectProperties = ['userid', 'username'];
-    this.uniqueProperties = ['userid', 'username'];
-
-    this.userid = userid;
-    this.username = username;
-};
-User.prototype = new filterObject();
-User.prototype.constructor = User;
-
+        this.username = username.toLowerCase();
+    }
+}
 
 (function() {
     var daFilter = new deviantARTFilter();
-    daFilter.setup();
+    daFilter.run();
 })();
 
 
