@@ -219,6 +219,10 @@ class deviantARTFilter {
     toggleUserDeviationClickHandler(event) {
         if (DEBUG) console.group('deviantARTFilter.toggleUserDeviationClickHandler()');
 
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+
         var target = $(event.target);
         var user = new User(target.attr('username'));
 
@@ -233,9 +237,8 @@ class deviantARTFilter {
         if (DEBUG) console.log('Complete');
         if (DEBUG) console.groupEnd();
 
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
+        // nasty nasty nasty
+        window.history.back();
 
         return false;
     }
