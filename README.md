@@ -5,17 +5,21 @@
 <ol>
 	<li>Install the script (<a href="http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter.user.js">deviantART Filter User Script</a>) for Firefox and/or Chrome</li>
 	<li>Visit any "browse" page of deviantART (i.e. any page that shows deviations from multiple users)</li>
-	<li>Click the "Hide User's Deviations" or "Hide Category's Deviations" links that appear beneath the deviation from a user/category you wish to filter/block</li>
+	<li>Click the "Hide User's Deviations" links that appear beneath the deviation from a user you wish to filter/block</li>
 	<li>Use the "Manage Filters" button that appears in the upper right corner of any "browse" page to access the settings or unhide users/categories</li>
 </ol>
 
 <h5>Settings</h5>
 <ul>
 	<li><b>Placeholders</b>: When this setting is checked, all filtered deviations will be replaced with a placeholder. When this setting is unchecked, all filtered deviations will be hidden completely</li>
-	<li><b>Cascade Categories</b>: When this setting is checked, hiding a category will automatically hide all sub-categories.</li>
 </ul>
 
 <h2>Change Log</h2>
+<h4>13 June 2016 - <a href="http://repo.ryanthaut.com/userscripts/deviantart_filter/old_versions/deviantART_Filter-3.0.0.user.js">v3.0.0</a></h4>
+<ul>
+	<li><b>Rewrite to support new thumbnails</b></li>
+</ul>
+
 <h4>19 August 2015 - <a href="http://repo.ryanthaut.com/userscripts/deviantart_filter/old_versions/deviantART_Filter-2.1.0.user.js">v2.1.0</a></h4>
 <ul>
 	<li><b>Added filter import and export functionality</b> to facilitate saving/migrating filters</li>
