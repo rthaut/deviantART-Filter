@@ -154,7 +154,7 @@ class deviantARTFilter {
     addEventSubsribers() {
         if (DEBUG) console.group('deviantARTFilter.addEventSubsribers()');
 
-        $('.torpedo-container').on('mouseover', 'span.thumb', function() {
+        $('.torpedo-container').on('mouseover', 'span.thumb', function () {
             var regex = /^https?:\/\/([^\.]+)\.deviantart\.com/i;
             var match;
 
@@ -290,7 +290,7 @@ class deviantARTFilter {
                 this.usePlaceholders = !this.usePlaceholders;
                 $('body').toggleClass('no-placeholders');
                 $('body').toggleClass('placeholders');
-            break;
+                break;
         }
 
         if (DEBUG) console.log('Complete');
@@ -519,9 +519,9 @@ class deviantARTFilter {
             .append(tabs)
             .append(usersContent)
             .append(settingsContent)
-            .daModal({title: 'Manage deviantART Filters', width: '50%', height: '75%', footnote: '"<a href="http://fav.me/d6uocct">deviantART Filter</a>" script by <a href="http://rthaut.deviantart.com/">rthaut</a>, <a href="http://lassekongo83.deviantart.com/journal/DeviantCrap-Filter-410429292">idea</a> from <a href="http://lassekongo83.deviantart.com/">lassekongo83</a>'});
+            .daModal({ title: 'Manage deviantART Filters', width: '50%', height: '75%', footnote: '"<a href="http://fav.me/d6uocct">deviantART Filter</a>" script by <a href="http://rthaut.deviantart.com/">rthaut</a>, <a href="http://lassekongo83.deviantart.com/journal/DeviantCrap-Filter-410429292">idea</a> from <a href="http://lassekongo83.deviantart.com/">lassekongo83</a>' });
 
-        $('a.manage-filters-tab').on('click', function() {
+        $('a.manage-filters-tab').on('click', function () {
             var tab = $(this).attr('data-tab');
             $('a.manage-filters-tab').removeClass('active');
             $('div.manage-filters-tab-content').addClass('hidden');
@@ -624,7 +624,7 @@ class deviantARTFilter {
             case 'users':
                 dirty = this.hiddenUsers;
                 list = 'hiddenUsers';
-            break;
+                break;
         }
 
         if (DEBUG) console.log('Dirty objects (' + list + ')', dirty);
@@ -657,7 +657,7 @@ class deviantARTFilter {
         switch (objectType) {
             case 'users':
                 this.hiddenUsers = clean;
-            break;
+                break;
         }
 
         if (DEBUG) console.log('Complete');
@@ -672,7 +672,7 @@ class deviantARTFilter {
         switch (objectType) {
             case 'users':
                 this.hiddenUsers = [];
-            break;
+                break;
         }
 
         if (DEBUG) console.log('Complete');
@@ -682,7 +682,7 @@ class deviantARTFilter {
     exportFilters() {
         if (DEBUG) console.group('deviantARTFilter.exportFilters()');
 
-        var filters = { };
+        var filters = {};
 
         var users = this.hiddenUsers;
 
@@ -704,7 +704,7 @@ class deviantARTFilter {
         if (DEBUG) console.log('filters', filters);
 
         var user,
-            importedUsers = {"Total" : 0, "Success" : 0, "Existing" : 0, "Invalid" : 0};
+            importedUsers = { "Total": 0, "Success": 0, "Existing": 0, "Invalid": 0 };
 
         if (typeof filters['users'] !== 'undefined' && filters['users'] !== null) {
             var users = filters['users'];
@@ -931,7 +931,7 @@ class User extends FilterObject {
     }
 }
 
-(function() {
+(function () {
     var daFilter = new deviantARTFilter();
     daFilter.run();
 })();
@@ -942,15 +942,15 @@ class User extends FilterObject {
  * @author Ryan Thaut
  */
 (function ($) {
-    $.fn.daModal = function(options) {
+    $.fn.daModal = function (options) {
         return $.daModal.init(this, options);
     }
 
     $.daModal = {
         defaults: {
-            title:  '',
+            title: '',
             footnote: '',
-            width:  '50%',
+            width: '50%',
             height: '50%',
         },
 
@@ -959,25 +959,25 @@ class User extends FilterObject {
             modal: null,
         },
 
-        init: function(elem, options) {
+        init: function (elem, options) {
             $.daModal.create(elem, options);
             $.daModal.open();
             return elem;
         },
 
-        create: function(elem, options) {
+        create: function (elem, options) {
             var settings = $.extend({}, $.daModal.defaults, options);
 
             var modal = $('<div/>')
                 .addClass('modal modal-rounded with-shadow')
                 .css({
-                    display:        'none',
-                    position:       'fixed',
-                    width:          settings.width,
-                    height:         settings.height,
-                    left:           'calc((100% - ' + settings.width + ') / 2)',
-                    top:            'calc((100% - ' + settings.height + ') / 2)',
-                    zIndex:         200,
+                    display: 'none',
+                    position: 'fixed',
+                    width: settings.width,
+                    height: settings.height,
+                    left: 'calc((100% - ' + settings.width + ') / 2)',
+                    top: 'calc((100% - ' + settings.height + ') / 2)',
+                    zIndex: 200,
                 })
                 .appendTo('body');
             $.daModal.objects.modal = modal;
@@ -995,29 +995,29 @@ class User extends FilterObject {
                 .addClass('daModal-content')
                 .attr('id', 'modal-content')
                 .css({
-                    overflow:       'auto',
-                    padding:        '15px',
-                    height:         'calc(100% - 54px - 50px - 30px)', // 54px: header; 50px: footer (buttons); 30px: vertical padding
-                    width:          'calc(100% - 30px)',        // 30px: horizontal padding
+                    overflow: 'auto',
+                    padding: '15px',
+                    height: 'calc(100% - 54px - 50px - 30px)', // 54px: header; 50px: footer (buttons); 30px: vertical padding
+                    width: 'calc(100% - 30px)',        // 30px: horizontal padding
                 })
                 .appendTo(modal)
                 .append(elem);
 
             var footer = $('<div/>')
                 .css({
-                    borderTop:      '1px solid #AAB5AB',
-                    boxShadow:      '0 1px 0 rgba(255, 255, 255, 0.75) inset',
-                    height:         '50px',
-                    margin:         '0 15px',
-                    textAlign:      'right',
+                    borderTop: '1px solid #AAB5AB',
+                    boxShadow: '0 1px 0 rgba(255, 255, 255, 0.75) inset',
+                    height: '50px',
+                    margin: '0 15px',
+                    textAlign: 'right',
                 })
                 .appendTo(modal);
 
             var footnote = $('<small/>')
                 .addClass('text')
                 .css({
-                    float:          'left',
-                    lineHeight:     '50px',
+                    float: 'left',
+                    lineHeight: '50px',
                 })
                 .html(settings.footnote)
                 .appendTo(footer);
@@ -1037,12 +1037,12 @@ class User extends FilterObject {
             return elem;
         },
 
-        open: function() {
+        open: function () {
             $.daModal.objects.overlay.show();
             $.daModal.objects.modal.show();
         },
 
-        close: function() {
+        close: function () {
             $.daModal.objects.modal.hide().remove();
             $.daModal.objects.overlay.hide().remove();
         }
