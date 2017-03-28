@@ -15,6 +15,12 @@
 </ul>
 
 <h2>Change Log</h2>
+<h4>27 March 2017 - <a href="http://repo.ryanthaut.com/userscripts/deviantart_filter/old_versions/deviantART_Filter-3.1.0.user.js">v3.1.0</a></h4>
+<ul>
+	<li><b>Fixed issue causing deviation to load when clicking X in upper-left corner</b></li>
+	<li><b>Fixed issue causing script to appear to not work after first install</b></li>
+</ul>
+
 <h4>13 June 2016 - <a href="http://repo.ryanthaut.com/userscripts/deviantart_filter/old_versions/deviantART_Filter-3.0.0.user.js">v3.0.0</a></h4>
 <ul>
 	<li><b>Rewrite to support new thumbnails</b></li>
