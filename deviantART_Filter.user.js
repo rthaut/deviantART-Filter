@@ -29,8 +29,10 @@ function addStyleSheet(css = "") {
 }
 
 function resetStyleSheet(sheet) {
-    while (sheet.cssRules.length > 0) {
-        sheet.deleteRule(0);
+    if (sheet && sheet.cssRules) {
+        while (sheet.cssRules.length > 0) {
+            sheet.deleteRule(0);
+        }
     }
 }
 
@@ -126,6 +128,17 @@ class deviantARTFilter {
         if (DEBUG) console.groupEnd();
     }
 
+    resetHiddenUsersCSS() {
+        if (DEBUG) console.group('deviantARTFilter.resetHiddenUsersCSS()');
+
+        if (this._filterSheet != null) {
+            resetStyleSheet(this._filterSheet);
+        }
+
+        if (DEBUG) console.log('Complete');
+        if (DEBUG) console.groupEnd();
+    }
+
     insertHiddenUsersCSS(users) {
         if (DEBUG) console.group('deviantARTFilter.insertHiddenUsersCSS()');
 
@@ -134,7 +147,8 @@ class deviantARTFilter {
         var placeholderCSS = 'position: absolute; left: 0; top: 0; height: 100%; width: 100%; content: " "; background: #DDE6DA url("http://st.deviantart.net/misc/noentry-green.png") no-repeat center center; display: block; z-index: 10;';
 
         if (users.length > 0) {
-            if (DEBUG) console.log("Hiding user(s):");
+            if (DEBUG) console.log("Hiding " + users.length + "user(s) via CSS");
+
             if (this._filterSheet == null) {
                 this._filterSheet = addStyleSheet();
             }
@@ -191,7 +205,7 @@ class deviantARTFilter {
         if (this.hideUser(user)) {
             $('#manage-users-tab-content').empty().append(this.buildFilteredUsersTable());
 
-            resetStyleSheet(this._filterSheet);
+            this.resetHiddenUsersCSS();
             this.insertHiddenUsersCSS(this.hiddenUsers);
         }
 
@@ -210,7 +224,7 @@ class deviantARTFilter {
         if (this.unhideUser(user)) {
             $('#manage-users-tab-content').empty().append(this.buildFilteredUsersTable());
 
-            resetStyleSheet(this._filterSheet);
+            this.resetHiddenUsersCSS();
             this.insertHiddenUsersCSS(this.hiddenUsers);
         }
 
@@ -248,7 +262,7 @@ class deviantARTFilter {
         var ret = false;
 
         if (user.hide()) {
-            resetStyleSheet(this._filterSheet);
+            this.resetHiddenUsersCSS();
             this.insertHiddenUsersCSS(this.hiddenUsers);
             ret = true;
         }
@@ -265,7 +279,7 @@ class deviantARTFilter {
         var ret = false;
 
         if (user.unhide()) {
-            resetStyleSheet(this._filterSheet);
+            this.resetHiddenUsersCSS();
             this.insertHiddenUsersCSS(this.hiddenUsers);
             ret = true;
         }
@@ -311,7 +325,7 @@ class deviantARTFilter {
 
         if (changed) {
             alert('Your hidden ' + object + ' have been cleaned.');
-            resetStyleSheet(this._filterSheet);
+            this.resetHiddenUsersCSS();
             this.insertHiddenUsersCSS(this.hiddenUsers);
         } else {
             alert('Your hidden ' + object + ' are clean; no changes were made.');
