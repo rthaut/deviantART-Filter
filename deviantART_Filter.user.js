@@ -151,8 +151,10 @@ class deviantARTFilter {
         if (DEBUG) console.groupEnd();
     }
 
-    addEventSubsribers() {
-        if (DEBUG) console.group('deviantARTFilter.addEventSubsribers()');
+    addEventSubscribers() {
+        if (DEBUG) console.group('deviantARTFilter.addEventSubscribers()');
+
+        var self = this;
 
         $('.torpedo-container').on('mouseover', 'span.thumb', function () {
             var regex = /^https?:\/\/([^\.]+)\.deviantart\.com/i;
@@ -164,11 +166,11 @@ class deviantARTFilter {
                 match = regex.exec(thumb.attr('href'));
                 control = $('<span/>').addClass('hide-user-corner');
                 control.attr('username', match[1]);
+                control.on('click', $.proxy(self.toggleUserDeviationClickHandler, self));
                 thumb.find('a.torpedo-thumb-link').append(control);
+                if (DEBUG) console.log('Added control', control);
             }
         });
-
-        $('.torpedo-container').on('click', 'span.hide-user-corner', $.proxy(this.toggleUserDeviationClickHandler, this));
 
         if (DEBUG) console.log('Complete');
         if (DEBUG) console.groupEnd();
@@ -236,9 +238,6 @@ class deviantARTFilter {
 
         if (DEBUG) console.log('Complete');
         if (DEBUG) console.groupEnd();
-
-        // nasty nasty nasty
-        window.history.back();
 
         return false;
     }
@@ -545,7 +544,7 @@ class deviantARTFilter {
         this.insertBaseCSS();
         this.insertHiddenUsersCSS(this.hiddenUsers);
         this.addControls();
-        this.addEventSubsribers();
+        this.addEventSubscribers();
 
         if (DEBUG) console.log('Complete');
         if (DEBUG) console.groupEnd();
