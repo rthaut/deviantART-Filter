@@ -1,0 +1,34 @@
+{
+  "name": "deviantART-Filter",
+  "title": "deviantART Filter",
+  "version": "4.0",
+  "description": "Allows automatic filtering/removal of deviations from certain users",
+  "author": "Ryan Thaut <rthaut@gmail.com> (http://ryanthaut.com/)",
+  "homepage": "https://github.com/rthaut/deviantART-Filter",
+  "license": " GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rthaut/deviantART-Filter.git"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-crx-pack": "^1.0.1",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-ejs": "^3.0.1",
+    "gulp-header": "^1.8.8",
+    "gulp-if": "^2.0.2",
+    "gulp-insert": "^0.5.0",
+    "gulp-replace": "^0.5.4",
+    "gulp-strip-debug": "^1.1.0",
+    "gulp-uglify": "^3.0.0",
+    "gulp-zip": "^4.0.0",
+    "run-sequence": "^1.2.2",
+    "uglify-es": "^3.0.15",
+    "web-ext": "^1.9.1"
+  },
+  "dependencies": {
+    "dialog-polyfill": "^0.4.7",
+    "jquery": "^3.2.1"
+  }
+}

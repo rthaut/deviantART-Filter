@@ -1,0 +1,7 @@
+/**
+ * <%= package.title || package.name %> - <%= package.description %>
+ * @version v<%= package.version %>
+ * @link <%= package.homepage %>
+ * @license <%= package.license %>
+ * @copyright (c) <%= new Date().getFullYear() %> <%= package.author %>
+ */
