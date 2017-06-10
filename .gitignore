@@ -20,5 +20,4 @@ jspm_packages
 
 # Miscellaneous
 certs
-dist/webextension
 Thumbs.db
