@@ -1,0 +1,29 @@
+dialog.daDialog::backdrop,
+dialog.daDialog + .backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+dialog.daDialog {
+	background: #dde6da url("//st.deviantart.net/ui/2011/modals/assets/modal_bkgrd.png") repeat-x 0 0;
+	border: 1px solid #9eb1a2;
+	box-shadow: 0 1px 15px rgba(0,0,0,0.5),0 1px 1px #fff inset;
+	border-radius: 6px;
+	padding: 20px;
+}
+
+dialog.daDialog header h3 {
+	color: #2c3635;
+	font-weight: bold;
+	letter-spacing: -1px;
+	padding-bottom: 10px;
+	text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+}
+
+dialog.daDialog footer {
+    text-align: right;
+}

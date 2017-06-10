@@ -10,43 +10,7 @@
     padding: 0 6px;
 }
 
-/* hide icon ("x") on individual thumbnails */
-.torpedo-container .thumb .hide-user-corner {
-    position: absolute;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    width: 38px;
-    height: 26px;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAaCAYAAADbhS54AAAAsUlEQVRIic3VPQuCYBSG4bvoA4fAIaKlpcHFoSASGpoaGgJDEMX//0dcEkTMXgPf8zxw7xdnOQCVYAUCiL5OirAcWCnCYj6zhrTLgIUiLKI1a0xTCswVYUc6swZVwAuYKcIOXZQC7NmHUoDtFWGPbyhr2FYRdh9CWcJCRdjtF8oCVgIbRdjVBeUbVgCBIuzsivIJy4G1GiwFdmNQPmAJsByLmhL2ZuBBuyyboAt/XqlZDcPEGXawh1sVAAAAAElFTkSuQmCC);
-    background-position: right;
-    opacity: 0;
-    display: flex;
-    align-items: center;
-    text-indent: 5px;
-    font-family: DA-brandicons;
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 1;
-    color: #EAF2EE;
-    cursor: pointer;
-    transition: all .2s cubic-bezier(0, 0, .58, 1);
-    white-space: nowrap;
-}
-.torpedo-container .thumb .hide-user-corner:hover {
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAaCAYAAADbhS54AAAAvklEQVRIic3OMQ7BcBxH8cdgQiQmu7W7zcQBnMAFXMAFxGoxdHWA3sAB7FaNhbGLSAxq0aRpilbT/+/7krd/AGLBbwgg8l4pwiKgpwhb8s4akv4CtBVhC1JZY5JDoKUIm5PJGhQDR6CpCJtlUQqwA9BQhE3yUNaw/SeUNWykCAu+oaxgT8BThO1+oSxgD2CoCNsWQbmG3YGBImxdFOUSFgF9NdgJGJdBuYD5QKcsqk7YGZj+A0q61vAG6FZBvQCzZyZfoGzu2QAAAABJRU5ErkJggg==);
-    color: #D32800;
-}
-.torpedo-container .thumb:hover .hide-user-corner {
-    opacity: 1;
-}
-.torpedo-container .thumb .hide-user-corner::after {
-    content: "\e632";
-    margin-right: 5px;
-    display: inline;
-}
-
-/* overrides for daModal to scroll individual tab panes instead of modal body*/
+/* overrides for daModal to scroll individual tab panes instead of modal body */
 .daModal-content {
     overflow: hidden !important;
     position: relative;
@@ -165,39 +129,4 @@
 .manage-filters-table button {
     margin: 0;
     padding: 0.2em;
-}
-
-/* HTML5 dialog + polyfill */
-dialog.daDialog::backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-dialog.daDialog + .backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-dialog.daDialog {
-	background: #dde6da url("//st.deviantart.net/ui/2011/modals/assets/modal_bkgrd.png") repeat-x 0 0;
-	border: 1px solid #9eb1a2;
-	box-shadow: 0 1px 15px rgba(0,0,0,0.5),0 1px 1px #fff inset;
-	border-radius: 6px;
-	padding: 20px;
-}
-dialog.daDialog header h3 {
-	color: #2c3635;
-	font-weight: bold;
-	letter-spacing: -1px;
-	padding-bottom: 10px;
-	text-shadow: 0 1px 0 rgba(255,255,255,0.8);
-}
-dialog.daDialog footer {
-    text-align: right;
 }
