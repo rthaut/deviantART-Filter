@@ -127,7 +127,7 @@ gulp.task('build:webextension:manifest', function () {
         .pipe(gulp.dest('./dist/webextension'));
 });
 gulp.task('build:webextension:icons', function () {
-    return gulp.src(['./icons/**/*.png'])
+    return gulp.src(['./resources/icons/**/*.png'])
         .pipe(gulp.dest('./dist/webextension/icons'));
 });
 gulp.task('build:webextension', function (callback) {
