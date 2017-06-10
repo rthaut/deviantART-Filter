@@ -16,13 +16,13 @@
         "*://*.deviantart.com/*"
       ],
       "css": [
-        "css/main.css"
+        "css/<%= package.name %>.css"
       ],
       "js": [
         "js/dialog-polyfill.js",
         "js/jquery.slim.min.js",
         "js/jquery.daModal.js",
-        "js/deviantART-Filter.js"
+        "js/<%= package.name %>.js"
       ]
     }
   ],
