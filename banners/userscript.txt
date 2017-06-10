@@ -3,13 +3,11 @@
 // @author      <%= package.author %>
 // @description <%= package.description %>
 // @version     <%= package.version %>
-// @namespace   https://github.com/rthaut/deviantART-Filter
-// @updateURL   https://github.com/rthaut/deviantART-Filter
-// @downloadURL https://github.com/rthaut/deviantART-Filter
+// @namespace   <%= package.homepage %>
+// @updateURL   <%= package.homepage %>/raw/master/dist/userscript/deviantART_Filter.user.js
+// @downloadURL <%= package.homepage %>/raw/master/dist/userscript/deviantART_Filter.user.js
 // @include     http://*deviantart.com/*
 // @include     https://*deviantart.com/*
-// @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
-// @require     https://code.jquery.com/jquery-3.2.1.slim.min.js
 // ==/UserScript==
