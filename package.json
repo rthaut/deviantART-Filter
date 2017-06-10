@@ -2,13 +2,16 @@
   "name": "deviantART-Filter",
   "title": "deviantART Filter",
   "version": "4.0",
-  "description": "Allows automatic filtering/removal of deviations from certain users",
+  "description": "Allows configurable filtering/removal of deviations by selected users on deviantART (http://www.deviantart.com)",
   "author": "Ryan Thaut <rthaut@gmail.com> (http://ryanthaut.com/)",
   "homepage": "https://github.com/rthaut/deviantART-Filter",
   "license": " GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rthaut/deviantART-Filter.git"
+    "url": "git://github.com/rthaut/deviantART-Filter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rthaut/deviantART-Filter/issues"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
