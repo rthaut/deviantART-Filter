@@ -1,52 +1,45 @@
-<h2>Overview</h2>
-<p>Have you ever been bothered by seeing submissions/deviations by certain users while browsing deviantART? Now you can quickly and permanently hide deviations from any user! Either manually enter their username in the settings panel, or simply click the red X in the upper left corner of any deviation.</p>
+![deviantART Filter Promotional Image](https://raw.githubusercontent.com/rthaut/deviantART-Filter/development/resources/screenshots/Promo.png)
 
-<h5>Settings</h5>
-<ul>
-	<li><b>Placeholders</b>: When this setting is checked, all filtered deviations will be replaced with a placeholder. When this setting is unchecked, all filtered deviations will be hidden completely</li>
-</ul>
+## Overview
+Have you ever been bothered by seeing deviations (submissions) from certain users while browsing [deviantART](https://www.deviantart.com)? Now you can quickly and permanently hide all deviations from any user! Install deviantART Filter in your web browser of choice, then either a.) enter their username on the settings panel, or b.) simply click the new red X that appears in the top right corner of any thumbnail image to filter that user.
 
-<h2>Change Log</h2>
-<h4>27 March 2017 - <a href="http://repo.ryanthaut.com/userscripts/deviantart_filter/old_versions/deviantART_Filter-3.1.0.user.js">v3.1.0</a></h4>
-<ul>
-	<li><b>Fixed issue causing deviation to load when clicking X in upper-left corner</b></li>
-	<li><b>Fixed issue causing script to appear to not work after first install</b></li>
-</ul>
+* * *
 
-<h4>13 June 2016 - <a href="http://repo.ryanthaut.com/userscripts/deviantart_filter/old_versions/deviantART_Filter-3.0.0.user.js">v3.0.0</a></h4>
-<ul>
-	<li><b>Rewrite to support new thumbnails</b></li>
-</ul>
+## Installation
+### Mozilla Firefox
+1. Install from the official Mozilla Add-ons for Firefox: [https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/](https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/)
+1. There is no step 2
 
-<h4>19 August 2015 - <a href="http://repo.ryanthaut.com/userscripts/deviantart_filter/old_versions/deviantART_Filter-2.1.0.user.js">v2.1.0</a></h4>
-<ul>
-	<li><b>Added filter import and export functionality</b> to facilitate saving/migrating filters</li>
-	<li>Cleaned up settings</li>
-	<li>Prevented row removal when unhiding a user fails</li>
-</ul>
+### Google Chrome
+1. Install from the official Chrome Web Store: [https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp](https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp)
+1. There is no step 2
 
-<h4>11 August 2015 - <a href="http://repo.ryanthaut.com/userscripts/deviantart_filter/old_versions/deviantART_Filter-2.0.0.user.js">v2.0.0</a></h4>
-<ul>
-	<li><b>Complete rewrite of core filtering system</b>; script performance should be drastically improved</li>
-	<li><b>Moved "Manage Filters" button/link</b> to top bar beside username</li>
-	<li><b>Moved "Hide Category" functionality</b> to category browse page</li>
-</ul>
+* * *
 
-<h4>25 January 2015 - <a href="http://repo.ryanthaut.com/userscripts/deviantart_filter/old_versions/deviantART_Filter-1.5.1.user.js">v1.5.1</a></h4>
-<ul>
-	<li><b>Bug fix for case insensitive filtering of deviations by username</b></li>
-</ul>
+### Legacy Userscript (Deprecated)
+**NOTE:** The userscript version of deviantART Filter is being deprecated in favor of the web extension versions. It is *strongly* recommended that you transition from the userscript version to a web exension (see the [transition instructions](#transitioning-from-legacy-userscript) below).
+#### For Mozilla Firefox
+1. Install the [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey) Add-on
+1. Restart your browser after installation
+1. Visit the [script installation URL](https://github.com/rthaut/deviantART-Filter/raw/development/dist/userscript/deviantART_Filter.user.js) and follow the prompts from Greasemonkey to complete the installation
+    - See [this wiki article](https://wiki.greasespot.net/Greasemonkey_Manual:Installing_Scripts) for help with installing userscripts in Greasemonkey
+#### For Google Chrome
+1. Install [Tampermonkey Beta](https://chrome.google.com/webstore/detail/tampermonkey-beta/gcalenpjmijncebpfijmoaglllgpjagf) Extension
+1. Restart your browser after installation
+1. Visit the [script installation URL](https://github.com/rthaut/deviantART-Filter/raw/development/dist/userscript/deviantART_Filter.user.js) and follow the prompts from Tampermonkey to complete the installation
+    - See [this FAQ entry](http://tampermonkey.net/faq.php#Q102) for help with installing userscripts in Tampermonkey
 
-<h4>24 January 2015 - <a href="http://repo.ryanthaut.com/userscripts/deviantart_filter/old_versions/deviantART_Filter-1.5.0.user.js">v1.5</a></h4>
-<ul>
-	<li><b>Added ability to manually add users to filter list by name and/or ID</b></li>
-	<li><b>Added ability to add user to filter list directly from their profile page</b></li>
-	<li>Bug fixes for blank/empty usernames and/or user IDs</li>
-	<li>Simple deviantART Modal Plugin now allows specifying the footnote/credit HTML (which was previously hard-coded)</li>
-</ul>
+* * *
 
-<h4>17 January 2015 - <a href="http://repo.ryanthaut.com/userscripts/deviantart_filter/old_versions/deviantART_Filter-1.4.0.user.js">v1.4</a></h4>
-<ul>
-	<li><b>Moved to <a href="http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter.user.js">http://repo.ryanthaut.com/userscripts/deviantart_filter/deviantART_Filter.user.js</a> due to Userscripts.org no longer functioning</b></li>
-	<li><b>Added ability to filter deviations by category</b></li>
-</ul>
+### Transitioning from Legacy Userscript
+1. Open [deviantART](https://www.deviantart.com/), then click the "Manage Filter" link in the top right corner of the page (next to your username)
+1. Click the Settings tab, then click the Export Filters button
+1. Copy the **entire** block of text that appears below the button and paste it into a text editor for later use
+    - You can click anywhere in the textbox, then press `CTRL`+`A` (or `CMD`+`A`) on your keyboard to select all of the text
+    - You may want to save the file in your text editor, just in case, but this is not necessary
+1. Disable (or uninstall) the deviantART Filter userscript from Greasemonkey/Tampermonkey
+1. Install the deviantART filter web extension for Chrome/Firefox (see the [installation links](#installation) above)
+1. Visit [deviantART](https://www.deviantart.com/) again and open the Settings tab again
+1. Paste the block of text from step 4 into the textbox below the Export Filters button
+1. Click the Import Filters button
+1. A dialog will appear confirming the import results
