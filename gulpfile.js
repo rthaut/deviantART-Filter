@@ -76,41 +76,72 @@ gulp.task('clean', [
     'clean:webextension'
 ]);
 
-// task for building the userscript version
-gulp.task('build:userscript', function () {
+// tasks for building the userscript version
+gulp.task('build:userscript', function (callback) {
+    sequence(
+        ['build:userscript:includes', 'build:userscript:utils', 'build:userscript:stylesheets'],
+        'build:userscript:core',
+        'build:userscript:cleanup',
+        callback
+    );
+});
+gulp.task('build:userscript:includes', function () {
+    return gulp.src(includes)
+        .pipe(concat('includes.js'))
+        .pipe(gulpIf('!*.min.js', uglify({ mangle: false })))
+        .pipe(gulp.dest('./dist/userscript'));
+});
+gulp.task('build:userscript:utils', function () {
+    return gulp.src(utils)
+        .pipe(concat('utils.js'))
+        .pipe(gulpIf(!DEBUG, stripDebug()))
+        .pipe(uglify({ mangle: false }))
+        .pipe(gulp.dest('./dist/userscript'));
+});
+gulp.task('build:userscript:stylesheets', function () {
     return merge(
-        gulp.src(utils)
-            .pipe(concat('utils.js'))               // filename doesn't matter, it is never written out
-            .pipe(gulpIf(!DEBUG, stripDebug()))
-            .pipe(uglify({ mangle: false }))
-        , gulp.src(stylesheets)
-            .pipe(concat(package.name + '.css'))    // filename doesn't matter, it is never written out
+        gulp.src(stylesheets)
+            .pipe(concat(package.name + '.css'))
             .pipe(replace('\e632', '\\e632'))
             .pipe(cssnano({ zindex: false }))
-            .pipe(insert.wrap('(function () { addStyleSheet(\'', '\'); })();'))
-        , gulp.src('./node_modules/dialog-polyfill/dialog-polyfill.css')
+            .pipe(insert.wrap('(function () { addStyleSheet(\'', '\'); })();')),
+        gulp.src('./node_modules/dialog-polyfill/dialog-polyfill.css')
             .pipe(cssnano({ zindex: false }))
             .pipe(insert.wrap('(function () { addStyleSheet(\'', '\'); })();'))
-        , gulp.src([].concat(core, includes))
-            .pipe(concat(package.name + '.js'))
-            .pipe(gulpIf(!DEBUG, stripDebug()))
-            .pipe(gulpIf('!*.min.js', uglify({ mangle: false })))
     )
+        .pipe(concat('stylesheets.js'))
+        .pipe(gulp.dest('./dist/userscript'));
+});
+gulp.task('build:userscript:core', function () {
+    return gulp.src(
+        [
+            './dist/userscript/includes.js',
+            './dist/userscript/utils.js',
+            './dist/userscript/stylesheets.js'
+        ].concat(core))
+        .pipe(gulpIf(!DEBUG, stripDebug()))
+        .pipe(uglify({ mangle: false }))
         .pipe(concat(package.name.replace('-', '_') + '.user.js'))
         .pipe(header(fs.readFileSync('./banners/userscript.txt', 'utf8'), { package: package }))
         .pipe(gulp.dest('./dist/userscript'));
+});
+gulp.task('build:userscript:cleanup', function () {
+    return del([
+        './dist/userscript/**/*.js',
+        '!./dist/userscript/' + package.name.replace('-', '_') + '.user.js'
+    ]);
 });
 
 // tasks for building the WebExtension version
 gulp.task('build:webextension:js', function () {
     return merge(
+        gulp.src(includes)
+            .pipe(gulpIf('!*.min.js', uglify({ mangle: false }))),
         gulp.src([].concat(utils, core))
             .pipe(concat(package.name + '.js'))
             .pipe(gulpIf(!DEBUG, stripDebug()))
             .pipe(uglify({ mangle: false }))
             .pipe(header(fs.readFileSync('./banners/webextension.txt', 'utf8'), { package: package }))
-        , gulp.src(includes)
-            .pipe(gulpIf('!*.min.js', uglify({ mangle: false })))
     )
         .pipe(gulp.dest('./dist/webextension/js'));
 });
@@ -134,6 +165,7 @@ gulp.task('build:webextension', function (callback) {
     sequence(
         'clean:webextension',
         ['build:webextension:js', 'build:webextension:css', 'build:webextension:icons', 'build:webextension:manifest'],
+        ['zip:webextension', 'crx:webextension'],
         callback
     );
 });
@@ -154,9 +186,7 @@ gulp.task('crx:webextension', function () {
 });
 
 // task for building everything
-gulp.task('build', function (callback) {
-    sequence(['build:userscript', 'build:webextension'], ['zip:webextension', 'crx:webextension'], callback);
-});
+gulp.task('build', ['build:userscript', 'build:webextension']);
 
 // default task: cleans and builds everything
 gulp.task('default', function (callback) {
