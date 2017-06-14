@@ -1,4 +1,4 @@
-![deviantART Filter Promotional Image](https://raw.githubusercontent.com/rthaut/deviantART-Filter/development/resources/screenshots/Promo.png)
+![deviantART Filter Promotional Image](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/resources/screenshots/Promo.png)
 
 ## Overview
 Have you ever been bothered by seeing deviations (submissions) from certain users while browsing [deviantART](https://www.deviantart.com)? Now you can quickly and permanently hide all deviations from any user! Install deviantART Filter in your web browser of choice, then either a.) enter their username on the settings panel, or b.) simply click the new red X that appears in the top right corner of any thumbnail image to filter that user.
@@ -21,12 +21,12 @@ Have you ever been bothered by seeing deviations (submissions) from certain user
 #### For Mozilla Firefox
 1. Install the [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey) Add-on
 1. Restart your browser after installation
-1. Visit the [script installation URL](https://github.com/rthaut/deviantART-Filter/raw/development/dist/userscript/deviantART_Filter.user.js) and follow the prompts from Greasemonkey to complete the installation
+1. Visit the [script installation URL](https://github.com/rthaut/deviantART-Filter/raw/master/dist/userscript/deviantART_Filter.user.js) and follow the prompts from Greasemonkey to complete the installation
     - See [this wiki article](https://wiki.greasespot.net/Greasemonkey_Manual:Installing_Scripts) for help with installing userscripts in Greasemonkey
 #### For Google Chrome
 1. Install [Tampermonkey Beta](https://chrome.google.com/webstore/detail/tampermonkey-beta/gcalenpjmijncebpfijmoaglllgpjagf) Extension
 1. Restart your browser after installation
-1. Visit the [script installation URL](https://github.com/rthaut/deviantART-Filter/raw/development/dist/userscript/deviantART_Filter.user.js) and follow the prompts from Tampermonkey to complete the installation
+1. Visit the [script installation URL](https://github.com/rthaut/deviantART-Filter/raw/master/dist/userscript/deviantART_Filter.user.js) and follow the prompts from Tampermonkey to complete the installation
     - See [this FAQ entry](http://tampermonkey.net/faq.php#Q102) for help with installing userscripts in Tampermonkey
 
 * * *
