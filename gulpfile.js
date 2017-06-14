@@ -121,7 +121,7 @@ gulp.task('build:userscript:core', function () {
         ].concat(core))
         .pipe(gulpIf(!DEBUG, stripDebug()))
         .pipe(uglify({ mangle: false }))
-        .pipe(concat(package.name.replace('-', '_') + '.user.js'))
+        .pipe(concat(package.name.replace(/\-/g, '_') + '.user.js'))
         .pipe(header(fs.readFileSync('./banners/userscript.txt', 'utf8'), { package: package }))
         .pipe(gulp.dest('./dist/userscript'));
 });

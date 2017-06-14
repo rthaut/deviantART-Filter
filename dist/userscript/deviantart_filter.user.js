@@ -4,8 +4,8 @@
 // @description Allows configurable filtering/removal of deviations by selected users on deviantART
 // @version     4.0.1
 // @namespace   https://github.com/rthaut/deviantART-Filter
-// @updateURL   https://github.com/rthaut/deviantART-Filter/raw/master/dist/userscript/deviantART_Filter.user.js
-// @downloadURL https://github.com/rthaut/deviantART-Filter/raw/master/dist/userscript/deviantART_Filter.user.js
+// @updateURL   https://github.com/rthaut/deviantART-Filter/raw/master/dist/userscript/deviantart_filter.user.js
+// @downloadURL https://github.com/rthaut/deviantART-Filter/raw/master/dist/userscript/deviantart_filter.user.js
 // @include     http://*deviantart.com/*
 // @include     https://*deviantart.com/*
 // @grant       GM_getValue
