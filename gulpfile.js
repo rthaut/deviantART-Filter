@@ -146,10 +146,14 @@ gulp.task('build:webextension:js', function () {
         .pipe(gulp.dest('./dist/webextension/js'));
 });
 gulp.task('build:webextension:css', function () {
-    return gulp.src(stylesheets)
-        .pipe(concat(package.name + '.css'))
-        .pipe(cssnano({ zindex: false }))
-        .pipe(header(fs.readFileSync('./banners/webextension.txt', 'utf8'), { package: package }))
+    return merge(
+        gulp.src(stylesheets)
+            .pipe(concat(package.name + '.css'))
+            .pipe(cssnano({ zindex: false }))
+            .pipe(header(fs.readFileSync('./banners/webextension.txt', 'utf8'), { package: package })),
+        gulp.src('./node_modules/dialog-polyfill/dialog-polyfill.css')
+            .pipe(cssnano({ zindex: false }))
+    )
         .pipe(gulp.dest('./dist/webextension/css'));
 });
 gulp.task('build:webextension:manifest', function () {

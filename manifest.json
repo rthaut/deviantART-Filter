@@ -16,6 +16,7 @@
         "*://*.deviantart.com/*"
       ],
       "css": [
+        "css/dialog-polyfill.css",
         "css/<%= package.name %>.css"
       ],
       "js": [
