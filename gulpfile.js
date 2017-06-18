@@ -189,6 +189,17 @@ gulp.task('crx:webextension', function () {
         .pipe(gulp.dest('./dist'))
 });
 
+// tasks for automatically building on source changes
+gulp.task('watch', ['build'], function() {
+  gulp.watch('./lib/**/*', ['build']);
+});
+gulp.task('watch:userscript', ['build:userscript'], function() {
+  gulp.watch('./lib/**/*', ['build:userscript']);
+});
+gulp.task('watch:webextension', ['build:webextension'], function() {
+  gulp.watch('./lib/**/*', ['build:webextension']);
+});
+
 // task for building everything
 gulp.task('build', ['build:userscript', 'build:webextension']);
 
