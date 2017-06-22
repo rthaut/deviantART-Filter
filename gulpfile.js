@@ -7,6 +7,7 @@ var sequence = require('run-sequence');
 var concat = require('gulp-concat');
 var cssnano = require('gulp-cssnano');
 var ejs = require("gulp-ejs")
+var eslint = require('gulp-eslint');
 var gulpIf = require('gulp-if');
 var header = require('gulp-header');
 var insert = require('gulp-insert');
@@ -58,6 +59,18 @@ var package = require('./package.json');
 
 /* ====================  BUILD TASKS  ==================== */
 
+const eslintIsFixed = function (file) {
+    return file.eslint && file.eslint.fixed;
+}
+gulp.task('lint', function () {
+    return gulp.src('./lib/js/**/*.js')
+        .pipe(eslint({
+            'fix': true
+        }))
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
+});
+
 // tasks for cleaning the build directories
 gulp.task('clean:userscript', function () {
     return del(['./dist/userscript/*'])
@@ -79,6 +92,7 @@ gulp.task('clean', [
 // tasks for building the userscript version
 gulp.task('build:userscript', function (callback) {
     sequence(
+        'lint',
         ['build:userscript:includes', 'build:userscript:utils', 'build:userscript:stylesheets'],
         'build:userscript:core',
         'build:userscript:cleanup',
@@ -133,6 +147,15 @@ gulp.task('build:userscript:cleanup', function () {
 });
 
 // tasks for building the WebExtension version
+gulp.task('build:webextension', function (callback) {
+    sequence(
+        'lint',
+        'clean:webextension',
+        ['build:webextension:js', 'build:webextension:css', 'build:webextension:icons', 'build:webextension:manifest'],
+        ['zip:webextension', 'crx:webextension'],
+        callback
+    );
+});
 gulp.task('build:webextension:js', function () {
     return merge(
         gulp.src(includes)
@@ -165,14 +188,6 @@ gulp.task('build:webextension:icons', function () {
     return gulp.src(['./resources/icons/**/*.png'])
         .pipe(gulp.dest('./dist/webextension/icons'));
 });
-gulp.task('build:webextension', function (callback) {
-    sequence(
-        'clean:webextension',
-        ['build:webextension:js', 'build:webextension:css', 'build:webextension:icons', 'build:webextension:manifest'],
-        ['zip:webextension', 'crx:webextension'],
-        callback
-    );
-});
 
 // tasks for packaging the WebExtension for distribution
 gulp.task('zip:webextension', function (callback) {
@@ -190,14 +205,14 @@ gulp.task('crx:webextension', function () {
 });
 
 // tasks for automatically building on source changes
-gulp.task('watch', ['build'], function() {
-  gulp.watch('./lib/**/*', ['build']);
+gulp.task('watch', ['build'], function () {
+    gulp.watch('./lib/**/*', ['build']);
 });
-gulp.task('watch:userscript', ['build:userscript'], function() {
-  gulp.watch('./lib/**/*', ['build:userscript']);
+gulp.task('watch:userscript', ['build:userscript'], function () {
+    gulp.watch('./lib/**/*', ['build:userscript']);
 });
-gulp.task('watch:webextension', ['build:webextension'], function() {
-  gulp.watch('./lib/**/*', ['build:webextension']);
+gulp.task('watch:webextension', ['build:webextension'], function () {
+    gulp.watch('./lib/**/*', ['build:webextension']);
 });
 
 // task for building everything
