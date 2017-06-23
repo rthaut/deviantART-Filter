@@ -1,23 +1,23 @@
-![deviantART Filter Promotional Image](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/resources/screenshots/Promo.png)
-
 ## Overview
 Have you ever been bothered by seeing deviations (submissions) from certain users while browsing [deviantART](https://www.deviantart.com)? Now you can quickly and permanently hide all deviations from any user! Install deviantART Filter in your web browser of choice, then either a.) enter their username on the settings panel, or b.) simply click the new red X that appears in the top right corner of any thumbnail image to filter that user.
+
+![deviantART Filter Promotional Image](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/resources/screenshots/Promo.png)
 
 * * *
 
 ## Installation
 ### Mozilla Firefox
-1. Install from the official Mozilla Add-ons for Firefox: [https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/](https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/)
+1. Install from the official Mozilla Add-ons for Firefox: <https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/>
 1. There is no step 2
 
 ### Google Chrome
-1. Install from the official Chrome Web Store: [https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp](https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp)
+1. Install from the official Chrome Web Store: <https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp>
 1. There is no step 2
 
 * * *
 
 ### Legacy Userscript (Deprecated)
-**NOTE:** The userscript version of deviantART Filter is being deprecated in favor of the web extension versions. It is *strongly* recommended that you transition from the userscript version to a web exension (see the [transition instructions](#transitioning-from-legacy-userscript) below).
+ :exclamation: **NOTE:** The userscript version of deviantART Filter is being deprecated in favor of the web extension versions. It is *strongly* recommended that you transition from the userscript version to a web exension (see the [transition instructions](#transitioning-from-legacy-userscript) below).
 #### For Mozilla Firefox
 1. Install the [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey) Add-on
 1. Restart your browser after installation
