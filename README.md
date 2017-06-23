@@ -7,11 +7,11 @@ Have you ever been bothered by seeing deviations (submissions) from certain user
 
 ## Installation
 ### Mozilla Firefox
-#### [Install from the official Mozilla Add-ons for Firefox site](https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/)
+**[Install from the official Mozilla Add-ons for Firefox site](https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/)**
 
 
 ### Google Chrome
-#### [Install from the official Google Chrome Web Store](https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp)
+**[Install from the official Google Chrome Web Store](https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp)**
 
 * * *
 
@@ -58,4 +58,4 @@ deviantART Filter allows your to export and import filters. This is mostly for k
 * * *
 
 ### Legacy Userscript (Deprecated)
-#### Please visit [the wiki](https://github.com/rthaut/deviantART-Filter/wiki#about-the-old-userscript-) for information about the userscript version of deviantART Filter. There you will find [steps for migrating](https://github.com/rthaut/deviantART-Filter/wiki/Userscript#transitioning-from-legacy-userscript) to the new web extensions.
+**Please visit [the wiki](https://github.com/rthaut/deviantART-Filter/wiki#about-the-old-userscript-) for information about the userscript version of deviantART Filter. There you will find [steps for migrating](https://github.com/rthaut/deviantART-Filter/wiki/Userscript#transitioning-from-legacy-userscript) to the new web extensions.**
