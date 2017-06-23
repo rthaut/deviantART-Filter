@@ -17,29 +17,4 @@ Have you ever been bothered by seeing deviations (submissions) from certain user
 * * *
 
 ### Legacy Userscript (Deprecated)
- :exclamation: **NOTE:** The userscript version of deviantART Filter is being deprecated in favor of the web extension versions. It is *strongly* recommended that you transition from the userscript version to a web exension (see the [transition instructions](#transitioning-from-legacy-userscript) below).
-#### For Mozilla Firefox
-1. Install the [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey) Add-on
-1. Restart your browser after installation
-1. Visit the [script installation URL](https://github.com/rthaut/deviantART-Filter/raw/master/dist/userscript/deviantart_filter.user.js) and follow the prompts from Greasemonkey to complete the installation
-    - See [this wiki article](https://wiki.greasespot.net/Greasemonkey_Manual:Installing_Scripts) for help with installing userscripts in Greasemonkey
-#### For Google Chrome
-1. Install [Tampermonkey Beta](https://chrome.google.com/webstore/detail/tampermonkey-beta/gcalenpjmijncebpfijmoaglllgpjagf) Extension
-1. Restart your browser after installation
-1. Visit the [script installation URL](https://github.com/rthaut/deviantART-Filter/raw/master/dist/userscript/deviantart_filter.user.js) and follow the prompts from Tampermonkey to complete the installation
-    - See [this FAQ entry](http://tampermonkey.net/faq.php#Q102) for help with installing userscripts in Tampermonkey
-
-* * *
-
-### Transitioning from Legacy Userscript
-1. Open [deviantART](https://www.deviantart.com/), then click the "Manage Filter" link in the top right corner of the page (next to your username)
-1. Click the Settings tab, then click the Export Filters button
-1. Copy the **entire** block of text that appears below the button and paste it into a text editor for later use
-    - You can click anywhere in the textbox, then press `CTRL`+`A` (or `CMD`+`A`) on your keyboard to select all of the text
-    - You may want to save the file in your text editor, just in case, but this is not necessary
-1. Disable (or uninstall) the deviantART Filter userscript from Greasemonkey/Tampermonkey
-1. Install the deviantART filter web extension for Chrome/Firefox (see the [installation links](#installation) above)
-1. Visit [deviantART](https://www.deviantart.com/) again and open the Settings tab again
-1. Paste the block of text from step 4 into the textbox below the Export Filters button
-1. Click the Import Filters button
-1. A dialog will appear confirming the import results
+#### Please visit [the wiki](https://github.com/rthaut/deviantART-Filter/wiki#about-the-old-userscript-) for information about the userscript version of deviantART Filter. There you will find [steps for migrating](https://github.com/rthaut/deviantART-Filter/wiki/Userscript#transitioning-from-legacy-userscript) to the new web extensions.
