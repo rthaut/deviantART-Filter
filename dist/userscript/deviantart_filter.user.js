@@ -2,7 +2,7 @@
 // @name        deviantART Filter
 // @author      Ryan Thaut <rthaut@gmail.com> (http://ryanthaut.com/)
 // @description Allows configurable filtering/removal of deviations by selected users on deviantART
-// @version     4.1.0
+// @version     4.1.0.1
 // @namespace   https://github.com/rthaut/deviantART-Filter
 // @updateURL   https://github.com/rthaut/deviantART-Filter/raw/master/dist/userscript/deviantart_filter.user.js
 // @downloadURL https://github.com/rthaut/deviantART-Filter/raw/master/dist/userscript/deviantart_filter.user.js
