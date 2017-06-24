@@ -1,5 +1,5 @@
 ## Overview
-Have you ever been bothered by seeing deviations (submissions) from certain users while browsing [deviantART](https://www.deviantart.com)? Now you can quickly and permanently hide all deviations from any user! Install deviantART Filter in your web browser of choice, then either a.) enter their username on the settings panel, or b.) simply click the new red X that appears in the top right corner of any thumbnail image to filter that user.
+Have you ever been bothered by seeing deviations (submissions) from certain users while browsing [deviantART](https://www.deviantart.com)? Now you can quickly and permanently hide all deviations from any user! Install deviantART Filter in your web browser of choice, then either a.) click the new red X that appears in the top left corner of any thumbnail image, or b.) type in their username on the settings panel. After that, you will no longer see any deviations submitted by that user.
 
 ![deviantART Filter Promotional Image](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/resources/screenshots/Promo.png)
 
