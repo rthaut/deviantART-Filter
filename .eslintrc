@@ -1,0 +1,30 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "greasemonkey": true,
+    "jquery": true
+  },
+  "globals": {
+    "dialogPolyfill": true,
+    "getStoredValue": true,
+    "getStoredJSON": true,
+    "setStoredValue": true,
+    "setStoredJSON": true,
+    "addStyleSheet": true,
+    "resetStyleSheet": true,
+    "daDialog": true
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "curly": ["error", "multi-line"],
+    "no-console": "off",
+    "no-unused-vars": ["error", {
+      "vars": "local",
+      "args": "none"
+    }],
+    "no-useless-escape": "off",
+    "prefer-const": ["error"],
+    "quote-props": ["error", "always"]
+  }
+}
