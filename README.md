@@ -6,12 +6,11 @@ Have you ever been bothered by seeing deviations (submissions) from certain user
 * * *
 
 ## Installation
-### Mozilla Firefox
-**[Install from the official Mozilla Add-ons for Firefox site](https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/)**
+| Web Browser | Information | Download Link |
+| ----------- | ----------- | ------------- |
+| Google Chrome | [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/odlmamilbohnpnoomjclomghphbajikp.svg)](https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp)<br/>[![Chrome Web Store](https://img.shields.io/chrome-web-store/d/odlmamilbohnpnoomjclomghphbajikp.svg)](https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp) | [Download from the Chrome Web Store](https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp) |
+| Mozilla Firefox | [![Mozilla Add-on](https://img.shields.io/amo/v/deviantart-filter.svg)](https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/)<br/>[![Mozilla Add-on](https://img.shields.io/amo/d/deviantart-filter.svg)](https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/) | [Download from Mozilla Add-ons](https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/) |
 
-
-### Google Chrome
-**[Install from the official Google Chrome Web Store](https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp)**
 
 * * *
 
