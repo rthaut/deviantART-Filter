@@ -1,0 +1,25 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jquery": true
+  },
+  "globals": {
+    "angular": true,
+    "browser": true
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "curly": ["error", "multi-line"],
+    "no-console": "off",
+    "no-unused-vars": ["error", {
+      "vars": "local",
+      "args": "none"
+    }],
+    "no-useless-escape": "off",
+    "prefer-const": ["error"],
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"],
+    "quote-props": ["error", "always"]
+  }
+}

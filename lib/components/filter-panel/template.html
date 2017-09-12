@@ -1,0 +1,34 @@
+<div>
+    <h4><span ng-if="filter.data.length">Showing {{filter.data.length | number}} of {{filter.total | number}}</span> Filtered {{filter.name.plural}}</h4>
+
+    <div uib-alert ng-class="'alert-warning'" ng-if="filter.data && !filter.data.length"><strong>{{filter.labels.none}}</strong><br/><br/>{{filter.labels.help}}</div>
+
+    <div uib-alert ng-class="'alert-info'" ng-if="loading">{{loading}}</div>
+
+    <table class="table table-hover table-striped" ng-if="filter.data">
+        <thead>
+            <tr>
+                <th ng-repeat="prop in filter.properties">{{prop}}</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <form class="form-horizontal">
+                    <td ng-repeat="(prop, value) in newFilterItem">
+                        <input type="text" class="form-control" name="{{prop}}" ng-model="newFilterItem[prop]" ng-model-options="{debounce: 500}" placeholder="{{prop}}" />
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success" ng-click="addItemToFilter($event, filter)" ng-disabled="!isNewFilterItemValid()">Create Filter</button>
+                    </td>
+                </form>
+            </tr>
+            <tr ng-repeat="item in filter.data track by $index">
+                <td ng-repeat="prop in item">{{prop}}</td>
+                <td>
+                    <button type="button" class="btn btn-danger" ng-click="removeItemFromFilter($event, filter, item, $index)">Remove Filter</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

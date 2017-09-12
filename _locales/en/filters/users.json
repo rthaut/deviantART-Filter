@@ -1,0 +1,18 @@
+{
+  "FilterTypeUsersName": {
+    "message": "User",
+    "description": "The singular name of the filter type used for users."
+  },
+  "FilterTypeUsersNamePlural": {
+    "message": "Users",
+    "description": "The plural name of the filter type used for users."
+  },
+  "FilterTypeUsersLabelNone": {
+    "message": "You have not filtered any users yet.",
+    "description": "The message displayed when the user does not have any filtered users."
+  },
+  "FilterTypeUsersLabelHelp": {
+    "message": "You can manually filter users by entering their username below, or while browsing by clicking the red 'x' that appears on thumbnails when you hover over them.",
+    "description": "The message displayed to help the user filter new users."
+  }
+}

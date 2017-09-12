@@ -1,0 +1,10 @@
+{
+  "PopupMenuLabelManageFilters": {
+    "message": "Manage Filters",
+    "description": "The message shown on the popup menu for opening the management window/tab."
+  },
+  "PopupMenuLabelQuickSettings": {
+    "message": "Quick Settings",
+    "description": "The message shown on the popup menu above the quick/toggle settings."
+  }
+}

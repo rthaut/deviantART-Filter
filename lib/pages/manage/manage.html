@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="deviantArtFilter" ng-csp ng-controller="ManageCtrl">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{{title}}</title>
+
+        <link rel="stylesheet" href="../../includes/angular-csp.css">
+        <link rel="stylesheet" href="../../includes/bootstrap.min.css">
+        <link rel="stylesheet" href="../../includes/bootstrap-theme.min.css">
+    </head>
+
+    <body ng-cloak>
+        <div class="container">
+
+            <div class="page-header">
+                <h1>{{title}} <small>{{version}}</small></h1>
+            </div>
+
+            <div uib-alert ng-class="'alert-info'" ng-if="loading">{{loading}}</div>
+
+            <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)">{{alert.msg}}</div>
+
+            <div class="panel panel-default" ng-if="filters">
+                <uib-tabset type="tabs" justified="true" active="0">
+                    <uib-tab index="$index" ng-repeat="filter in filters" heading="Manage {{filter.name.plural}}">
+                        <div class="panel-body">
+                            <filter-panel filter="filter"></filter-panel>
+                        </div>
+                    </uib-tab>
+                    <uib-tab index="filters.length + 1" heading="Settings">
+                        <div class="panel-body">
+                            <div class="container-fluid">
+                                <options-panel></options-panel>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+
+        </div>
+
+        <!-- dependencies -->
+        <script src="../../includes/jquery.min.js"></script>
+        <script src="../../includes/angular.min.js"></script>
+        <script src="../../includes/bootstrap.min.js"></script>
+        <script src="../../includes/ui-bootstrap-tpls.js"></script>
+
+        <!-- custom components -->
+        <script src="../../components/filter-panel.min.js"></script>
+        <script src="../../components/options-panel.min.js"></script>
+
+        <!-- main script for this page -->
+        <script src="deviantart-filter.manage.js"></script>
+    </body>
+
+</html>

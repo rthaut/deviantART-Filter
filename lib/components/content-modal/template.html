@@ -1,0 +1,22 @@
+<div>
+    <div uib-alert ng-class="'alert-info'" ng-if="loading">{{loading}}</div>
+
+    <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)">{{alert.msg}}</div>
+
+    <div class="panel panel-default" ng-if="filters">
+        <uib-tabset type="tabs" justified="true" active="0">
+            <uib-tab index="$index" ng-repeat="filter in filters" heading="Manage {{filter.name.plural}}">
+                <div class="panel-body">
+                    <filter-panel filter="filter"></filter-panel>
+                </div>
+            </uib-tab>
+            <uib-tab index="filters.length + 1" heading="Settings">
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        <options-panel></options-panel>
+                    </div>
+                </div>
+            </uib-tab>
+        </uib-tabset>
+    </div>
+</div>

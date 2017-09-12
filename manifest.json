@@ -1,0 +1,72 @@
+{
+  "manifest_version": 2,
+  "name": "__MSG_ExtensionName__",
+  "version": "<%= package.version %>",
+  "description": "__MSG_ExtensionDescription__",
+  "homepage_url": "<%= package.homepage %>",
+  "default_locale": "en",
+
+  "icons": {
+    "12": "/icons/icon-16.png",
+    "24": "/icons/icon-24.png",
+    "32": "/icons/icon-32.png",
+    "48": "/icons/icon-48.png",
+    "64": "/icons/icon-64.png",
+    "96": "/icons/icon-96.png",
+    "128": "/icons/icon-128.png"
+  },
+
+  "applications": {
+    "gecko": {
+      "id": "filter@deviantart.com",
+      "strict_min_version": "42.0"
+    }
+  },
+
+  "background": {
+    "scripts": [
+      "scripts/<%= package.name %>.background.js"
+    ],
+    "persistent": false
+  },
+
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "matches": [
+        "*://*.deviantart.com/*"
+      ],
+      "css": [
+        "includes/angular-csp.css",
+        "includes/bootstrap.min.css",
+        "includes/bootstrap-theme.min.css"
+      ],
+      "js": [
+        "includes/browser-polyfill.min.js",
+        "includes/jquery.min.js",
+        "includes/jquery.daModal.js",
+        "includes/angular.min.js",
+        "includes/bootstrap.min.js",
+        "includes/ui-bootstrap-tpls.js",
+        "components/content-modal.min.js",
+        "components/filter-panel.min.js",
+        "components/options-panel.min.js",
+        "scripts/<%= package.name %>.content.js"
+      ]
+    }
+  ],
+
+  "page_action": {
+    "browser_style": true,
+    "default_icon": "icons/icon-action-active.svg",
+    "default_title": "__MSG_ExtensionName__",
+    "default_popup": "pages/popup/<%= package.name %>.popup.html"
+  },
+
+  "permissions": [
+    "*://*.deviantart.com/*",
+    "activeTab",
+    "tabs",
+    "storage"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "OptionActiveName": {
+    "message": "Activate Filters",
+    "description": ""
+  },
+  "OptionActiveDescription": {
+    "message": "Disabling this turns off all filtering functionality",
+    "description": ""
+  },
+  "OptionPlaceholdersName": {
+    "message": "Use Placeholders",
+    "description": ""
+  },
+  "OptionPlaceholdersDescription": {
+    "message": "Show placeholders in place of filtered content (disable to hide filtered content completely)",
+    "description": ""
+  },
+  "OptionPageActionPopupMenuName": {
+    "message": "Enable Popup Menu",
+    "description": ""
+  },
+  "OptionPageActionPopupMenuDescription": {
+    "message": "Enable the popup menu on the icon in the address bar (disable this to open the management screen directly)",
+    "description": ""
+  },
+  "OptionManagementPanelTypeName": {
+    "message": "Mangement Panel Type",
+    "description": ""
+  },
+  "OptionManagementPanelTypeDescription": {
+    "message": "Specifies where/how the main mangement panel is displayed",
+    "description": ""
+  }
+}

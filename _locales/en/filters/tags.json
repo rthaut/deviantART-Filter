@@ -1,0 +1,18 @@
+{
+  "FilterTypeTagsName": {
+    "message": "Tag",
+    "description": "The singular name of the filter type used for tags."
+  },
+  "FilterTypeTagsNamePlural": {
+    "message": "Tags",
+    "description": "The plural name of the filter type used for tags."
+  },
+  "FilterTypeTagsLabelNone": {
+    "message": "You have not filtered any tags yet.",
+    "description": "The message displayed when the user does not have any filtered tags."
+  },
+  "FilterTypeTagsLabelHelp": {
+    "message": "You can filter tags by adding them below.",
+    "description": "The message displayed to help the user filter new tags."
+  }
+}

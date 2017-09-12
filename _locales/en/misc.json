@@ -1,0 +1,38 @@
+{
+  "GenericLoading": {
+    "message": "Loading $DATA$...",
+    "description": "The generic message displayed while data is loading.",
+    "placeholders": {
+      "data": {
+        "content": "$1"
+      }
+    }
+  },
+  "GenericLoadingError": {
+    "message": "An error occured while loading $DATA$: $ERROR$",
+    "description": "The generic error message displayed if data fails to load.",
+    "placeholders": {
+      "data": {
+        "content": "$1"
+      },
+      "error": {
+        "content": "$2"
+      }
+    }
+  },
+  "LabelFilters": {
+    "message": "Filters"
+  },
+  "LabelOptions": {
+    "message": "Options"
+  },
+  "OptionsHeading": {
+    "message": "$TITLE$ Options",
+    "description": "The heading displayed above the options on the management panel.",
+    "placeholders": {
+      "title": {
+        "name": "$1"
+      }
+    }
+  }
+}
