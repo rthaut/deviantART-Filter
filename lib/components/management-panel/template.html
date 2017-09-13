@@ -1,0 +1,46 @@
+<div>
+    <div class="alert alert-info" ng-if="loading">{{loading}}</div>
+
+    <div ng-repeat="alert in alerts" class="alert alert-dismissible" ng-class="'alert-' + (alert.type || 'warning')" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="closeAlert($index)"><span aria-hidden="true">&times;</span></button>
+        {{alert.msg}}
+    </div>
+
+    <div class="panel panel-default" ng-if="filters">
+        <div class="panel-heading panel-heading-nav">
+            <ul class="nav nav-tabs">
+
+                <li role="presentation" class="active">
+                    <a href="#options" aria-controls="options" role="tab" data-toggle="tab">Options</a>
+                </li>
+
+                <li ng-repeat="filter in filters" role="presentation" ng-if="filters.length <= 3">
+                    <a ng-href="#{{filter.name.singular | lowercase}}" aria-controls="{{filter.name.singular | lowercase}}" role="tab" data-toggle="tab">{{manageLbl}} {{filter.name.plural}}</a>
+                </li>
+
+                <li role="presentation" class="dropdown" ng-if="filters.length > 3">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{manageLbl}} <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="filter in filters">
+                            <a ng-href="#{{filter.name.singular | lowercase}}" aria-controls="{{filter.name.singular | lowercase}}" role="tab" data-toggle="tab">{{filter.name.plural}}</a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+        <div class="panel-body">
+            <div class="tab-content">
+
+                <div role="tabpanel" class="tab-pane active" id="options">
+                    <options-panel></options-panel>
+                </div>
+
+                <div ng-repeat="filter in filters" role="tabpanel" class="tab-pane" id="{{filter.name.singular | lowercase}}">
+                    <filter-panel filter="filter"></filter-panel>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
