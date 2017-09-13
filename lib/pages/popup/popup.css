@@ -1,3 +1,7 @@
+.icon-section-header {
+    background-image:url('../../icons/logo-red.svg');
+}
+
 .panel-list-item .icon.toggle {
     width: 24px;
     height: 17px;
