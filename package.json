@@ -10,7 +10,7 @@
     "build": "gulp build",
     "watch": "gulp watch",
     "dev": "npm run build && npm run start:firefox",
-    "start:firefox": "web-ext run --source-dir ./dist/webextension --browser-console"
+    "start:firefox": "web-ext run --source-dir ./dist --browser-console"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,7 @@
     "gulp-folders": "^1.1.0",
     "gulp-header": "^1.8.8",
     "gulp-if": "^2.0.2",
+    "gulp-less": "^3.3.2",
     "gulp-merge-json": "^1.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",

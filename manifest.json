@@ -37,9 +37,8 @@
         "*://*.deviantart.com/*"
       ],
       "css": [
-        "includes/angular-csp.css",
-        "includes/bootstrap.min.css",
-        "includes/bootstrap-theme.min.css"
+        "includes/angular-csp.css"//,
+        //"css/style.min.css"
       ],
       "js": [
         "includes/browser-polyfill.min.js",
@@ -48,7 +47,7 @@
         "includes/angular.min.js",
         "includes/bootstrap.min.js",
         "includes/ui-bootstrap-tpls.js",
-        "components/content-modal.min.js",
+        "components/management-panel.min.js",
         "components/filter-panel.min.js",
         "components/options-panel.min.js",
         "scripts/<%= package.name %>.content.js"
@@ -58,7 +57,7 @@
 
   "page_action": {
     "browser_style": true,
-    "default_icon": "icons/icon-action-active.svg",
+    "default_icon": "icons/logo-gray.svg",
     "default_title": "__MSG_ExtensionName__",
     "default_popup": "pages/popup/<%= package.name %>.popup.html"
   },
