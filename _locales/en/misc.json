@@ -20,6 +20,9 @@
       }
     }
   },
+  "LabelManage": {
+    "message": "Manage"
+  },
   "LabelFilters": {
     "message": "Filters"
   },
