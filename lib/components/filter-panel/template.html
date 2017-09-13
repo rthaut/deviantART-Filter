@@ -5,7 +5,7 @@
 
     <div uib-alert ng-class="'alert-info'" ng-if="loading">{{loading}}</div>
 
-    <table class="table table-hover table-striped" ng-if="filter.data">
+    <table class="table table-condensed table-striped" ng-if="filter.data">
         <thead>
             <tr>
                 <th ng-repeat="prop in filter.properties">{{prop}}</th>
@@ -19,14 +19,14 @@
                         <input type="text" class="form-control" name="{{prop}}" ng-model="newFilterItem[prop]" ng-model-options="{debounce: 500}" placeholder="{{prop}}" />
                     </td>
                     <td>
-                        <button type="submit" class="btn btn-success" ng-click="addItemToFilter($event, filter)" ng-disabled="!isNewFilterItemValid()">Create Filter</button>
+                        <button type="submit" class="btn btn-sm btn-success" ng-click="addItemToFilter($event, filter)" ng-disabled="!isNewFilterItemValid()">Create Filter</button>
                     </td>
                 </form>
             </tr>
             <tr ng-repeat="item in filter.data track by $index">
                 <td ng-repeat="prop in item">{{prop}}</td>
                 <td>
-                    <button type="button" class="btn btn-danger" ng-click="removeItemFromFilter($event, filter, item, $index)">Remove Filter</button>
+                    <button type="button" class="btn btn-sm btn-danger" ng-click="removeItemFromFilter($event, filter, item, $index)">Remove Filter</button>
                 </td>
             </tr>
         </tbody>
