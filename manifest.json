@@ -25,7 +25,7 @@
 
   "background": {
     "scripts": [
-      "scripts/<%= package.name %>.background.js"
+      "scripts/background.js"
     ],
     "persistent": false
   },
@@ -37,20 +37,20 @@
         "*://*.deviantart.com/*"
       ],
       "css": [
-        "includes/angular-csp.css"//,
-        //"css/style.min.css"
+        "includes/angular-csp.css",
+        "css/content.css"
       ],
       "js": [
-        "includes/browser-polyfill.min.js",
-        "includes/jquery.min.js",
+        "vendor/browser-polyfill.min.js",
+        "vendor/jquery.min.js",
+        "vendor/angular.min.js",
+        "vendor/bootstrap.min.js",
+        "vendor/ui-bootstrap-tpls.js",
         "includes/jquery.daModal.js",
-        "includes/angular.min.js",
-        "includes/bootstrap.min.js",
-        "includes/ui-bootstrap-tpls.js",
-        "components/management-panel.min.js",
-        "components/filter-panel.min.js",
-        "components/options-panel.min.js",
-        "scripts/<%= package.name %>.content.js"
+        "components/management-panel.js",
+        "components/filter-panel.js",
+        "components/options-panel.js",
+        "scripts/content.js"
       ]
     }
   ],
@@ -59,7 +59,7 @@
     "browser_style": true,
     "default_icon": "icons/logo-gray.svg",
     "default_title": "__MSG_ExtensionName__",
-    "default_popup": "pages/popup/<%= package.name %>.popup.html"
+    "default_popup": "pages/popup/popup.html"
   },
 
   "permissions": [

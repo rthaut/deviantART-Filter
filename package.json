@@ -20,9 +20,6 @@
     "url": "https://github.com/rthaut/deviantART-Filter/issues"
   },
   "devDependencies": {
-    "angular": "^1.6.6",
-    "angular-ui-bootstrap": "^2.5.0",
-    "bootstrap": "^3.3.7",
     "gulp": "^3.9.1",
     "gulp-angular-embed-templates": "^2.3.0",
     "gulp-concat": "^2.6.1",
@@ -37,12 +34,15 @@
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
     "gulp-zip": "^4.0.0",
-    "jquery": "^1.12.4",
     "run-sequence": "^1.2.2",
     "uglify-es": "^3.0.15",
     "web-ext": "^1.9.1"
   },
   "dependencies": {
+    "angular": "^1.6.6",
+    "angular-ui-bootstrap": "^2.5.0",
+    "bootstrap": "^3.3.7",
+    "jquery": "^1.12.4",
     "webextension-polyfill": "^0.1.1"
   }
 }
