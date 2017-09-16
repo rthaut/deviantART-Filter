@@ -26,6 +26,7 @@
   "permissions": [
     "*://*.deviantart.com/*",
     "activeTab",
+    "history",
     "tabs",
     "storage"
   ],
