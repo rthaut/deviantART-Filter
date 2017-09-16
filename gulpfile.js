@@ -52,13 +52,13 @@ var package = require('./package.json');
 
 // default options for various plugins
 var options = {
-    // less options
+    // options for compiling LESS to CSS
     less: {
         paths: 'node_modules',
         outputStyle: 'compressed',
         sourceMap: true,
     },
-    // uglify options for all non-minified JS files
+    // options for compressing JS files
     uglify: {
         compress: {
             drop_console: !DEBUG
