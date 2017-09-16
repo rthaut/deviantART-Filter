@@ -18,10 +18,17 @@
 
   "applications": {
     "gecko": {
-      "id": "filter@deviantart.com",
+      "id": "{a2ce7c11-e47d-42cf-b6db-ede36265cf6c}",
       "strict_min_version": "42.0"
     }
   },
+
+  "permissions": [
+    "*://*.deviantart.com/*",
+    "activeTab",
+    "tabs",
+    "storage"
+  ],
 
   "options_ui": {
     "page": "pages/options/options.html",
@@ -67,10 +74,7 @@
     "default_popup": "pages/popup/popup.html"
   },
 
-  "permissions": [
-    "*://*.deviantart.com/*",
-    "activeTab",
-    "tabs",
-    "storage"
+  "web_accessible_resources": [
+    "icons/*"
   ]
 }
