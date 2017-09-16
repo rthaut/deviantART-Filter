@@ -23,6 +23,11 @@
     }
   },
 
+  "options_ui": {
+    "page": "pages/options/options.html",
+    "browser_style": true
+  },
+
   "background": {
     "scripts": [
       "scripts/background.js"

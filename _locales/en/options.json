@@ -30,5 +30,25 @@
   "OptionManagementPanelTypeDescription": {
     "message": "Specifies where/how the main mangement panel is displayed",
     "description": ""
+  },
+  "OptionPrivateStorageName": {
+    "message": "Use Filters in Private/Incognito Mode",
+    "description": ""
+  },
+  "OptionPrivateStorageDescription": {
+    "message": "This option determines if filters that are created in normal browsing mode are available while in Private/Incognito mode.",
+    "description": ""
+  },
+  "OptionPrivateStorageValueWrite": {
+    "message": "Yes, and save changes",
+    "description": ""
+  },
+  "OptionPrivateStorageValueRead": {
+    "message": "Yes, but do NOT save changes",
+    "description": ""
+  },
+  "OptionPrivateStorageValueNone": {
+    "message": "No",
+    "description": ""
   }
 }
