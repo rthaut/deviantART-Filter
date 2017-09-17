@@ -50,7 +50,7 @@
         "*://*.deviantart.com/*"
       ],
       "css": [
-        "includes/angular-csp.css",
+        "vendor/angular-csp.css",
         "css/content.css"
       ],
       "js": [
