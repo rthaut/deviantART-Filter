@@ -14,7 +14,7 @@
                     <a href="#options" aria-controls="options" role="tab" data-toggle="tab">{{optionsLbl}}</a>
                 </li>
 
-                <li ng-repeat="filter in filters" role="presentation" ng-if="filters.length <= 3">
+                <li ng-repeat="filter in filters" role="presentation" ng-if="filters.length && filters.length <= 3">
                     <a ng-href="#{{filter.name.singular | lowercase}}" aria-controls="{{filter.name.singular | lowercase}}" role="tab" data-toggle="tab">{{manageLbl}} {{filter.name.plural}}</a>
                 </li>
 

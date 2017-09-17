@@ -1,22 +1,26 @@
 <div>
     <h4><span ng-if="filter.data.length">Showing {{filter.data.length | number}} of {{filter.total | number}}</span> Filtered {{filter.name.plural}}</h4>
 
-    <div uib-alert ng-class="'alert-warning'" ng-if="filter.data && !filter.data.length"><strong>{{filter.labels.none}}</strong><br/><br/>{{filter.labels.help}}</div>
-
     <div uib-alert ng-class="'alert-info'" ng-if="loading">{{loading}}</div>
+
+    <div ng-repeat="alert in alerts" class="alert alert-dismissible" ng-class="'alert-' + (alert.type || 'warning')" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="closeAlert($index)"><span aria-hidden="true">&times;</span></button> {{alert.msg}}
+    </div>
+
+    <div uib-alert ng-class="'alert-warning'" ng-if="filter.data && !filter.data.length"><strong>{{filter.labels.none}}</strong><br/><br/>{{filter.labels.help}}</div>
 
     <table class="table table-condensed table-striped" ng-if="filter.data">
         <thead>
             <tr>
-                <th ng-repeat="prop in filter.properties">{{prop}}</th>
+                <th ng-repeat="(prop, value) in filter.properties.available">{{value.label}}</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <form class="form-horizontal">
-                    <td ng-repeat="(prop, value) in newFilterItem">
-                        <input type="text" class="form-control" name="{{prop}}" ng-model="newFilterItem[prop]" ng-model-options="{debounce: 500}" placeholder="{{prop}}" />
+                    <td ng-repeat="(prop, value) in filter.properties.available">
+                        <input type="{{value.type}}" class="form-control" name="{{prop}}" ng-model="newFilterItem[prop]" ng-model-options="{debounce: 500}" placeholder="{{value.label}}" ng-if="filter.properties.required[prop]" />
                     </td>
                     <td>
                         <button type="submit" class="btn btn-sm btn-success" ng-click="addItemToFilter($event, filter)" ng-disabled="!isNewFilterItemValid()">Create Filter</button>
@@ -24,7 +28,10 @@
                 </form>
             </tr>
             <tr ng-repeat="item in filter.data track by $index">
-                <td ng-repeat="prop in item">{{prop}}</td>
+                <td ng-repeat="(prop, value) in filter.properties.available" ng-switch="value.type">
+                    <time ng-switch-when="date" datetime="{{item[prop] | date:'medium'}}">{{item[prop] | date:'longDate'}}</time>
+                    <span ng-switch-default>{{item[prop]}}</span>
+                </td>
                 <td>
                     <button type="button" class="btn btn-sm btn-danger" ng-click="removeItemFromFilter($event, filter, item, $index)">Remove Filter</button>
                 </td>

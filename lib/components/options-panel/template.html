@@ -3,7 +3,9 @@
 
     <div uib-alert ng-class="'alert-info'" ng-if="loading">{{loading}}</div>
 
-    <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)">{{alert.msg}}</div>
+    <div ng-repeat="alert in alerts" class="alert alert-dismissible" ng-class="'alert-' + (alert.type || 'warning')" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="closeAlert($index)"><span aria-hidden="true">&times;</span></button> {{alert.msg}}
+    </div>
 
     <form class="form">
         <div class="form-group" ng-repeat="option in options" ng-switch="option.type">
