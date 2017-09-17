@@ -108,9 +108,9 @@ gulp.task('build:components', folders(_folders.components, function (folder) {
         .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { package: package }))
         .pipe(gulp.dest('./dist/components'));
 }));
-gulp.task('build:icons', function () {
-    return gulp.src(['./icons/**/*.{png,svg}'])
-        .pipe(gulp.dest('./dist/icons'));
+gulp.task('build:images', function () {
+    return gulp.src(['./images/**/*.{png,svg}'])
+        .pipe(gulp.dest('./dist/images'));
 });
 gulp.task('build:includes', function () {
     return gulp.src(includes)
@@ -183,7 +183,7 @@ gulp.task('crx', function () {
 // pimary build task
 gulp.task('build', ['clean'], function (callback) {
     sequence(
-        ['build:icons', 'build:less', 'build:locales', 'build:manifest'],
+        ['build:images', 'build:less', 'build:locales', 'build:manifest'],
         ['lint'],
         ['build:components', 'build:includes', 'build:pages', 'build:scripts', 'build:vendor'],
         //['zip', 'crx'],
@@ -195,7 +195,7 @@ gulp.task('build', ['clean'], function (callback) {
 gulp.task('watch', ['build'], function () {
     debug = true;
     gulp.watch(path.join(_folders.components, '/**/*'), ['build:components']);
-    gulp.watch('./icons/**/*.{png,svg}', ['build:icons']);
+    gulp.watch('./images/**/*.{png,svg}', ['build:images']);
     gulp.watch(includes, ['build:includes']);
     gulp.watch('./lib/less/**/*.less', ['build:less']);
     gulp.watch(path.join(_folders.locales, '/**/*'), ['build:locales']);

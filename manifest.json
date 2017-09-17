@@ -70,7 +70,7 @@
 
   "page_action": {
     "browser_style": true,
-    "default_icon": "icons/logo-gray.svg",
+    "default_icon": "images/logo/logo-gray.svg",
     "default_title": "__MSG_ExtensionName__",
     "default_popup": "pages/popup/popup.html"
   },
