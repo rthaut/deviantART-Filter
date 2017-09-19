@@ -1,37 +1,39 @@
-var gulp = require('gulp');
+const gulp = require('gulp');
+const rollup = require('rollup-stream');
+const source = require('vinyl-source-stream');
 
-var del = require('del');
-var fs = require('fs');
-var path = require('path');
-var merge = require('merge-stream');
-var sequence = require('run-sequence');
+const del = require('del');
+const fs = require('fs');
+const path = require('path');
+const merge = require('merge-stream');
+const sequence = require('run-sequence');
 
-var concat = require('gulp-concat');
-var ejs = require('gulp-ejs');
-var embedTemplates = require('gulp-angular-embed-templates');
-var eslint = require('gulp-eslint');
-var folders = require('gulp-folders');
-var gulpIf = require('gulp-if');
-var header = require('gulp-header');
-var less = require('gulp-less');
-var mergeJson = require('gulp-merge-json');
-var rename = require('gulp-rename');
+const concat = require('gulp-concat');
+const ejs = require('gulp-ejs');
+const embedTemplates = require('gulp-angular-embed-templates');
+const eslint = require('gulp-eslint');
+const folders = require('gulp-folders');
+const gulpIf = require('gulp-if');
+const header = require('gulp-header');
+const less = require('gulp-less');
+const mergeJson = require('gulp-merge-json');
+const rename = require('gulp-rename');
 
-var composer = require('gulp-uglify/composer');
-var uglify = composer(require('uglify-es'), console);
+const composer = require('gulp-uglify/composer');
+const uglify = composer(require('uglify-es'), console);
 
-var crx = require('gulp-crx-pack');
-var zip = require('gulp-zip');
+const crx = require('gulp-crx-pack');
+const zip = require('gulp-zip');
 
 
 
 /* ==================== CONFIGURATION ==================== */
 
 // set to TRUE to enable console messages in JS output files
-var DEBUG = true;
+let DEBUG = true;
 
 // vendor libraries needed for core functionality
-var vendor = [
+const vendor = [
     './node_modules/angular/angular-csp.css',
     './node_modules/angular/angular.min.js',
     './node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
@@ -43,15 +45,15 @@ var vendor = [
 ]
 
 // additional includes (custom libraries, classes, etc.)
-var includes = [
+const includes = [
     './lib/jquery.daModal.js',
 ]
 
 // load in package JSON as object for variables & EJS templates
-var package = require('./package.json');
+const package = require('./package.json');
 
 // default options for various plugins
-var options = {
+const options = {
     // options for compiling LESS to CSS
     less: {
         paths: 'node_modules',
@@ -71,7 +73,7 @@ var options = {
     }
 };
 
-var _folders = {
+const _folders = {
     locales: './_locales',
     components: './lib/components',
     pages: './lib/pages',
@@ -152,10 +154,12 @@ gulp.task('build:pages', folders(_folders.pages, function (folder) {
         .pipe(gulp.dest(path.join('./dist/pages', folder)));
 }));
 gulp.task('build:scripts', folders(_folders.scripts, function (folder) {
-    return gulp.src(path.join(_folders.scripts, folder, '**/*.js'))
-        .pipe(concat(folder + '.js'))
-        .pipe(uglify(options.uglify))
-        //.pipe(rename(folder + '.min.js'))
+    return rollup({
+        input: path.join(_folders.scripts, folder, 'index.js'),
+        format: 'iife',
+        name: package.title.replace(' ', ''),
+    })
+        .pipe(source(folder + '.js'))
         .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { package: package }))
         .pipe(gulp.dest('./dist/scripts'));
 }));
