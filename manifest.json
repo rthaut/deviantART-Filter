@@ -61,8 +61,7 @@
         "includes/jquery.daModal.js",
         "components/management-panel.js",
         "components/filter-panel.js",
-        "components/options-panel.js",
-        "scripts/content.js"
+        "components/options-panel.js"
       ]
     }
   ],
