@@ -90,7 +90,8 @@ gulp.task('lint', function () {
             'fix': true
         }))
         .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
+        .on('error', gutil.log)
+        //.pipe(eslint.failAfterError());
 });
 
 gulp.task('clean', function () {
