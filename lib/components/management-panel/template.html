@@ -27,6 +27,10 @@
                     </ul>
                 </li>
 
+                <li role="presentation">
+                    <a href="#importexport" aria-controls="importexport" role="tab" data-toggle="tab">{{importExportLbl}}</a>
+                </li>
+
             </ul>
         </div>
         <div class="panel-body">
@@ -40,6 +44,10 @@
                     <filter-panel filter="filter"></filter-panel>
                 </div>
 
+
+                <div role="tabpanel" class="tab-pane" id="importexport">
+                    <import-export-panel></import-export-panel>
+                </div>
             </div>
         </div>
     </div>

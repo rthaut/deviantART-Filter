@@ -10,3 +10,29 @@
   padding-left: 10px;
   padding-right: 10px;
 }
+
+.drag-drop {
+  border: 2px dashed;
+  position: relative;
+  z-index: 1;
+}
+
+.drag-drop label {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.drag-drop.hover {
+  border-style: solid;
+}
+
+.drag-drop.hover::before {
+  content: ' ';
+  background: rgba(255, 255, 255, 0.25);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+}
