@@ -1,5 +1,6 @@
 const gulp = require('gulp');
 const rollup = require('rollup-stream');
+const buffer = require('vinyl-buffer');
 const source = require('vinyl-source-stream');
 
 const del = require('del');
@@ -30,7 +31,7 @@ const zip = require('gulp-zip');
 /* ==================== CONFIGURATION ==================== */
 
 // set to TRUE to enable console messages in JS output files
-let DEBUG = true;
+let debug = false;
 
 // vendor libraries needed for core functionality
 const vendor = [
@@ -41,6 +42,8 @@ const vendor = [
     './node_modules/bootstrap/dist/css/bootstrap-theme.min.css',
     './node_modules/bootstrap/dist/js/bootstrap.min.js',
     './node_modules/jquery/dist/jquery.min.js',
+    './node_modules/ng-table/bundles/ng-table.min.css',
+    './node_modules/ng-table/bundles/ng-table.min.js',
     './node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
 ]
 
@@ -63,7 +66,7 @@ const options = {
     // options for compressing JS files
     uglify: {
         compress: {
-            drop_console: !DEBUG
+            drop_console: !debug
         },
         mangle: false,
         output: {
@@ -90,7 +93,6 @@ gulp.task('lint', function () {
             'fix': true
         }))
         .pipe(eslint.format())
-        .on('error', gutil.log)
         //.pipe(eslint.failAfterError());
 });
 
@@ -161,6 +163,8 @@ gulp.task('build:scripts', folders(_folders.scripts, function (folder) {
         name: package.title.replace(' ', ''),
     })
         .pipe(source(folder + '.js'))
+        .pipe(buffer())
+        .pipe(uglify(options.uglify))
         .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { package: package }))
         .pipe(gulp.dest('./dist/scripts'));
 }));

@@ -37,6 +37,7 @@
     "rollup-stream": "^1.24.1",
     "run-sequence": "^1.2.2",
     "uglify-es": "^3.0.15",
+    "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "web-ext": "^1.9.1"
   },
