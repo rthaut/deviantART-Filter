@@ -9,13 +9,34 @@
 
     <div uib-alert ng-class="'alert-warning'" ng-if="!filterTableData.total()"><strong>{{filter.labels.none}}</strong><br/><br/>{{filter.labels.help}}</div>
 
-    <table ng-table-dynamic="filterTableData with filterTableColumns" class="table table-bordered table-striped">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h5 class="panel-title">Create a New {{filter.name.singular}} Filter</h5>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <div class="form-group" ng-repeat="property in filter.properties.required">
+                    <label for="{{property.field}}" class="col-sm-2 control-label">{{property.title}}</label>
+                    <div class="col-sm-10">
+                        <input type="{{property.dataType}}" class="form-control" name="{{property.field}}" id="{{property.field}}" ng-model="newFilterItem[property.field]" placeholder="{{property.title}}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary" ng-click="addItemToFilter($event)" ng-disabled="!isNewFilterItemValid()">Add Filter</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <table ng-table-dynamic="filterTableData with filterTableColumns" class="table table-bordered table-striped" ng-show="filterTableData.total()">
         <tr ng-repeat="row in $data track by $index">
             <td ng-repeat="col in $columns" ng-switch="col.dataType">
                 <span ng-switch-default>{{row[col.field]}}</span>
                 <time ng-switch-when="date" datetime="{{row[col.field] | date:'medium'}}">{{row[col.field] | date:'longDate'}}</time>
                 <div ng-switch-when="command">
-                    <button type="button" class="btn btn-sm btn-danger" ng-click="removeItemFromFilter($event, filter, row, $index)">Remove Filter</button>
+                    <button type="button" class="btn btn-sm btn-danger" ng-click="removeItemFromFilter($event, row)">Remove Filter</button>
                 </div>
             </td>
         </tr>
