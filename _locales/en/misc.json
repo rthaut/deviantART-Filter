@@ -33,13 +33,8 @@
     "message": "Import/Export Filters"
   },
   "OptionsHeading": {
-    "message": "$TITLE$ Options",
-    "description": "The heading displayed above the options on the management panel.",
-    "placeholders": {
-      "title": {
-        "name": "$1"
-      }
-    }
+    "message": "DeviantArt Filter Options",
+    "description": "The heading displayed above the options on the management panel."
   },
   "ImportExportHeading": {
     "message": "Import/Export Filters",
