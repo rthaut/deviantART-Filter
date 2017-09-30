@@ -1,3 +1,4 @@
+/* global require */
 const gulp = require('gulp');
 const rollup = require('rollup-stream');
 const buffer = require('vinyl-buffer');
@@ -30,9 +31,6 @@ const zip = require('gulp-zip');
 
 /* ==================== CONFIGURATION ==================== */
 
-// set to TRUE to enable console messages in JS output files
-let debug = false;
-
 // vendor libraries needed for core functionality
 const vendor = [
     './node_modules/angular/angular-csp.css',
@@ -45,12 +43,12 @@ const vendor = [
     './node_modules/ng-table/bundles/ng-table.min.css',
     './node_modules/ng-table/bundles/ng-table.min.js',
     './node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
-]
+];
 
 // additional includes (custom libraries, classes, etc.)
 const includes = [
     './lib/jquery.daModal.js',
-]
+];
 
 // load in package JSON as object for variables & EJS templates
 const package = require('./package.json');
@@ -58,142 +56,176 @@ const package = require('./package.json');
 // default options for various plugins
 const options = {
     // options for compiling LESS to CSS
-    less: {
-        paths: 'node_modules',
-        outputStyle: 'compressed',
-        sourceMap: true,
+    'less': {
+        'paths': 'node_modules',
+        'outputStyle': 'compressed',
+        'sourceMap': true,
     },
     // options for compressing JS files
-    uglify: {
-        compress: {
-            drop_console: !debug
+    'uglify': {
+        'compress': {
+            'drop_console': true
         },
-        mangle: false,
-        output: {
-            beautify: true,
-            bracketize: true
+        'mangle': false,
+        'output': {
+            'beautify': true,
+            'bracketize': true
         }
     }
 };
 
 const _folders = {
-    locales: './_locales',
-    components: './lib/components',
-    pages: './lib/pages',
-    scripts: './lib/scripts'
+    'locales': './_locales',
+    'components': './lib/components',
+    'pages': './lib/pages',
+    'scripts': './lib/scripts'
 };
 
 
 
 /* ====================  BUILD TASKS  ==================== */
 
-gulp.task('lint', function () {
-    return gulp.src('./lib/**/*.js')
-        .pipe(eslint({
-            'fix': true
-        }))
-        .pipe(eslint.format())
-        //.pipe(eslint.failAfterError());
-});
-
 gulp.task('clean', function () {
     return del(['./dist/*'])
         .catch(function (error) {
-            console.warn(error)
+            console.warn(error);
         });
 });
 
+
+// ===================================
 // build tasks, broken into components
-gulp.task('build:components', folders(_folders.components, function (folder) {
+// ===================================
+
+gulp.task('lint:components', function () {
+    return gulp.src(path.join(_folders.components, '**/*.js'))
+        .pipe(eslint({
+            'fix': true
+        }))
+        .pipe(eslint.format());
+});
+gulp.task('build:components', ['lint:components'], folders(_folders.components, function (folder) {
     return gulp.src(path.join(_folders.components, folder, '**/*.js'))
         .pipe(embedTemplates())
         .pipe(concat(folder + '.js'))
         .pipe(uglify(options.uglify))
         //.pipe(rename(folder + '.min.js'))
-        .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { package: package }))
+        .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { 'package': package }))
         .pipe(gulp.dest('./dist/components'));
 }));
+
+
 gulp.task('build:images', function () {
     return gulp.src(['./images/**/*.{png,svg}'])
         .pipe(gulp.dest('./dist/images'));
 });
+
+
 gulp.task('build:includes', function () {
     return gulp.src(includes)
         .pipe(gulp.dest('./dist/includes'));
 });
+
+
 gulp.task('build:less', function () {
     return gulp.src('./lib/less/*.less')
         .pipe(less(options.less))
         //.pipe(rename({ suffix: '.min' }))
-        .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { package: package }))
+        .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { 'package': package }))
         .pipe(gulp.dest('./dist/css'));
 });
+
+
 gulp.task('build:locales', folders(_folders.locales, function (folder) {
     return gulp.src(path.join(_folders.locales, folder, '**/*.json'))
         .pipe(mergeJson({
-            fileName: 'messages.json'
+            'fileName': 'messages.json'
         }))
         .pipe(gulp.dest(path.join('./dist/_locales', folder)));
 }));
+
+
 gulp.task('build:manifest', function () {
     return gulp.src(['./manifest.json'])
-        .pipe(ejs({ package: package }))
+        .pipe(ejs({ 'package': package }))
         .pipe(gulp.dest('./dist'));
 });
-gulp.task('build:pages', folders(_folders.pages, function (folder) {
+
+
+gulp.task('lint:pages', function () {
+    return gulp.src(path.join(_folders.pages, '**/*.js'))
+        .pipe(eslint({
+            'fix': true
+        }))
+        .pipe(eslint.format());
+});
+gulp.task('build:pages', ['lint:pages'], folders(_folders.pages, function (folder) {
     return merge(
         gulp.src(path.join(_folders.pages, folder, '**/*.html'))
             .pipe(concat(folder + '.html')),
         gulp.src(path.join(_folders.pages, folder, '**/*.css'))
             .pipe(concat(folder + '.css'))
             //.pipe(rename({ suffix: '.min' }))
-            .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { package: package })),
+            .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { 'package': package })),
         gulp.src(path.join(_folders.pages, folder, '**/*.js'))
             .pipe(concat(folder + '.js'))
             .pipe(uglify(options.uglify))
             //.pipe(rename(folder + '.min.js'))
-            .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { package: package }))
+            .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { 'package': package }))
     )
         .pipe(gulp.dest(path.join('./dist/pages', folder)));
 }));
-gulp.task('build:scripts', folders(_folders.scripts, function (folder) {
+
+
+gulp.task('lint:scripts', function () {
+    return gulp.src(path.join(_folders.scripts, '**/*.js'))
+        .pipe(eslint({
+            'fix': true
+        }))
+        .pipe(eslint.format());
+});
+gulp.task('build:scripts', ['lint:scripts'], folders(_folders.scripts, function (folder) {
     return rollup({
-        input: path.join(_folders.scripts, folder, 'index.js'),
-        format: 'iife',
-        name: package.title.replace(' ', ''),
+        'input': path.join(_folders.scripts, folder, 'index.js'),
+        'format': 'iife',
+        'name': package.title.replace(' ', ''),
     })
         .pipe(source(folder + '.js'))
         .pipe(buffer())
         .pipe(uglify(options.uglify))
-        .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { package: package }))
+        .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { 'package': package }))
         .pipe(gulp.dest('./dist/scripts'));
 }));
+
+
 gulp.task('build:vendor', function () {
     return gulp.src(vendor)
         .pipe(gulp.dest('./dist/vendor'));
 });
 
 
-// tasks for packaging the WebExtension for distribution
+// ========================
+// package/distribute tasks
+// ========================
+
 gulp.task('zip', function (callback) {
     return gulp.src(['./dist/**/*', '!Thumbs.db'])
         .pipe(zip(package.name + '.zip'))
-        .pipe(gulp.dest('./dist'))
+        .pipe(gulp.dest('./dist'));
 });
 gulp.task('crx', function () {
     return gulp.src(['./dist', '!Thumbs.db'])
         .pipe(crx({
-            privateKey: fs.readFileSync('./certs/' + package.name + '.pem', 'utf8'),
-            filename: package.name + '.crx'
+            'privateKey': fs.readFileSync('./certs/' + package.name + '.pem', 'utf8'),
+            'filename': package.name + '.crx'
         }))
-        .pipe(gulp.dest('./dist'))
+        .pipe(gulp.dest('./dist'));
 });
 
 // pimary build task
 gulp.task('build', ['clean'], function (callback) {
     sequence(
         ['build:images', 'build:less', 'build:locales', 'build:manifest'],
-        ['lint'],
         ['build:components', 'build:includes', 'build:pages', 'build:scripts', 'build:vendor'],
         //['zip', 'crx'],
         callback
@@ -202,7 +234,7 @@ gulp.task('build', ['clean'], function (callback) {
 
 //primary watch task
 gulp.task('watch', ['build'], function () {
-    debug = true;
+    options.uglify.compress.drop_console = false;
     gulp.watch(path.join(_folders.components, '/**/*'), ['build:components']);
     gulp.watch('./images/**/*.{png,svg}', ['build:images']);
     gulp.watch(includes, ['build:includes']);
