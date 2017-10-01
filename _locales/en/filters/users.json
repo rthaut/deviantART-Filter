@@ -14,5 +14,14 @@
   "FilterTypeUsersLabelHelp": {
     "message": "You can manually filter users by entering their username below, or while browsing by clicking the red 'x' that appears on thumbnails when you hover over them.",
     "description": "The message displayed to help the user filter new users."
+  },
+  "FilterTypeUsersPlaceholderText": {
+    "message": "Filtered User: $USER$",
+    "description": "The message displayed on the placeholder for deviations filtered for a user",
+    "placeholders": {
+      "user": {
+        "content": "$1"
+      }
+    }
   }
 }

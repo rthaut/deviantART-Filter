@@ -14,5 +14,14 @@
   "FilterTypeTagsLabelHelp": {
     "message": "You can filter tags by adding them below.",
     "description": "The message displayed to help the user filter new tags."
+  },
+  "FilterTypeTagsPlaceholderText": {
+    "message": "Filtered Tag: $TAG$",
+    "description": "The message displayed on the placeholder for deviations filtered by a tag",
+    "placeholders": {
+      "tag": {
+        "content": "$1"
+      }
+    }
   }
 }
