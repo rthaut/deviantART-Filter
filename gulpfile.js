@@ -190,7 +190,6 @@ gulp.task('lint:scripts', function () {
         .pipe(eslint.format());
 });
 gulp.task('build:scripts', ['lint:scripts'], folders(_folders.scripts, function (folder) {
-    console.log(config);
     return rollup({
         'input': path.join(_folders.scripts, folder, 'index.js'),
         'format': 'iife',
