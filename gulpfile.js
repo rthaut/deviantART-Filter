@@ -6,6 +6,7 @@ const source = require('vinyl-source-stream');
 
 const del = require('del');
 const fs = require('fs');
+const ini = require('ini');
 const path = require('path');
 const merge = require('merge-stream');
 const sequence = require('run-sequence');
@@ -20,6 +21,7 @@ const header = require('gulp-header');
 const less = require('gulp-less');
 const mergeJson = require('gulp-merge-json');
 const rename = require('gulp-rename');
+const tokenReplace = require('gulp-token-replace');
 
 const composer = require('gulp-uglify/composer');
 const uglify = composer(require('uglify-es'), console);
@@ -52,6 +54,9 @@ const includes = [
 
 // load in package JSON as object for variables & EJS templates
 const package = require('./package.json');
+
+// load in configuration data from INI file
+const config = ini.parse(fs.readFileSync('.config.ini', 'utf-8'));
 
 // default options for various plugins
 const options = {
@@ -185,6 +190,7 @@ gulp.task('lint:scripts', function () {
         .pipe(eslint.format());
 });
 gulp.task('build:scripts', ['lint:scripts'], folders(_folders.scripts, function (folder) {
+    console.log(config);
     return rollup({
         'input': path.join(_folders.scripts, folder, 'index.js'),
         'format': 'iife',
@@ -194,6 +200,10 @@ gulp.task('build:scripts', ['lint:scripts'], folders(_folders.scripts, function 
         .pipe(buffer())
         .pipe(uglify(options.uglify))
         .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { 'package': package }))
+        .pipe(tokenReplace({
+            'global': config,
+            'preserveUnknownTokens': true
+        }))
         .pipe(gulp.dest('./dist/scripts'));
 }));
 
