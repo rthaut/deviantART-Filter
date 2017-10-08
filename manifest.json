@@ -76,6 +76,7 @@
   },
 
   "web_accessible_resources": [
-    "icons/*"
+    "icons/*",
+    "images/filtered.png"
   ]
 }
