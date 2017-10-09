@@ -55,5 +55,23 @@
         "content": "$1"
       }
     }
+  },
+  "CreateFilterError": {
+    "message": "An error occurred while creating filter: $ERROR$",
+    "description": "The error message displayed if an error occurs while creating a new filter item.",
+    "placeholders": {
+      "error": {
+        "content": "$1"
+      }
+    }
+  },
+  "RemoveFilterError": {
+    "message": "An error occurred while removing filter: $ERROR$",
+    "description": "The error message displayed if an error occurs while removing a filter item.",
+    "placeholders": {
+      "error": {
+        "content": "$1"
+      }
+    }
   }
 }

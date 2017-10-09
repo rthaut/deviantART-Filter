@@ -31,7 +31,7 @@
     "description": "The error message displayed if an error occurs while importing filter data.",
     "placeholders": {
       "error": {
-        "content": "$2"
+        "content": "$1"
       }
     }
   },
@@ -56,7 +56,7 @@
     "description": "The error message displayed if an error occurs while exporting filter data.",
     "placeholders": {
       "error": {
-        "content": "$2"
+        "content": "$1"
       }
     }
   }
