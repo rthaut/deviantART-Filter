@@ -1,4 +1,8 @@
 {
+  "OptionsHeading": {
+    "message": "DeviantArt Filter Options",
+    "description": "The heading displayed above the options on the management panel."
+  },
   "OptionActiveName": {
     "message": "Activate Filters",
     "description": ""
@@ -50,5 +54,17 @@
   "OptionPrivateStorageValueNone": {
     "message": "No",
     "description": ""
+  },
+  "OptionUpdateError": {
+    "message": "An error occured while updating the $OPTION$ option: $ERROR$",
+    "description": "The error message displayed if an option fails to update correctly.",
+    "placeholders": {
+      "option": {
+        "content": "$1"
+      },
+      "error": {
+        "content": "$2"
+      }
+    }
   }
 }

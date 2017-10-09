@@ -9,7 +9,7 @@
 
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h5 class="panel-title">Create a New {{filter.name.singular}} Filter</h5>
+            <h5 class="panel-title">{{createHeading}}</h5>
         </div>
         <div class="panel-body">
             <form class="form-horizontal">
@@ -21,7 +21,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-primary" ng-click="addItemToFilter($event)" ng-disabled="!isNewFilterItemValid()">Add Filter</button>
+                        <button type="submit" class="btn btn-primary" ng-click="addItemToFilter($event)" ng-disabled="!isNewFilterItemValid()">{{createFilterLbl}}</button>
                     </div>
                 </div>
             </form>
@@ -31,7 +31,8 @@
     <div class="panel panel-default" ng-show="filterTableData.total()">
         <div class="panel-heading">
             <h5 class="panel-title">
-                <span ng-if="filterTableData.total()">{{showing()}}</span> Filtered {{filter.name.plural}}
+                <span ng-show="filterTableData.total()">{{showingFilterCount()}}</span>
+                <span ng-hide="filterTableData.total()">{{filteredLbl}}</span>
             </h5>
         </div>
         <table ng-table-dynamic="filterTableData with filterTableColumns" class="table table-hover">
@@ -40,7 +41,7 @@
                     <span ng-switch-default>{{row[col.field]}}</span>
                     <time ng-switch-when="date" datetime="{{row[col.field] | date:'medium'}}">{{row[col.field] | date:'longDate'}}</time>
                     <div ng-switch-when="command">
-                        <button type="button" class="btn btn-sm btn-danger" ng-click="removeItemFromFilter($event, row)">Remove Filter</button>
+                        <button type="button" class="btn btn-sm btn-danger" ng-click="removeItemFromFilter($event, row)">{{removeFilterLbl}}</button>
                     </div>
                 </td>
             </tr>

@@ -1,0 +1,59 @@
+{
+  "ShowingFilterCount": {
+    "message": "Showing $LOWER$-$UPPER$ of $TOTAL$ $FILTER$",
+    "description": "The message displayed above the filter management panel showing the filtered item counts",
+    "placeholders": {
+      "lower": {
+        "content": "$1"
+      },
+      "upper": {
+        "content": "$2"
+      },
+      "total": {
+        "content": "$3"
+      },
+      "filter": {
+        "content": "$4"
+      }
+    }
+  },
+  "LabelFilterType": {
+    "message": "Filter Type"
+  },
+  "LabelCreateFilter": {
+    "message": "Create Filter"
+  },
+  "LabelRemoveFilter": {
+    "message": "Remove Filter"
+  },
+  "LabelCreatingFilter": {
+    "message": "Creating Filter..."
+  },
+  "LabelRemovingFilter": {
+    "message": "Removing Filter..."
+  },
+  "LabelCreateFilterPlaceholder": {
+    "message": "Create a New $FILTER$ Filter",
+    "placeholders": {
+      "filter": {
+        "content": "$1"
+      }
+    }
+  },
+  "LabelFilteredPlaceholder": {
+    "message": "Filtered $FILTER$",
+    "placeholders": {
+      "filter": {
+        "content": "$1"
+      }
+    }
+  },
+  "LabelUnknownFilterTypePlaceholder": {
+    "message": "Unknown Filter Type: $FILTER$",
+    "placeholders": {
+      "filter": {
+        "content": "$1"
+      }
+    }
+  }
+}
