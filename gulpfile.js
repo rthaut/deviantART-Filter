@@ -37,6 +37,7 @@ const zip = require('gulp-zip');
 const vendor = [
     './node_modules/angular/angular-csp.css',
     './node_modules/angular/angular.min.js',
+    './node_modules/angular-sanitize/angular-sanitize.min.js',
     './node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
     './node_modules/bootstrap/dist/css/bootstrap.min.css',
     './node_modules/bootstrap/dist/css/bootstrap-theme.min.css',

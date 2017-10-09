@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "angular": "^1.6.6",
+    "angular-sanitize": "^1.6.6",
     "angular-ui-bootstrap": "^2.5.0",
     "bootstrap": "^3.3.7",
     "jquery": "^1.12.4",
