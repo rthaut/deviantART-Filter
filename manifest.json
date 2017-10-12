@@ -33,6 +33,7 @@
 
   "background": {
     "scripts": [
+      "vendor/browser-polyfill.min.js",
       "scripts/background.js"
     ]
   },
