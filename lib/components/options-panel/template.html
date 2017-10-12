@@ -16,7 +16,7 @@
                 <label class="control-label">{{option.name}}</label>
                 <span class="help-block">{{option.description}}</span>
                 <div class="checkbox" ng-class="{'disabled':option.disabled}">
-                    <label><input type="checkbox" name="{{option.name}}" id="{{option.name}}" ng-model="option.value" ng-disabled="option.disabled" ng-change="changeOption(option, {{option.value}})" ng-checked="option.value == true"> {{enabledLbl}}</label>
+                    <label><input type="checkbox" name="{{option.id}}" id="{{option.id}}" ng-model="option.value" ng-disabled="option.disabled" ng-change="changeOption(option, {{option.value}})" ng-checked="option.value == true"> {{enabledLbl}}</label>
                 </div>
             </div>
 
@@ -24,22 +24,22 @@
                 <label class="control-label">{{option.name}}</label>
                 <span class="help-block">{{option.description}}</span>
                 <div class="radio" ng-repeat="opt in option.values" ng-class="{'disabled':opt.disabled}">
-                    <label><input type="radio" name="{{option.name}}" ng-model="option.value" ng-disabled="opt.disabled" ng-change="changeOption(option, {{option.value}})" ng-checked="option.value == opt.value" value="{{opt.value}}"> {{opt.label}}</label>
+                    <label><input type="radio" name="{{option.id}}" ng-model="option.value" ng-disabled="opt.disabled" ng-change="changeOption(option, {{option.value}})" ng-checked="option.value == opt.value" value="{{opt.value}}"> {{opt.label}}</label>
                 </div>
             </div>
 
             <div ng-switch-when="select">
                 <label class="control-label">{{option.name}}</label>
                 <span class="help-block">{{option.description}}</span>
-                <select class="form-control" name="{{option.name}}" id="{{option.name}}" ng-model="option.value" ng-change="changeOption(option, '{{option.value}}')">
+                <select class="form-control" name="{{option.id}}" id="{{option.id}}" ng-model="option.value" ng-change="changeOption(option, '{{option.value}}')">
                 <option ng-repeat="opt in option.values" ng-disabled="opt.disabled" value="{{opt.value}}">{{opt.label}}</option>
             </select>
             </div>
 
             <div ng-switch-when="text|number">
-                <label for="{{option.name}}" class="col-sm-2 control-label">{{option.name}}</label>
+                <label for="{{option.id}}" class="col-sm-2 control-label">{{option.name}}</label>
                 <span class="help-block">{{option.description}}</span>
-                <input type="{{option.type}}" class="form-control" name="{{option.name}}" id="{{option.name}}" ng-model="option.value" ng-model-options="{debounce: 500}" ng-disabled="option.disabled" ng-change="changeOption(option, '{{option.value}}')"/>
+                <input type="{{option.type}}" class="form-control" name="{{option.id}}" id="{{option.id}}" ng-model="option.value" ng-model-options="{debounce: 500}" ng-disabled="option.disabled" ng-change="changeOption(option, '{{option.value}}')"/>
             </div>
 
         </div>
