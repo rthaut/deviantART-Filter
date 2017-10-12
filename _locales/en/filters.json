@@ -73,5 +73,36 @@
         "content": "$1"
       }
     }
+  },
+  "FilterMigrationComplete": {
+    "message": "Filter Migration is Complete",
+    "description": "The title message of the notification displayed to the user after attempting to migrate their filters to the new storage system."
+  },
+  "FilterMigrationFailure": {
+    "message": "Unfortunately, an error occurred while migrating your old filters: $ERROR$",
+    "description": "The error message displayed if an error occurs while migrating filters.",
+    "placeholders": {
+      "error": {
+        "content": "$1"
+      }
+    }
+  },
+  "FilterMigrationSuccess": {
+    "message": "$SUCCESS$ out of $TOTAL$ filters were migrated successfully; $DUPLICATE$ were duplicates, and $INVALID$ were invalid.",
+    "description": "The message displayed when the filters were migrated successfully.",
+    "placeholders": {
+      "success": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      },
+      "duplicate": {
+        "content": "$3"
+      },
+      "invalid": {
+        "content": "$4"
+      }
+    }
   }
 }
