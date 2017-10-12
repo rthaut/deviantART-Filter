@@ -16,7 +16,19 @@
                 <div class="form-group" ng-repeat="property in filter.properties.required" ng-class="{'has-success': form.{{property.field}}.$dirty && form.{{property.field}}.$valid, 'has-error': form.{{property.field}}.$dirty && form.{{property.field}}.$invalid}">
                     <label for="{{property.field}}" class="col-sm-2 control-label">{{property.title}}</label>
                     <div class="col-sm-10">
-                        <input type="{{property.dataType}}" class="form-control" name="{{property.field}}" id="{{property.field}}" ng-model="newFilterItem[property.field]" placeholder="{{property.title}}" ng-pattern="property.pattern" required>
+                        <div ng-switch="property.type">
+                            <input ng-switch-when="text" type="text" class="form-control" name="{{property.field}}" id="{{property.field}}" ng-model="newFilterItem[property.field]" placeholder="{{property.title}}" ng-pattern="property.pattern" required>
+                            <div class="radio" ng-switch-when="boolean">
+                                <label>
+                                    <input type="radio" name="{{property.field}}" id="{{property.field}}Yes" ng-model="newFilterItem[property.field]" ng-value="true" required>
+                                    Yes
+                                </label>
+                                <label>
+                                    <input type="radio" name="{{property.field}}" id="{{property.field}}No" ng-model="newFilterItem[property.field]" ng-value="false" required>
+                                    No
+                                </label>
+                            </div>
+                        </div>
                         <div ng-messages="form[property.field].$error" role="alert" ng-hide="form.$pristine">
                             <span ng-message="required" class="help-block">Please enter a value for this field.</span>
                             <span ng-message="pattern" class="help-block">This value is not valid.</span>
