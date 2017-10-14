@@ -16,7 +16,7 @@
     "description": "The message displayed to help the user filter new categories."
   },
   "FilterTypeCategoriesPlaceholderText": {
-    "message": "Filtered Category: $TAG$",
+    "message": "Filtered Category: $CATEGORY$",
     "description": "The message displayed on the placeholder for deviations filtered by a category",
     "placeholders": {
       "category": {
