@@ -2,10 +2,16 @@
     <div uib-alert ng-class="'alert-info'" ng-if="loading">{{loading}}</div>
 
     <div ng-repeat="alert in alerts" class="alert alert-dismissible" ng-class="'alert-' + (alert.type || 'warning')" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="closeAlert($index)"><span aria-hidden="true">&times;</span></button> {{alert.msg}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="closeAlert($index)">
+            <span aria-hidden="true">&times;</span>
+        </button> {{alert.msg}}
     </div>
 
-    <div uib-alert ng-class="'alert-warning'" ng-if="!filterTableData.total()"><strong>{{filter.labels.none}}</strong><br/><br/>{{filter.labels.help}}</div>
+    <div uib-alert ng-class="'alert-warning'" ng-if="!filterTableData.total()">
+        <strong>{{filter.labels.none}}</strong>
+        <br/>
+        <br/>{{filter.labels.help}}
+    </div>
 
     <div class="panel panel-primary">
         <div class="panel-heading">
@@ -20,13 +26,14 @@
                             <input ng-switch-when="text" type="text" class="form-control" name="{{property.field}}" id="{{property.field}}" ng-model="newFilterItem[property.field]" placeholder="{{property.title}}" ng-pattern="property.pattern" required>
                             <div class="radio" ng-switch-when="boolean">
                                 <label>
-                                    <input type="radio" name="{{property.field}}" id="{{property.field}}Yes" ng-model="newFilterItem[property.field]" ng-value="true" required>
-                                    Yes
+                                    <input type="radio" name="{{property.field}}" id="{{property.field}}Yes" ng-model="newFilterItem[property.field]" ng-value="true" required> Yes
                                 </label>
                                 <label>
-                                    <input type="radio" name="{{property.field}}" id="{{property.field}}No" ng-model="newFilterItem[property.field]" ng-value="false" required>
-                                    No
+                                    <input type="radio" name="{{property.field}}" id="{{property.field}}No" ng-model="newFilterItem[property.field]" ng-value="false" required> No
                                 </label>
+                            </div>
+                            <div ng-switch-when="hierarchy" ng-if="property.subtype == 'category'">
+                                <category-hierarchy-select ng-model="newFilterItem[property.field]" required></category-hierarchy-select>
                             </div>
                         </div>
                         <div ng-messages="form[property.field].$error" role="alert" ng-hide="form.$pristine">
@@ -63,3 +70,4 @@
             </tr>
         </table>
     </div>
+</div>

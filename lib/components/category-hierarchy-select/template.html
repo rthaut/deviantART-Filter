@@ -1,0 +1,10 @@
+<div>
+    <div class="row">
+        <div class="col-sm-3" ng-repeat="path in catpath">
+            <select class="form-control" ng-model="categories[$index]" ng-change="onChange($index)">
+                <option ng-if="$level > 0"></option>
+                <option ng-repeat="category in hierarchy[path]" ng-value="category">{{category.title}}</option>
+            </select>
+        </div>
+    </div>
+</div>

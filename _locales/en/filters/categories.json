@@ -1,0 +1,27 @@
+{
+  "FilterTypeCategoriesName": {
+    "message": "Category",
+    "description": "The singular name of the filter type used for categories."
+  },
+  "FilterTypeCategoriesNamePlural": {
+    "message": "Categories",
+    "description": "The plural name of the filter type used for categories."
+  },
+  "FilterTypeCategoriesLabelNone": {
+    "message": "You have not filtered any categories yet.",
+    "description": "The message displayed when the user does not have any filtered categories."
+  },
+  "FilterTypeCategoriesLabelHelp": {
+    "message": "You can filter categories by adding them below.",
+    "description": "The message displayed to help the user filter new categories."
+  },
+  "FilterTypeCategoriesPlaceholderText": {
+    "message": "Filtered Category: $TAG$",
+    "description": "The message displayed on the placeholder for deviations filtered by a category",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  }
+}
