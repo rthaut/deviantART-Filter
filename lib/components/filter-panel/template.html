@@ -22,6 +22,8 @@
                 <div class="form-group" ng-repeat="property in filter.properties.required" ng-class="{'has-success': form.{{property.field}}.$dirty && form.{{property.field}}.$valid, 'has-error': form.{{property.field}}.$dirty && form.{{property.field}}.$invalid}">
                     <label for="{{property.field}}" class="col-sm-2 control-label">{{property.title}}</label>
                     <div class="col-sm-10">
+                        <!--<category-hierarchy-select ng-switch-when="categories" ng-model="newFilterItem"></category-hierarchy-select>
+                        <div ng-switch-default ng-switch="property.type">-->
                         <div ng-switch="property.type">
                             <input ng-switch-when="text" type="text" class="form-control" name="{{property.field}}" id="{{property.field}}" ng-model="newFilterItem[property.field]" placeholder="{{property.title}}" ng-pattern="property.pattern" required>
                             <div class="radio" ng-switch-when="boolean">
@@ -33,7 +35,7 @@
                                 </label>
                             </div>
                             <div ng-switch-when="hierarchy" ng-if="property.subtype == 'category'">
-                                <category-hierarchy-select ng-model="newFilterItem[property.field]" required></category-hierarchy-select>
+                                <category-hierarchy-select ng-model="newFilterItem[property.field]"></category-hierarchy-select>
                             </div>
                         </div>
                         <div ng-messages="form[property.field].$error" role="alert" ng-hide="form.$pristine">

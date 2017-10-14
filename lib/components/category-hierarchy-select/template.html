@@ -1,10 +1,20 @@
 <div>
-    <div class="row">
-        <div class="col-sm-3" ng-repeat="path in catpath">
-            <select class="form-control" ng-model="categories[$index]" ng-change="onChange($index)">
-                <option ng-if="$level > 0"></option>
-                <option ng-repeat="category in hierarchy[path]" ng-value="category">{{category.title}}</option>
+
+    <select class="form-control" ng-model="categories[0]" ng-change="onChange(0)" required>
+        <option ng-repeat="category in hierarchy['/']" ng-value="category">{{category.title}}</option>
+    </select>
+
+    <div class="media" ng-repeat="category in categories" ng-show="hierarchy[category.catpath].length">
+        <div class="media-left" style="white-space: nowrap">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="{{34 * $index | number}}" height="34" />
+            <img src="../../images/icons/subitem-16.svg" width="16" height="34" />
+        </div>
+        <div class="media-body">
+            <select class="form-control" ng-model="categories[$index + 1]" ng-change="onChange($index + 1)">
+                <option ng-value="wildcard" selected="selected">{{wildcard.title}}</option>
+                <option ng-repeat="cat in hierarchy[category.catpath]" ng-value="cat">{{cat.title}}</option>
             </select>
         </div>
     </div>
+
 </div>
