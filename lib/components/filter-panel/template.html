@@ -19,21 +19,22 @@
         </div>
         <div class="panel-body">
             <form class="form-horizontal" name="form">
-                <div class="form-group" ng-repeat="property in filter.properties.required" ng-class="{'has-success': form.{{property.field}}.$dirty && form.{{property.field}}.$valid, 'has-error': form.{{property.field}}.$dirty && form.{{property.field}}.$invalid}">
+                <div class="form-group" ng-repeat="property in filter.properties | filter: {editable: true}" ng-class="{'has-success': form.{{property.field}}.$dirty && form.{{property.field}}.$valid, 'has-error': form.{{property.field}}.$dirty && form.{{property.field}}.$invalid}">
                     <label for="{{property.field}}" class="col-sm-2 control-label">{{property.label || property.title}}</label>
                     <div class="col-sm-10" ng-switch="filter.id">
                         <category-hierarchy-select ng-switch-when="categories" filter-path="newFilterItem.path" filter-name="newFilterItem.name"></category-hierarchy-select>
                         <div ng-switch-default ng-switch="property.type">
                             <div ng-switch="property.type">
-                                <input ng-switch-when="text" type="text" class="form-control" name="{{property.field}}" id="{{property.field}}" ng-model="newFilterItem[property.field]" placeholder="{{property.title}}" ng-pattern="property.pattern" required>
+                                <input ng-switch-when="text" type="text" class="form-control" name="{{property.field}}" id="{{property.field}}" ng-model="newFilterItem[property.field]" placeholder="{{property.title}}" ng-pattern="property.pattern" ng-required="property.required">
                                 <div class="radio" ng-switch-when="boolean">
                                     <label>
-                                        <input type="radio" name="{{property.field}}" id="{{property.field}}Yes" ng-model="newFilterItem[property.field]" ng-value="true" required> Yes
+                                        <input type="radio" name="{{property.field}}" id="{{property.field}}Yes" ng-model="newFilterItem[property.field]" ng-value="true" ng-required="property.required"> Yes
                                     </label>
                                     <label>
-                                        <input type="radio" name="{{property.field}}" id="{{property.field}}No" ng-model="newFilterItem[property.field]" ng-value="false" required> No
+                                        <input type="radio" name="{{property.field}}" id="{{property.field}}No" ng-model="newFilterItem[property.field]" ng-value="false" ng-required="property.required"> No
                                     </label>
                                 </div>
+                                <span class="help-block" ng-show="property.hint">{{property.hint}}</span>
                                 <div ng-messages="form[property.field].$error" role="alert" ng-hide="form.$pristine">
                                     <span ng-message="required" class="help-block">Please enter a value for this field.</span>
                                     <span ng-message="pattern" class="help-block">This value is not valid.</span>
