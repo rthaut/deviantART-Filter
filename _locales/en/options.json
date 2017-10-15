@@ -35,6 +35,18 @@
     "message": "Specifies where/how the main mangement panel is displayed",
     "description": ""
   },
+  "OptionManagementPanelTypeValueModal": {
+    "message": "Open as an embedded modal",
+    "description": "The label for the value of the Mangement Panel Type option that corresponds to using an embedded modal."
+  },
+  "OptionManagementPanelTypeValueTab": {
+    "message": "Open in a new tab in the current window",
+    "description": "The label for the value of the Mangement Panel Type option that corresponds to using a new browser tab."
+  },
+  "OptionManagementPanelTypeValueWindow": {
+    "message": "Open in a a new popup window",
+    "description": "The label for the value of the Mangement Panel Type option that corresponds to using a new browser window."
+  },
   "OptionPrivateStorageName": {
     "message": "Use Filters in Private/Incognito Mode",
     "description": ""
