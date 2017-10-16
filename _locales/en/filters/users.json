@@ -23,5 +23,14 @@
         "content": "$1"
       }
     }
+  },
+  "FilterTypeUsersPropertyUsernameTitle": {
+    "message": "Username"
+  },
+  "FilterTypeUsersPropertyUsernameLabel": {
+    "message": "Enter Username"
+  },
+  "FilterTypeUsersPropertyUsernameHint": {
+    "message": "Usernames may contain letters, numbers, hyphens (-), and underscores (_); usernames are stored in lowercase letters"
   }
 }

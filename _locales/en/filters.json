@@ -104,5 +104,41 @@
         "content": "$4"
       }
     }
+  },
+  "ErrorInvalidFilterItem": {
+    "message": "$ITEM$ is invalid",
+    "description": "The error message displayed when creating a new filter item if the item is invalid.",
+    "placeholders": {
+      "item": {
+        "content": "$1"
+      }
+    }
+  },
+  "ErrorDuplicateFilterItem": {
+    "message": "$ITEM$ is already filtered",
+    "description": "The error message displayed when creating a new filter item if the item is already filtered.",
+    "placeholders": {
+      "item": {
+        "content": "$1"
+      }
+    }
+  },
+  "ErrorMissingFilterItem": {
+    "message": "$ITEM$ is not filtered",
+    "description": "The error message displayed when removing a filter item if the item is not already filtered.",
+    "placeholders": {
+      "item": {
+        "content": "$1"
+      }
+    }
+  },
+  "FilterTypeGenericPropertyDateTitle": {
+    "message": "Date Created"
+  },
+  "FilterTypeGenericPropertyDateLabel": {
+    "message": ""
+  },
+  "FilterTypeGenericPropertyDateHint": {
+    "message": ""
   }
 }

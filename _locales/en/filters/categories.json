@@ -23,5 +23,23 @@
         "content": "$1"
       }
     }
+  },
+  "FilterTypeCategoriesPropertyNameTitle": {
+    "message": "Category Name"
+  },
+  "FilterTypeCategoriesPropertyNameLabel": {
+    "message": ""
+  },
+  "FilterTypeCategoriesPropertyNameHint": {
+    "message": ""
+  },
+  "FilterTypeCategoriesPropertyPathTitle": {
+    "message": "Category Path"
+  },
+  "FilterTypeCategoriesPropertyPathLabel": {
+    "message": "Select Category"
+  },
+  "FilterTypeCategoriesPropertyPathHint": {
+    "message": "Deviations submitted to the selected category, or to any category under the selected category, will be filtered"
   }
 }

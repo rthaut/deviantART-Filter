@@ -23,5 +23,23 @@
         "content": "$1"
       }
     }
+  },
+  "FilterTypeTagsPropertyTagTitle": {
+    "message": "Tag"
+  },
+  "FilterTypeTagsPropertyTagLabel": {
+    "message": "Enter Tag"
+  },
+  "FilterTypeTagsPropertyTagHint": {
+    "message": "Tags may contain any characters (letters, numbers, symbols, etc.) except spaces; tags are stored in lowercase letters"
+  },
+  "FilterTypeTagsPropertyWildcardTitle": {
+    "message": "Wildcard"
+  },
+  "FilterTypeTagsPropertyWildcardLabel": {
+    "message": "Is Wildcard"
+  },
+  "FilterTypeTagsPropertyWildcardHint": {
+    "message": "Wildcard filters match aggressively (ex: \"art\" would also match \"fanart\" and \"artistic\")"
   }
 }
