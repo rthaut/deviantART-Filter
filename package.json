@@ -50,6 +50,6 @@
     "bootstrap": "^3.3.7",
     "jquery": "^1.12.4",
     "ng-table": "^3.0.1",
-    "webextension-polyfill": "^0.2.0"
+    "webextension-polyfill": "^0.2.1"
   }
 }
