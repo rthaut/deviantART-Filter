@@ -1,7 +1,4 @@
 {
-  "LabelImportExport": {
-    "message": "Import/Export Filters"
-  },
   "ImportExportHeading": {
     "message": "Import/Export Filters",
     "description": "The heading displayed above the import/export controls on the management panel."
@@ -21,6 +18,22 @@
   "ImportResultsHeading": {
     "message": "Import Results",
     "description": "The heading displayed above the import results on the management panel."
+  },
+  "ImportResultsTotalHeader": {
+    "message": "Total",
+    "description": "The heading displayed above the column for total filters processed on the import results table."
+  },
+  "ImportResultsSuccessHeader": {
+    "message": "Success",
+    "description": "The heading displayed above the column for filters successfully imported on the import results table."
+  },
+  "ImportResultsInvalidHeader": {
+    "message": "Invalid",
+    "description": "The heading displayed above the column for the invalid filters on the import results table."
+  },
+  "ImportResultsDuplicateHeader": {
+    "message": "Duplicate",
+    "description": "The heading displayed above the column for the duplicate filters on the import results table."
   },
   "ImportingFilters": {
     "message": "Importing filters from file",

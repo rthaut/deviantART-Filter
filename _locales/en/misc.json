@@ -34,20 +34,5 @@
   },
   "LabelFilters": {
     "message": "Filters"
-  },
-  "LabelOptions": {
-    "message": "Options"
-  },
-  "LabelTotal": {
-    "message": "Total"
-  },
-  "LabelSuccess": {
-    "message": "Success"
-  },
-  "LabelInvalid": {
-    "message": "Invalid"
-  },
-  "LabelDuplicate": {
-    "message": "Duplicate"
   }
 }
