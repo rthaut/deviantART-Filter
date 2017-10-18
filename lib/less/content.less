@@ -1,4 +1,9 @@
-.torpedo-container .thumb .hide-user-corner {
+.tt-crop.thumb,
+*[data-embed-format="thumb"] {
+    position: relative;
+}
+
+.torpedo-container .thumb a.torpedo-thumb-link .hide-user-corner {
     position: absolute;
     z-index: 10;
     top: 0;
@@ -23,18 +28,18 @@
     white-space: nowrap;
 }
 
-.torpedo-container .thumb .hide-user-corner:hover {
+.torpedo-container .thumb a.torpedo-thumb-link .hide-user-corner:hover {
     //TODO: best way to handle protocol for all browsers (moz-extension, chrome-extension, etc.)?
     background-image: url('chrome-extension://__MSG_@@extension_id__/images/thumb-corner-hover.png');
     background-image: url('moz-extension://__MSG_@@extension_id__/images/thumb-corner-hover.png');
     color: #D32800;
 }
 
-.torpedo-container .thumb:hover .hide-user-corner {
+.torpedo-container .thumb a.torpedo-thumb-link:hover .hide-user-corner {
     opacity: 1;
 }
 
-.torpedo-container .thumb .hide-user-corner::after {
+.torpedo-container .thumb a.torpedo-thumb-link .hide-user-corner::after {
     content: "\e632";
     margin-right: 5px;
     display: inline;
