@@ -65,18 +65,14 @@ const options = {
     'less': {
         'paths': 'node_modules',
         'outputStyle': 'compressed',
-        'sourceMap': true,
+        'sourceMap': false
     },
     // options for compressing JS files
     'uglify': {
         'compress': {
             'drop_console': true
         },
-        'mangle': false,
-        'output': {
-            'beautify': true,
-            'bracketize': true
-        }
+        'mangle': false
     }
 };
 
