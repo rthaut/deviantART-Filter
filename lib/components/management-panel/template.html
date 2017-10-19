@@ -11,15 +11,15 @@
             <ul class="nav nav-tabs">
 
                 <li role="presentation" class="active">
-                    <a href="#options" aria-controls="options" role="tab" data-toggle="tab">{{optionsLbl}}</a>
+                    <a href="#options" aria-controls="options" role="tab" data-toggle="tab">{{labels.optionsHeading}}</a>
                 </li>
 
                 <li ng-repeat="filter in filters" role="presentation" ng-if="filters.length && filters.length <= 3">
-                    <a ng-href="#{{filter.name.singular | lowercase}}" aria-controls="{{filter.name.singular | lowercase}}" role="tab" data-toggle="tab">{{manageLbl}} {{filter.name.plural}}</a>
+                    <a ng-href="#{{filter.name.singular | lowercase}}" aria-controls="{{filter.name.singular | lowercase}}" role="tab" data-toggle="tab">{{labels.manage}} {{filter.name.plural}}</a>
                 </li>
 
                 <li role="presentation" class="dropdown" ng-if="filters.length > 3">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{manageLbl}} <span class="caret"></span></a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{labels.manage}} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li ng-repeat="filter in filters">
                             <a ng-href="#{{filter.name.singular | lowercase}}" aria-controls="{{filter.name.singular | lowercase}}" role="tab" data-toggle="tab">{{filter.name.plural}}</a>
@@ -28,7 +28,7 @@
                 </li>
 
                 <li role="presentation">
-                    <a href="#importexport" aria-controls="importexport" role="tab" data-toggle="tab">{{importExportLbl}}</a>
+                    <a href="#importexport" aria-controls="importexport" role="tab" data-toggle="tab">{{labels.importExport}}</a>
                 </li>
 
             </ul>
@@ -49,6 +49,10 @@
                     <import-export-panel></import-export-panel>
                 </div>
             </div>
+        </div>
+        <div class="panel-footer" ng-show="info">
+            <a ng-href="{{info.homepageUrl}}" target="_blank">{{info.shortName || info.name}}</span></a> by <a href="https://ryanthaut.com/" target="_blank">Ryan Thaut</a>.
+            <span class="label label-primary pull-right">{{labels.version}} {{info.versionName || info.version}}</span>
         </div>
     </div>
 </div>

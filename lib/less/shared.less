@@ -1,6 +1,15 @@
 @import "includes/variables";
 @import "includes/bootstrap";
 
+a[target="_blank"] {
+    background-image: url('chrome-extension://__MSG_@@extension_id__/images/icons/open-in-new-16.svg');
+    background-image: url('moz-extension://__MSG_@@extension_id__/images/icons/open-in-new-16.svg');
+    background-position: center right;
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    padding-right: 20px;
+}
+
 .panel-heading-nav {
   border-bottom: 0;
   padding: 10px 0 0;

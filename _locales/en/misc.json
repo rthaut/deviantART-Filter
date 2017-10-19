@@ -34,5 +34,8 @@
   },
   "LabelFilters": {
     "message": "Filters"
+  },
+  "LabelVersion": {
+    "message": "Version"
   }
 }
