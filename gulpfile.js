@@ -40,7 +40,7 @@ const vendor = [
     './node_modules/angular-messages/angular-messages.min.js',
     './node_modules/angular-sanitize/angular-sanitize.min.js',
     './node_modules/bootstrap/dist/css/bootstrap.min.css',
-    './node_modules/bootstrap/dist/css/bootstrap-theme.min.css',
+    //'./node_modules/bootstrap/dist/css/bootstrap-theme.min.css',
     './node_modules/bootstrap/dist/js/bootstrap.min.js',
     './node_modules/jquery/dist/jquery.min.js',
     './node_modules/ng-table/bundles/ng-table.min.css',
@@ -50,7 +50,7 @@ const vendor = [
 
 // additional includes (custom libraries, classes, etc.)
 const includes = [
-    './lib/jquery.daModal.js',
+    //'./lib/jquery.daModal.js',
 ];
 
 // load in package JSON as object for variables & EJS templates
