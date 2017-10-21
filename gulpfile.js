@@ -79,6 +79,7 @@ const options = {
 const _folders = {
     'locales': './_locales',
     'components': './lib/components',
+    'helpers': './lib/helpers',
     'pages': './lib/pages',
     'scripts': './lib/scripts'
 };
@@ -95,9 +96,9 @@ gulp.task('clean', function () {
 });
 
 
-// ===================================
-// build tasks, broken into components
-// ===================================
+// ==========================================
+// build & lint tasks, broken into components
+// ==========================================
 
 gulp.task('lint:components', function () {
     return gulp.src(path.join(_folders.components, '**/*.js'))
@@ -115,6 +116,15 @@ gulp.task('build:components', ['lint:components'], folders(_folders.components, 
         .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { 'package': package }))
         .pipe(gulp.dest('./dist/components'));
 }));
+
+
+gulp.task('lint:helpers', function () {
+    return gulp.src(path.join(_folders.helpers, '**/*.js'))
+        .pipe(eslint({
+            'fix': true
+        }))
+        .pipe(eslint.format());
+});
 
 
 gulp.task('build:images', function () {
@@ -186,7 +196,7 @@ gulp.task('lint:scripts', function () {
         }))
         .pipe(eslint.format());
 });
-gulp.task('build:scripts', ['lint:scripts'], folders(_folders.scripts, function (folder) {
+gulp.task('build:scripts', ['lint:helpers', 'lint:scripts'], folders(_folders.scripts, function (folder) {
     return rollup({
         'input': path.join(_folders.scripts, folder, 'index.js'),
         'format': 'iife',
@@ -228,7 +238,18 @@ gulp.task('crx', function () {
         .pipe(gulp.dest('./dist'));
 });
 
-// pimary build task
+
+// =========================
+// primary development tasks
+// =========================
+
+gulp.task('lint', function (callback) {
+    sequence(
+        ['lint:components', 'lint:helpers', 'lint:pages', 'lint:scripts'],
+        callback
+    );
+});
+
 gulp.task('build', ['clean'], function (callback) {
     sequence(
         ['build:images', 'build:less', 'build:locales', 'build:manifest'],
@@ -238,11 +259,12 @@ gulp.task('build', ['clean'], function (callback) {
     );
 });
 
-//primary watch task
 gulp.task('watch', ['build'], function () {
     options.uglify.compress.drop_console = false;
+
     gulp.watch(path.join(_folders.components, '/**/*'), ['build:components']);
     gulp.watch('./images/**/*.{png,svg}', ['build:images']);
+    gulp.watch(path.join(_folders.helpers, '/**/*'), ['build:scripts']);    // rebuild all scripts that include helpers
     gulp.watch(includes, ['build:includes']);
     gulp.watch('./lib/less/**/*.less', ['build:less']);
     gulp.watch(path.join(_folders.locales, '/**/*'), ['build:locales']);
