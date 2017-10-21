@@ -24,7 +24,7 @@
     "description": ""
   },
   "OptionPageActionPopupMenuDescription": {
-    "message": "Enable the popup menu on the icon in the address bar (disable this to open the management screen directly)",
+    "message": "Enable the popup menu on the icon in the address bar (disable this to open the management panel directly when clicking the icon)",
     "description": ""
   },
   "OptionManagementPanelTypeName": {
