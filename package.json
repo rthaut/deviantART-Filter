@@ -48,7 +48,7 @@
     "angular-messages": "^1.6.6",
     "angular-sanitize": "^1.6.6",
     "bootstrap": "^3.3.7",
-    "jquery": "^1.12.4",
+    "jquery": "^2.2.4",
     "ng-table": "^3.0.1",
     "webextension-polyfill": "^0.2.1"
   }
