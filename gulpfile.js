@@ -72,7 +72,7 @@ const options = {
         'compress': {
             'drop_console': true
         },
-        'mangle': false
+        'mangle': true
     }
 };
 
