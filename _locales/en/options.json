@@ -1,0 +1,82 @@
+{
+  "OptionsHeading": {
+    "message": "DeviantArt Filter Options",
+    "description": "The heading displayed above the options on the management panel."
+  },
+  "OptionActiveName": {
+    "message": "Activate Filters",
+    "description": ""
+  },
+  "OptionActiveDescription": {
+    "message": "Disabling this turns off all filtering functionality",
+    "description": ""
+  },
+  "OptionPlaceholdersName": {
+    "message": "Use Placeholders",
+    "description": ""
+  },
+  "OptionPlaceholdersDescription": {
+    "message": "Show placeholders in place of filtered content (disable to hide filtered content completely)",
+    "description": ""
+  },
+  "OptionPageActionPopupMenuName": {
+    "message": "Enable Popup Menu",
+    "description": ""
+  },
+  "OptionPageActionPopupMenuDescription": {
+    "message": "Enable the popup menu on the icon in the address bar (disable this to open the management panel directly when clicking the icon)",
+    "description": ""
+  },
+  "OptionManagementPanelTypeName": {
+    "message": "Mangement Panel Type",
+    "description": ""
+  },
+  "OptionManagementPanelTypeDescription": {
+    "message": "Specifies where/how the main mangement panel is displayed",
+    "description": ""
+  },
+  "OptionManagementPanelTypeValueModal": {
+    "message": "Open as an embedded modal",
+    "description": "The label for the value of the Mangement Panel Type option that corresponds to using an embedded modal."
+  },
+  "OptionManagementPanelTypeValueTab": {
+    "message": "Open in a new tab in the current window",
+    "description": "The label for the value of the Mangement Panel Type option that corresponds to using a new browser tab."
+  },
+  "OptionManagementPanelTypeValueWindow": {
+    "message": "Open in a a new popup window",
+    "description": "The label for the value of the Mangement Panel Type option that corresponds to using a new browser window."
+  },
+  "OptionPrivateStorageName": {
+    "message": "Use Filters in Private/Incognito Mode",
+    "description": ""
+  },
+  "OptionPrivateStorageDescription": {
+    "message": "This option determines if filters that are created in normal browsing mode are available while in Private/Incognito mode.",
+    "description": ""
+  },
+  "OptionPrivateStorageValueWrite": {
+    "message": "Yes, and save changes",
+    "description": ""
+  },
+  "OptionPrivateStorageValueRead": {
+    "message": "Yes, but do NOT save changes",
+    "description": ""
+  },
+  "OptionPrivateStorageValueNone": {
+    "message": "No",
+    "description": ""
+  },
+  "OptionUpdateError": {
+    "message": "An error occured while updating the $OPTION$ option: $ERROR$",
+    "description": "The error message displayed if an option fails to update correctly.",
+    "placeholders": {
+      "option": {
+        "content": "$1"
+      },
+      "error": {
+        "content": "$2"
+      }
+    }
+  }
+}

@@ -1,224 +1,277 @@
-var gulp = require('gulp');
+/* global require */
+const gulp = require('gulp');
+const rollup = require('rollup-stream');
+const buffer = require('vinyl-buffer');
+const source = require('vinyl-source-stream');
 
-var del = require('del');
-var fs = require('fs');
-var sequence = require('run-sequence');
+const del = require('del');
+const fs = require('fs');
+const ini = require('ini');
+const path = require('path');
+const merge = require('merge-stream');
+const sequence = require('run-sequence');
 
-var concat = require('gulp-concat');
-var cssnano = require('gulp-cssnano');
-var ejs = require("gulp-ejs")
-var eslint = require('gulp-eslint');
-var gulpIf = require('gulp-if');
-var header = require('gulp-header');
-var insert = require('gulp-insert');
-var merge = require('merge-stream');
-var replace = require('gulp-replace');
-var stripDebug = require('gulp-strip-debug');
+const concat = require('gulp-concat');
+const ejs = require('gulp-ejs');
+const embedTemplates = require('gulp-angular-embed-templates');
+const eslint = require('gulp-eslint');
+const folders = require('gulp-folders');
+const gulpIf = require('gulp-if');
+const header = require('gulp-header');
+const less = require('gulp-less');
+const mergeJson = require('gulp-merge-json');
+const rename = require('gulp-rename');
+const tokenReplace = require('gulp-token-replace');
 
-var composer = require('gulp-uglify/composer');
-var uglify = composer(require('uglify-es'), console);
+const composer = require('gulp-uglify/composer');
+const uglify = composer(require('uglify-es'), console);
 
-var crx = require('gulp-crx-pack');
-var zip = require('gulp-zip');
+const crx = require('gulp-crx-pack');
+const zip = require('gulp-zip');
 
 
 
 /* ==================== CONFIGURATION ==================== */
 
-// set to TRUE to enable console messages in JS output files
-const DEBUG = false;
-
-// all scripts directly contributing to the core deviantART Filter functionality
-// order is important: base classes > custom filter classes > main class > index.js
-var core = [
-    './lib/js/classes/base/*.class.js',
-    './lib/js/classes/users/*.class.js',
-    './lib/js/daFilter.class.js',
-    './lib/js/index.js'
+// vendor libraries needed for core functionality
+const vendor = [
+    './node_modules/angular/angular-csp.css',
+    './node_modules/angular/angular.min.js',
+    './node_modules/angular-messages/angular-messages.min.js',
+    './node_modules/angular-sanitize/angular-sanitize.min.js',
+    './node_modules/bootstrap/dist/css/bootstrap.min.css',
+    //'./node_modules/bootstrap/dist/css/bootstrap-theme.min.css',
+    './node_modules/bootstrap/dist/js/bootstrap.min.js',
+    './node_modules/jquery/dist/jquery.min.js',
+    './node_modules/ng-table/bundles/ng-table.min.css',
+    './node_modules/ng-table/bundles/ng-table.min.js',
+    './node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
 ];
 
-// additional scripts used by deviantART Filter
-var includes = [
-    './node_modules/dialog-polyfill/dialog-polyfill.js',
-    './node_modules/jquery/dist/jquery.slim.min.js',
-    './lib/js/jquery.daModal.js'
-];
-
-var utils = [
-    './lib/js/scripts/**/*.js'
-];
-
-var stylesheets = [
-    './lib/css/**/*.css'
+// additional includes (custom libraries, classes, etc.)
+const includes = [
+    //'./lib/jquery.daModal.js',
 ];
 
 // load in package JSON as object for variables & EJS templates
-var package = require('./package.json');
+const package = require('./package.json');
+
+// load in configuration data from INI file
+const config = ini.parse(fs.readFileSync('.config.ini', 'utf-8'));
+
+// default options for various plugins
+const options = {
+    // options for compiling LESS to CSS
+    'less': {
+        'paths': 'node_modules',
+        'outputStyle': 'compressed',
+        'sourceMap': false
+    },
+    // options for compressing JS files
+    'uglify': {
+        'compress': {
+            'drop_console': true
+        },
+        'mangle': true
+    }
+};
+
+const _folders = {
+    'locales': './_locales',
+    'components': './lib/components',
+    'helpers': './lib/helpers',
+    'pages': './lib/pages',
+    'scripts': './lib/scripts'
+};
 
 
 
 /* ====================  BUILD TASKS  ==================== */
 
-const eslintIsFixed = function (file) {
-    return file.eslint && file.eslint.fixed;
-}
-gulp.task('lint', function () {
-    return gulp.src('./lib/js/**/*.js')
+gulp.task('clean', function () {
+    return del(['./dist/*'])
+        .catch(function (error) {
+            console.warn(error);
+        });
+});
+
+
+// ==========================================
+// build & lint tasks, broken into components
+// ==========================================
+
+gulp.task('lint:components', function () {
+    return gulp.src(path.join(_folders.components, '**/*.js'))
         .pipe(eslint({
             'fix': true
         }))
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
+        .pipe(eslint.format());
 });
+gulp.task('build:components', ['lint:components'], folders(_folders.components, function (folder) {
+    return gulp.src(path.join(_folders.components, folder, '**/*.js'))
+        .pipe(embedTemplates())
+        .pipe(concat(folder + '.js'))
+        .pipe(uglify(options.uglify))
+        //.pipe(rename(folder + '.min.js'))
+        .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { 'package': package }))
+        .pipe(gulp.dest('./dist/components'));
+}));
 
-// tasks for cleaning the build directories
-gulp.task('clean:userscript', function () {
-    return del(['./dist/userscript/*'])
-        .catch(function (error) {
-            console.warn(error)
-        });
-});
-gulp.task('clean:webextension', function () {
-    return del(['./dist/webextension/*'])
-        .catch(function (error) {
-            console.warn(error)
-        });
-});
-gulp.task('clean', [
-    'clean:userscript',
-    'clean:webextension'
-]);
 
-// tasks for building the userscript version
-gulp.task('build:userscript', function (callback) {
-    sequence(
-        'lint',
-        ['build:userscript:includes', 'build:userscript:utils', 'build:userscript:stylesheets'],
-        'build:userscript:core',
-        'build:userscript:cleanup',
-        callback
-    );
-});
-gulp.task('build:userscript:includes', function () {
-    return gulp.src(includes)
-        .pipe(concat('includes.js'))
-        .pipe(gulpIf('!*.min.js', uglify({ mangle: false })))
-        .pipe(gulp.dest('./dist/userscript'));
-});
-gulp.task('build:userscript:utils', function () {
-    return gulp.src(utils)
-        .pipe(concat('utils.js'))
-        .pipe(gulpIf(!DEBUG, stripDebug()))
-        .pipe(uglify({ mangle: false }))
-        .pipe(gulp.dest('./dist/userscript'));
-});
-gulp.task('build:userscript:stylesheets', function () {
-    return merge(
-        gulp.src(stylesheets)
-            .pipe(concat(package.name + '.css'))
-            .pipe(replace('\e632', '\\e632'))
-            .pipe(cssnano({ zindex: false }))
-            .pipe(insert.wrap('(function () { addStyleSheet(\'', '\'); })();')),
-        gulp.src('./node_modules/dialog-polyfill/dialog-polyfill.css')
-            .pipe(cssnano({ zindex: false }))
-            .pipe(insert.wrap('(function () { addStyleSheet(\'', '\'); })();'))
-    )
-        .pipe(concat('stylesheets.js'))
-        .pipe(gulp.dest('./dist/userscript'));
-});
-gulp.task('build:userscript:core', function () {
-    return gulp.src(
-        [
-            './dist/userscript/includes.js',
-            './dist/userscript/utils.js',
-            './dist/userscript/stylesheets.js'
-        ].concat(core))
-        .pipe(gulpIf(!DEBUG, stripDebug()))
-        .pipe(uglify({ mangle: false }))
-        .pipe(concat(package.name.replace(/\-/g, '_') + '.user.js'))
-        .pipe(header(fs.readFileSync('./banners/userscript.txt', 'utf8'), { package: package }))
-        .pipe(gulp.dest('./dist/userscript'));
-});
-gulp.task('build:userscript:cleanup', function () {
-    return del([
-        './dist/userscript/**/*.js',
-        '!./dist/userscript/' + package.name.replace('-', '_') + '.user.js'
-    ]);
-});
-
-// tasks for building the WebExtension version
-gulp.task('build:webextension', function (callback) {
-    sequence(
-        'lint',
-        'clean:webextension',
-        ['build:webextension:js', 'build:webextension:css', 'build:webextension:icons', 'build:webextension:manifest'],
-        ['zip:webextension', 'crx:webextension'],
-        callback
-    );
-});
-gulp.task('build:webextension:js', function () {
-    return merge(
-        gulp.src(includes)
-            .pipe(gulpIf('!*.min.js', uglify({ mangle: false }))),
-        gulp.src([].concat(utils, core))
-            .pipe(concat(package.name + '.js'))
-            .pipe(gulpIf(!DEBUG, stripDebug()))
-            .pipe(uglify({ mangle: false }))
-            .pipe(header(fs.readFileSync('./banners/webextension.txt', 'utf8'), { package: package }))
-    )
-        .pipe(gulp.dest('./dist/webextension/js'));
-});
-gulp.task('build:webextension:css', function () {
-    return merge(
-        gulp.src(stylesheets)
-            .pipe(concat(package.name + '.css'))
-            .pipe(cssnano({ zindex: false }))
-            .pipe(header(fs.readFileSync('./banners/webextension.txt', 'utf8'), { package: package })),
-        gulp.src('./node_modules/dialog-polyfill/dialog-polyfill.css')
-            .pipe(cssnano({ zindex: false }))
-    )
-        .pipe(gulp.dest('./dist/webextension/css'));
-});
-gulp.task('build:webextension:manifest', function () {
-    return gulp.src(['./manifest.json'])
-        .pipe(ejs({ package: package }))
-        .pipe(gulp.dest('./dist/webextension'));
-});
-gulp.task('build:webextension:icons', function () {
-    return gulp.src(['./resources/icons/**/*.png'])
-        .pipe(gulp.dest('./dist/webextension/icons'));
-});
-
-// tasks for packaging the WebExtension for distribution
-gulp.task('zip:webextension', function (callback) {
-    return gulp.src(['./dist/webextension/**/*', '!Thumbs.db'])
-        .pipe(zip(package.name + '.zip'))
-        .pipe(gulp.dest('./dist'))
-});
-gulp.task('crx:webextension', function () {
-    return gulp.src(['./dist/webextension', '!Thumbs.db'])
-        .pipe(crx({
-            privateKey: fs.readFileSync('./certs/' + package.name + '.pem', 'utf8'),
-            filename: package.name + '.crx'
+gulp.task('lint:helpers', function () {
+    return gulp.src(path.join(_folders.helpers, '**/*.js'))
+        .pipe(eslint({
+            'fix': true
         }))
-        .pipe(gulp.dest('./dist'))
+        .pipe(eslint.format());
 });
 
-// tasks for automatically building on source changes
+
+gulp.task('build:images', function () {
+    return gulp.src(['./images/**/*.{png,svg}'])
+        .pipe(gulp.dest('./dist/images'));
+});
+
+
+gulp.task('build:includes', function () {
+    return gulp.src(includes)
+        .pipe(gulp.dest('./dist/includes'));
+});
+
+
+gulp.task('build:less', function () {
+    return gulp.src('./lib/less/*.less')
+        .pipe(less(options.less))
+        //.pipe(rename({ suffix: '.min' }))
+        .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { 'package': package }))
+        .pipe(gulp.dest('./dist/css'));
+});
+
+
+gulp.task('build:locales', folders(_folders.locales, function (folder) {
+    return gulp.src(path.join(_folders.locales, folder, '**/*.json'))
+        .pipe(mergeJson({
+            'fileName': 'messages.json'
+        }))
+        .pipe(gulp.dest(path.join('./dist/_locales', folder)));
+}));
+
+
+gulp.task('build:manifest', function () {
+    return gulp.src(['./manifest.json'])
+        .pipe(ejs({ 'package': package }))
+        .pipe(gulp.dest('./dist'));
+});
+
+
+gulp.task('lint:pages', function () {
+    return gulp.src(path.join(_folders.pages, '**/*.js'))
+        .pipe(eslint({
+            'fix': true
+        }))
+        .pipe(eslint.format());
+});
+gulp.task('build:pages', ['lint:pages'], folders(_folders.pages, function (folder) {
+    return merge(
+        gulp.src(path.join(_folders.pages, folder, '**/*.html'))
+            .pipe(concat(folder + '.html')),
+        gulp.src(path.join(_folders.pages, folder, '**/*.css'))
+            .pipe(concat(folder + '.css'))
+            //.pipe(rename({ suffix: '.min' }))
+            .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { 'package': package })),
+        gulp.src(path.join(_folders.pages, folder, '**/*.js'))
+            .pipe(concat(folder + '.js'))
+            .pipe(uglify(options.uglify))
+            //.pipe(rename(folder + '.min.js'))
+            .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { 'package': package }))
+    )
+        .pipe(gulp.dest(path.join('./dist/pages', folder)));
+}));
+
+
+gulp.task('lint:scripts', function () {
+    return gulp.src(path.join(_folders.scripts, '**/*.js'))
+        .pipe(eslint({
+            'fix': true
+        }))
+        .pipe(eslint.format());
+});
+gulp.task('build:scripts', ['lint:helpers', 'lint:scripts'], folders(_folders.scripts, function (folder) {
+    return rollup({
+        'input': path.join(_folders.scripts, folder, 'index.js'),
+        'format': 'iife',
+        'name': package.title.replace(' ', ''),
+    })
+        .pipe(source(folder + '.js'))
+        .pipe(buffer())
+        .pipe(uglify(options.uglify))
+        .pipe(header(fs.readFileSync('./banner.txt', 'utf8'), { 'package': package }))
+        .pipe(tokenReplace({
+            'global': config,
+            'preserveUnknownTokens': true
+        }))
+        .pipe(gulp.dest('./dist/scripts'));
+}));
+
+
+gulp.task('build:vendor', function () {
+    return gulp.src(vendor)
+        .pipe(gulp.dest('./dist/vendor'));
+});
+
+
+// ========================
+// package/distribute tasks
+// ========================
+
+gulp.task('zip', function (callback) {
+    return gulp.src(['./dist/**/*', '!Thumbs.db'])
+        .pipe(zip(package.name + '.zip'))
+        .pipe(gulp.dest('./dist'));
+});
+gulp.task('crx', function () {
+    return gulp.src(['./dist', '!Thumbs.db'])
+        .pipe(crx({
+            'privateKey': fs.readFileSync('./certs/' + package.name + '.pem', 'utf8'),
+            'filename': package.name + '.crx'
+        }))
+        .pipe(gulp.dest('./dist'));
+});
+
+
+// =========================
+// primary development tasks
+// =========================
+
+gulp.task('lint', function (callback) {
+    sequence(
+        ['lint:components', 'lint:helpers', 'lint:pages', 'lint:scripts'],
+        callback
+    );
+});
+
+gulp.task('build', ['clean'], function (callback) {
+    sequence(
+        ['build:images', 'build:less', 'build:locales', 'build:manifest'],
+        ['build:components', 'build:includes', 'build:pages', 'build:scripts', 'build:vendor'],
+        //['zip', 'crx'],
+        callback
+    );
+});
+
 gulp.task('watch', ['build'], function () {
-    gulp.watch('./lib/**/*', ['build']);
-});
-gulp.task('watch:userscript', ['build:userscript'], function () {
-    gulp.watch('./lib/**/*', ['build:userscript']);
-});
-gulp.task('watch:webextension', ['build:webextension'], function () {
-    gulp.watch('./lib/**/*', ['build:webextension']);
+    options.uglify.compress.drop_console = false;
+
+    gulp.watch(path.join(_folders.components, '/**/*'), ['build:components']);
+    gulp.watch('./images/**/*.{png,svg}', ['build:images']);
+    gulp.watch(path.join(_folders.helpers, '/**/*'), ['build:scripts']);    // rebuild all scripts that include helpers
+    gulp.watch(includes, ['build:includes']);
+    gulp.watch('./lib/less/**/*.less', ['build:less']);
+    gulp.watch(path.join(_folders.locales, '/**/*'), ['build:locales']);
+    gulp.watch('./manifest.json', ['build:manifest']);
+    gulp.watch(path.join(_folders.pages, '/**/*'), ['build:pages']);
+    gulp.watch('./lib/scripts/**/*.js', ['build:scripts']);
 });
 
-// task for building everything
-gulp.task('build', ['build:userscript', 'build:webextension']);
-
-// default task: cleans and builds everything
-gulp.task('default', function (callback) {
-    sequence('clean', 'build', callback);
-});
+// default task (alias build)
+gulp.task('default', ['build']);

@@ -1,33 +1,71 @@
 {
   "manifest_version": 2,
-  "name": "<%= package.title || package.name %>",
-  "version": "<%= package.version %>",
-  "description": "<%= package.description %>",
+  "name": "__MSG_ExtensionName__",
+  "version": "<%= package.version %>beta1",
+  "description": "__MSG_ExtensionDescription__",
   "homepage_url": "<%= package.homepage %>",
+  "default_locale": "en",
+
   "icons": {
-    "48": "icons/icon48.png",
-    "64": "icons/icon64.png",
-    "96": "icons/icon96.png",
-    "128": "icons/icon128.png"
+    "48": "images/logo/logo-red.svg",
+    "96": "images/logo/logo-red.svg"
   },
+
+  "applications": {
+    "gecko": {
+      "id": "{a2ce7c11-e47d-42cf-b6db-ede36265cf6c}",
+      "strict_min_version": "42.0"
+    }
+  },
+
+  "permissions": [
+    "*://*.deviantart.com/*",
+    "activeTab",
+    "history",
+    "notifications",
+    "tabs",
+    "storage"
+  ],
+
+  "options_ui": {
+    "page": "pages/options/options.html",
+    "browser_style": true
+  },
+
+  "background": {
+    "scripts": [
+      "vendor/browser-polyfill.min.js",
+      "scripts/background.js"
+    ]
+  },
+
   "content_scripts": [
     {
+      "all_frames": true,
       "matches": [
         "*://*.deviantart.com/*"
       ],
       "css": [
-        "css/dialog-polyfill.css",
-        "css/<%= package.name %>.css"
+        "css/content.css"
       ],
       "js": [
-        "js/dialog-polyfill.js",
-        "js/jquery.slim.min.js",
-        "js/jquery.daModal.js",
-        "js/<%= package.name %>.js"
-      ]
+        "vendor/browser-polyfill.min.js",
+        "scripts/content.js"
+      ],
+      "run_at": "document_end"
     }
   ],
-  "permissions": [
-    "*://*.deviantart.com/*"
+
+  "page_action": {
+    "browser_style": true,
+    "default_icon": "images/logo/logo-red.svg",
+    "default_title": "__MSG_ExtensionName__",
+    "default_popup": "pages/popup/popup.html"
+  },
+
+  "web_accessible_resources": [
+    "css/*",
+    "images/*",
+    "includes/*"
   ]
 }

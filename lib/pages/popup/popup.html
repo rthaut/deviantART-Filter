@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html ng-app="deviantArtFilter" ng-csp>
+
+    <head>
+        <meta charset="utf-8">
+
+        <script type="application/javascript" src="../../vendor/browser-polyfill.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="popup.css" />
+    </head>
+
+    <body ng-controller="PopupCtrl">
+
+        <div class="panel">
+            <div class="panel-arrowUp"></div>
+
+            <div class="panel-section panel-section-header">
+                <div class="icon-section-header"></div>
+                <div class="text-section-header">{{heading}}</div>
+            </div>
+
+            <div class="panel-section panel-section-list" ng-cloak>
+
+                <div class="panel-list-item" ng-click="openManagementPanel($event)">
+                    <div class="icon"></div>
+                    <div class="text">{{manage}}</div>
+                    <div class="text-shortcut"></div>
+                </div>
+
+                <div class="panel-section-separator" ng-if="options"></div>
+                <div class="panel-list-item disabled" ng-if="options">
+                    <div class="icon"></div>
+                    <div class="text">{{toggles}}</div>
+                    <div class="text-shortcut"></div>
+                </div>
+
+                <div class="panel-list-item" ng-repeat="option in options | filter: {type:'checkbox'}" ng-click="toggleOption($event, option)">
+                    <div class="icon toggle" ng-class="{'active':option.value}"></div>
+                    <div class="text">{{option.name}}</div>
+                    <div class="text-shortcut">{{option.shortcut}}</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- dependencies -->
+        <script type="application/javascript" src="../../vendor/angular.min.js"></script>
+
+        <!-- main script for this page -->
+        <script type="application/javascript" src="popup.js"></script>
+    </body>
+
+</html>
