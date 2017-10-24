@@ -3,14 +3,6 @@
     "message": "DeviantArt Filter Options",
     "description": "The heading displayed above the options on the management panel."
   },
-  "OptionActiveName": {
-    "message": "Activate Filters",
-    "description": ""
-  },
-  "OptionActiveDescription": {
-    "message": "Disabling this turns off all filtering functionality",
-    "description": ""
-  },
   "OptionPlaceholdersName": {
     "message": "Use Placeholders",
     "description": ""
