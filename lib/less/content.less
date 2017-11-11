@@ -2,7 +2,7 @@
 .tt-crop.thumb,
 .shadow .thumb,
 *[data-embed-format="thumb"] {
-    position: relative;
+position: relative;
 }
 
 .shadow .thumb {
@@ -16,8 +16,9 @@
     left: 0;
     width: 38px;
     height: 26px;
-    background-image: url('chrome-extension://__MSG_@@extension_id__/images/thumb-corner.png');
+    //TOOD: this will likely need to be a search & replace during the build process
     background-image: url('moz-extension://__MSG_@@extension_id__/images/thumb-corner.png');
+    background-image: url('chrome-extension://__MSG_@@extension_id__/images/thumb-corner.png');
     background-position: center left;
     opacity: 0;
     display: flex;
@@ -34,8 +35,9 @@
 }
 
 .torpedo-container .thumb a.torpedo-thumb-link .hide-user-corner:hover {
-    background-image: url('chrome-extension://__MSG_@@extension_id__/images/thumb-corner-hover.png');
+    //TOOD: this will likely need to be a search & replace during the build process
     background-image: url('moz-extension://__MSG_@@extension_id__/images/thumb-corner-hover.png');
+    background-image: url('chrome-extension://__MSG_@@extension_id__/images/thumb-corner-hover.png');
     color: #D32800;
 }
 
