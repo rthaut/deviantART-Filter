@@ -360,6 +360,8 @@ gulp.task('build', [
 ]);
 
 gulp.task('dist', (callback) => {
+    options.uglify.compress.drop_console = true;
+
     $.sequence('clean', 'build', 'zip', callback);
 });
 
