@@ -111,7 +111,7 @@ const esLintTask = $.lazypipe()
  */
 const cssTask = $.lazypipe()
     .pipe($.postcss, options.postcss.plugins)
-    //$.rename({ suffix: '.min' }),
+    //$.rename({ suffix: '.min' }), //TODO: the filename SHOULD include .min, but we need to update the path(s) in the HTML file(s)
     .pipe(headerTask);
 
 /**
@@ -119,7 +119,7 @@ const cssTask = $.lazypipe()
  */
 const lessTask = $.lazypipe()
     .pipe($.less, options.less)
-    //$.rename({ suffix: '.min' }),
+    //$.rename({ suffix: '.min' }), //TODO: the filename SHOULD include .min, but we need to update the path(s) in the HTML file(s)
     .pipe(headerTask);
 
 /**
@@ -127,7 +127,7 @@ const lessTask = $.lazypipe()
  */
 const jsTask = $.lazypipe()
     .pipe($.uglify, options.uglify)
-    //$.rename({ suffix: '.min' }),
+    //$.rename({ suffix: '.min' }), //TODO: the filename SHOULD include .min, but we need to update the path(s) in the HTML file(s)
     .pipe(headerTask);
 
 /**
@@ -231,6 +231,7 @@ gulp.task('build:locales', () => {
         ]);
     }));
 });
+
 
 gulp.task('build:manifest:chrome', () => {
     return $.pump([
