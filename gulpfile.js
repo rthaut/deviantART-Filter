@@ -192,6 +192,23 @@ gulp.task('build:images', () => {
 });
 
 
+/**
+ * Creates multiple resized PNG versions of the SVG logo files
+ * TODO: read one (or both) of the manifest files and use the "icons" property to determine which sizes to build
+ */
+gulp.task('build:images:logos', () => {
+    return merge([16, 32, 48, 64].map((size) => {
+        return $.pump([
+            gulp.src('./images/logo/**/*.svg'),
+            $.svg2png({ 'width': size, 'height': size }),
+            $.rename({ 'suffix': '-' + size }),
+            gulp.dest('./dist/chrome/images/logo'),
+            gulp.dest('./dist/firefox/images/logo'),
+        ]);
+    }));
+});
+
+
 gulp.task('build:less', () => {
     return $.pump([
         gulp.src('./lib/less/*.less'),
@@ -332,6 +349,7 @@ gulp.task('lint', [
 
 gulp.task('build', [
     'build:images',
+    'build:images:logos',
     'build:less',
     'build:locales',
     'build:manifest',
@@ -350,6 +368,7 @@ gulp.task('watch', ['build'], () => {
 
     gulp.watch('./manifest.*.json', ['build:manifest']);
     gulp.watch('./images/**/*.{png,svg}', ['build:images']);
+    gulp.watch('./images/logo/**/*.svg', ['build:images:logos']);
     gulp.watch('./lib/less/**/*.less', ['build:less']);
     gulp.watch(path.join(_folders.locales, '/**/*'), ['build:locales']);
     gulp.watch(path.join(_folders.components, '/**/*'), ['build:components']);

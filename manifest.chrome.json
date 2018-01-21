@@ -8,10 +8,10 @@
   "default_locale": "en",
 
   "icons": {
-    "16": "images/logo/logo-red.svg",
-    "32": "images/logo/logo-red.svg",
-    "48": "images/logo/logo-red.svg",
-    "96": "images/logo/logo-red.svg"
+    "16": "images/logo/logo-red-16.png",
+    "32": "images/logo/logo-red-32.png",
+    "48": "images/logo/logo-red-48.png",
+    "64": "images/logo/logo-red-64.png"
   },
 
   "permissions": [
@@ -53,7 +53,7 @@
 
   "page_action": {
     "browser_style": true,
-    "default_icon": "images/logo/logo-red.svg",
+    "default_icon": "images/logo/logo-red-16.png",
     "default_title": "__MSG_ExtensionName__",
     "default_popup": "pages/popup/popup.html"
   },

@@ -32,6 +32,7 @@
     "gulp-merge-json": "^1.2.0",
     "gulp-postcss": "^7.0.0",
     "gulp-rename": "^1.2.2",
+    "gulp-svg2png": "^2.0.2",
     "gulp-token-replace": "^1.1.2",
     "gulp-uglify": "^3.0.0",
     "gulp-useref": "^3.1.3",
