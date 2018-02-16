@@ -3,6 +3,14 @@
     "message": "DeviantArt Filter Options",
     "description": "The heading displayed above the options on the management panel."
   },
+  "OptionCacheMetadataName": {
+    "message": "Cache Metadata",
+    "description": ""
+  },
+  "OptionCacheMetadataDescription": {
+    "message": "Cache category and tag metadata for deviations locally",
+    "description": ""
+  },
   "OptionPlaceholdersName": {
     "message": "Use Placeholders",
     "description": ""
