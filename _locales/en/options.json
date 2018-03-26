@@ -60,7 +60,7 @@
     "description": ""
   },
   "OptionUpdateError": {
-    "message": "An error occured while updating the $OPTION$ option: $ERROR$",
+    "message": "An error occurred while updating the $OPTION$ option: $ERROR$",
     "description": "The error message displayed if an option fails to update correctly.",
     "placeholders": {
       "option": {

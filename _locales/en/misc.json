@@ -9,7 +9,7 @@
     }
   },
   "GenericLoadingError": {
-    "message": "An error occured while loading $DATA$: $ERROR$",
+    "message": "An error occurred while loading $DATA$: $ERROR$",
     "description": "The generic error message displayed if data fails to load.",
     "placeholders": {
       "data": {
