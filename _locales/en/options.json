@@ -3,12 +3,24 @@
     "message": "DeviantArt Filter Options",
     "description": "The heading displayed above the options on the management panel."
   },
-  "OptionCacheMetadataName": {
-    "message": "Cache Metadata",
+  "OptionLabelRequired": {
+    "message": "This option requires a value",
+    "description": "The message displayed on a required option if the option does not have a value."
+  },
+  "OptionLabelMinimum": {
+    "message": "The minimum value for this option is",
+    "description": "The message displayed on an option if the value is less than the minimum required value."
+  },
+  "OptionLabelMaximum": {
+    "message": "The maximum value for this option is",
+    "description": "The message displayed on an option if the value is greater than the maximum required value."
+  },
+  "OptionMetadataCacheTTLName": {
+    "message": "Number of Days to Cache Metadata",
     "description": ""
   },
-  "OptionCacheMetadataDescription": {
-    "message": "Cache category and tag metadata for deviations locally",
+  "OptionMetadataCacheTTLDescription": {
+    "message": "Specifies the number of days to cache metadata locally for deviations (set to 0 to disable)",
     "description": ""
   },
   "OptionPlaceholdersName": {
