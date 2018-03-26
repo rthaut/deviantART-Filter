@@ -19,8 +19,7 @@ Simply install DeviantArt Filter in your web browser of choice and filter deviat
 
 ### Creating and Removing Filters
 1. While on [DeviantArt](https://www.deviantart.com), click the red logo that appears on the right side of the address bar.
-2. By default, a menu will appear from the icon; click the `Manage Filter` item to open the configuration screen.
-    - If you have disabled the `Popup Menu` option, the configuration screen will open automatically when you click the icon.
+2. The configuration screen will open automatically when you click the icon.
 3. Navigate to any of the Manage Users/Tags/Categories tabs.
 4. To create a new filter, use the form at the top of the tab.
     - For users, enter their username.
@@ -40,8 +39,7 @@ Simply install DeviantArt Filter in your web browser of choice and filter deviat
 ### Exporting/Importing Filters
 DeviantArt Filter allows you to export and import filters from a JSON file. This is mostly for keeping your filters in sync between browsers/computers, but is handy for backup purposes as well.
 1. While on [DeviantArt](https://www.deviantart.com), click the red logo that appears on the right side of the address bar.
-2. By default, a menu will appear from the icon; click the `Manage Filter` item to open the configuration screen.
-    - If you have disabled the `Popup Menu` option, the configuration screen will open automatically when you click the icon.
+2. The configuration screen will open automatically when you click the icon.
 3. Navigate to the `Import/Export Filters` tab.
 4. To export your current filters to a JSON file, click the `Export Filter Data` button, then open/save the file when prompted (it will use your browser's native download functionality).
 5. To import filters from a JSON file, either drag and drop the file onto the designated box, or click the box to open a File Browser dialog and select your JSON file.
@@ -52,9 +50,6 @@ DeviantArt Filter allows you to export and import filters from a JSON file. This
 ## Options
 ### Management Panel Type
 This option determines how the management panel (configuration screen) is displayed.
-
-### Enable Popup Menu
-This option determines if a menu is displayed when the icon in the address bar is clicked or if the the management panel (configuration screen) is displayed immediately. The menu includes the ability to quickly toggle the use of placeholders.
 
 ### Use Placeholders
 This option determines if filtered deviations are hidden completely or if a placeholder image is displayed in their place.

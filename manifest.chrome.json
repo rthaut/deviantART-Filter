@@ -54,8 +54,7 @@
   "page_action": {
     "browser_style": true,
     "default_icon": "images/logo/logo-red-16.png",
-    "default_title": "__MSG_ExtensionName__",
-    "default_popup": "pages/popup/popup.html"
+    "default_title": "__MSG_ExtensionName__"
   },
 
   "web_accessible_resources": [

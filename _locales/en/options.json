@@ -19,14 +19,6 @@
     "message": "Show placeholders in place of filtered content (disable to hide filtered content completely)",
     "description": ""
   },
-  "OptionPageActionPopupMenuName": {
-    "message": "Enable Popup Menu",
-    "description": ""
-  },
-  "OptionPageActionPopupMenuDescription": {
-    "message": "Enable the popup menu on the icon in the address bar (disable this to open the management panel directly when clicking the icon)",
-    "description": ""
-  },
   "OptionManagementPanelTypeName": {
     "message": "Management Panel Type",
     "description": ""
