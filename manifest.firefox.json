@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
   "name": "__MSG_ExtensionName__",
-  "version": "<%= package.version %>beta1",
+  "version": "<%= pkg.version %>beta1",
   "description": "__MSG_ExtensionDescription__",
-  "homepage_url": "<%= package.homepage %>",
+  "homepage_url": "<%= pkg.homepage %>",
   "default_locale": "en",
 
   "icons": {
