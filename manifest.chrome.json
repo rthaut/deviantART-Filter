@@ -47,6 +47,7 @@
       ],
       "js": [
         "vendor/browser-polyfill.min.js",
+        "vendor/idb.js",
         "scripts/content.js"
       ],
       "run_at": "document_end"

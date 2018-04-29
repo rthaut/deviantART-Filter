@@ -46,6 +46,7 @@ const vendor = [
     './node_modules/bootstrap/dist/css/bootstrap.min.css',
     //'./node_modules/bootstrap/dist/css/bootstrap-theme.min.css',
     './node_modules/bootstrap/dist/js/bootstrap.min.js',
+    './node_modules/idb/lib/idb.js',
     './node_modules/jquery/dist/jquery.min.js',
     './node_modules/ng-table/bundles/ng-table.min.css',
     './node_modules/ng-table/bundles/ng-table.min.js',
@@ -270,7 +271,13 @@ gulp.task('build:scripts', gulp.series('lint:scripts', () => {
             $.rollup({
                 'input': `${_folders.scripts}/${folder}/index.js`,
                 'format': 'iife',
-                'name': pkg.title.replace(/\s/g, '')
+                'name': pkg.title.replace(/\s/g, ''),
+                'external': [
+                    'idb'
+                ],
+                'globals': {
+                    'idb': 'idb'
+                }
             }),
             $.source(folder + '.js'),
             $.buffer(),
