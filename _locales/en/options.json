@@ -39,10 +39,6 @@
     "message": "Specifies where/how the main management panel is displayed",
     "description": ""
   },
-  "OptionManagementPanelTypeValueModal": {
-    "message": "Open as an embedded modal",
-    "description": "The label for the value of the Management Panel Type option that corresponds to using an embedded modal."
-  },
   "OptionManagementPanelTypeValueTab": {
     "message": "Open in a new tab in the current window",
     "description": "The label for the value of the Management Panel Type option that corresponds to using a new browser tab."
