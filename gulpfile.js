@@ -129,13 +129,14 @@ gulp.task('build:logos', () => {
     const manifest = JSON.parse(fs.readFileSync('./manifest.shared.json'));
     const icons = manifest.icons;
     return merge(Object.keys(icons).map((size) => {
+        const file = path.basename(icons[size], '.png').replace(/\-\d+/, '');
         return $.pump([
-            gulp.src(['./images/logo/*.svg']),
+            gulp.src([`./images/logo/${file}.svg`]),
             $.svg2png({
                 'width': size,
                 'height': size
             }),
-            $.rename(icons[size]),  // the name will include the relative path structure (from the manifest to the icon)
+            $.rename(icons[size]),  // the name includes the relative path structure (from the manifest to the icon)
             ...cfg.supported_browsers.map(browser => gulp.dest(`./dist/${browser}`)),
         ]);
     }));
