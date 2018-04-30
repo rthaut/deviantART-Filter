@@ -1,0 +1,8 @@
+/*global module, require */
+module.exports = {
+    'plugins': [
+        require('cssnano')({
+            'preset': 'default',
+        }),
+    ]
+};
