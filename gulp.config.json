@@ -1,9 +1,15 @@
 {
-  "supported_browsers": [
-    "firefox",
-    "chrome",
-    "edge"
-  ],
+  "supported_browsers": {
+    "firefox": {
+      "protocol": "moz-extension://"
+    },
+    "chrome": {
+      "protocol": "chrome-extension://"
+    },
+    "edge": {
+      "protocol": "ms-browser-extension://"
+    }
+  },
   "vendor_files": [
     "./node_modules/angular/angular-csp.css",
     "./node_modules/angular/angular.min.js",

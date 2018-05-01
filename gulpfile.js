@@ -102,7 +102,7 @@ gulp.task('build:components', gulp.series('lint:components', () => {
             gulp.src([`${cfg.source_folders.components}/${folder}/**/*.js`]),
             $.embedTemplates(),
             $.concat(folder + '.js'),
-            ...cfg.supported_browsers.map(browser => gulp.dest(`./dist/${browser}/components`)),
+            ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/components`)),
         ]);
     }));
 }));
@@ -116,7 +116,7 @@ gulp.task('lint:helpers', () => {
 gulp.task('build:images', () => {
     return $.pump([
         gulp.src(['./images/**/*.{png,svg}']),
-        ...cfg.supported_browsers.map(browser => gulp.dest(`./dist/${browser}/images`)),
+        ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/images`)),
     ]);
 });
 
@@ -137,19 +137,21 @@ gulp.task('build:logos', () => {
                 'height': size
             }),
             $.rename(icons[size]),  // the name includes the relative path structure (from the manifest to the icon)
-            ...cfg.supported_browsers.map(browser => gulp.dest(`./dist/${browser}`)),
+            ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}`)),
         ]);
     }));
 });
 
 
 gulp.task('build:less', () => {
-    //TODO: handle the moz-extension/chrome-extension URL protocol issue (i.e. the corner background image in content.less)
-    return $.pump([
-        gulp.src(['./lib/less/*.less']),
-        $.less(cfg.plugin_options.less),
-        ...cfg.supported_browsers.map(browser => gulp.dest(`./dist/${browser}/css`)),
-    ]);
+    return merge(Object.keys(cfg.supported_browsers).map((browser) => {
+        return $.pump([
+            gulp.src(['./lib/less/*.less']),
+            $.less(cfg.plugin_options.less),
+            $.replace(/browser-extension\:\/\//gm, cfg.supported_browsers[browser].protocol),
+            gulp.dest(`./dist/${browser}/css`),
+        ]);
+    }));
 });
 
 
@@ -158,14 +160,14 @@ gulp.task('build:locales', () => {
         return $.pump([
             gulp.src([`${cfg.source_folders.locales}/${folder}/**/*.json`]),
             $.mergeJson({ 'fileName': 'messages.json' }),
-            ...cfg.supported_browsers.map(browser => gulp.dest(`./dist/${browser}/_locales/${folder}`)),
+            ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/_locales/${folder}`)),
         ]);
     }));
 });
 
 
 gulp.task('build:manifest', () => {
-    return merge(cfg.supported_browsers.map((browser) => {
+    return merge(Object.keys(cfg.supported_browsers).map((browser) => {
         return $.pump([
             gulp.src(['./manifest.shared.json', `./manifest.${browser}.json`]),
             $.mergeJson({ 'fileName': 'manifest.json' }),
@@ -190,7 +192,7 @@ gulp.task('build:pages', gulp.series('lint:pages', () => {
             gulp.src([`${cfg.source_folders.pages}/${folder}/**/*.*`]),
 
             // TODO: maybe use gulp-html-replace to only inject the browser polyfill for Chrome (or remove it for Firefox)? then the manifest for Firefox can probably omit the polyfill script completely
-            ...cfg.supported_browsers.map(browser => gulp.dest(`./dist/${browser}/pages/${folder}`)),
+            ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/pages/${folder}`)),
         ]);
     }));
 }));
@@ -220,7 +222,7 @@ gulp.task('build:scripts', gulp.series('lint:scripts', () => {
                 'global': tokens,
                 'preserveUnknownTokens': true
             }),
-            ...cfg.supported_browsers.map(browser => gulp.dest(`./dist/${browser}/scripts`)),
+            ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/scripts`)),
         ]);
     }));
 }));
@@ -229,7 +231,7 @@ gulp.task('build:scripts', gulp.series('lint:scripts', () => {
 gulp.task('build:vendor', () => {
     return $.pump([
         gulp.src(cfg.vendor_files),
-        ...cfg.supported_browsers.map(browser => gulp.dest(`./dist/${browser}/vendor`)),
+        ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/vendor`)),
     ]);
 });
 
@@ -238,7 +240,7 @@ gulp.task('build:vendor', () => {
 // package/distribute tasks
 // ========================
 gulp.task('zip', () => {
-    return merge(cfg.supported_browsers.map((browser) => {
+    return merge(Object.keys(cfg.supported_browsers).map((browser) => {
         return $.pump([
             gulp.src([`./dist/${browser}/**/*`, '!Thumbs.db']),
             $.zip(`${pkg.name}-${browser}.zip`),
@@ -274,8 +276,6 @@ gulp.task('build', gulp.parallel(
 gulp.task('watch', (callback) => {
     // TODO: it would be nice to only rebuild the modified files per watch, but that requires a way to pass them to the build task
     gulp.watch('./manifest.*.json', gulp.task('build:manifest'));
-    gulp.watch('./images/**/*.{png,svg}', gulp.task('build:images'));
-    gulp.watch('./images/logo/**/*.svg', gulp.task('build:logos'));
     gulp.watch('./lib/less/**/*.less', gulp.task('build:less'));
     gulp.watch(`${cfg.source_folders.locales}/**/*`, gulp.task('build:locales'));
     gulp.watch(`${cfg.source_folders.components}/**/*`, gulp.task('build:components'));
