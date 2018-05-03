@@ -120,8 +120,7 @@ const Filters = (() => {
                 console.log('[Background] Filters.importFilterData() :: Results', results);
 
                 // notify the Management screen (if it is open) that the filter was updated (so it can be refreshed)
-                // TODO: this is just sending the message to the active tab, which works ASSUMING the user still has
-                // the Management screen open. It should do a search for the Management screen's URL instead...
+                // TODO: this is just sending the message to the active tab, which works ASSUMING the user still has the Management screen open; it should probably do a search for the Management screen's URL instead...
                 BrowserTabs.sendMessageToTab(null, {
                     'action': 'filter-updated',
                     'data': {

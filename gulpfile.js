@@ -24,9 +24,7 @@ const $ = require('gulp-load-plugins')({
         'vinyl-source-stream': 'source',
     },
     'postRequireTransforms': {
-        'uglify': function (uglify) {
-            return uglify = require('gulp-uglify/composer')(require('uglify-es'), console);
-        }
+        'uglify': uglify => require('gulp-uglify/composer')(require('uglify-es'), console)
     }
 });
 
@@ -82,7 +80,7 @@ gulp.task('minify', () => {
         $.gulpIf(['**/*.js'], $.uglify(cfg.plugin_options.uglify)),
         // TODO: the filenames SHOULD include .min, but we would need to update the paths in both the HTML files and the manifests
         //$.rename({ 'suffix': '.min' }),
-        $.header(fs.readFileSync('./banner.txt', 'utf8'), {
+        $.header(fs.readFileSync('./src/banner.txt', 'utf8'), {
             'pkg': pkg
         }),
         gulp.dest('./dist'),
@@ -126,7 +124,7 @@ gulp.task('build:images', () => {
  */
 gulp.task('build:logos', () => {
     //TODO: handle the icons/sizes defined in page_action.default_icon for Edge
-    const manifest = JSON.parse(fs.readFileSync('./manifest.shared.json'));
+    const manifest = JSON.parse(fs.readFileSync(`${cfg.source_folders.manifests}/manifest.shared.json`));
     const icons = manifest.icons;
     return merge(Object.keys(icons).map((size) => {
         const file = path.basename(icons[size], '.png').replace(/\-\d+/, '');
@@ -146,7 +144,7 @@ gulp.task('build:logos', () => {
 gulp.task('build:less', () => {
     return merge(Object.keys(cfg.supported_browsers).map((browser) => {
         return $.pump([
-            gulp.src(['./lib/less/*.less']),
+            gulp.src([`${cfg.source_folders.less}/*.less`]),
             $.less(cfg.plugin_options.less),
             $.replace(/browser-extension\:\/\//gm, cfg.supported_browsers[browser].protocol),
             gulp.dest(`./dist/${browser}/css`),
@@ -169,7 +167,10 @@ gulp.task('build:locales', () => {
 gulp.task('build:manifest', () => {
     return merge(Object.keys(cfg.supported_browsers).map((browser) => {
         return $.pump([
-            gulp.src(['./manifest.shared.json', `./manifest.${browser}.json`]),
+            gulp.src([
+                `${cfg.source_folders.manifests}/manifest.shared.json`,
+                `${cfg.source_folders.manifests}/manifest.${browser}.json`,
+            ]),
             $.mergeJson({ 'fileName': 'manifest.json' }),
             $.ejs({ 'pkg': pkg }),
             gulp.dest(`./dist/${browser}`),
@@ -275,10 +276,10 @@ gulp.task('build', gulp.parallel(
 
 gulp.task('watch', (callback) => {
     // TODO: it would be nice to only rebuild the modified files per watch, but that requires a way to pass them to the build task
-    gulp.watch('./manifest.*.json', gulp.task('build:manifest'));
-    gulp.watch('./lib/less/**/*.less', gulp.task('build:less'));
     gulp.watch(`${cfg.source_folders.locales}/**/*`, gulp.task('build:locales'));
+    gulp.watch(`${cfg.source_folders.manifests}/**/*`, gulp.task('build:manifest'));
     gulp.watch(`${cfg.source_folders.components}/**/*`, gulp.task('build:components'));
+    gulp.watch(`${cfg.source_folders.less}/**/*`, gulp.task('build:less'));
     gulp.watch(`${cfg.source_folders.pages}/**/*`, gulp.task('build:pages'));
     gulp.watch([
         `${cfg.source_folders.helpers}/**/*.js`,
@@ -289,7 +290,8 @@ gulp.task('watch', (callback) => {
 });
 
 gulp.task('debug', gulp.series('clean', 'build', 'watch'));
-gulp.task('release', gulp.series('clean', gulp.parallel('build'), 'minify', 'zip'));
+gulp.task('package', gulp.series('minify', 'zip'));
+gulp.task('release', gulp.series('clean', 'build', 'package'));
 
 // default task (alias release)
 gulp.task('default', gulp.task('release'));

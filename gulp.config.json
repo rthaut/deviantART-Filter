@@ -38,9 +38,11 @@
   },
   "source_folders": {
     "locales": "./_locales",
-    "components": "./lib/components",
-    "helpers": "./lib/helpers",
-    "pages": "./lib/pages",
-    "scripts": "./lib/scripts"
+    "manifests": "./manifests",
+    "components": "./src/components",
+    "helpers": "./src/helpers",
+    "less": "./src/less",
+    "pages": "./src/pages",
+    "scripts": "./src/scripts"
   }
 }
