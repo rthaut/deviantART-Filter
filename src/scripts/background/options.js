@@ -10,8 +10,9 @@ const Options = (() => {
 
             //TODO: this list should probably be a constant that is somehow tied to the "options" data in getOptions()
             var defaults = {
-                'metadataCacheTTL': 7,
                 'managementPanelType': 'tab',
+                'metadataCacheTTL': 7,
+                'metadataDebug': false,
                 'placeholders': true,
                 'privateStorage': 'read'
             };
@@ -47,8 +48,14 @@ const Options = (() => {
         'getOptions': async function () {
             console.log('[Background] Options.getOptions()');
 
-            //TODO: this list should probably be a constant that is somehow tied to the "defaults"
-            const data = await browser.storage.sync.get(['managementPanelType', 'metadataCacheTTL', 'placeholders']);
+            //TODO: this list (and the properties below) should probably be a constant that is somehow tied to the "defaults"
+            // NOTE: the order used below is the display order on the options tab of the management panel
+            const data = await browser.storage.sync.get([
+                'placeholders',
+                'managementPanelType',
+                'metadataCacheTTL',
+                'metadataDebug',
+            ]);
 
             var options = [];
             var opt;
@@ -80,6 +87,7 @@ const Options = (() => {
                         opt.maximum = 365;
                         break;
 
+                    case 'metadataDebug':
                     case 'placeholders':
                         opt.type = 'checkbox';
                         break;
@@ -90,6 +98,8 @@ const Options = (() => {
                 }
                 options.push(opt);
             }
+
+            console.log('[Background] Options.getOptions() :: Return', options);
 
             return { 'options': options };
         }

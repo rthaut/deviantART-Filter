@@ -24,6 +24,10 @@ const Metadata = (() => {
             } else {
                 MetadataCache.clear();
             }
+
+            const { metadataDebug } = await browser.storage.sync.get('metadataDebug');
+            console.log('[Content] Metadata.init() :: Debug Enabled', metadataDebug);
+            document.querySelector('body').classList.toggle('debug-metadata', metadataDebug);
         },
 
         /**
@@ -47,6 +51,10 @@ const Metadata = (() => {
                     } else {
                         MetadataCache.clear();
                     }
+                    break;
+
+                case 'toggle-metadata-debug':
+                    document.querySelector('body').classList.toggle('debug-metadata', message.data.metadataDebug);
                     break;
             }
 

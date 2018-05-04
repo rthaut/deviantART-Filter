@@ -32,6 +32,14 @@ const BrowserStorage = (() => {
                             }
                         });
 
+                    case 'metadataDebug':
+                        return BrowserTabs.sendMessageToAllTabs({
+                            'action': 'toggle-metadata-debug',
+                            'data': {
+                                'metadataDebug': changes[item].newValue
+                            }
+                        });
+
                     case 'placeholders':
                         return BrowserTabs.sendMessageToAllTabs({ 'action': 'toggle-placeholders' });
                 }
