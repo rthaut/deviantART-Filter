@@ -23,7 +23,6 @@ angular.module('deviantArtFilter.components.ImportExportPanel', ['ngSanitize'])
         };
 
         $scope.exportFilterData = function ($event) {
-
             $event.target.setAttribute('disabled', true);
             $event.target.textContent = browser.i18n.getMessage('ExportGeneratingFile');
 
@@ -191,6 +190,7 @@ angular.module('deviantArtFilter.components.ImportExportPanel', ['ngSanitize'])
             'templateUrl': 'template.html',
             'restrict': 'E',
             'replace': true,
+            'scope': true,
             'require': ['ImportExportPanelCtrl'],
             'controller': 'ImportExportPanelCtrl'
         };

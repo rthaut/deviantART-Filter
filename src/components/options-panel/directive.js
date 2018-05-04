@@ -10,6 +10,7 @@ angular.module('deviantArtFilter.components.OptionsPanel', ['ngMessages'])
             'maximum': browser.i18n.getMessage('OptionLabelMaximum'),
             'required': browser.i18n.getMessage('OptionLabelRequired'),
         };
+        console.log('[Component] OptionsPanelCtrl :: Labels', $scope.labels);
 
         $scope.alerts = [];
 
@@ -18,16 +19,19 @@ angular.module('deviantArtFilter.components.OptionsPanel', ['ngMessages'])
         };
 
         $scope.getOptions = function () {
+            console.log('[Component] OptionsPanelCtrl.getOptions()');
             $scope.loading = browser.i18n.getMessage('GenericLoading', [$scope.optionsLbl]);
 
             browser.runtime.sendMessage({
                 'action': 'get-options'
             }).then((response) => {
+                console.log('[Component] OptionsPanelCtrl.getOptions() :: Response', response);
                 $scope.$apply(() => {
                     $scope.options = response.options;
                     $scope.loading = false;
                 });
             }).catch((error) => {
+                console.log('[Component] OptionsPanelCtrl.getOptions() :: Error', error);
                 $scope.$apply(() => {
                     $scope.alerts.push({
                         'type': 'danger',
@@ -40,6 +44,7 @@ angular.module('deviantArtFilter.components.OptionsPanel', ['ngMessages'])
         $scope.getOptions();
 
         $scope.changeOption = function (option) {
+            console.log('[Component] OptionsPanelCtrl.changeOption()', option);
             if ($scope.OptionsPanelCtrlForm[option.id].$valid) {
                 browser.runtime.sendMessage({
                     'action': 'set-option',
@@ -48,6 +53,7 @@ angular.module('deviantArtFilter.components.OptionsPanel', ['ngMessages'])
                         'value': option.value
                     }
                 }).catch((error) => {
+                    console.log('[Component] OptionsPanelCtrl.changeOption() :: Error', error);
                     $scope.$apply(() => {
                         option.value = !option.value;
                         $scope.alerts.push({
@@ -65,6 +71,7 @@ angular.module('deviantArtFilter.components.OptionsPanel', ['ngMessages'])
             'templateUrl': 'template.html',
             'restrict': 'E',
             'replace': true,
+            'scope': true,
             'require': ['OptionsPanelCtrl'],
             'controller': 'OptionsPanelCtrl'
         };

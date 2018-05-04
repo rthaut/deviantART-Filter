@@ -1,5 +1,5 @@
 <div>
-    <h4>{{headingImportExport}}</h4>
+    <h4>{{headingImportExport}}</h4><br/>
 
     <div ng-repeat="alert in alerts" class="alert alert-dismissible" ng-class="'alert-' + (alert.type || 'warning')" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="closeAlert($index)"><span aria-hidden="true">&times;</span></button> {{alert.msg}}

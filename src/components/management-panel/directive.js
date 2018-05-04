@@ -4,13 +4,13 @@ angular.module('deviantArtFilter.components.ManagementPanel', ['deviantArtFilter
     .controller('ManagementPanelCtrl', ['$scope', function ($scope) {
 
         $scope.labels = {
-            'homepage': browser.i18n.getMessage('VisitHomepage'),
             'manage': browser.i18n.getMessage('LabelManage'),
             'filters': browser.i18n.getMessage('LabelFilters'),
             'optionsHeading': browser.i18n.getMessage('OptionsHeading'),
             'importExport': browser.i18n.getMessage('ImportExportHeading'),
             'version': browser.i18n.getMessage('LabelVersion')
         };
+        console.log('[Component] ManagementPanelCtrl :: Labels', $scope.labels);
 
         browser.management.getSelf().then((info) => {
             $scope.$apply(() => {
@@ -25,6 +25,7 @@ angular.module('deviantArtFilter.components.ManagementPanel', ['deviantArtFilter
         };
 
         $scope.getFilters = function () {
+            console.log('[Component] ManagementPanelCtrl.getFilters()');
             $scope.loading = browser.i18n.getMessage('GenericLoading', [$scope.labels.filters]);
 
             browser.runtime.sendMessage({
@@ -36,11 +37,13 @@ angular.module('deviantArtFilter.components.ManagementPanel', ['deviantArtFilter
                     }
                 }
             }).then((response) => {
+                console.log('[Component] ManagementPanelCtrl.getFilters() :: Response', response);
                 $scope.$apply(() => {
                     $scope.filters = response.filters;
                     $scope.loading = false;
                 });
             }).catch((error) => {
+                console.log('[Component] ManagementPanelCtrl.getFilters() :: Error', error);
                 $scope.$apply(() => {
                     $scope.alerts.push({
                         'type': 'danger',
