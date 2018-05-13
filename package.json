@@ -10,7 +10,7 @@
   "scripts": {
     "build": "gulp build",
     "debug": "gulp debug",
-    "release": "gulp release",
+    "package": "gulp package",
     "webext:lint": "web-ext lint",
     "webext:build": "web-ext build",
     "webext:run": "web-ext run"

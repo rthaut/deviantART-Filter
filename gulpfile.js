@@ -290,8 +290,7 @@ gulp.task('watch', (callback) => {
 });
 
 gulp.task('debug', gulp.series('clean', 'build', 'watch'));
-gulp.task('package', gulp.series('minify', 'zip'));
-gulp.task('release', gulp.series('clean', 'build', 'package'));
+gulp.task('package', gulp.series('clean', 'build', 'minify', 'zip'));
 
-// default task (alias release)
-gulp.task('default', gulp.task('release'));
+// default task (alias debug)
+gulp.task('default', gulp.task('debug'));
