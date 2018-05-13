@@ -1,3 +1,5 @@
+import BrowserTabs from './browser-tabs';
+
 const Management = (() => {
 
     const WINDOW_TYPE = 'popup';
@@ -6,7 +8,7 @@ const Management = (() => {
     const Management = {
 
         /**
-         *
+         * Shows the management panel using the user's configured type (as a tab or a popup window)
          */
         'showManagementPanel': async function () {
             console.log('[Background] Management.showManagementPanel()');
@@ -32,7 +34,7 @@ const Management = (() => {
         },
 
         /**
-         *
+         * Shows the management panel in a new window (focuses the window if it was already open in the background)
          */
         'showManagementPanelWindow': async function () {
             console.log('[Background] Management.showManagementPanelWindow()');
@@ -65,7 +67,7 @@ const Management = (() => {
         },
 
         /**
-         *
+         * Shows the management panel in a tab in the current window (focuses the tab if it was already open in the background)
          */
         'showManagementPanelTab': async function () {
             console.log('[Background] Management.showManagementPanelTab()');
@@ -86,6 +88,16 @@ const Management = (() => {
             return browser.tabs.create({
                 'url': MANAGEMENT_URL,
             });
+        },
+
+        /**
+         * Send a message to the management panel(s)
+         * @param {string} message the message to send
+         */
+        'sendMessageToManagementPanel': async function (message) {
+            console.log('[Background] Management.sendMessageToManagementPanel()');
+
+            return BrowserTabs.sendMessageToAllTabs(message, MANAGEMENT_URL);
         }
 
     };

@@ -2,7 +2,7 @@ import UsersFilter from './filter-classes/UsersFilter.class';
 import TagsFilter from './filter-classes/TagsFilter.class';
 import CategoriesFilter from './filter-classes/CategoriesFilter.class';
 
-import BrowserTabs from './browser-tabs';
+import Management from './management';
 
 const Filters = (() => {
 
@@ -120,8 +120,7 @@ const Filters = (() => {
                 console.log('[Background] Filters.importFilterData() :: Results', results);
 
                 // notify the Management screen (if it is open) that the filter was updated (so it can be refreshed)
-                // TODO: this is just sending the message to the active tab, which works ASSUMING the user still has the Management screen open; it should probably do a search for the Management screen's URL instead...
-                BrowserTabs.sendMessageToTab(null, {
+                Management.sendMessageToManagementPanel({
                     'action': 'filter-updated',
                     'data': {
                         'filter': filter.id
@@ -162,7 +161,7 @@ const Filters = (() => {
         },
 
         /**
-         *
+         * Sends an "update-filter" message with all data for the filter to a specific tab
          * @param {tab} tab
          */
         'sendFilterDataToTab': function (tab) {
@@ -183,7 +182,7 @@ const Filters = (() => {
         },
 
         /**
-         *
+         * Retrieves a filter by an internal ID
          * @param {string} id filter unique identifier
          */
         'getFilterByID': function (id) {
@@ -193,7 +192,7 @@ const Filters = (() => {
         },
 
         /**
-         *
+         * Retrieves all filters
          */
         'getAvailableFilters': function () {
             console.log('[Background] Filters.getAvailableFilters()');
@@ -202,7 +201,7 @@ const Filters = (() => {
         },
 
         /**
-         *
+         * Retrieves metadata for all filters
          */
         'getFiltersMetaData': function () {
             console.log('[Background] Filters.getFiltersMetaData()');
@@ -217,7 +216,7 @@ const Filters = (() => {
         },
 
         /**
-         *
+         * Retrieves all filter items
          * @param {string} id filter unique identifier
          * @param {number} [limit] upper limit
          * @param {number} [offset] starting index
@@ -240,7 +239,7 @@ const Filters = (() => {
         },
 
         /**
-         *
+         * Adds a filter item
          * @param {string} id filter unique identifier
          * @param {*} item
          */
@@ -264,7 +263,7 @@ const Filters = (() => {
         },
 
         /**
-         *
+         * Removes a filter item
          * @param {string} id filter unique identifier
          * @param {*} item
          */
@@ -282,13 +281,13 @@ const Filters = (() => {
 
                 return { 'data': data };
             } catch (error) {
-                    console.error('[Background] Filters.removeFilterItem() :: Error', error);
+                console.error('[Background] Filters.removeFilterItem() :: Error', error);
                 throw error;
             }
         },
 
         /**
-         *
+         * Toggles a filter item
          * @param {string} id filter unique identifier
          * @param {*} item
          */

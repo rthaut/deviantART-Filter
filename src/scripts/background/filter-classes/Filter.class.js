@@ -132,7 +132,7 @@ const Filter = (() => {
         /**
          * Validates all required properties on a filter object
          * @param {object} item Object representing a filterable item
-         * @returns {boolean} -True if the item is valid
+         * @returns {boolean} True if the item is valid
          */
         isValid(item) {
             console.log(`${this.name}.isValid()`);

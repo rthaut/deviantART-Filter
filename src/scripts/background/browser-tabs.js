@@ -5,7 +5,7 @@ const BrowserTabs = (() => {
     const BrowserTabs = {
 
         /**
-         *
+         * Event handler for when tabs are updated
          * @param {number} tabId
          * @param {object} changeInfo
          * @param {tab} tab
@@ -33,7 +33,7 @@ const BrowserTabs = (() => {
         },
 
         /**
-         * Send a message to a specific tab (defaults to active tab)
+         * Send a message to a specific tab (defaults to the active tab)
          * @param {tab} [tab] the tab to which the message should be sent (normally the active tab)
          * @param {string} message the message to send
          */
@@ -54,11 +54,16 @@ const BrowserTabs = (() => {
         /**
          * Send a message to all tabs
          * @param {string} message the message to send
+         * @param {string} [url] the URL (or pattern) of the target tabs (defaults to all tabs on DeviantArt)
          */
-        'sendMessageToAllTabs': async function (message) {
-            console.log('[Background] BrowserTabs.sendMessageToAllTabs()', message);
+        'sendMessageToAllTabs': async function (message, url = null) {
+            console.log('[Background] BrowserTabs.sendMessageToAllTabs()', message, url);
 
-            const tabs = await browser.tabs.query({ 'url': URL.WILDCARD });
+            if (url === undefined || url === null) {
+                url = URL.WILDCARD;
+            }
+
+            const tabs = await browser.tabs.query({ 'url': url });
             console.log('[Background] BrowserTabs.sendMessageToAllTabs() :: Tabs', tabs);
 
             const promises = [];
@@ -71,11 +76,16 @@ const BrowserTabs = (() => {
 
         /**
          * Reloads all tabs
+         * @param {string} [url] the URL (or pattern) of the target tabs (defaults to all tabs on DeviantArt)
          */
-        'reloadTabs': async function () {
-            console.log('[Background] BrowserTabs.reloadTabs()');
+        'reloadTabs': async function (url = null) {
+            console.log('[Background] BrowserTabs.reloadTabs()', url);
 
-            const tabs = await browser.tabs.query({ 'url': URL.WILDCARD });
+            if (url === undefined || url === null) {
+                url = URL.WILDCARD;
+            }
+
+            const tabs = await browser.tabs.query({ 'url': url });
 
             const promises = [];
             tabs.forEach((tab) => {
