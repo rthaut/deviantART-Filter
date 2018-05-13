@@ -24,7 +24,7 @@ Simply install DeviantArt Filter in your web browser of choice and filter deviat
 
 ### Creating and Removing Filters
 #### You can filter deviations by artist, category, and/or tag through the management panel/screen.
-1. After [opening the Management Panel/Screen](#Opening-the-Management-Panel/Screen), navigate to any of the Manage [Users](#Manage-Users-Page)/[Tags](#Manage-Tags-Page)/[Categories](#Manage-Categories-Page) tabs.
+1. After [opening the Management Panel/Screen](#opening-the-management-panelscreen), navigate to any of the Manage [Users](#manage-users-page)/[Tags](#manage-tags-page)/[Categories](#manage-categories-page) tabs.
 2. To create a new filter, use the form at the top of the tab.
     - For users, enter their username.
     - For tags, enter a single tag (*no spaces*), then choose if the tag should use wildcard matching.
@@ -37,7 +37,7 @@ Simply install DeviantArt Filter in your web browser of choice and filter deviat
 
 ### Exporting/Importing Filters
 DeviantArt Filter allows you to export and import filters from a JSON file. This is mostly for keeping your filters in sync between browsers/computers, but is handy for backup purposes as well.
-1. After [opening the Management Panel/Screen](#Opening-the-Management-Panel/Screen), navigate to the [Import/Export Filters](#Import-Export-Filters-Page) tab.
+1. After [opening the Management Panel/Screen](#opening-the-management-panelscreen), navigate to the [Import/Export Filters](#importexport-filters-page) tab.
 2. To export your current filters to a JSON file, click the `Export Filter Data` button, then open/save the file when prompted (it will use your browser's native download functionality).
 3. To import filters from a JSON file, either drag and drop the file onto the designated box, or click the box to open a File Browser dialog and select your JSON file.
     - After the import has finished, a table showing the results of the import will be displayed. This includes how many filters were imported successfully, as well as how many filters failed to import (either because they were invalid or were duplicate).
@@ -50,6 +50,7 @@ DeviantArt Filter allows you to export and import filters from a JSON file. This
 * * *
 
 ## Options
+Options for DeviantArt filtered are configured through the [Management Panel/Screen](#opening-the-management-panelscreen) on the [Options](#options-page) tab.
 
 ### Use Placeholders for Filtered Deviations
 `When enabled, a placeholder image is displayed instead of the actual thumbnail for filtered deviations. Disable this setting to completely remove filtered deviation thumbnails.`
