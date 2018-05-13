@@ -1,0 +1,52 @@
+<div>
+    <h4>{{headingImportExport}}</h4><br/>
+
+    <div ng-repeat="alert in alerts" class="alert alert-dismissible" ng-class="'alert-' + (alert.type || 'warning')" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="closeAlert($index)"><span aria-hidden="true">&times;</span></button> {{alert.msg}}
+    </div>
+
+    <form class="form">
+        <label class="control-label">{{exportHeading}}</label>
+        <span class="help-block">{{exportHelpText}}</span>
+
+        <button class="btn btn-large btn-primary" ng-click="exportFilterData($event)">{{exportButtonText}}</button>
+    </form>
+
+    <hr/>
+
+    <form class="form">
+        <label class="control-label">{{importHeading}}</label>
+        <span class="help-block">{{importHelpText}}</span>
+
+        <div class="panel panel-primary" ng-show="results">
+            <div class="panel-heading">
+                <button type="button" class="close" aria-label="Close" ng-click="clearImportResults($event)"><span aria-hidden="true">&times;</span></button>
+                <h3 class="panel-title">{{importResultsHeading}} <span class="label label-primary">"{{file.name}}" ({{file.size | number}} {{bytesLbl}})</span></h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>{{filterTypeLbl}}</th>
+                            <th ng-repeat="(col, heading) in results.headers">{{heading}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(id, result) in results.data" ng-class="{'danger':result.error, 'success':(result.total==result.success), 'warning':(result.total!=result.success)}">
+                            <td>{{id}}</td>
+                            <td colspan="4" ng-if="result.error">{{result.error}}</td>
+                            <td ng-if="!result.error" ng-repeat="(col, heading) in results.headers">{{result[col]}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="alert alert-info" ng-show="importing">{{importing}}</div>
+
+        <div class="well well-lg drag-drop" id="fileDragDrop" ng-class="{'hover':dragHover}" ng-hide="importing">
+            <input type="file" id="fileInput" accept="application/json" style="display:none" />
+            <label for="fileInput" class="text-center center-block" ng-bind-html="importInstructions"></label>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,36 @@
+{
+  "FilterTypeUsersName": {
+    "message": "User",
+    "description": "The singular name of the filter type used for users."
+  },
+  "FilterTypeUsersNamePlural": {
+    "message": "Users",
+    "description": "The plural name of the filter type used for users."
+  },
+  "FilterTypeUsersLabelNone": {
+    "message": "You have not filtered any users yet.",
+    "description": "The message displayed when the user does not have any filtered users."
+  },
+  "FilterTypeUsersLabelHelp": {
+    "message": "You can manually filter users by entering their username below, or while browsing by clicking the red 'x' that appears on thumbnails when you hover over them.",
+    "description": "The message displayed to help the user filter new users."
+  },
+  "FilterTypeUsersPlaceholderText": {
+    "message": "Filtered User: $USER$",
+    "description": "The message displayed on the placeholder for deviations filtered for a user",
+    "placeholders": {
+      "user": {
+        "content": "$1"
+      }
+    }
+  },
+  "FilterTypeUsersPropertyUsernameTitle": {
+    "message": "Username"
+  },
+  "FilterTypeUsersPropertyUsernameLabel": {
+    "message": "Enter Username"
+  },
+  "FilterTypeUsersPropertyUsernameHint": {
+    "message": "Usernames may contain letters, numbers, hyphens (-), and underscores (_); usernames are stored in lowercase letters"
+  }
+}

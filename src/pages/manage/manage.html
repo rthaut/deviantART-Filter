@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="deviantArtFilter" ng-csp ng-controller="ManagementPageCtrl">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{{info.name}}</title>
+
+        <script type="application/javascript" src="../../vendor/browser-polyfill.min.js"></script>
+
+        <link rel="stylesheet" href="../../vendor/angular-csp.css">
+        <link rel="stylesheet" href="../../vendor/ng-table.min.css">
+        <link rel="stylesheet" href="../../css/shared.css">
+        <link rel="stylesheet" href="manage.css">
+    </head>
+
+    <body ng-cloak>
+        <div class="container">
+
+            <div class="page-header" ng-show="info">
+                <h1>{{info.shortName || info.name}}</h1>
+            </div>
+
+            <management-panel></management-panel>
+
+        </div>
+
+        <!-- dependencies -->
+        <script type="application/javascript" src="../../vendor/angular.min.js"></script>
+        <script type="application/javascript" src="../../vendor/angular-messages.min.js"></script>
+        <script type="application/javascript" src="../../vendor/angular-sanitize.min.js"></script>
+        <script type="application/javascript" src="../../vendor/jquery.min.js"></script>
+        <script type="application/javascript" src="../../vendor/bootstrap.min.js"></script>
+        <script type="application/javascript" src="../../vendor/ng-table.min.js"></script>
+
+        <!-- custom components -->
+        <script type="application/javascript" src="../../components/category-hierarchy-select.js"></script>
+        <script type="application/javascript" src="../../components/management-panel.js"></script>
+        <script type="application/javascript" src="../../components/filter-panel.js"></script>
+        <script type="application/javascript" src="../../components/import-export-panel.js"></script>
+        <script type="application/javascript" src="../../components/options-panel.js"></script>
+
+        <!-- main script for this page -->
+        <script type="application/javascript" src="manage.js"></script>
+    </body>
+
+</html>

@@ -1,0 +1,41 @@
+{
+  "GenericLoading": {
+    "message": "Loading $DATA$...",
+    "description": "The generic message displayed while data is loading.",
+    "placeholders": {
+      "data": {
+        "content": "$1"
+      }
+    }
+  },
+  "GenericLoadingError": {
+    "message": "An error occurred while loading $DATA$: $ERROR$",
+    "description": "The generic error message displayed if data fails to load.",
+    "placeholders": {
+      "data": {
+        "content": "$1"
+      },
+      "error": {
+        "content": "$2"
+      }
+    }
+  },
+  "LabelAction": {
+    "message": "Action"
+  },
+  "LabelBytes": {
+    "message": "Bytes"
+  },
+  "LabelManage": {
+    "message": "Manage"
+  },
+  "LabelEnabled": {
+    "message": "Enabled"
+  },
+  "LabelFilters": {
+    "message": "Filters"
+  },
+  "LabelVersion": {
+    "message": "Version"
+  }
+}
