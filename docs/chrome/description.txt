@@ -2,7 +2,7 @@ DEVIANTART FILTER FOR GOOGLE CHROME
 > Allows configurable filtering/removal of deviations by user, tag, and/or category on DeviantArt
 
 OVERVIEW
-Have you ever want to block/filter deviations (a.k.a. submissions) while browsing DeviantArt? Well now you can!  Just install %{= title %} from the Chrome Web Store  and start filtering by user, tag, and/or category.
+Have you ever want to block/filter deviations (a.k.a. submissions) while browsing DeviantArt? Well now you can!  Just install DeviantArt Filter from the Chrome Web Store  and start filtering by user, tag, and/or category.
 
 PERMISSIONS
 These are the required browser permissions for DeviantArt Filter.

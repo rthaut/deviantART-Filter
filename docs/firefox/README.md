@@ -3,7 +3,7 @@
 > Allows configurable filtering/removal of deviations by user, tag, and/or category on DeviantArt
 
 ## Overview
-Have you ever want to block/filter deviations (a.k.a. submissions) while browsing [DeviantArt](https://www.deviantart.com)? **Well now you can!** Just [install %{= title %} from Mozilla Add-ons][firefox-url] and start filtering by user, tag, and/or category.
+Have you ever want to block/filter deviations (a.k.a. submissions) while browsing [DeviantArt](https://www.deviantart.com)? **Well now you can!** Just [install DeviantArt Filter from Mozilla Add-ons][firefox-url] and start filtering by user, tag, and/or category.
 
 * * *
 
