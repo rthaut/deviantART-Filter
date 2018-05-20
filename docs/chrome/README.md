@@ -10,20 +10,20 @@ Have you ever want to block/filter deviations (a.k.a. submissions) while browsin
 ## Permissions
 These are the required browser permissions for DeviantArt Filter.
 
-If you would like to know more about permissions in general, Mozilla has a [support article about permissions](https://support.mozilla.org/en-US/kb/permission-request-messages-firefox-extensions) on permissions, as well as a [guide for assessing the safety of an extension](https://support.mozilla.org/en-US/kb/tips-assessing-safety-extension).
+If you would like to know more about permissions in general, Mozilla has a [support article about permissions](https://support.mozilla.org/en-US/kb/permission-request-messages-firefox-extensions), as well as a [guide for assessing the safety of an extension](https://support.mozilla.org/en-US/kb/tips-assessing-safety-extension).
 
 Please [submit a new issue](https://github.com/rthaut/deviantART-Filter/issues/new) if you are still concerned about the use of any of the following permissions so the information provided below can be updated to cover common concerns and answer common questions.
 
-###  Access your data for sites in the deviantart.com domain
+### Access your data for sites in the deviantart.com domain
 This permission is used to apply filters to DeviantArt pages and to add the quick-hide icon in the upper-left corner of deviation thumbnails.
 
-###  Access browsing history
+### Access browsing history
 The History permission is used to remove the DeviantArt Filter Management Panel/Screen from your browser's history.
 
-###  Display notifications to you
+### Display notifications to you
 The Notifications permission is used to display a notification message when upgrading from version 4.x to version 5.x.
 
-###  Access browser tabs
+### Access browser tabs
 The Tabs permission is used to apply filter changes from the Management Panel/Screen to all open DeviantArt tabs, to enable/disable the DeviantArt Filter icon, and to switch to the Management Panel/Screen (if it is already open) when clicking the DeviantArt Filter icon.
 
 * * *
@@ -31,7 +31,7 @@ The Tabs permission is used to apply filter changes from the Management Panel/Sc
 ## Usage
 
 ### Opening the Management Panel/Screen
-1. While on [DeviantArt](https://www.deviantart.com), click the red logo that appears on the right side of the address bar:
+1. While on [DeviantArt](https://www.deviantart.com), click the red logo that appears on the right side of the address bar.
 ![DeviantArt Filter Page Action Demo](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Page-Action-Demo.png)
 2. The configuration screen will open automatically when you click the icon.
 
@@ -63,3 +63,4 @@ DeviantArt Filter allows you to export and import filters from a JSON file. This
 [chrome-url]: https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp
 [chrome-image-download]: https://img.shields.io/chrome-web-store/d/odlmamilbohnpnoomjclomghphbajikp.svg
 [chrome-image-version]: https://img.shields.io/chrome-web-store/v/odlmamilbohnpnoomjclomghphbajikp.svg
+

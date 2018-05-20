@@ -7,7 +7,7 @@ Have you ever want to block/filter deviations (a.k.a. submissions) while browsin
 PERMISSIONS
 These are the required browser permissions for DeviantArt Filter.
 
-If you would like to know more about permissions in general, Mozilla has a support article about permissions  on permissions, as well as a guide for assessing the safety of an extension.
+If you would like to know more about permissions in general, Mozilla has a support article about permissions, as well as a guide for assessing the safety of an extension.
 
 Please submit a new issue  if you are still concerned about the use of any of the following permissions so the information provided below can be updated to cover common concerns and answer common questions.
 
@@ -25,7 +25,7 @@ The Tabs permission is used to apply filter changes from the Management Panel/Sc
 
 USAGE
 OPENING THE MANAGEMENT PANEL/SCREEN
- 1. While on DeviantArt, click the red logo that appears on the right side of the address bar:
+ 1. While on DeviantArt, click the red logo that appears on the right side of the address bar.
  2. The configuration screen will open automatically when you click the icon.
 
 CREATING AND REMOVING FILTERS
