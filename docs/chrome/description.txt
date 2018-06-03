@@ -25,11 +25,11 @@ The Tabs permission is used to apply filter changes from the Management Panel/Sc
 
 USAGE
 OPENING THE MANAGEMENT PANEL/SCREEN
- 1. While on DeviantArt, click the red logo that appears on the right side of the address bar.
+ 1. While on DeviantArt, click the red logo that appears on the right side of the address bar. 
  2. The configuration screen will open automatically when you click the icon.
 
 CREATING AND REMOVING FILTERS
-YOU CAN FILTER DEVIATIONS BY ARTIST, CATEGORY, AND/OR TAG THROUGH THE MANAGEMENT PANEL/SCREEN.
+YOU CAN FILTER DEVIATIONS BY ARTIST, CATEGORY, AND/OR TAG THROUGH THE MANAGEMENT PANEL/SCREEN
  1. After opening the Management Panel/Screen, navigate to any of the Manage Users/Tags/Categories  tabs.
  2. To create a new filter, use the form at the top of the tab.
     - For users, enter their username.

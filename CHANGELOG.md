@@ -35,5 +35,5 @@
 
 ### Bug Fixes
 
-- [Filters do not Work on Subdomains](https://github.com/rthaut/deviantART-Filter/issues/26)
-- [Apply Filtering to Thumbnails in Comments](https://github.com/rthaut/deviantART-Filter/issues/25)
+* [Filters do not Work on Subdomains](https://github.com/rthaut/deviantART-Filter/issues/26)
+* [Apply Filtering to Thumbnails in Comments](https://github.com/rthaut/deviantART-Filter/issues/25)
