@@ -287,7 +287,7 @@ gulp.task('watch', (callback) => {
     callback();
 });
 
-gulp.task('debug', gulp.series('clean', 'build', 'watch'));
+gulp.task('debug', gulp.series('build', 'watch'));
 gulp.task('package', gulp.series('clean', 'build', 'minify', 'zip'));
 
 // default task (alias debug)

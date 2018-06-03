@@ -6,10 +6,9 @@ module.exports = {
     },
     'run': {
         'browserConsole': true,
-        'firefox': 'firefox',
         'startUrl': [
             'www.deviantart.com'
         ]
     },
-    'sourceDir': './dist/firefox'
+
 };

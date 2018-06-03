@@ -11,9 +11,9 @@
     "build": "gulp build",
     "debug": "gulp debug",
     "package": "gulp package",
-    "webext:lint": "web-ext lint",
-    "webext:build": "web-ext build",
-    "webext:run": "web-ext run"
+    "firefox:lint": "web-ext lint --source-dir=./dist/firefox",
+    "firefox:build": "web-ext build --source-dir=./dist/firefox --firefox=firefox",
+    "firefox:start": "web-ext run --source-dir=./dist/firefox"
   },
   "repository": {
     "type": "git",
