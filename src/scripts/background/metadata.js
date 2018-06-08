@@ -123,9 +123,9 @@ const Metadata = (() => {
     const Metadata = {
 
         /**
-         * Retrieves metadata for the deviations on the tab's page
-         * @param {tab} tab
-         * @param {string} [url]
+         * Sends a message to the specified tab with metadata for the deviations displayed on that tab
+         * @param {tab} tab the tab for which metadata should be retrieved
+         * @param {string} [url] the URL for which metadata should be retrieved
          */
         'sendMetadataToTab': function (tab, url) {
             console.log('[Background] Metadata.getMetadataForTab()', tab, url);
@@ -147,7 +147,8 @@ const Metadata = (() => {
         },
 
         /**
-         * @param {string} url
+         * Retrieves metadata for deviations for a supplied URL
+         * @param {string} url the URL for which metadata should be retrieved
          */
         'getMetadataForURL': function (url) {
             console.log('[Background] Metadata.getMetadataForURL()', url);
@@ -169,6 +170,12 @@ const Metadata = (() => {
             return this.getMetadata(request.resource, request.data);
         },
 
+        /**
+         * Retrieves metadata for deviations from an API resource
+         * @param {string} resource the API resource path
+         * @param {FormData} data GET parameters for the API request
+         * @returns {object[]} the array of metadata objects with deviation IDs and URLs
+         */
         'getMetadata': async function (resource, data) {
             console.log('[Background] Metadata.getMetadata()', resource, data);
 
@@ -214,6 +221,7 @@ const Metadata = (() => {
         /**
          * Returns the Category Hierarchy (one level) for the specified category path
          * @param {FormData} data GET parameters for the API request
+         * @returns {object} the Category Hierarchy data
          */
         'getCategoryHierarchy': function (data) {
             console.log('[Background] Metadata.getCategoryHierarchy()', data);

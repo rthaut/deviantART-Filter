@@ -12,7 +12,9 @@ const BrowserRuntime = (() => {
     const BrowserRuntime = {
 
         /**
-         *
+         * Event listener for browser runtime messages
+         * @param {object} message The message
+         * @param {runtime.MessageSender} sender The sender of the message
          */
         'onRuntimeMessage': function (message, sender) {
             console.log('[Background] BrowserRuntime.onRuntimeMessage()', message, sender);
@@ -79,7 +81,8 @@ const BrowserRuntime = (() => {
         },
 
         /**
-         *
+         * Event handler for installation event
+         * @param {object} details
          */
         'onRuntimeInstalled': function (details) {
             console.log('[Background] BrowserRuntime.onRuntimeInstalled()', details);

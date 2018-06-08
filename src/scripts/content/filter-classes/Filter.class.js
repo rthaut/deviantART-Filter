@@ -31,8 +31,9 @@ const Filter = (() => {
          * @param {runtime.MessageSender} sender The sender of the message
          * @param {function} sendResponse Function to call to send a response to the message
          */
-        onMessage(message) {
-            console.log(`[Content] Filter('${this.name}').onMessage()`, message);
+        onMessage(message, sender) {
+            console.log(`[Content] Filter('${this.name}').onMessage()`, message, sender);
+
             if (message.action === undefined) {
                 return;
             }

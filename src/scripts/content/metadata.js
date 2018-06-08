@@ -31,10 +31,16 @@ const Metadata = (() => {
         },
 
         /**
-         *
+         * Event listener for browser runtime messages
+         * @param {object} message The message
+         * @param {runtime.MessageSender} sender The sender of the message
          */
-        'onMessage': function (message) {
-            console.log('[Content] Metadata.onMessage()', message);
+        'onMessage': function (message, sender) {
+            console.log('[Content] Metadata.onMessage()', message, sender);
+
+            if (message.action === undefined) {
+                return;
+            }
 
             switch (message.action) {
                 case 'set-metadata':

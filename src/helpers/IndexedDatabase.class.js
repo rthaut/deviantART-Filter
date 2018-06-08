@@ -4,24 +4,44 @@ const IndexedDatabase = (() => {
 
     class IndexedDatabase {
 
+        /**
+         * Constructor for IndexedDatabase
+         * @param {string} databaseName the name of the database
+         * @param {string} storeName the name of the store
+         * @param {number} version the version of the database
+         * @param {Callback} upgradeCallback the callback function to invoke when the database is opened or upgraded
+         */
         constructor(databaseName, storeName, version, upgradeCallback) {
             this._storeName = storeName;
 
             this.openDB = idb.open(databaseName, version, upgradeCallback);
         }
 
+        /**
+         * Retrieves a record from the the object store
+         * @param {*} key the key or key range that identifies the record to be retrieved
+         * @returns {Promise<Object>} the retrieved record
+         */
         Get(key) {
             return this.openDB.then(db => {
                 return db.transaction(this._storeName).objectStore(this._storeName).get(key);
             });
         }
 
+        /**
+         * Retrieves all record from the the object store
+         * @returns {Promise<Object[]>} the retrieved records
+         */
         GetAll() {
             return this.openDB.then(db => {
                 return db.transaction(this._storeName).objectStore(this._storeName).getAll();
             });
         }
 
+        /**
+         * Retrieves all keys from the the object store
+         * @returns {Promise<Object[]>} the retrieved records
+         */
         GetAllKeys() {
             return this.openDB.then(db => {
                 const tx = db.transaction(this._storeName);
@@ -36,6 +56,12 @@ const IndexedDatabase = (() => {
             });
         }
 
+        /**
+         * Updates an existing record in the the object store
+         * @param {object} value the object to store
+         * @param {*} [key] the key that identifies the record to be stored
+         * @returns {Promise<void>}
+         */
         Put(value, key = null) {
             return this.openDB.then(db => {
                 const tx = db.transaction(this._storeName, 'readwrite');
@@ -44,6 +70,11 @@ const IndexedDatabase = (() => {
             });
         }
 
+        /**
+         * Updates multiple existing records in the the object store
+         * @param {object[]} values the objects to store
+         * @returns {Promise<IDBValidKey[]>} the keys of the updated records
+         */
         PutMany(values) {
             return this.openDB.then(db => {
                 const tx = db.transaction(this._storeName, 'readwrite');
@@ -52,6 +83,12 @@ const IndexedDatabase = (() => {
             });
         }
 
+        /**
+         * Inserts a record into the the object store
+         * @param {object} value the object to store
+         * @param {*} [key] the key that identifies the record to be stored
+         * @returns {Promise<void>}
+         */
         Add(value, key = null) {
             return this.openDB.then(db => {
                 const tx = db.transaction(this._storeName, 'readwrite');
@@ -60,6 +97,11 @@ const IndexedDatabase = (() => {
             });
         }
 
+        /**
+         * Inserts multiple records into the the object store
+         * @param {object[]} values the objects to store
+         * @returns {Promise<IDBValidKey[]>} the keys of the inserted records
+         */
         AddMany(values) {
             return this.openDB.then(db => {
                 const tx = db.transaction(this._storeName, 'readwrite');
@@ -68,6 +110,10 @@ const IndexedDatabase = (() => {
             });
         }
 
+        /**
+         * Removes all records from the object store
+         * @returns {Promise<void>}
+         */
         Clear() {
             return this.openDB.then(db => {
                 const tx = db.transaction(this._storeName, 'readwrite');
@@ -76,6 +122,11 @@ const IndexedDatabase = (() => {
             });
         }
 
+        /**
+         * Removes a record or range of records from the object store
+         * @param {*} key the key or key range that identifies the record(s) to be removed
+         * @returns {Promise<void>}
+         */
         Delete(key) {
             return this.openDB.then(db => {
                 const tx = db.transaction(this._storeName, 'readwrite');
@@ -84,6 +135,12 @@ const IndexedDatabase = (() => {
             });
         }
 
+        /**
+         * Removes a range of records from the object store
+         * @param {Index} [index] the index to use when iterating through the store
+         * @param {string|number|IDBKeyRange|Date} range the key to or range of records to remove
+         * @returns {Promise<void>}
+         */
         DeleteRange(index, range) {
             return this.openDB.then(db => {
                 const tx = db.transaction(this._storeName, 'readwrite');

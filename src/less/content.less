@@ -47,8 +47,7 @@
     display: inline;
 }
 
-// Add a red border around thumbnails that are missing the injected metadata
-// This probably shouldn't ship, but it is really useful for debugging...
+// Add borders around thumbnails that do or do not have the injected metadata
 body.debug-metadata .browse-results-page .thumb:not([data-deviation-uuid]) {
     outline: red solid 3px
 }

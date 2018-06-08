@@ -57,6 +57,11 @@ angular.module('deviantArtFilter.components.FilterPanel', ['ngMessages', 'ngTabl
         });
         $scope.filterTableColumns = filterTableColumns;
 
+        /**
+         * Event listener for browser runtime messages
+         * @param {object} message The message
+         * @param {runtime.MessageSender} sender The sender of the message
+         */
         browser.runtime.onMessage.addListener((message, sender) => {
             console.log('[Component] FilterPanelCtrl.browser.runtime.onMessage()', message, sender);
             if (message.action === undefined) {
