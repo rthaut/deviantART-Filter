@@ -51,6 +51,21 @@ const UsersFilter = (() => {
             return item;
         }
 
+        /**
+         * Validates all required properties on a filter object
+         * @param {object} item Object representing a filterable item
+         * @returns {boolean} True if the item is valid
+         */
+        isValid(item) {
+            console.log('UsersFilter.isValid()', item);
+
+            if (item.username === 'www') {
+                return false;
+            }
+
+            return super.isValid(item);
+        }
+
     }
 
     return UsersFilter;
