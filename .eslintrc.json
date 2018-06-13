@@ -1,0 +1,25 @@
+{
+    "env": {
+        "node": true
+    },
+    "extends": [
+        "eslint:recommended"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "module"
+    },
+    "rules": {
+        "curly": ["error", "multi-line"],
+        "no-console": "off",
+        "no-unused-vars": ["error", {
+            "vars": "local",
+            "args": "none"
+        }],
+        "no-useless-escape": "off",
+        "prefer-const": ["error"],
+        "semi": ["error", "always"],
+        "quotes": ["error", "single"],
+        "quote-props": ["error", "always"]
+    }
+}
