@@ -1,6 +1,14 @@
 //angular.module('deviantArtFilter.components', ['deviantArtFilter.components.FilterPanel', 'deviantArtFilter.components.ImportExportPanel', 'deviantArtFilter.components.OptionsPanel'])
 angular.module('deviantArtFilter.components.ManagementPanel', ['deviantArtFilter.components.FilterPanel', 'deviantArtFilter.components.ImportExportPanel', 'deviantArtFilter.components.OptionsPanel'])
 
+    .config([
+        '$compileProvider',
+        function ($compileProvider) {
+            $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|chrome-extension|moz-extension):|data:image\//);
+            $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|chrome-extension|moz-extension):/);
+        }
+    ])
+
     .controller('ManagementPanelCtrl', ['$scope', function ($scope) {
 
         $scope.labels = {
