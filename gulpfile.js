@@ -10,8 +10,6 @@ const fs = require('fs');
 const path = require('path');
 const merge = require('merge-stream');
 
-const print = require('gulp-print').default;
-
 // load all plugins from package development dependencies
 const $ = require('gulp-load-plugins')({
     'scope': ['devDependencies'],
