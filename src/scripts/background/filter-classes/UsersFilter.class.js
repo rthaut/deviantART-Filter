@@ -48,7 +48,7 @@ const UsersFilter = (() => {
                 item.username = item.username.toLowerCase();
             }
 
-            return item;
+            return super.normalize(item);
         }
 
         /**
