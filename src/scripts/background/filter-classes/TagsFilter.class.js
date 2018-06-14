@@ -65,7 +65,7 @@ const TagsFilter = (() => {
                 }
             }
 
-            return item;
+            return super.normalize(item);
         }
 
     }

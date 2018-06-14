@@ -48,7 +48,22 @@ const UsersFilter = (() => {
                 item.username = item.username.toLowerCase();
             }
 
-            return item;
+            return super.normalize(item);
+        }
+
+        /**
+         * Validates all required properties on a filter object
+         * @param {object} item Object representing a filterable item
+         * @returns {boolean} True if the item is valid
+         */
+        isValid(item) {
+            console.log('UsersFilter.isValid()', item);
+
+            if (item.username === 'www') {
+                return false;
+            }
+
+            return super.isValid(item);
         }
 
     }
