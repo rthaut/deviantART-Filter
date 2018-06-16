@@ -1,4 +1,14 @@
 {
     "cSpell.enabled": true,
-    "cSpell.language": "en"
+    "cSpell.language": "en",
+    "cSpell.words": [
+        "deviantart",
+        "greasemonkey",
+        "polyfill",
+        "subdomain",
+        "subdomains",
+        "userscript",
+        "webextension",
+        "webextensions"
+    ]
 }
