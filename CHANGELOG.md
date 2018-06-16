@@ -1,5 +1,11 @@
 # DeviantArt Filter Changelog
 
+## Version 5.0.2 (June 16, 2018)
+
+### Bug Fixes
+
+- [User Quick Filter No Longer Works](https://github.com/rthaut/deviantART-Filter/issues/51)
+
 ## Version 5.0.1 (June 13, 2018)
 
 ### Bug Fixes

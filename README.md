@@ -1,4 +1,4 @@
-# DeviantArt Filter 5.0.1
+# DeviantArt Filter 5.0.2
 
 > Allows configurable filtering/removal of deviations by user, tag, and/or category on DeviantArt
 
