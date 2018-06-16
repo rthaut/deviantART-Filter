@@ -110,7 +110,7 @@ const UsersFilter = (() => {
                             if (username !== null) {
                                 control = document.createElement('span');
                                 control.classList.add('hide-user-corner');
-                                control.setAttribute('username', match[1]);
+                                control.setAttribute('username', username);
                                 control.addEventListener('click', this.toggleUserDeviationClickHandler);
                                 link.appendChild(control);
                             } else {
