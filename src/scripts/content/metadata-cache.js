@@ -93,10 +93,9 @@ const MetadataCache = (() => {
         },
 
         /**
-         * Removes all data from the IndexedDB that is older than the supplied number of days
-         * @param {number} days
+         * Completely removes all data from the IndexedDB
          */
-        'clear': function (days) {
+        'clear': function () {
             console.log('[Content] MetadataCache.clear()');
 
             return MetadataDB.Clear().then(() => {
