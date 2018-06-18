@@ -8,6 +8,7 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
+    "build:docs": "verb default",
     "build": "gulp build",
     "debug": "gulp debug",
     "package": "gulp package",
