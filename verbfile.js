@@ -10,15 +10,43 @@ module.exports = function (verb) {
     verb.use(require('verb-generate-readme'));
     verb.use(require('verb-toc'));
 
+    /**
+     * Generates the primary README.md
+     */
+    verb.task('readme', () => {
+        return verb.src('.verb.md')
+            .pipe(verb.renderFile('md'))
+            .pipe(through.obj((file, enc, next) => {
+                // replace multiple empty lines with a single newline
+                file.contents = file.contents.toString().replace(/^\s*\n+$/gm, '\n');
+                next(null, file);
+            }))
+            .pipe(verb.dest((file) => {
+                file.path = './README.md';
+                return file.base;
+            }));
+    });
+
+    /**
+     * Generates the README.md for Chrome
+     */
     verb.task('chrome-readme', () => {
         return verb.src('./docs/chrome/.verb.md')
             .pipe(verb.renderFile('md'))
+            .pipe(through.obj((file, enc, next) => {
+                // replace multiple empty lines with a single newline
+                file.contents = file.contents.toString().replace(/^\s*\n+$/gm, '\n');
+                next(null, file);
+            }))
             .pipe(verb.dest((file) => {
                 file.path = './docs/chrome/README.md';
                 return file.base;
             }));
     });
 
+    /**
+     * Generates a plain-text file containing the description for the Chrome Web Store from the README.md for Chrome
+     */
     verb.task('chrome-description', ['chrome-readme'], () => {
         return verb.src('./docs/chrome/README.md')
             .pipe(through.obj((file, enc, next) => {
@@ -46,19 +74,31 @@ module.exports = function (verb) {
             }));
     });
 
+    /**
+     * Runs all Chrome-related tasks
+     */
     verb.task('chrome', ['chrome-readme', 'chrome-description']);
 
+    /**
+     * Generates the README.md for Firefox
+     */
     verb.task('firefox-readme', () => {
         return verb.src('./docs/firefox/.verb.md')
             .pipe(verb.renderFile('md'))
+            .pipe(through.obj((file, enc, next) => {
+                // replace multiple empty lines with a single newline
+                file.contents = file.contents.toString().replace(/^\s*\n+$/gm, '\n');
+                next(null, file);
+            }))
             .pipe(verb.dest((file) => {
                 file.path = './docs/firefox/README.md';
                 return file.base;
             }));
     });
 
-    verb.task('firefox', ['firefox-readme', 'firefox-description']);
-
+    /**
+     * Generates a simplified HTML file containing the description for the AMO site from the README.md for Firefox
+     */
     verb.task('firefox-description', ['firefox-readme'], () => {
         return verb.src('./docs/firefox/README.md')
             .pipe(through.obj((file, enc, next) => {
@@ -119,6 +159,14 @@ module.exports = function (verb) {
             }));
     });
 
+    /**
+     * Runs all Firefox-related tasks
+     */
+    verb.task('firefox', ['firefox-readme', 'firefox-description']);
+
+    /**
+     * Generates a simplified HTML file containing the description for DeviantArt from the .verb.md for DeviantArt
+     */
     verb.task('deviantart-description', () => {
         return verb.src('./docs/deviantart/.verb.md')
             .pipe(verb.renderFile('md'))
@@ -187,5 +235,8 @@ module.exports = function (verb) {
             }));
     });
 
-    verb.task('default', ['chrome', 'firefox', 'deviantart-description', 'readme']);
+    /**
+     * Default task
+     */
+    verb.task('default', ['readme', 'chrome', 'firefox', 'deviantart-description']);
 };
