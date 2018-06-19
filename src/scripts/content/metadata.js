@@ -1,4 +1,5 @@
 import MetadataCache from './metadata-cache';
+import { DEVIATION_SLUG_REGEX as SLUG_REGEX } from '../../helpers/constants';
 
 const Metadata = (() => {
 
@@ -69,14 +70,15 @@ const Metadata = (() => {
 
         /**
          * Sets metadata as data- attributes on the corresponding thumbnails
-         * @param {Object[]} metadata -
+         * @param {Object[]} metadata The array of metadata objects to process
          * @param {boolean} [requestMissingMetadata=false] Request missing metadata after processing
          */
         'setMetadataOnThumbnails': function (metadata, requestMissingMetadata = false) {
-            console.log('[Content] Metadata.setMetadataOnDeviations()', metadata);
+            console.log('[Content] Metadata.setMetadataOnDeviations()', metadata, requestMissingMetadata);
 
             metadata.forEach((meta) => {
-                const link = document.querySelector(`a[href*="${meta.url}"]`);
+                const href = (meta.slug !== undefined && meta.slug !== null) ? meta.slug : meta.url;
+                const link = document.querySelector(`a[href*="${href}"]`);
 
                 if (link !== undefined && link !== null) {
                     const thumb = link.parentElement;
@@ -152,7 +154,15 @@ const Metadata = (() => {
 
             if (this.useCache) {
                 // try to load metadata from the IndexedDB first, then fallback to passively requesting via the API
-                const metadata = await MetadataCache.get(thumbs);
+                const slugs = [];
+                thumbs.forEach((thumb) => {
+                    const link = thumb.querySelector('a');
+                    if (link !== undefined && link !== null) {
+                        slugs.push(SLUG_REGEX.exec(link.getAttribute('href'))[1]);
+                    }
+                });
+
+                const metadata = await MetadataCache.get(slugs);
                 if (metadata.length) {
                     this.setMetadataOnThumbnails(metadata, true);
                 } else {
