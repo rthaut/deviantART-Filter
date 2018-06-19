@@ -6,7 +6,12 @@ const UsersFilter = (() => {
     const NAME = 'Users';    // the internal "name" (NOT translated) for the filter (used for retrieving localized messages)
     const LOCAL_STORAGE_KEY = 'hiddenUsers';    // the key used for the legacy web localStorage system (used for migration)
 
-    const USER_REGEX = /^https?:\/\/([^\.]+)\.deviantart\.com\/(art|(?!art\/)[^\/]+)\//i;
+    const RESERVED_SUBDOMAINS = [
+        'www',
+        'browse',
+    ];
+
+    const USER_REGEX = /^https?:\/\/(?:([^\.]+)\.)?deviantart\.com\/([^\/]+)\//gi;
 
     class UsersFilter extends CSSFilter {
 
@@ -60,17 +65,17 @@ const UsersFilter = (() => {
                 const placeholderText = browser.i18n.getMessage('FilterTypeUsersPlaceholderText', [item.username]);
 
                 const browseSelectors = [
-                    `.torpedo-container .thumb[href*="//${item.username}.deviantart.com/art"]`,         // browse (thumb wall)
-                    `.torpedo-container .thumb[href*="//www.deviantart.com/${item.username}/art"]`,     // browse (thumb wall)
-                    `a.full-view-link[href*="${item.username}.deviantart.com/art"]`,                    // browse (full view)
-                    `a.full-view-link[href*="www.deviantart.com/${item.username}/art"]`                 // browse (full view)
+                    `.torpedo-container .thumb[href*="//${item.username}.deviantart.com/"]`,                // browse (thumb wall)
+                    `.torpedo-container .thumb[href*="//www.deviantart.com/${item.username}/"]`,            // browse (thumb wall)
+                    `a.full-view-link[href*="${item.username}.deviantart.com/"]`,                           // browse (full view)
+                    `a.full-view-link[href*="www.deviantart.com/${item.username}/"]`                        // browse (full view)
                 ];
 
                 const additionalSelectors = [
-                    `.thumb a:not(.torpedo-thumb-link)[href*="//${item.username}.deviantart.com/art"]`,     // deviation sidebar
-                    `.thumb a:not(.torpedo-thumb-link)[href*="//www.deviantart.com/${item.username}/art"]`, // deviation sidebar
-                    `*[data-embed-format="thumb"] .thumb[href*="//${item.username}.deviantart.com/art"]`,   // comments, journals
-                    `*[data-embed-format="thumb"] .thumb[href*="//www.deviantart.com/${item.username}/art"]`// comments, journals
+                    `.thumb a:not(.torpedo-thumb-link)[href*="//${item.username}.deviantart.com/"]`,        // deviation sidebar
+                    `.thumb a:not(.torpedo-thumb-link)[href*="//www.deviantart.com/${item.username}/"]`,    // deviation sidebar
+                    `*[data-embed-format="thumb"] .thumb[href*="//${item.username}.deviantart.com/"]`,      // comments, journals
+                    `*[data-embed-format="thumb"] .thumb[href*="//www.deviantart.com/${item.username}/"]`   // comments, journals
                 ];
 
                 super.insertFilterRules(browseSelectors, placeholderText, additionalSelectors);
@@ -98,16 +103,15 @@ const UsersFilter = (() => {
                             let username;
 
                             const match = USER_REGEX.exec(link.href);
-                            if (match[1] !== 'www' && match[2] === 'art') {
-                                // classic style: {username}.deviantart.com/art/{deviation-slug}
+                            if ((match[1] === undefined || RESERVED_SUBDOMAINS.includes(match[1])) && match[2] !== undefined) {
+                                // new style: [www.]deviantart.com/{username}/art|journal/{deviation-slug}
+                                username = match[2];
+                            } else if (match[1] !== undefined && !RESERVED_SUBDOMAINS.includes(match[1])) {
+                                // classic style: {username}.deviantart.com/art|journal/{deviation-slug}
                                 username = match[1];
                             }
-                            else if (match[1] === 'www' && match[2] !== 'art') {
-                                // new style: www.deviantart.com/{username}/art/{deviation-slug}
-                                username = match[2];
-                            }
 
-                            if (username !== null) {
+                            if (username !== undefined && username !== null) {
                                 control = document.createElement('span');
                                 control.classList.add('hide-user-corner');
                                 control.setAttribute('username', username);
