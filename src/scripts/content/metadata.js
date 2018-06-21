@@ -76,28 +76,30 @@ const Metadata = (() => {
             console.log('[Content] Metadata.setMetadataOnDeviations()', metadata);
 
             metadata.forEach((meta) => {
-                const link = document.querySelector(`a[href*="${meta.url}"]`);
+                const links = document.querySelectorAll(`span.thumb a[href*="${meta.url}"]`);
 
-                if (link !== undefined && link !== null) {
-                    const thumb = link.parentElement;
-                    const target = (thumb !== undefined && thumb !== null) ? thumb : link;
+                links.forEach((link) => {
+                    if (link !== undefined && link !== null) {
+                        const thumb = link.parentElement;
+                        const target = (thumb !== undefined && thumb !== null) ? thumb : link;
 
-                    if (meta.uuid) {
-                        target.setAttribute('data-deviation-uuid', meta.uuid);
+                        if (meta.uuid) {
+                            target.setAttribute('data-deviation-uuid', meta.uuid);
+                        }
+
+                        if (meta.category_name) {
+                            target.setAttribute('data-category', meta.category_name);
+                        }
+
+                        if (meta.category_path) {
+                            target.setAttribute('data-category-path', meta.category_path);
+                        }
+
+                        if (meta.tags && meta.tags.length) {
+                            target.setAttribute('data-tags', meta.tags.join(' '));
+                        }
                     }
-
-                    if (meta.category_name) {
-                        target.setAttribute('data-category', meta.category_name);
-                    }
-
-                    if (meta.category_path) {
-                        target.setAttribute('data-category-path', meta.category_path);
-                    }
-
-                    if (meta.tags && meta.tags.length) {
-                        target.setAttribute('data-tags', meta.tags.join(' '));
-                    }
-                }
+                });
             });
 
             const thumbs = document.querySelectorAll('span.thumb:not([data-deviation-uuid])');
