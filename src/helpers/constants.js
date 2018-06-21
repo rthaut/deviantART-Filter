@@ -3,6 +3,8 @@ export const URL = {
     'REGEX': /^https ?:\/\/(?:(\S+)\.)?deviantart\.com\/([^\?]*)(?:\?(.*))?/i
 };
 
+export const DEVIATION_SLUG_REGEX = /\/([^\/]+)\/?$/;
+
 export const PLACEHOLDER_CSS = [
     'z-index: 101;',
     'position: absolute;',
