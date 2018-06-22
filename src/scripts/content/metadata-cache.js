@@ -9,7 +9,7 @@ const MetadataCache = (() => {
     const MetadataDB = new IndexedDatabase(DB_NAME, DB_STORE_NAME, DB_VERSION, (DBDatabase) => {
         console.log('[Content] MetadataDB UpgradeDB Callback', DBDatabase);
 
-        if (DBDatabase.oldVersion < 2) {
+        if (DBDatabase.oldVersion == 1) {
             // prior to version 2, the keyPath for the main object store was "url" (version 2 switched to "slug")
             // unfortunately, there isn't an easy way to do an "in-place" upgrade,
             // so just delete the old store completely and start over
