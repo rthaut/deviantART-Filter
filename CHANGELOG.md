@@ -1,5 +1,18 @@
 # DeviantArt Filter Changelog
 
+## Version 5.0.3 (June 22, 2018)
+
+### Bug Fixes
+
+- [Tag and Category Filters do not Work](https://github.com/rthaut/deviantART-Filter/issues/48)
+- [Cannot Quick Filter Users from Journal Thumbnails](https://github.com/rthaut/deviantART-Filter/issues/52)
+
+### Release Notes
+
+Upgrading to Version 5.0.3 will reset your cached metadata. **This shouldn't have any noticeable impact, but if do encounter any issues (like metadata not loading, or tag and category filters not working), you may need to restart your browser.**
+
+Also, please be aware that the changes/fixes made in Version 5.0.3 (just like 5.0.1 and 5.0.2) are **primarily for people who are in the Beta Test program for DeviantArt**, which is only available for Core members with paid subscriptions. If you are in the Beta Test program and encounter issues with DeviantArt Filter, please either [send me (rthaut) a private Note on DeviantArt](https://www.deviantart.com/notifications/notes/#to=rthaut) or [create a new issue on GitHub](https://github.com/rthaut/deviantART-Filter/issues) so I can (try to) make DeviantArt Filter compatible with the beta changes.
+
 ## Version 5.0.2 (June 16, 2018)
 
 ### Bug Fixes
@@ -35,5 +48,5 @@
 
 ### Bug Fixes
 
-* [Filters do not Work on Subdomains](https://github.com/rthaut/deviantART-Filter/issues/26)
-* [Apply Filtering to Thumbnails in Comments](https://github.com/rthaut/deviantART-Filter/issues/25)
+- [Filters do not Work on Subdomains](https://github.com/rthaut/deviantART-Filter/issues/26)
+- [Apply Filtering to Thumbnails in Comments](https://github.com/rthaut/deviantART-Filter/issues/25)
