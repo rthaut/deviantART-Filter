@@ -11,8 +11,6 @@ const UsersFilter = (() => {
         'browse',
     ];
 
-    const USER_REGEX = /^https?:\/\/(?:([^\.]+)\.)?deviantart\.com\/([^\/]+)\//gi;
-
     class UsersFilter extends CSSFilter {
 
         /**
@@ -83,7 +81,7 @@ const UsersFilter = (() => {
         }
 
         /**
-         * Attaches event listeners to the provided thumb DOM nodes
+         * Adds the hide user corner "button" to thumbs
          * @param {Node[]} thumbs The thumbs to modify
          */
         updateThumbs(thumbs) {
@@ -94,36 +92,35 @@ const UsersFilter = (() => {
             }
 
             thumbs.forEach((thumb) => {
-                thumb.addEventListener('mouseover', () => {
-                    const link = thumb.querySelector('a');
-                    if (link !== undefined && link !== null) {
-                        let control = link.querySelector('span.hide-user-corner');
+                const link = thumb.querySelector('a');
+                if (link !== undefined && link !== null) {
 
-                        if (!control || control === null) {
-                            let username;
+                    let username;
 
-                            const match = USER_REGEX.exec(link.href);
-                            if ((match[1] === undefined || RESERVED_SUBDOMAINS.includes(match[1])) && match[2] !== undefined) {
-                                // new style: [www.]deviantart.com/{username}/art|journal/{deviation-slug}
-                                username = match[2];
-                            } else if (match[1] !== undefined && !RESERVED_SUBDOMAINS.includes(match[1])) {
-                                // classic style: {username}.deviantart.com/art|journal/{deviation-slug}
-                                username = match[1];
-                            }
-
-                            if (username !== undefined && username !== null) {
-                                control = document.createElement('span');
-                                control.classList.add('hide-user-corner');
-                                control.setAttribute('username', username);
-                                control.addEventListener('click', this.toggleUserDeviationClickHandler);
-                                link.appendChild(control);
-                            } else {
-                                console.error('[Content] UsersFilter :: Failed to extract username from thumbnail\'s target URL', link.href);
-                            }
-                        }
-
+                    const url = new URL(link.href);
+                    const hostname = url.hostname.split('.');
+                    const pathname = url.pathname.split('/');
+                    if (hostname.length == 3 && !RESERVED_SUBDOMAINS.includes(hostname[0])) {
+                        // classic style: {username}.deviantart.com/art|journal/{deviation-slug}
+                        username = hostname[0];
+                    } else if (pathname.length > 3) {
+                        // new style: [www.]deviantart.com/{username}/art|journal/{deviation-slug}
+                        username = pathname[1];
                     }
-                });
+
+                    if (username !== undefined && username !== null) {
+                        const control = document.createElement('span');
+                        control.classList.add('hide-user-corner');
+                        control.setAttribute('username', username);
+                        control.addEventListener('click', this.toggleUserDeviationClickHandler);
+                        link.appendChild(control);
+                    } else {
+                        console.error('[Content] UsersFilter.updateThumbs() :: Failed to extract username from thumbnail\'s target URL', link.href);
+                    }
+
+                } else {
+                    console.error('[Content] UsersFilter.updateThumbs() :: Failed to find link element for thumbnail', thumb);
+                }
             });
         }
 
