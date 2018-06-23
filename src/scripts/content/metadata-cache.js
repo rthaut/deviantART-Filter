@@ -4,14 +4,20 @@ const MetadataCache = (() => {
 
     const DB_NAME = 'metadata';
     const DB_STORE_NAME = 'metadata';
-    const DB_VERSION = 1;
-    const DB_KEY_PATH = 'url';
+    const DB_VERSION = 2;
 
     const MetadataDB = new IndexedDatabase(DB_NAME, DB_STORE_NAME, DB_VERSION, (DBDatabase) => {
         console.log('[Content] MetadataDB UpgradeDB Callback', DBDatabase);
 
+        if (DBDatabase.oldVersion == 1) {
+            // prior to version 2, the keyPath for the main object store was "url" (version 2 switched to "slug")
+            // unfortunately, there isn't an easy way to do an "in-place" upgrade,
+            // so just delete the old store completely and start over
+            DBDatabase.deleteObjectStore(DB_STORE_NAME);
+        }
+
         const DBObjectStore = DBDatabase.createObjectStore(DB_STORE_NAME, {
-            'keyPath': DB_KEY_PATH
+            'keyPath': 'slug'
         });
 
         DBObjectStore.createIndex('uuid', 'uuid', {
@@ -26,24 +32,16 @@ const MetadataCache = (() => {
     const MetadataCache = {
 
         /**
-         * Retrieves metadata for the specified thumbs from the IndexedDB
-         * @param {NodeList} thumbs
+         * Retrieves metadata for the specified slugs from the IndexedDB
+         * @param {string[]} slugs
          */
-        'get': function (thumbs) {
-            console.log('[Content] MetadataCache.get()', thumbs);
-
-            const urls = [];
-            thumbs.forEach((thumb) => {
-                const link = thumb.querySelector('a');
-                if (link !== undefined && link !== null) {
-                    urls.push(link.getAttribute('href'));
-                }
-            });
+        'get': function (slugs) {
+            console.log('[Content] MetadataCache.get()', slugs);
 
             return MetadataDB.GetAll().then((cached) => {
                 const metadata = [];
                 cached.forEach((meta) => {
-                    if (urls.indexOf(meta.url) !== -1) {
+                    if (slugs.indexOf(meta.slug) !== -1) {
                         metadata.push(meta);
                     }
                 });
