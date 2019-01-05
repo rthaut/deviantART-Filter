@@ -19,11 +19,11 @@ browser.runtime.onMessage.addListener((message) => {
     console.log('[Content] browser.runtime.onMessage', message);
 
     if (message.action !== undefined) {
-    switch (message.action) {
-        case 'toggle-placeholders':
+        switch (message.action) {
+            case 'toggle-placeholders':
                 togglePlaceholders(message.data.placeholders);
-            break;
-    }
+                break;
+        }
     }
 
     return true;
@@ -53,7 +53,8 @@ function watchForNewThumbs() {
 
     const browse = document.querySelector('#browse-results');
     if (browse !== undefined && browse !== null) {
-        const target = browse.querySelector('.results-page-thumb'); //TODO: handle the "full view" browse mode
+        //TODO: handle other DOM structures (like the "Full View" browse mode and galleries/folders)
+        const target = browse.querySelector('.results-page-thumb');
 
         if (target !== undefined && target !== null) {
 
