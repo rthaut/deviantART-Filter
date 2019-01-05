@@ -104,7 +104,7 @@ const Metadata = (() => {
 
             const thumbs = document.querySelectorAll('span.thumb:not([data-deviation-uuid])');
             if (thumbs.length) {
-                console.error(`[Content] Metadata.setMetadataOnDeviations() :: There are ${thumbs.length} thumbnails missing metadata (of ${document.querySelectorAll('span.thumb').length} total thumbnails) after inserting metadata`);
+                console.info(`[Content] Metadata.setMetadataOnDeviations() :: There are ${thumbs.length} thumbnails missing metadata (of ${document.querySelectorAll('span.thumb').length} total thumbnails) after inserting metadata`);
                 if (requestMissingMetadata) {
                     this.requestMetadataForURL();
                 }
