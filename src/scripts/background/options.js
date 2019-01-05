@@ -11,6 +11,7 @@ const Options = (() => {
             //TODO: this list should probably be a constant that is somehow tied to the "options" data in getOptions()
             var defaults = {
                 'managementPanelType': 'tab',
+                'metadataBatchSize': 96,
                 'metadataCacheTTL': 7,
                 'metadataDebug': false,
                 'placeholders': true,
@@ -53,6 +54,7 @@ const Options = (() => {
             const data = await browser.storage.sync.get([
                 'placeholders',
                 'managementPanelType',
+                'metadataBatchSize',
                 'metadataCacheTTL',
                 'metadataDebug',
             ]);
@@ -77,6 +79,36 @@ const Options = (() => {
                             {
                                 'value': 'tab',
                                 'label': browser.i18n.getMessage('OptionManagementPanelTypeValueTab')
+                            }
+                        ];
+                        break;
+
+                    case 'metadataBatchSize':
+                        opt.type = 'select';
+                        opt.values = [
+                            {
+                                'value': 16,
+                                'label': 16
+                            },
+                            {
+                                'value': 32,
+                                'label': 32
+                            },
+                            {
+                                'value': 48,
+                                'label': 48
+                            },
+                            {
+                                'value': 64,
+                                'label': 64
+                            },
+                            {
+                                'value': 80,
+                                'label': 80
+                            },
+                            {
+                                'value': 96,
+                                'label': 96
                             }
                         ];
                         break;

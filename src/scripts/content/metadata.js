@@ -154,6 +154,7 @@ const Metadata = (() => {
                 return false;
             }
 
+            // try to load metadata from the IndexedDB first
             if (this.useCache) {
                 // try to load metadata from the IndexedDB first, then fallback to passively requesting via the API
                 const slugs = [];
@@ -167,13 +168,13 @@ const Metadata = (() => {
                 const metadata = await MetadataCache.get(slugs);
                 if (metadata.length) {
                     this.setMetadataOnThumbnails(metadata, true);
-                } else {
-                    this.requestMetadataForURL();
+                    return;
                 }
-            } else {
+                }
+
+            // if the cache is disabled, or if there was no cached metadata for the thumbs, use the API
                 this.requestMetadataForURL();
             }
-        }
     };
 
     return Metadata;
