@@ -5,6 +5,11 @@ import { PLACEHOLDER_CSS, PLACEHOLDER_TEXT_CSS } from '../../../helpers/constant
 
 const CSSFilter = (() => {
 
+    const DEFAULT_COLORS = {
+        'placeholderBGColor': '#DDE6DA',
+        'placeholderTextColor': '#B4C0B0'
+    };
+
     class CSSFilter extends Filter {
 
         /**
@@ -15,7 +20,23 @@ const CSSFilter = (() => {
         constructor(id, name) {
             super(id, name);
 
+            this.colors = {};
             this.styleSheet = StyleSheet.Create();
+            this.setVariables();
+        }
+
+        async setVariables() {
+            const userColors = await browser.storage.sync.get([
+                'placeholderBGColor',
+                'placeholderTextColor'
+            ]);
+
+            this.colors = Object.assign({}, DEFAULT_COLORS, userColors);
+
+            this.styleSheet.insertRule(`:root {
+                --placeholder-bg-color: ${this.colors.placeholderBGColor};
+                --placeholder-text-color: ${this.colors.placeholderTextColor};
+            }`);
         }
 
         /**
@@ -25,6 +46,7 @@ const CSSFilter = (() => {
             console.log('[Content] CSSFilter.resetFilter()');
 
             StyleSheet.Reset(this.styleSheet);
+            this.setVariables();
         }
 
         /**

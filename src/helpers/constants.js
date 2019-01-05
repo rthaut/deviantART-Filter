@@ -15,8 +15,9 @@ export const PLACEHOLDER_CSS = [
     'width: 100%;',
     'height: 100%;',
     'content: "";',
-    'background-color: #DDE6DA;',
-    `background-image: url(${browser.runtime.getURL('images/logo/logo-muted.svg')});`,
+    'color: var(--placeholder-logo-color);',
+    'background-color: var(--placeholder-bg-color);',
+    `background-image: url("${browser.runtime.getURL('images/placeholder-dark.svg')}");`,
     'background-position: center center;',
     'background-repeat: no-repeat;',
     'background-size: 80% 50%;'
@@ -32,7 +33,7 @@ export const PLACEHOLDER_TEXT_CSS = [
     'width: 100%;',
     'height: 20%;',
     'text-align: center;',
-    'color: #B4C0B0;',
+    'color: var(--placeholder-text-color);',
     'font-weight: bold;',
     'line-height: 1.25em;',
     'background: none;'

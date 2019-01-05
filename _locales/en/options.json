@@ -55,6 +55,22 @@
     "message": "When enabled, a placeholder image is displayed instead of the actual thumbnail for filtered deviations. Disable this setting to completely remove filtered deviation thumbnails.",
     "description": ""
   },
+  "OptionPlaceholderBGColorName": {
+    "message": "Background Color for Placeholders",
+    "description": ""
+  },
+  "OptionPlaceholderBGColorDescription": {
+    "message": "Set a custom color for the background of the placeholder shown in place of filtered deviations. <strong>Note</strong>: You must refresh DeviantArt for this change to take effect.",
+    "description": ""
+  },
+  "OptionPlaceholderTextColorName": {
+    "message": "Text Color for Placeholders",
+    "description": ""
+  },
+  "OptionPlaceholderTextColorDescription": {
+    "message": "Set a custom color for the text of the placeholder shown in place of filtered deviations. <strong>Note</strong>: You must refresh DeviantArt for this change to take effect.",
+    "description": ""
+  },
   "OptionPrivateStorageName": {
     "message": "Use Filters in Private/Incognito Mode",
     "description": ""
