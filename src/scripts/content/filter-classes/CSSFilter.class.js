@@ -22,7 +22,7 @@ const CSSFilter = (() => {
          * Resets the CSS stylesheet for this filter
          */
         resetFilter() {
-            console.log('[Content] CSSFilter.resetFilter()');
+            console.log(`[Content] CSSFilter('${this.name}').resetFilter()`);
 
             StyleSheet.Reset(this.styleSheet);
         }
@@ -34,7 +34,7 @@ const CSSFilter = (() => {
          * @param {string[]} [additionalSelectors=[]] Additional selectors for other pages
          */
         insertFilterRules(browseSelectors, placeholderText, additionalSelectors = []) {
-            console.log('[Content] CSSFilter.insertFilterRules()', browseSelectors, placeholderText, additionalSelectors);
+            console.log(`[Content] CSSFilter('${this.name}').insertFilterRules()`, browseSelectors, placeholderText, additionalSelectors);
 
             const invisible = 'display: none !important;';
 
