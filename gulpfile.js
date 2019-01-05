@@ -22,6 +22,7 @@ const $ = require('gulp-load-plugins')({
         'vinyl-source-stream': 'source',
     },
     'postRequireTransforms': {
+        'print': print => print.default,
         'uglify': uglify => require('gulp-uglify/composer')(require('uglify-es'), console)
     }
 });
