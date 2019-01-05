@@ -34,16 +34,14 @@ const Filter = (() => {
         onMessage(message, sender) {
             console.log(`[Content] Filter('${this.name}').onMessage()`, message, sender);
 
-            if (message.action === undefined) {
-                return;
-            }
-
-            switch (message.action) {
-                case 'update-filter':
-                    if (message.data.filter.id === this.id) {
-                        this.updateFilter(message.data.filter);
-                    }
-                    break;
+            if (message.action !== undefined) {
+                switch (message.action) {
+                    case 'update-filter':
+                        if (message.data.filter.id === this.id) {
+                            this.updateFilter(message.data.filter);
+                        }
+                        break;
+                }
             }
 
             return true;

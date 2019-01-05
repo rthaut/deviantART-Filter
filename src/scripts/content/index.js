@@ -18,11 +18,13 @@ AVAILABLE_FILTERS.forEach((filter) => {
 browser.runtime.onMessage.addListener((message) => {
     console.log('[Content] browser.runtime.onMessage', message);
 
+    if (message.action !== undefined) {
     switch (message.action) {
         case 'toggle-placeholders':
-            document.querySelector('body').classList.toggle('placeholders');
-            document.querySelector('body').classList.toggle('no-placeholders');
+                document.querySelector('body').classList.toggle('placeholders', active);
+                document.querySelector('body').classList.toggle('no-placeholders', !active);
             break;
+    }
     }
 
     return true;

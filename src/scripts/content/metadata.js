@@ -39,10 +39,7 @@ const Metadata = (() => {
         'onMessage': function (message, sender) {
             console.log('[Content] Metadata.onMessage()', message, sender);
 
-            if (message.action === undefined) {
-                return;
-            }
-
+            if (message.action !== undefined) {
             switch (message.action) {
                 case 'set-metadata':
                     if (this.useCache) {
@@ -63,6 +60,7 @@ const Metadata = (() => {
                 case 'toggle-metadata-debug':
                     document.querySelector('body').classList.toggle('debug-metadata', message.data.metadataDebug);
                     break;
+            }
             }
 
             return true;
