@@ -40,27 +40,27 @@ const Metadata = (() => {
             console.log('[Content] Metadata.onMessage()', message, sender);
 
             if (message.action !== undefined) {
-            switch (message.action) {
-                case 'set-metadata':
-                    if (this.useCache) {
-                        MetadataCache.save(message.data.metadata);
-                    }
-                    this.setMetadataOnThumbnails(message.data.metadata, false);
-                    break;
+                switch (message.action) {
+                    case 'set-metadata':
+                        if (this.useCache) {
+                            MetadataCache.save(message.data.metadata);
+                        }
+                        this.setMetadataOnThumbnails(message.data.metadata, false);
+                        break;
 
-                case 'metadata-cache-ttl-changed':
-                    this.useCache = parseInt(message.data.metadataCacheTTL, 10) > 0;
-                    if (this.useCache) {
-                        MetadataCache.trim(message.data.metadataCacheTTL);
-                    } else {
-                        MetadataCache.clear();
-                    }
-                    break;
+                    case 'metadata-cache-ttl-changed':
+                        this.useCache = parseInt(message.data.metadataCacheTTL, 10) > 0;
+                        if (this.useCache) {
+                            MetadataCache.trim(message.data.metadataCacheTTL);
+                        } else {
+                            MetadataCache.clear();
+                        }
+                        break;
 
-                case 'toggle-metadata-debug':
-                    document.querySelector('body').classList.toggle('debug-metadata', message.data.metadataDebug);
-                    break;
-            }
+                    case 'toggle-metadata-debug':
+                        document.querySelector('body').classList.toggle('debug-metadata', message.data.metadataDebug);
+                        break;
+                }
             }
 
             return true;
@@ -109,6 +109,8 @@ const Metadata = (() => {
                     this.requestMetadataForURL();
                 }
             }
+
+            return;
         },
 
         /**
@@ -149,7 +151,7 @@ const Metadata = (() => {
             console.log('[Content] Metadata.handleThumbs()', thumbs);
 
             if (!thumbs.length) {
-                return false;
+                return;
             }
 
             // try to load metadata from the IndexedDB first
@@ -168,11 +170,11 @@ const Metadata = (() => {
                     this.setMetadataOnThumbnails(metadata, true);
                     return;
                 }
-                }
+            }
 
             // if the cache is disabled, or if there was no cached metadata for the thumbs, use the API
-                this.requestMetadataForURL();
-            }
+            this.requestMetadataForURL();
+        }
     };
 
     return Metadata;
