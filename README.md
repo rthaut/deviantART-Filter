@@ -1,5 +1,7 @@
 # DeviantArt Filter 5.0.3
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/rthaut/deviantART-Filter.svg)](https://greenkeeper.io/)
+
 > Allows configurable filtering/removal of deviations by user, tag, and/or category on DeviantArt
 
 ## Table of Contents
