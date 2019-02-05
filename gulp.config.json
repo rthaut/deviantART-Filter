@@ -17,7 +17,7 @@
     "./node_modules/angular-sanitize/angular-sanitize.min.js",
     "./node_modules/bootstrap/dist/css/bootstrap.min.css",
     "./node_modules/bootstrap/dist/js/bootstrap.min.js",
-    "./node_modules/idb/lib/idb.js",
+    "./node_modules/idb/build/idb.js",
     "./node_modules/jquery/dist/jquery.min.js",
     "./node_modules/ng-table/bundles/ng-table.min.css",
     "./node_modules/ng-table/bundles/ng-table.min.js",
