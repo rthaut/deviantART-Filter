@@ -31,7 +31,7 @@
     "angular": "^1.7.5",
     "angular-messages": "^1.7.5",
     "angular-sanitize": "^1.7.5",
-    "bootstrap": "~3.3.7",
+    "bootstrap": "~3.4.0",
     "jquery": "^3.2.1",
     "ng-table": "^3.0.1",
     "webextension-polyfill": "^0.3.1"
