@@ -1,12 +1,13 @@
 import Filter from './Filter.class';
 import StyleSheet from '../../../helpers/stylesheet';
 
-import { PLACEHOLDER_CSS, PLACEHOLDER_TEXT_CSS } from '../../../helpers/constants';
+import { PLACEHOLDER_CSS, PLACEHOLDER_LOGO_CSS } from '../../../helpers/constants';
 
 const CSSFilter = (() => {
 
-    const DEFAULT_COLORS = {
+    const DEFAULT_VARS = {
         'placeholderBGColor': '#DDE6DA',
+        'placeholderLogoColor': '#B4C0B0',
         'placeholderTextColor': '#B4C0B0'
     };
 
@@ -20,22 +21,22 @@ const CSSFilter = (() => {
         constructor(id, name) {
             super(id, name);
 
-            this.colors = {};
             this.styleSheet = StyleSheet.Create();
+
+            this.varStyleSheet = StyleSheet.Create();
             this.setVariables();
         }
 
         async setVariables() {
-            const userColors = await browser.storage.sync.get([
-                'placeholderBGColor',
-                'placeholderTextColor'
-            ]);
+            console.log('[Content] CSSFilter.setVariables()');
 
-            this.colors = Object.assign({}, DEFAULT_COLORS, userColors);
+            StyleSheet.Reset(this.varStyleSheet);
 
-            this.styleSheet.insertRule(`:root {
-                --placeholder-bg-color: ${this.colors.placeholderBGColor};
-                --placeholder-text-color: ${this.colors.placeholderTextColor};
+            const vars = await browser.storage.sync.get(DEFAULT_VARS);
+            this.varStyleSheet.insertRule(`:root {
+                --placeholder-bg-color: ${vars.placeholderBGColor};
+                --placeholder-logo-color: ${vars.placeholderLogoColor};
+                --placeholder-text-color: ${vars.placeholderTextColor};
             }`);
         }
 
@@ -46,7 +47,6 @@ const CSSFilter = (() => {
             console.log('[Content] CSSFilter.resetFilter()');
 
             StyleSheet.Reset(this.styleSheet);
-            this.setVariables();
         }
 
         /**
@@ -65,11 +65,11 @@ const CSSFilter = (() => {
             // hide the entire thumb completely when not using placeholders
             this.styleSheet.insertRule(allSelectors.map(selector => `body.no-placeholders ${selector}`).join(', ') + ` { ${invisible} }`);
 
-            // show the placeholder image over the thumb image when using placeholders
-            this.styleSheet.insertRule(allSelectors.map(selector => `body.placeholders ${selector}::before`).join(', ') + ` { ${PLACEHOLDER_CSS} }`);
+            // show a placeholder (with text) over the thumb image when using placeholders
+            this.styleSheet.insertRule(allSelectors.map(selector => `body.placeholders ${selector}::before`).join(', ') + ` { content: "${placeholderText}"; ${PLACEHOLDER_CSS} }`);
 
-            // show the placeholder text over the thumb (browse results page only) when using placeholders
-            this.styleSheet.insertRule(browseSelectors.map(selector => `body.placeholders ${selector}::after`).join(', ') + ` { content: "${placeholderText}"; ${PLACEHOLDER_TEXT_CSS} }`);
+            // show an image over the placeholder when using placeholders
+            this.styleSheet.insertRule(allSelectors.map(selector => `body.placeholders ${selector}::after`).join(', ') + ` { ${PLACEHOLDER_LOGO_CSS} }`);
         }
     }
 

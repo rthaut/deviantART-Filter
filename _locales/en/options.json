@@ -63,6 +63,14 @@
     "message": "Set a custom color for the background of the placeholder shown in place of filtered deviations. <strong>Note</strong>: You must refresh DeviantArt for this change to take effect.",
     "description": ""
   },
+  "OptionPlaceholderLogoColorName": {
+    "message": "Logo Color for Placeholders",
+    "description": ""
+  },
+  "OptionPlaceholderLogoColorDescription": {
+    "message": "Set a custom color for the logo of the placeholder shown in place of filtered deviations. <strong>Note</strong>: You must refresh DeviantArt for this change to take effect.",
+    "description": ""
+  },
   "OptionPlaceholderTextColorName": {
     "message": "Text Color for Placeholders",
     "description": ""

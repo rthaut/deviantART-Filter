@@ -15,6 +15,7 @@ const Options = (() => {
                 'metadataDebug': false,
                 'placeholders': true,
                 'placeholderBGColor': '#DDE6DA',
+                'placeholderLogoColor': '#B4C0B0',
                 'placeholderTextColor': '#B4C0B0',
                 'privateStorage': 'read'
             };
@@ -55,6 +56,7 @@ const Options = (() => {
             const data = await browser.storage.sync.get([
                 'placeholders',
                 'placeholderBGColor',
+                'placeholderLogoColor',
                 'placeholderTextColor',
                 'managementPanelType',
                 'metadataCacheTTL',
@@ -97,6 +99,7 @@ const Options = (() => {
                         break;
 
                     case 'placeholderBGColor':
+                    case 'placeholderLogoColor':
                     case 'placeholderTextColor':
                         opt.type = 'color';
                         break;
