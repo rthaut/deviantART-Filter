@@ -5,7 +5,7 @@ const env = process.env.NODE_ENV || 'development';
 const gulp = require('gulp');
 
 const pkg = require('./package.json');
-const cfg = require('./gulp.config.json');
+const cfg = require('./gulp.config.js');
 
 // additional native gulp packages
 const fs = require('fs');
@@ -207,7 +207,6 @@ gulp.task('lint:scripts', gulp.series('lint:helpers', () => {
     return lint(cfg.source_folders.scripts, true, false);
 }));
 gulp.task('build:scripts', gulp.series('lint:scripts', () => {
-    const tokens = $.ini.parse(fs.readFileSync('.config.ini', 'utf-8'));
     return $.merge(folders(cfg.source_folders.scripts).map((folder) => {
         return $.pump([
             $.rollup({
@@ -224,7 +223,7 @@ gulp.task('build:scripts', gulp.series('lint:scripts', () => {
             $.source(folder + '.js'),
             $.buffer(),
             $.tokenReplace({
-                'global': tokens,
+                'global': cfg.tokens,
                 'preserveUnknownTokens': true
             }),
             ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/scripts`)),
