@@ -6,12 +6,8 @@ import Utils from '../../helpers/utils';
 
 const Metadata = (() => {
 
-    const METADATA_LIMIT = 96;
-
-    const REQUEST_DEFAULTS = {
-        'limit': 48,    //TODO: the API limits differ per resource... this is the lowest of the used APIs
-        'offset': 0
-    };
+    const BROWSE_API_LIMIT = 48;
+    const METADATA_API_LIMIT = 48;
 
     /**
      * Determines which API resource to use (and optional request parameters) based on the supplied URL
@@ -23,7 +19,7 @@ const Metadata = (() => {
 
         const result = URL.REGEX.exec(url);
         if (result === null) {
-            throw new Error('Tab URL did not match pattern');   //TODO: i18n? for now this is only internal...
+            throw new Error('URL did not match pattern');   //TODO: i18n? for now this is only internal...
         }
 
         let subdomain = '';
@@ -54,7 +50,10 @@ const Metadata = (() => {
         }
 
         let resource;
-        const data = Object.assign({}, REQUEST_DEFAULTS, query);
+        const data = Object.assign({}, {
+            'limit': BROWSE_API_LIMIT,
+            'offset': 0
+        }, query);
 
         if (data.limit !== undefined) {
             data.limit = parseInt(data.limit, 10);
@@ -127,21 +126,38 @@ const Metadata = (() => {
          * @param {tab} tab the tab for which metadata should be retrieved
          * @param {string} [url] the URL for which metadata should be retrieved
          */
-        'sendMetadataToTab': function (tab, url) {
-            console.log('[Background] Metadata.getMetadataForTab()', tab, url);
+        'sendMetadataToTab': async function (tab, url) {
+            console.log('[Background] Metadata.sendMetadataToTab()', tab, url);
 
             if (url === undefined || url === null) {
                 url = tab.url;
             }
 
-            //TODO: it would be better to send each chunk of metadata to the tab as soon as it is returned rather than waiting for all chunks to return and combining the results before sending, but that will require changes to sendMetadataToTab() and getMetadata(), which would then negatively impact getMetadataForURL() (because it should NOT send the metadata, but return all of it)... the solution is probably to have getMetadata() return the array of promises for each chunk, then have sendMetadataToTab() do the sending as each promise resolves, but have getMetadataForURL() wait for them all to resolve
+            let resource, data;
 
-            return this.getMetadataForURL(url).then((metadata) => {
-                return BrowserTabs.sendMessageToTab(tab, {
-                    'action': 'set-metadata',
-                    'data': {
-                        'metadata': metadata
-                    }
+            try {
+                ({ resource, data } = _getRequestDataFromURL(url));
+            } catch (error) {
+                console.error('[Background] Metadata.sendMetadataToTab() :: Error', error);
+                return; // return Promise.reject(error);
+                // this doesn't currently reject/return the error,
+                // as we don't want to inadvertently send it back to the Content Script
+            }
+
+            const { metadataBatchSize } = await browser.storage.sync.get('metadataBatchSize');
+
+            const deviations = await this.getDeviations(resource, data, metadataBatchSize);
+
+            Utils.ChunkArray(deviations, METADATA_API_LIMIT).forEach((chunkOfDeviations) => {
+                DeviantArtAPI.GET('/deviation/metadata', {
+                    'deviationids': chunkOfDeviations.map(deviation => deviation.deviationid)
+                }).then((response) => {
+                    BrowserTabs.sendMessageToTab(tab, {
+                        'action': 'set-metadata',
+                        'data': {
+                            'metadata': this.extractMetadataFromResponse(response, deviations)
+                        }
+                    });
                 });
             });
         },
@@ -149,17 +165,16 @@ const Metadata = (() => {
         /**
          * Retrieves metadata for deviations for a supplied URL
          * @param {string} url the URL for which metadata should be retrieved
+         * @param {number} [limit] the maximum number of deviations to retrieve
+         * @returns {object[]} the array of metadata objects with deviation IDs and URLs
          */
-        'getMetadataForURL': function (url) {
-            console.log('[Background] Metadata.getMetadataForURL()', url);
+        'getMetadataForURL': function (url, limit = BROWSE_API_LIMIT) {
+            console.log('[Background] Metadata.getMetadataForURL()', url, limit);
 
-            let request = {
-                'resource': null,
-                'data': null
-            };
+            let resource, data;
 
             try {
-                request = Object.assign({}, request, _getRequestDataFromURL(url));
+                ({ resource, data } = _getRequestDataFromURL(url));
             } catch (error) {
                 console.error('[Background] Metadata.getMetadataForURL() :: Error', error);
                 return; // return Promise.reject(error);
@@ -167,56 +182,109 @@ const Metadata = (() => {
                 // as we don't want to inadvertently send it back to the Content Script
             }
 
-            return this.getMetadata(request.resource, request.data);
+            return this.getMetadata(resource, data, limit);
+        },
+
+        /**
+         * Retrieves deviations from an API resource
+         * @param {string} resource the API resource path
+         * @param {FormData} data GET parameters for the API request
+         * @param {number} [limit] the maximum number of deviations to retrieve
+         * @returns {object[]} the array of deviation objects from the API
+         */
+        'getDeviations': async function (resource, data, limit = BROWSE_API_LIMIT) {
+            console.log('[Background] Metadata.getDeviations()', resource, data, limit);
+
+            let deviations = [];
+
+            if (data.limit === undefined || data.limit > limit) {
+                data.limit = limit;
+            }
+
+            let response;
+            do {
+                response = await DeviantArtAPI.GET(resource, data);
+                deviations = deviations.concat(response.results.slice());
+                data.offset = response.next_offset;
+            } while (response && response.has_more && deviations.length < limit);
+
+            deviations = deviations.slice(0, limit);
+
+            console.log('[Background] Metadata.getDeviations() :: Deviations', deviations);
+            return deviations;
+        },
+
+        /**
+         * Retrieves metadata for the supplied deviations
+         * @param {object[]} deviations the array of deviation objects
+         * @returns {object[]} the array of metadata objects with deviation IDs and URLs
+         */
+        'getMetadataForDeviations': async function (deviations) {
+            console.log('[Background] Metadata.getMetadataForDeviations()', deviations);
+
+            const metadataRequests = [];
+            Utils.ChunkArray(deviations, METADATA_API_LIMIT).forEach((chunkOfDeviations) => {
+                metadataRequests.push(DeviantArtAPI.GET('/deviation/metadata', {
+                    'deviationids': chunkOfDeviations.map(deviation => deviation.deviationid)
+                }));
+            });
+
+            return Promise.all(metadataRequests).then((responses) => {
+                let metadata = [];
+
+                responses.forEach((response) => {
+                    metadata = metadata.concat(this.extractMetadataFromResponse(response, deviations));
+                });
+
+                console.log('[Background] Metadata.getMetadataForDeviations() :: Metadata', metadata);
+                return metadata;
+            });
         },
 
         /**
          * Retrieves metadata for deviations from an API resource
          * @param {string} resource the API resource path
          * @param {FormData} data GET parameters for the API request
+         * @param {number} [limit] the maximum number of deviations to retrieve
          * @returns {object[]} the array of metadata objects with deviation IDs and URLs
          */
-        'getMetadata': async function (resource, data) {
-            console.log('[Background] Metadata.getMetadata()', resource, data);
+        'getMetadata': async function (resource, data, limit = BROWSE_API_LIMIT) {
+            console.log('[Background] Metadata.getMetadata()', resource, data, limit);
 
-            let _deviations = [];
-            const _metadata = [];
+            const deviations = await this.getDeviations(resource, data, limit);
+            const metadata = await this.getMetadataForDeviations(deviations);
 
-            let response;
-            do {
-                response = await DeviantArtAPI.GET(resource, data);
-                _deviations = _deviations.concat(response.results.slice());
-                data.offset = response.next_offset;
-            } while (response && response.has_more && _deviations.length < METADATA_LIMIT);
+            console.log('[Background] Metadata.getMetadata() :: Metadata', metadata);
+            return metadata;
+        },
 
-            console.log('[Background] Metadata.getMetadata() :: Deviations', _deviations);
+        /**
+         * Extracts metadata from an API response and matches it to the corresponding deviation
+         * @param {object} response the metadata API response
+         * @param {object[]} deviations the array of deviation objects
+         * @returns {object[]} the array of metadata objects with deviation IDs and URLs
+         */
+        'extractMetadataFromResponse': function (response, deviations) {
+            console.log('[Background] Metadata.extractMetadataFromResponse()', response, deviations);
 
-            const metadataRequests = [];
-            Utils.ChunkArray(_deviations, REQUEST_DEFAULTS.limit).forEach((deviations) => {
-                metadataRequests.push(DeviantArtAPI.GET('/deviation/metadata', {
-                    'deviationids': deviations.map(deviation => deviation.deviationid)
-                }));
-            });
+            const metadata = [];
 
-            return Promise.all(metadataRequests).then((responses) => {
-                responses.forEach((response) => {
-                    response.metadata.forEach((metadata) => {
-                        const deviation = _deviations.find((deviation) => deviation.deviationid === metadata.deviationid);
-                        if (deviation !== undefined && deviation !== null) {
-                            _metadata.push({
-                                'uuid': deviation.deviationid,
-                                'url': deviation.url,
-                                'slug': SLUG_REGEX.exec(deviation.url)[1],
-                                'category_name': deviation.category,
-                                'category_path': deviation.category_path,
-                                'tags': metadata.tags.map(tag => tag.tag_name)
-                            });
-                        }
+            response.metadata.forEach((data) => {
+                const deviation = deviations.find((deviation) => deviation.deviationid === data.deviationid);
+                if (deviation !== undefined && deviation !== null) {
+                    metadata.push({
+                        'uuid': deviation.deviationid,
+                        'url': deviation.url,
+                        'slug': SLUG_REGEX.exec(deviation.url)[1],
+                        'category_name': deviation.category,
+                        'category_path': deviation.category_path,
+                        'tags': data.tags.map(tag => tag.tag_name)
                     });
-                });
-                console.log('[Background] Metadata.getMetadata() :: Metadata', _metadata);
-                return _metadata;
+                }
             });
+
+            console.log('[Background] Metadata.extractMetadataFromResponse() :: Metadata', metadata);
+            return metadata;
         },
 
         /**

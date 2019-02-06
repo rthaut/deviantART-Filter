@@ -3,3 +3,22 @@
     background-repeat: no-repeat;
     text-indent: 84px;
 }
+
+.form-group .form-control-slider {
+    padding: 0 1em 1em;
+}
+
+.form-group .slider.slider-horizontal .slider-track {
+    background: #ccd9c8;
+}
+
+.form-group .slider.slider-horizontal .slider-selection {
+    background: #337287;
+    box-shadow: none;
+}
+
+.form-group .slider.slider-horizontal .slider-handle {
+    background: #f1f5ef;
+    border: 1px solid #adbdaf;
+}
+

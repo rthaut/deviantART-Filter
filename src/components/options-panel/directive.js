@@ -1,10 +1,11 @@
 //angular.module('deviantArtFilter.components', [])
-angular.module('deviantArtFilter.components.OptionsPanel', ['ngMessages'])
+angular.module('deviantArtFilter.components.OptionsPanel', ['ngMessages', 'ui.bootstrap-slider'])
 
     .controller('OptionsPanelCtrl', ['$scope', function ($scope) {
 
         $scope.labels = {
             'optionsHeading': browser.i18n.getMessage('OptionsHeading'),
+            'options': browser.i18n.getMessage('LabelOptions'),
             'enabled': browser.i18n.getMessage('LabelEnabled'),
             'minimum': browser.i18n.getMessage('OptionLabelMinimum'),
             'maximum': browser.i18n.getMessage('OptionLabelMaximum'),
@@ -20,7 +21,7 @@ angular.module('deviantArtFilter.components.OptionsPanel', ['ngMessages'])
 
         $scope.getOptions = function () {
             console.log('[Component] OptionsPanelCtrl.getOptions()');
-            $scope.loading = browser.i18n.getMessage('GenericLoading', [$scope.optionsLbl]);
+            $scope.loading = browser.i18n.getMessage('GenericLoading', [$scope.labels.options]);
 
             browser.runtime.sendMessage({
                 'action': 'get-options'
@@ -35,7 +36,7 @@ angular.module('deviantArtFilter.components.OptionsPanel', ['ngMessages'])
                 $scope.$apply(() => {
                     $scope.alerts.push({
                         'type': 'danger',
-                        'msg': browser.i18n.getMessage('GenericLoadingError', [$scope.optionsLbl, error.message])
+                        'msg': browser.i18n.getMessage('GenericLoadingError', [$scope.labels.options, error.message])
                     });
                     $scope.loading = false;
                 });

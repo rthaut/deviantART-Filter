@@ -11,6 +11,7 @@ const Options = (() => {
             //TODO: this list should probably be a constant that is somehow tied to the "options" data in getOptions()
             var defaults = {
                 'managementPanelType': 'tab',
+                'metadataBatchSize': 96,
                 'metadataCacheTTL': 7,
                 'metadataDebug': false,
                 'placeholders': true,
@@ -59,6 +60,7 @@ const Options = (() => {
                 'placeholderLogoColor',
                 'placeholderTextColor',
                 'managementPanelType',
+                'metadataBatchSize',
                 'metadataCacheTTL',
                 'metadataDebug',
             ]);
@@ -85,6 +87,13 @@ const Options = (() => {
                                 'label': browser.i18n.getMessage('OptionManagementPanelTypeValueTab')
                             }
                         ];
+                        break;
+
+                    case 'metadataBatchSize':
+                        opt.type = 'range';
+                        opt.min = 16;
+                        opt.max = 96;
+                        opt.step = 16;
                         break;
 
                     case 'metadataCacheTTL':

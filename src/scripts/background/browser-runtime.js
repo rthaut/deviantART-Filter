@@ -19,65 +19,64 @@ const BrowserRuntime = (() => {
         'onRuntimeMessage': function (message, sender) {
             console.log('[Background] BrowserRuntime.onRuntimeMessage()', message, sender);
 
-            if (message.action === undefined) {
-                console.error('received message without action property');
-                return Promise.reject();
+            if (message.action !== undefined) {
+                switch (message.action) {
+                    case 'content-script-loaded':
+                        return ContentScript.onContentScriptLoaded(sender.tab);
+
+                    case 'show-management-panel':
+                        return Management.showManagementPanel();
+
+                    case 'get-options':
+                        return Options.getOptions();
+
+                    case 'set-option':
+                        return Options.setOption(message.data.option, message.data.value);
+
+                    case 'get-filters-meta-data':
+                        return Promise.resolve(Filters.getFiltersMetaData());
+
+                    case 'get-filter-items':
+                        return Filters.getItems(message.data.filter, message.data.limit, message.data.offset);
+
+                    case 'add-filter-item':
+                        return Filters.addFilterItem(message.data.filter, message.data.item);
+
+                    case 'remove-filter-item':
+                        return Filters.removeFilterItem(message.data.filter, message.data.item);
+
+                    case 'toggle-filter-item':
+                        return Filters.toggleFilterItem(message.data.filter, message.data.item);
+
+                    case 'import-filters':
+                        if (message.data.file !== undefined && message.data.file !== null) {
+                            return Filters.importFiltersFromFile(message.data.file);
+                        } else {
+                            return Filters.importFiltersFromObject(message.data);
+                        }
+
+                    case 'export-filters':
+                        return Filters.exportFilters();
+
+                    case 'migrate-filter':
+                        return Migration.migrateFilter(message.data.filter, message.data.items);
+
+                    case 'get-category-hierarchy':
+                        return Metadata.getCategoryHierarchy(message.data);
+
+                    case 'send-metadata-to-tab':
+                        return Metadata.sendMetadataToTab(sender.tab, message.data && message.data.url ? message.data.url : null);
+
+                    case 'get-metadata-for-url':
+                        return Metadata.getMetadataForURL(message.data.url, message.data.offset, message.data.minimum);
+
+                    default:
+                        console.error(`no logic defined for action '${message.action}'`);
+                        return Promise.resolve(null);
+                }
             }
 
-            switch (message.action) {
-                case 'content-script-loaded':
-                    return ContentScript.onContentScriptLoaded(sender.tab);
-
-                case 'show-management-panel':
-                    return Management.showManagementPanel();
-
-                case 'get-options':
-                    return Options.getOptions();
-
-                case 'set-option':
-                    return Options.setOption(message.data.option, message.data.value);
-
-                case 'get-filters-meta-data':
-                    return Promise.resolve(Filters.getFiltersMetaData());
-
-                case 'get-filter-items':
-                    return Filters.getItems(message.data.filter, message.data.limit, message.data.offset);
-
-                case 'add-filter-item':
-                    return Filters.addFilterItem(message.data.filter, message.data.item);
-
-                case 'remove-filter-item':
-                    return Filters.removeFilterItem(message.data.filter, message.data.item);
-
-                case 'toggle-filter-item':
-                    return Filters.toggleFilterItem(message.data.filter, message.data.item);
-
-                case 'import-filters':
-                    if (message.data.file !== undefined && message.data.file !== null) {
-                        return Filters.importFiltersFromFile(message.data.file);
-                    } else {
-                        return Filters.importFiltersFromObject(message.data);
-                    }
-
-                case 'export-filters':
-                    return Filters.exportFilters();
-
-                case 'migrate-filter':
-                    return Migration.migrateFilter(message.data.filter, message.data.items);
-
-                case 'get-category-hierarchy':
-                    return Metadata.getCategoryHierarchy(message.data);
-
-                case 'send-metadata-to-tab':
-                    return Metadata.sendMetadataToTab(sender.tab, message.data && message.data.url ? message.data.url : null);
-
-                case 'get-metadata-for-url':
-                    return Metadata.getMetadataForURL(message.data.url, message.data.offset, message.data.minimum);
-
-                default:
-                    console.error(`no logic defined for action '${message.action}'`);
-                    return Promise.resolve(null);
-            }
+            return true;
         },
 
         /**
@@ -86,6 +85,7 @@ const BrowserRuntime = (() => {
          */
         'onRuntimeInstalled': function (details) {
             console.log('[Background] BrowserRuntime.onRuntimeInstalled()', details);
+
             switch (details.reason) {
                 case 'install':
                     console.log('The extension was installed' + (details.temporary ? ' temporarily' : '') + '.');

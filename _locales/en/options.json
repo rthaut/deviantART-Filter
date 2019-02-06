@@ -31,6 +31,13 @@
     "message": "Open in a a new popup window",
     "description": "The label for the value of the Management Panel Type option that corresponds to using a new browser window."
   },
+  "OptionMetadataBatchSizeName": {
+    "message": "Metadata Batch Size",
+    "description": ""
+  },
+  "OptionMetadataBatchSizeDescription": {
+    "message": "Specifies the number of deviations for which to load metadata at a time. Setting this value to a lower number may improve browsing performance."
+  },
   "OptionMetadataCacheTTLName": {
     "message": "Number of Days to Cache Metadata",
     "description": ""
