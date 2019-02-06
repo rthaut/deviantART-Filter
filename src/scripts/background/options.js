@@ -84,33 +84,10 @@ const Options = (() => {
                         break;
 
                     case 'metadataBatchSize':
-                        opt.type = 'select';
-                        opt.values = [
-                            {
-                                'value': 16,
-                                'label': 16
-                            },
-                            {
-                                'value': 32,
-                                'label': 32
-                            },
-                            {
-                                'value': 48,
-                                'label': 48
-                            },
-                            {
-                                'value': 64,
-                                'label': 64
-                            },
-                            {
-                                'value': 80,
-                                'label': 80
-                            },
-                            {
-                                'value': 96,
-                                'label': 96
-                            }
-                        ];
+                        opt.type = 'range';
+                        opt.min = 16;
+                        opt.max = 96;
+                        opt.step = 16;
                         break;
 
                     case 'metadataCacheTTL':

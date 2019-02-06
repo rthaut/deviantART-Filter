@@ -29,9 +29,11 @@
   },
   "dependencies": {
     "angular": "^1.7.5",
+    "angular-bootstrap-slider": "github:seiyria/angular-bootstrap-slider",
     "angular-messages": "^1.7.5",
     "angular-sanitize": "^1.7.5",
     "bootstrap": "~3.4.0",
+    "bootstrap-slider": "^10.6.0",
     "jquery": "^3.2.1",
     "ng-table": "^3.0.1",
     "webextension-polyfill": "^0.3.1"

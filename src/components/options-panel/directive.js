@@ -1,5 +1,5 @@
 //angular.module('deviantArtFilter.components', [])
-angular.module('deviantArtFilter.components.OptionsPanel', ['ngMessages'])
+angular.module('deviantArtFilter.components.OptionsPanel', ['ngMessages', 'ui.bootstrap-slider'])
 
     .controller('OptionsPanelCtrl', ['$scope', function ($scope) {
 
