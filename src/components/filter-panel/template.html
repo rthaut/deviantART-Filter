@@ -74,6 +74,7 @@
             <tr ng-repeat="row in $data track by $index">
                 <td ng-repeat="col in $columns" ng-switch="col.type">
                     <span ng-switch-default>{{row[col.field]}}</span>
+                    <span ng-switch-when="boolean">{{row[col.field] == true ? labels.booleanYes: labels.booleanNo}}</span>
                     <time ng-switch-when="date" datetime="{{row[col.field] | date:'medium'}}">{{row[col.field] | date:'longDate'}}</time>
                     <div ng-switch-when="command">
                         <button type="button" class="btn btn-sm btn-danger" ng-click="removeItemFromFilter($event, row)">{{labels.removeFilter}}</button>
