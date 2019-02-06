@@ -31,7 +31,7 @@
     "message": "Enter Tag"
   },
   "FilterTypeTagsPropertyTagHint": {
-    "message": "Tags may contain any characters (letters, numbers, symbols, etc.) except spaces; tags are stored in lowercase letters"
+    "message": "Tags may contain any characters (letters, numbers, symbols, etc.) except spaces. Tags are stored in lowercase letters.<br/><strong>Do NOT enter the leading hashtag symbol (ex: use \"fanart\" not \"#fanart\").</strong>"
   },
   "FilterTypeTagsPropertyWildcardTitle": {
     "message": "Wildcard"

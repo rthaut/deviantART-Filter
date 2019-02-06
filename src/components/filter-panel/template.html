@@ -42,7 +42,7 @@
                                 <category-hierarchy-select ng-switch-when="category" filter-path="newFilterItem.path" filter-name="newFilterItem.name"></category-hierarchy-select>
                             </div>
 
-                            <span class="help-block" ng-show="property.hint">{{property.hint}}</span>
+                            <span class="help-block" ng-show="property.hint" ng-bind-html="property.hint"></span>
                             <div ng-messages="form[property.field].$error" role="alert" ng-hide="form.$pristine">
                                 <span ng-message="required" class="help-block">Please enter a value for this field.</span>
                                 <span ng-message="pattern" class="help-block">This value is not valid.</span>

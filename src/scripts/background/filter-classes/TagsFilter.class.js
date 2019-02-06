@@ -16,7 +16,7 @@ const TagsFilter = (() => {
             'editable': true,
             'type': 'text',
             'default': '',
-            'pattern': '\\S+'
+            'pattern': '[a-zA-Z0-9]+\\S*'
         },
         {
             'field': 'wildcard',
