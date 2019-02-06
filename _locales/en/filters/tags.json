@@ -40,6 +40,6 @@
     "message": "Is Wildcard"
   },
   "FilterTypeTagsPropertyWildcardHint": {
-    "message": "Wildcard filters match aggressively (ex: \"art\" would also match \"fanart\" and \"artistic\")"
+    "message": "Wildcard filters match aggressively (ex: \"<strong>art</strong>\" would also match \"fan<strong>art</strong>\" and \"<strong>art</strong>istic\")."
   }
 }
