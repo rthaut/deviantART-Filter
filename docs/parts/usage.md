@@ -2,7 +2,7 @@
 
 ### Opening the Management Panel/Screen
 
-1. While on [DeviantArt](https://www.deviantart.com), click the red logo that appears on the right side of the address bar. ![DeviantArt Filter Page Action Demo](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Page-Action-Demo.png)
+1. While on [DeviantArt](https://www.deviantart.com), click the red logo that appears on the right side of the address bar. ![DeviantArt Filter Page Action Demo](/screenshots/Page-Action-Demo.png?raw=true)
 2. The configuration screen will open automatically when you click the icon.
 
 ### Creating and Removing Filters
