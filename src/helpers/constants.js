@@ -14,26 +14,30 @@ export const PLACEHOLDER_CSS = [
     'left: 0;',
     'width: 100%;',
     'height: 100%;',
-    'content: "";',
-    'background-color: #DDE6DA;',
-    `background-image: url(${browser.runtime.getURL('images/logo/logo-muted.svg')});`,
-    'background-position: center center;',
-    'background-repeat: no-repeat;',
-    'background-size: 80% 50%;'
+    'box-sizing: border-box;',
+    'background-color: var(--placeholder-bg-color);',
+    'color: var(--placeholder-text-color);',
+    'font-weight: bold;',
+    'line-height: 1.25em;',
+    'padding: 1.5em;',
+    'text-align: center;',
+    'display: flex;',
+    'flex-direction: column-reverse;'
 ].join('\n');
 
-export const PLACEHOLDER_TEXT_CSS = [
-    'z-index: 102;',
+export const PLACEHOLDER_LOGO_CSS = [
+    'z-index: 101;',
     'position: absolute;',
-    'top: 80%;',
+    'top: 0;',
     'right: 0;',
     'bottom: 0;',
     'left: 0;',
     'width: 100%;',
-    'height: 20%;',
-    'text-align: center;',
-    'color: #B4C0B0;',
-    'font-weight: bold;',
-    'line-height: 1.25em;',
-    'background: none;'
+    'height: 100%;',
+    'content: "";',
+    'background-color: var(--placeholder-logo-color);',
+    `mask-image: url(${browser.runtime.getURL('images/placeholder.svg')});`,
+    'mask-position: center center;',
+    'mask-repeat: no-repeat;',
+    'mask-size: 80% 50%;',
 ].join('\n');

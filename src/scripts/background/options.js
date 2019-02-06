@@ -15,6 +15,9 @@ const Options = (() => {
                 'metadataCacheTTL': 7,
                 'metadataDebug': false,
                 'placeholders': true,
+                'placeholderBGColor': '#DDE6DA',
+                'placeholderLogoColor': '#B4C0B0',
+                'placeholderTextColor': '#B4C0B0',
                 'privateStorage': 'read'
             };
 
@@ -53,6 +56,9 @@ const Options = (() => {
             // NOTE: the order used below is the display order on the options tab of the management panel
             const data = await browser.storage.sync.get([
                 'placeholders',
+                'placeholderBGColor',
+                'placeholderLogoColor',
+                'placeholderTextColor',
                 'managementPanelType',
                 'metadataBatchSize',
                 'metadataCacheTTL',
@@ -99,6 +105,12 @@ const Options = (() => {
                     case 'metadataDebug':
                     case 'placeholders':
                         opt.type = 'checkbox';
+                        break;
+
+                    case 'placeholderBGColor':
+                    case 'placeholderLogoColor':
+                    case 'placeholderTextColor':
+                        opt.type = 'color';
                         break;
 
                     default:

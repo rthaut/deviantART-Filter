@@ -14,7 +14,7 @@
 
             <div ng-switch-when="checkbox">
                 <label class="control-label">{{option.name}}</label>
-                <span class="help-block">{{option.description}}</span>
+                <span class="help-block" ng-bind-html="option.description"></span>
                 <div class="checkbox" ng-class="{'disabled':option.disabled}">
                     <label><input type="checkbox" name="{{option.id}}" id="{{option.id}}" ng-model="option.value" ng-disabled="option.disabled" ng-change="changeOption(option)" ng-checked="option.value == true"> {{labels.enabled}}</label>
                 </div>
@@ -22,7 +22,7 @@
 
             <div ng-switch-when="radio">
                 <label class="control-label">{{option.name}}</label>
-                <span class="help-block">{{option.description}}</span>
+                <span class="help-block" ng-bind-html="option.description"></span>
                 <div class="radio" ng-repeat="opt in option.values" ng-class="{'disabled': opt.disabled}">
                     <label><input type="radio" name="{{option.id}}" ng-model="option.value" ng-disabled="opt.disabled" ng-change="changeOption(option)" ng-checked="option.value == opt.value" value="{{opt.value}}"> {{opt.label}}</label>
                 </div>
@@ -30,21 +30,35 @@
 
             <div ng-switch-when="select">
                 <label class="control-label">{{option.name}}</label>
-                <span class="help-block">{{option.description}}</span>
+                <span class="help-block" ng-bind-html="option.description"></span>
                 <select class="form-control" name="{{option.id}}" id="{{option.id}}" ng-model="option.value" ng-change="changeOption(option)">
                     <option ng-repeat="opt in option.values" ng-disabled="opt.disabled" value="{{opt.value}}">{{opt.label}}</option>
                 </select>
             </div>
 
+            <div ng-switch-when="color">
+                <label class="control-label" for="{{option.id}}">{{option.name}}</label>
+                <span class="help-block" ng-bind-html="option.description"></span>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="{{option.id}}" id="{{option.id}}" ng-model="option.value" ng-model-options="{'debounce': 500}" ng-disabled="option.disabled" ng-change="changeOption(option)" required/>
+                    <span class="input-group-btn">
+                        <input type="color" class="btn btn-default" name="{{option.id}}" id="{{option.id}}" ng-model="option.value" ng-disabled="option.disabled" ng-change="changeOption(option)" required/>
+                    </span>
+                </div>
+                <div class="help-block" ng-messages="OptionsPanelCtrlForm[option.id].$error">
+                    <span ng-message="required">{{labels.required}}</span>
+                </div>
+            </div>
+
             <div ng-switch-when="range">
                 <label for="{{option.id}}" class="control-label">{{option.name}}</label>
-                <span class="help-block">{{option.description}}</span>
+                <span class="help-block" ng-bind-html="option.description"></span>
                 <slider class="form-control-slider" name="{{option.id}}" id="{{option.id}}" ng-model="option.value" min="option.min" max="option.max" step="option.step" slider-tooltip="always" slider-tooltip-position="bottom" on-stop-slide="changeOption(option)"></slider>
             </div>
 
             <div ng-switch-when="number">
                 <label class="control-label" for="{{option.id}}">{{option.name}}</label>
-                <span class="help-block">{{option.description}}</span>
+                <span class="help-block" ng-bind-html="option.description"></span>
                 <input type="number" class="form-control" name="{{option.id}}" id="{{option.id}}" ng-model="option.value" ng-model-options="{'debounce': 500}" ng-disabled="option.disabled" ng-change="changeOption(option)" min="{{option.minimum}}" max="{{option.maximum}}" required/>
                 <div class="help-block" ng-messages="OptionsPanelCtrlForm[option.id].$error">
                     <span ng-message="required">{{labels.required}}</span>
@@ -54,8 +68,8 @@
             </div>
 
             <div ng-switch-when="text">
-                <label for="{{option.id}}" class="control-label">{{option.name}}</label>
-                <span class="help-block">{{option.description}}</span>
+                <label class="control-label" for="{{option.id}}">{{option.name}}</label>
+                <span class="help-block" ng-bind-html="option.description"></span>
                 <input type="text" class="form-control" name="{{option.id}}" id="{{option.id}}" ng-model="option.value" ng-model-options="{'debounce': 500}" ng-disabled="option.disabled" ng-change="changeOption(option)" required/>
                 <div class="help-block" ng-messages="OptionsPanelCtrlForm[option.id].$error">
                     <span ng-message="required">{{labels.required}}</span>

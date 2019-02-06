@@ -2,8 +2,12 @@ import Metadata from './metadata';
 import UsersFilter from './filter-classes/UsersFilter.class';
 import TagsFilter from './filter-classes/TagsFilter.class';
 import CategoriesFilter from './filter-classes/CategoriesFilter.class';
+import StyleSheet from '../../helpers/stylesheet';
 
 Metadata.init();
+
+const PlaceholderVarsStyleSheet = StyleSheet.Create();
+setPlaceholderCSSVariables(PlaceholderVarsStyleSheet);
 
 const AVAILABLE_FILTERS = [
     new UsersFilter(),
@@ -22,6 +26,10 @@ browser.runtime.onMessage.addListener((message) => {
         switch (message.action) {
             case 'toggle-placeholders':
                 togglePlaceholders(message.data.placeholders);
+                break;
+
+            case 'placeholder-styles-changed':
+                setPlaceholderCSSVariables(PlaceholderVarsStyleSheet);
                 break;
         }
     }
@@ -43,6 +51,27 @@ browser.runtime.sendMessage({ 'action': 'content-script-loaded' });
 function togglePlaceholders(active) {
     document.querySelector('body').classList.toggle('placeholders', active);
     document.querySelector('body').classList.toggle('no-placeholders', !active);
+}
+
+/**
+ * Sets the CSS variables for the placeholders
+ */
+async function setPlaceholderCSSVariables(stylesheet) {
+    console.log('[Content] CSSFilter.setVariables()');
+
+    StyleSheet.Reset(stylesheet);
+
+    const vars = await browser.storage.sync.get({
+        'placeholderBGColor': '#DDE6DA',
+        'placeholderLogoColor': '#B4C0B0',
+        'placeholderTextColor': '#B4C0B0'
+    });
+
+    stylesheet.insertRule(`:root {
+        --placeholder-bg-color: ${vars.placeholderBGColor};
+        --placeholder-logo-color: ${vars.placeholderLogoColor};
+        --placeholder-text-color: ${vars.placeholderTextColor};
+    }`);
 }
 
 /**
