@@ -67,7 +67,7 @@
     "description": ""
   },
   "OptionPlaceholderBGColorDescription": {
-    "message": "Set a custom color for the background of the placeholder shown in place of filtered deviations. <strong>Note</strong>: You must refresh DeviantArt for this change to take effect.",
+    "message": "Set a custom color for the background of the placeholder shown in place of filtered deviations.",
     "description": ""
   },
   "OptionPlaceholderLogoColorName": {
@@ -75,7 +75,7 @@
     "description": ""
   },
   "OptionPlaceholderLogoColorDescription": {
-    "message": "Set a custom color for the logo of the placeholder shown in place of filtered deviations. <strong>Note</strong>: You must refresh DeviantArt for this change to take effect.",
+    "message": "Set a custom color for the logo of the placeholder shown in place of filtered deviations.",
     "description": ""
   },
   "OptionPlaceholderTextColorName": {
@@ -83,7 +83,7 @@
     "description": ""
   },
   "OptionPlaceholderTextColorDescription": {
-    "message": "Set a custom color for the text of the placeholder shown in place of filtered deviations. <strong>Note</strong>: You must refresh DeviantArt for this change to take effect.",
+    "message": "Set a custom color for the text of the placeholder shown in place of filtered deviations.",
     "description": ""
   },
   "OptionPrivateStorageName": {
