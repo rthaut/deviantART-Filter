@@ -1,5 +1,12 @@
 # DeviantArt Filter Changelog
 
+## Version 5.1 (February 6, 2019)
+
+### New Features
+
+- **Custom Placeholder Styles**. You can now control the colors used for the placeholders on filtered deviations. Management Panel/Screen, go to the Options tab, and set the Background, Logo, and/or Text Colors for Placeholders. Note that these settings are ineffective if you have placeholders disabled.
+- **Metadata Batch Size**. A new (somewhat experimental) feature has been implemented to allow control over how much metadata is loaded at once (for category and tag filters). Setting this to a lower value may help your browsing performance.
+
 ## Version 5.0.3 (June 22, 2018)
 
 ### Bug Fixes
