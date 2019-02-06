@@ -1,4 +1,4 @@
-import idb from 'idb';
+import { openDb as openDB } from 'idb';
 
 const IndexedDatabase = (() => {
 
@@ -14,7 +14,7 @@ const IndexedDatabase = (() => {
         constructor(databaseName, storeName, version, upgradeCallback) {
             this._storeName = storeName;
 
-            this.openDB = idb.open(databaseName, version, upgradeCallback);
+            this.openDB = openDB(databaseName, version, upgradeCallback);
         }
 
         /**
