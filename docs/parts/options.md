@@ -8,11 +8,23 @@ Options for DeviantArt filtered are configured through the [Management Panel/Scr
 
 If you want to see/know when a deviation was filtered (and why), enable this option (it is enabled by default). This will show a placeholder instead of the deviation's thumbnail (similar to Mature Content that is blocked). If you would rather just completely hide deviations matching any of your filters, disable this option, and the thumbnails will be removed entirely.
 
+### Background/Logo/Text Color for Placeholders
+
+`Set a custom color for the background/logo/text of the placeholder shown in place of filtered deviations.`
+
+Use these three options to control the style of the placeholders that are inserted for filtered deviations. These settings are ignored when placeholders are disabled altogether.
+
 ### Management Panel Type
 
 `Specifies where/how the main management panel is displayed when clicking the DeviantArt Filter logo by the address bar.`
 
 This option allows you to control if the DeviantArt Filter Management page is opened in a new tab in your current browser window, or if a new popup window is opened. The default behavior for this option is to use a new tab in the current window.
+
+### Metadata Batch Size
+
+`Specifies the number of deviations for which to load metadata at a time. Setting this value to a lower number may improve browsing performance.`
+
+This option limits how much metadata (used for category and tag filters) is loaded at once. The default is 96, which means that metadata for up to 96 deviations is retrieved for deviations on the page and loaded for the tag and category filters to use. Lowering this number may improve browsing performance, so you can try different values for this option to see if you notice any improvements.
 
 ### Number of Days to Cache Metadata
 

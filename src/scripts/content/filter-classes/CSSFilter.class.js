@@ -1,7 +1,7 @@
 import Filter from './Filter.class';
 import StyleSheet from '../../../helpers/stylesheet';
 
-import { PLACEHOLDER_CSS, PLACEHOLDER_TEXT_CSS } from '../../../helpers/constants';
+import { PLACEHOLDER_CSS, PLACEHOLDER_LOGO_CSS } from '../../../helpers/constants';
 
 const CSSFilter = (() => {
 
@@ -22,7 +22,7 @@ const CSSFilter = (() => {
          * Resets the CSS stylesheet for this filter
          */
         resetFilter() {
-            console.log('[Content] CSSFilter.resetFilter()');
+            console.log(`[Content] CSSFilter('${this.name}').resetFilter()`);
 
             StyleSheet.Reset(this.styleSheet);
         }
@@ -34,7 +34,7 @@ const CSSFilter = (() => {
          * @param {string[]} [additionalSelectors=[]] Additional selectors for other pages
          */
         insertFilterRules(browseSelectors, placeholderText, additionalSelectors = []) {
-            console.log('[Content] CSSFilter.insertFilterRules()', browseSelectors, placeholderText, additionalSelectors);
+            console.log(`[Content] CSSFilter('${this.name}').insertFilterRules()`, browseSelectors, placeholderText, additionalSelectors);
 
             const invisible = 'display: none !important;';
 
@@ -43,11 +43,11 @@ const CSSFilter = (() => {
             // hide the entire thumb completely when not using placeholders
             this.styleSheet.insertRule(allSelectors.map(selector => `body.no-placeholders ${selector}`).join(', ') + ` { ${invisible} }`);
 
-            // show the placeholder image over the thumb image when using placeholders
-            this.styleSheet.insertRule(allSelectors.map(selector => `body.placeholders ${selector}::before`).join(', ') + ` { ${PLACEHOLDER_CSS} }`);
+            // show a placeholder (with text) over the thumb image when using placeholders
+            this.styleSheet.insertRule(allSelectors.map(selector => `body.placeholders ${selector}::before`).join(', ') + ` { content: "${placeholderText}"; ${PLACEHOLDER_CSS} }`);
 
-            // show the placeholder text over the thumb (browse results page only) when using placeholders
-            this.styleSheet.insertRule(browseSelectors.map(selector => `body.placeholders ${selector}::after`).join(', ') + ` { content: "${placeholderText}"; ${PLACEHOLDER_TEXT_CSS} }`);
+            // show an image over the placeholder when using placeholders
+            this.styleSheet.insertRule(allSelectors.map(selector => `body.placeholders ${selector}::after`).join(', ') + ` { ${PLACEHOLDER_LOGO_CSS} }`);
         }
     }
 

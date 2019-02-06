@@ -161,7 +161,7 @@ const Filters = (() => {
         },
 
         /**
-         * Sends an "update-filter" message with all data for the filter to a specific tab
+         * Sends an "update-filter" message (with all data for that filter) for all filters to a specific tab
          * @param {tab} tab
          */
         'sendFilterDataToTab': function (tab) {

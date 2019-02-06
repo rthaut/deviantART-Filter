@@ -29,21 +29,18 @@ const Filter = (() => {
          * Event listener for browser runtime messages
          * @param {object} message The message
          * @param {runtime.MessageSender} sender The sender of the message
-         * @param {function} sendResponse Function to call to send a response to the message
          */
         onMessage(message, sender) {
             console.log(`[Content] Filter('${this.name}').onMessage()`, message, sender);
 
-            if (message.action === undefined) {
-                return;
-            }
-
-            switch (message.action) {
-                case 'update-filter':
-                    if (message.data.filter.id === this.id) {
-                        this.updateFilter(message.data.filter);
-                    }
-                    break;
+            if (message.action !== undefined) {
+                switch (message.action) {
+                    case 'update-filter':
+                        if (message.data.filter.id === this.id) {
+                            this.updateFilter(message.data.filter);
+                        }
+                        break;
+                }
             }
 
             return true;

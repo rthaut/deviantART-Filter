@@ -3,12 +3,17 @@ angular.module('deviantArtFilter.components.FilterPanel', ['ngMessages', 'ngTabl
 
     .controller('FilterPanelCtrl', ['$scope', 'NgTableParams', function ($scope, NgTableParams) {
 
-        $scope.createHeading = browser.i18n.getMessage('LabelCreateFilterPlaceholder', [$scope.filter.name.singular]);
-        $scope.filteredLbl = browser.i18n.getMessage('LabelFilteredPlaceholder', [$scope.filter.name.plural]);
-        $scope.createFilterLbl = browser.i18n.getMessage('LabelCreateFilter');
-        $scope.removeFilterLbl = browser.i18n.getMessage('LabelRemoveFilter');
-        $scope.creatingFilterLbl = browser.i18n.getMessage('LabelCreatingFilter');
-        $scope.removingFilterLbl = browser.i18n.getMessage('LabelRemovingFilter');
+        $scope.labels = {
+            'create': browser.i18n.getMessage('LabelCreateFilterPlaceholder', [$scope.filter.name.singular]),
+            'filtered': browser.i18n.getMessage('LabelFilteredPlaceholder', [$scope.filter.name.plural]),
+            'createFilter': browser.i18n.getMessage('LabelCreateFilter'),
+            'removeFilter': browser.i18n.getMessage('LabelRemoveFilter'),
+            'removingFilter': browser.i18n.getMessage('LabelRemovingFilter'),
+            'propertyRequired': browser.i18n.getMessage('FilterPropertyRequiredMessage'),
+            'propertyInvalidPattern': browser.i18n.getMessage('FilterPropertyInvalidPatternMessage'),
+            'booleanYes': browser.i18n.getMessage('LabelBooleanYes'),
+            'booleanNo': browser.i18n.getMessage('LabelBooleanNo')
+        };
 
         $scope.alerts = [];
 
@@ -31,7 +36,7 @@ angular.module('deviantArtFilter.components.FilterPanel', ['ngMessages', 'ngTabl
                 upper = total;
             }
 
-            return browser.i18n.getMessage('ShowingFilterCount', [lower, upper, total, $scope.filteredLbl]);
+            return browser.i18n.getMessage('ShowingFilterCount', [lower, upper, total, $scope.labels.filtered]);
         };
 
         const sorting = {};
@@ -64,18 +69,18 @@ angular.module('deviantArtFilter.components.FilterPanel', ['ngMessages', 'ngTabl
          */
         browser.runtime.onMessage.addListener((message, sender) => {
             console.log('[Component] FilterPanelCtrl.browser.runtime.onMessage()', message, sender);
-            if (message.action === undefined) {
-                console.error('[Component] FilterPanelCtrl.browser.runtime.onMessage() :: Error', 'Message is missing required "action" property');
-                return;
+
+            if (message.action !== undefined) {
+                switch (message.action) {
+                    case 'filter-updated':
+                        if ((message.data.filter !== undefined) && (message.data.filter === $scope.filter.id)) {
+                            $scope.getItems();
+                        }
+                        break;
+                }
             }
 
-            switch (message.action) {
-                case 'filter-updated':
-                    if ((message.data.filter !== undefined) && (message.data.filter === $scope.filter.id)) {
-                        $scope.getItems();
-                    }
-                    break;
-            }
+            return true;
         });
 
         $scope.getItems = function () {
@@ -90,25 +95,18 @@ angular.module('deviantArtFilter.components.FilterPanel', ['ngMessages', 'ngTabl
             }).then((response) => {
                 console.log('[Component] FilterPanelCtrl.getItems() :: Response', response);
                 if (response && response.data) {
-                    $scope.$apply(() => {
-                        updateFilterDataTableDataset(angular.copy(response.data));
-                    });
-                } else {
-                    throw new Error();
+                    updateFilterDataTableDataset(angular.copy(response.data));
                 }
             }).catch((error) => {
                 console.error('[Component] FilterPanelCtrl.getItems() :: Import Error', error);
-                $scope.$apply(() => {
-                    $scope.alerts.push({
-                        'type': 'danger',
-                        'msg': browser.i18n.getMessage('GenericLoadingError', [browser.i18n.getMessage('LabelFilters'), error.message])
-                    });
+                $scope.alerts.push({
+                    'type': 'danger',
+                    'msg': browser.i18n.getMessage('GenericLoadingError', [browser.i18n.getMessage('LabelFilters'), error.message])
                 });
-            }).then(() => {
+            }).finally(() => {
                 console.log('[Component] FilterPanelCtrl.getItems() :: Finally');
-                $scope.$apply(() => {
-                    $scope.loading = false;
-                });
+                $scope.loading = false;
+                $scope.$apply();
             });
         };
         $scope.getItems();
@@ -116,7 +114,7 @@ angular.module('deviantArtFilter.components.FilterPanel', ['ngMessages', 'ngTabl
         $scope.addItemToFilter = function ($event) {
             console.log('[Component] FilterPanelCtrl.addItemToFilter()', $event);
             $event.target.setAttribute('disabled', true);
-            $event.target.textContent = $scope.creatingFilterLbl;
+            $event.target.textContent = $scope.labels.creatingFilter;
 
             browser.runtime.sendMessage({
                 'action': 'add-filter-item',
@@ -129,34 +127,29 @@ angular.module('deviantArtFilter.components.FilterPanel', ['ngMessages', 'ngTabl
                 // (so response is an empty object, which triggers the below empty error)
                 console.log('[Component] FilterPanelCtrl.addItemToFilter() :: Response', response);
                 if (response && response.data) {
-                    $scope.$apply(() => {
-                        $scope.newFilterItem = angular.copy(blankFilterItem);
-                        $scope.form.$setPristine();
+                    $scope.newFilterItem = angular.copy(blankFilterItem);
+                    $scope.form.$setPristine();
 
-                        updateFilterDataTableDataset(angular.copy(response.data));
-                    });
-                } else {
-                    throw new Error();
+                    updateFilterDataTableDataset(angular.copy(response.data));
                 }
             }).catch((error) => {
                 console.error('[Component] FilterPanelCtrl.addItemToFilter() :: Create Error', error);
-                $scope.$apply(() => {
-                    $scope.alerts.push({
-                        'type': 'danger',
-                        'msg': browser.i18n.getMessage('CreateFilterError', [error.message || ''])
-                    });
+                $scope.alerts.push({
+                    'type': 'danger',
+                    'msg': browser.i18n.getMessage('CreateFilterError', [error.message || ''])
                 });
-            }).then(() => {
+            }).finally(() => {
                 console.log('[Component] FilterPanelCtrl.addItemToFilter() :: Finally');
                 $event.target.removeAttribute('disabled');
-                $event.target.textContent = $scope.createFilterLbl;
+                $event.target.textContent = $scope.labels.createFilter;
+                $scope.$apply();
             });
         };
 
         $scope.removeItemFromFilter = function ($event, item) {
             console.log('[Component] FilterPanelCtrl.removeItemFromFilter()', $event, item);
             $event.target.setAttribute('disabled', true);
-            $event.target.textContent = $scope.removingFilterLbl;
+            $event.target.textContent = $scope.labels.removingFilter;
 
             browser.runtime.sendMessage({
                 'action': 'remove-filter-item',
@@ -167,24 +160,19 @@ angular.module('deviantArtFilter.components.FilterPanel', ['ngMessages', 'ngTabl
             }).then((response) => {
                 console.log('[Component] FilterPanelCtrl.removeItemFromFilter() :: Response', response);
                 if (response && response.data) {
-                    $scope.$apply(() => {
-                        updateFilterDataTableDataset(angular.copy(response.data));
-                    });
-                } else {
-                    throw new Error();
+                    updateFilterDataTableDataset(angular.copy(response.data));
                 }
             }).catch((error) => {
                 console.error('[Component] FilterPanelCtrl.removeItemFromFilter() :: Remove Error', error);
-                $scope.$apply(() => {
-                    $scope.alerts.push({
-                        'type': 'danger',
-                        'msg': browser.i18n.getMessage('RemoveFilterError', [error.message || ''])
-                    });
+                $scope.alerts.push({
+                    'type': 'danger',
+                    'msg': browser.i18n.getMessage('RemoveFilterError', [error.message || ''])
                 });
             }).then(() => {
                 console.log('[Component] FilterPanelCtrl.removeItemFromFilter() :: Finally');
                 $event.target.removeAttribute('disabled');
-                $event.target.textContent = $scope.removeFilterLbl;
+                $event.target.textContent = $scope.labels.removeFilter;
+                $scope.$apply();
             });
         };
 

@@ -29,6 +29,9 @@
   "LabelManage": {
     "message": "Manage"
   },
+  "LabelOptions": {
+    "message": "Options"
+  },
   "LabelEnabled": {
     "message": "Enabled"
   },

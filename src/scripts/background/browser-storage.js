@@ -42,6 +42,11 @@ const BrowserStorage = (() => {
 
                     case 'placeholders':
                         return BrowserTabs.sendMessageToAllTabs({ 'action': 'toggle-placeholders' });
+
+                    case 'placeholderBGColor':
+                    case 'placeholderLogoColor':
+                    case 'placeholderTextColor':
+                        return BrowserTabs.sendMessageToAllTabs({ 'action': 'placeholder-styles-changed' });
                 }
             }
         },

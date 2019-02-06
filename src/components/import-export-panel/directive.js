@@ -140,10 +140,19 @@ angular.module('deviantArtFilter.components.ImportExportPanel', ['ngSanitize'])
 
         const fileDragDrop = angular.element(document.querySelector('#fileDragDrop'));
         fileDragDrop.bind('dragstart', function (e) {
-            e.dataTransfer.setData('text/plain', e.target.id);
-            e.dataTransfer.effectAllowed = 'move';
+            e.stopPropagation();
+            e.preventDefault();
+
+            const dt = e.dataTransfer !== undefined ? e.dataTransfer : e.originalEvent.dataTransfer;
+            if (dt !== undefined) {
+                dt.setData('text/plain', e.target.id);
+                dt.effectAllowed = 'move';
+            }
         });
         fileDragDrop.bind('dragenter', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+
             $scope.$apply(() => {
                 $scope.dragHover = true;
             });
@@ -156,20 +165,32 @@ angular.module('deviantArtFilter.components.ImportExportPanel', ['ngSanitize'])
                 $scope.dragHover = true;
             });
 
-            e.dataTransfer.dropEffect = 'move';
+            const dt = e.dataTransfer !== undefined ? e.dataTransfer : e.originalEvent.dataTransfer;
+            if (dt !== undefined) {
+                dt.dropEffect = 'move';
+            }
         });
         fileDragDrop.bind('dragleave', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+
             $scope.$apply(() => {
                 $scope.dragHover = false;
             });
         });
         fileDragDrop.bind('dragend', function (e) {
-            e.dataTransfer.clearData('text/plain');
-            e.dataTransfer.effectAllowed = 'none';
+            e.stopPropagation();
+            e.preventDefault();
 
             $scope.$apply(() => {
                 $scope.dragHover = false;
             });
+
+            const dt = e.dataTransfer !== undefined ? e.dataTransfer : e.originalEvent.dataTransfer;
+            if (dt !== undefined) {
+                dt.clearData('text/plain');
+                dt.effectAllowed = 'none';
+            }
         });
         fileDragDrop.bind('drop', function (e) {
             e.stopPropagation();
@@ -179,8 +200,13 @@ angular.module('deviantArtFilter.components.ImportExportPanel', ['ngSanitize'])
                 $scope.dragHover = false;
             });
 
-            const file = e.dataTransfer.files[0];
-            parseFilterFile(file);
+            const dt = e.dataTransfer !== undefined ? e.dataTransfer : e.originalEvent.dataTransfer;
+            if (dt !== undefined) {
+                const file = dt.files[0];
+                if (file !== undefined && file !== null) {
+                    parseFilterFile(file);
+                }
+            }
         });
 
     }])

@@ -11,9 +11,13 @@ const Options = (() => {
             //TODO: this list should probably be a constant that is somehow tied to the "options" data in getOptions()
             var defaults = {
                 'managementPanelType': 'tab',
+                'metadataBatchSize': 96,
                 'metadataCacheTTL': 7,
                 'metadataDebug': false,
                 'placeholders': true,
+                'placeholderBGColor': '#DDE6DA',
+                'placeholderLogoColor': '#B4C0B0',
+                'placeholderTextColor': '#B4C0B0',
                 'privateStorage': 'read'
             };
 
@@ -52,7 +56,11 @@ const Options = (() => {
             // NOTE: the order used below is the display order on the options tab of the management panel
             const data = await browser.storage.sync.get([
                 'placeholders',
+                'placeholderBGColor',
+                'placeholderLogoColor',
+                'placeholderTextColor',
                 'managementPanelType',
+                'metadataBatchSize',
                 'metadataCacheTTL',
                 'metadataDebug',
             ]);
@@ -81,6 +89,13 @@ const Options = (() => {
                         ];
                         break;
 
+                    case 'metadataBatchSize':
+                        opt.type = 'range';
+                        opt.min = 16;
+                        opt.max = 96;
+                        opt.step = 16;
+                        break;
+
                     case 'metadataCacheTTL':
                         opt.type = 'number';
                         opt.minimum = 0;
@@ -90,6 +105,12 @@ const Options = (() => {
                     case 'metadataDebug':
                     case 'placeholders':
                         opt.type = 'checkbox';
+                        break;
+
+                    case 'placeholderBGColor':
+                    case 'placeholderLogoColor':
+                    case 'placeholderTextColor':
+                        opt.type = 'color';
                         break;
 
                     default:

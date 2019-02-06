@@ -15,7 +15,7 @@
 
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h5 class="panel-title">{{createHeading}}</h5>
+            <h5 class="panel-title">{{labels.create}}</h5>
         </div>
         <div class="panel-body">
             <form class="form-horizontal" name="form">
@@ -29,12 +29,12 @@
 
                             <input ng-switch-when="text" type="text" class="form-control" name="{{property.field}}" id="{{property.field}}" ng-model="newFilterItem[property.field]" placeholder="{{property.title}}" ng-pattern="property.pattern" ng-required="property.required">
 
-                            <div ng-switch-when="boolean" class="radio">
-                                <label>
-                                    <input type="radio" name="{{property.field}}" id="{{property.field}}Yes" ng-model="newFilterItem[property.field]" ng-value="true" ng-required="property.required"> Yes
+                            <div ng-switch-when="boolean">
+                                <label class="radio-inline">
+                                    <input type="radio" name="{{property.field}}" id="{{property.field}}Yes" ng-model="newFilterItem[property.field]" ng-value="true" ng-required="property.required"> {{labels.booleanYes}}
                                 </label>
-                                <label>
-                                    <input type="radio" name="{{property.field}}" id="{{property.field}}No" ng-model="newFilterItem[property.field]" ng-value="false" ng-required="property.required"> No
+                                <label class="radio-inline">
+                                    <input type="radio" name="{{property.field}}" id="{{property.field}}No" ng-model="newFilterItem[property.field]" ng-value="false" ng-required="property.required"> {{labels.booleanNo}}
                                 </label>
                             </div>
 
@@ -42,10 +42,10 @@
                                 <category-hierarchy-select ng-switch-when="category" filter-path="newFilterItem.path" filter-name="newFilterItem.name"></category-hierarchy-select>
                             </div>
 
-                            <span class="help-block" ng-show="property.hint">{{property.hint}}</span>
+                            <span class="help-block" ng-show="property.hint" ng-bind-html="property.hint"></span>
                             <div ng-messages="form[property.field].$error" role="alert" ng-hide="form.$pristine">
-                                <span ng-message="required" class="help-block">Please enter a value for this field.</span>
-                                <span ng-message="pattern" class="help-block">This value is not valid.</span>
+                                <span ng-message="required" class="help-block">{{labels.propertyRequired}}</span>
+                                <span ng-message="pattern" class="help-block">{{labels.propertyInvalidPattern}}</span>
                             </div>
 
                         </div>
@@ -54,7 +54,7 @@
 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-primary" ng-click="addItemToFilter($event)" ng-disabled="form.$pristine || form.$invalid">{{createFilterLbl}}</button>
+                        <button type="submit" class="btn btn-primary" ng-click="addItemToFilter($event)" ng-disabled="form.$pristine || form.$invalid">{{labels.createFilter}}</button>
                     </div>
                 </div>
 
@@ -66,7 +66,7 @@
         <div class="panel-heading">
             <h5 class="panel-title">
                 <span ng-show="filterTableData.total()">{{showingFilterCount()}}</span>
-                <span ng-hide="filterTableData.total()">{{filteredLbl}}</span>
+                <span ng-hide="filterTableData.total()">{{labels.filtered}}</span>
             </h5>
         </div>
 
@@ -74,9 +74,10 @@
             <tr ng-repeat="row in $data track by $index">
                 <td ng-repeat="col in $columns" ng-switch="col.type">
                     <span ng-switch-default>{{row[col.field]}}</span>
+                    <span ng-switch-when="boolean">{{row[col.field] == true ? labels.booleanYes: labels.booleanNo}}</span>
                     <time ng-switch-when="date" datetime="{{row[col.field] | date:'medium'}}">{{row[col.field] | date:'longDate'}}</time>
                     <div ng-switch-when="command">
-                        <button type="button" class="btn btn-sm btn-danger" ng-click="removeItemFromFilter($event, row)">{{removeFilterLbl}}</button>
+                        <button type="button" class="btn btn-sm btn-danger" ng-click="removeItemFromFilter($event, row)">{{labels.removeFilter}}</button>
                     </div>
                 </td>
             </tr>
