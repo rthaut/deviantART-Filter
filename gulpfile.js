@@ -1,27 +1,31 @@
+/* global process */
+const env = process.env.NODE_ENV || 'development';
+
 /* global require */
 const gulp = require('gulp');
 
 const pkg = require('./package.json');
-const cfg = require('./gulp.config.json');
+const cfg = require('./gulp.config.js');
 
 // additional native gulp packages
-const del = require('del');
 const fs = require('fs');
 const path = require('path');
-const merge = require('merge-stream');
 
 // load all plugins from package development dependencies
 const $ = require('gulp-load-plugins')({
     'scope': ['devDependencies'],
     'pattern': ['*'],
     'rename': {
+        'ansi-colors': 'colors',
+        'fancy-log': 'log',
         'gulp-angular-embed-templates': 'embedTemplates',
-        'gulp-if': 'gulpIf',
+        'merge-stream': 'merge',
         'rollup-stream': 'rollup',
         'vinyl-buffer': 'buffer',
         'vinyl-source-stream': 'source',
     },
     'postRequireTransforms': {
+        'print': print => print.default,
         'uglify': uglify => require('gulp-uglify/composer')(require('uglify-es'), console)
     }
 });
@@ -56,33 +60,28 @@ function lint(dir, fix = true, failOnError = true) {
             'fix': fix
         }),
         $.eslint.format(),
-        $.gulpIf(failOnError, $.eslint.failOnError()),
-    ]);
+        $.if(failOnError, $.eslint.failOnError()),
+    ],
+    err => { if (err) $.log.error(`${$.colors.red('Function Error [\'lint\']')}: ${err.message}`); });
 }
 
 
 
 /* ====================  BUILD TASKS  ==================== */
 
-gulp.task('clean', () => {
-    return del(['./dist/*'])
-        .catch((error) => {
-            console.error(error);
-        });
-});
-
 gulp.task('minify', () => {
     return $.pump([
         gulp.src(['./dist/**/*.{css,js}', '!./dist/*/vendor/**/*', '!./dist/**/*.min.*', ]),
-        $.gulpIf(['**/*.css'], $.postcss()),    // options are loaded from postcss.config.js automatically
-        $.gulpIf(['**/*.js'], $.uglify(cfg.plugin_options.uglify)),
+        $.if(['**/*.css'], $.postcss()),    // options are loaded from postcss.config.js automatically
+        $.if(['**/*.js'], $.uglify(cfg.plugin_options.uglify)),
         // TODO: the filenames SHOULD include .min, but we would need to update the paths in both the HTML files and the manifests
         //$.rename({ 'suffix': '.min' }),
         $.header(fs.readFileSync('./src/banner.txt', 'utf8'), {
             'pkg': pkg
         }),
         gulp.dest('./dist'),
-    ]);
+    ],
+    err => { if (err) $.log.error(`${$.colors.red('Task Error [\'minify\']')}: ${err.message}`); });
 });
 
 // ==========================================
@@ -93,13 +92,14 @@ gulp.task('lint:components', () => {
     return lint(cfg.source_folders.components, true, false);
 });
 gulp.task('build:components', gulp.series('lint:components', () => {
-    return merge(folders(cfg.source_folders.components).map((folder) => {
+    return $.merge(folders(cfg.source_folders.components).map((folder) => {
         return $.pump([
             gulp.src([`${cfg.source_folders.components}/${folder}/**/*.js`]),
             $.embedTemplates(),
             $.concat(folder + '.js'),
             ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/components`)),
-        ]);
+        ],
+        err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:components\']')}: ${err.message}`); });
     }));
 }));
 
@@ -113,7 +113,8 @@ gulp.task('build:images', () => {
     return $.pump([
         gulp.src(['./images/**/*.{png,svg}']),
         ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/images`)),
-    ]);
+    ],
+    err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:images\']')}: ${err.message}`); });
 });
 
 
@@ -124,7 +125,7 @@ gulp.task('build:logos', () => {
     //TODO: handle the icons/sizes defined in page_action.default_icon for Edge
     const manifest = JSON.parse(fs.readFileSync(`${cfg.source_folders.manifests}/manifest.shared.json`));
     const icons = manifest.icons;
-    return merge(Object.keys(icons).map((size) => {
+    return $.merge(Object.keys(icons).map((size) => {
         const file = path.basename(icons[size], '.png').replace(/\-\d+/, '');
         return $.pump([
             gulp.src([`./images/logo/${file}.svg`]),
@@ -134,36 +135,39 @@ gulp.task('build:logos', () => {
             }),
             $.rename(icons[size]),  // the name includes the relative path structure (from the manifest to the icon)
             ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}`)),
-        ]);
+        ],
+        err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:logos\']')}: ${err.message}`); });
     }));
 });
 
 
 gulp.task('build:less', () => {
-    return merge(Object.keys(cfg.supported_browsers).map((browser) => {
+    return $.merge(Object.keys(cfg.supported_browsers).map((browser) => {
         return $.pump([
             gulp.src([`${cfg.source_folders.less}/*.less`]),
             $.less(cfg.plugin_options.less),
             $.replace(/browser-extension\:\/\//gm, cfg.supported_browsers[browser].protocol),
             gulp.dest(`./dist/${browser}/css`),
-        ]);
+        ],
+        err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:less\']')}: ${err.message}`); });
     }));
 });
 
 
 gulp.task('build:locales', () => {
-    return merge(folders(cfg.source_folders.locales).map((folder) => {
+    return $.merge(folders(cfg.source_folders.locales).map((folder) => {
         return $.pump([
             gulp.src([`${cfg.source_folders.locales}/${folder}/**/*.json`]),
             $.mergeJson({ 'fileName': 'messages.json' }),
             ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/_locales/${folder}`)),
-        ]);
+        ],
+        err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:locales\']')}: ${err.message}`); });
     }));
 });
 
 
 gulp.task('build:manifest', () => {
-    return merge(Object.keys(cfg.supported_browsers).map((browser) => {
+    return $.merge(Object.keys(cfg.supported_browsers).map((browser) => {
         return $.pump([
             gulp.src([
                 `${cfg.source_folders.manifests}/manifest.shared.json`,
@@ -172,7 +176,8 @@ gulp.task('build:manifest', () => {
             $.mergeJson({ 'fileName': 'manifest.json' }),
             $.ejs({ 'pkg': pkg }),
             gulp.dest(`./dist/${browser}`),
-        ]);
+        ],
+        err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:manifest\']')}: ${err.message}`); });
     }));
 });
 
@@ -181,7 +186,7 @@ gulp.task('lint:pages', () => {
     return lint(cfg.source_folders.pages, true, false);
 });
 gulp.task('build:pages', gulp.series('lint:pages', () => {
-    return merge(folders(cfg.source_folders.pages).map((folder) => {
+    return $.merge(folders(cfg.source_folders.pages).map((folder) => {
         return $.pump([
             // TODO: invoking useref prevents this entire task from properly ending, so any dependent tasks do not complete properly (like the 'watch' task, which just stops completely...)
             //gulp.src([`${_folders.pages}/${folder}/**/*.html`]),
@@ -192,7 +197,8 @@ gulp.task('build:pages', gulp.series('lint:pages', () => {
 
             // TODO: maybe use gulp-html-replace to only inject the browser polyfill for Chrome (or remove it for Firefox)? then the manifest for Firefox can probably omit the polyfill script completely
             ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/pages/${folder}`)),
-        ]);
+        ],
+        err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:pages\']')}: ${err.message}`); });
     }));
 }));
 
@@ -201,8 +207,7 @@ gulp.task('lint:scripts', gulp.series('lint:helpers', () => {
     return lint(cfg.source_folders.scripts, true, false);
 }));
 gulp.task('build:scripts', gulp.series('lint:scripts', () => {
-    const tokens = $.ini.parse(fs.readFileSync('.config.ini', 'utf-8'));
-    return merge(folders(cfg.source_folders.scripts).map((folder) => {
+    return $.merge(folders(cfg.source_folders.scripts).map((folder) => {
         return $.pump([
             $.rollup({
                 'input': `${cfg.source_folders.scripts}/${folder}/index.js`,
@@ -218,11 +223,12 @@ gulp.task('build:scripts', gulp.series('lint:scripts', () => {
             $.source(folder + '.js'),
             $.buffer(),
             $.tokenReplace({
-                'global': tokens,
+                'global': cfg.tokens,
                 'preserveUnknownTokens': true
             }),
             ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/scripts`)),
-        ]);
+        ],
+        err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:scripts\']')}: ${err.message}`); });
     }));
 }));
 
@@ -231,7 +237,8 @@ gulp.task('build:vendor', () => {
     return $.pump([
         gulp.src(cfg.vendor_files),
         ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/vendor`)),
-    ]);
+    ],
+    err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:vendor\']')}: ${err.message}`); });
 });
 
 
@@ -239,12 +246,13 @@ gulp.task('build:vendor', () => {
 // package/distribute tasks
 // ========================
 gulp.task('zip', () => {
-    return merge(Object.keys(cfg.supported_browsers).map((browser) => {
+    return $.merge(Object.keys(cfg.supported_browsers).map((browser) => {
         return $.pump([
             gulp.src([`./dist/${browser}/**/*`, '!Thumbs.db']),
             $.zip(`${pkg.name}-${browser}.zip`),
             gulp.dest('./dist'),
-        ]);
+        ],
+        err => { if (err) $.log.error(`${$.colors.red('Task Error [\'zip\']')}: ${err.message}`); });
     }));
 });
 
@@ -287,8 +295,10 @@ gulp.task('watch', (callback) => {
     callback();
 });
 
-gulp.task('debug', gulp.series('build', 'watch'));
-gulp.task('package', gulp.series('clean', 'build', 'minify', 'zip'));
+gulp.task('build:development', gulp.task('build'));
+gulp.task('build:production', gulp.series('build', 'minify'));
 
-// default task (alias debug)
-gulp.task('default', gulp.task('debug'));
+gulp.task('watch:development', gulp.series('build:development', 'watch'));
+gulp.task('watch:production', gulp.series('build:production', 'watch'));
+
+gulp.task('package', gulp.series('build:production', 'zip'));
