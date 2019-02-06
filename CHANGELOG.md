@@ -7,6 +7,10 @@
 - **Custom Placeholder Styles**. You can now control the colors used for the placeholders on filtered deviations. Management Panel/Screen, go to the Options tab, and set the Background, Logo, and/or Text Colors for Placeholders. Note that these settings are ineffective if you have placeholders disabled.
 - **Metadata Batch Size**. A new (somewhat experimental) feature has been implemented to allow control over how much metadata is loaded at once (for category and tag filters). Setting this to a lower value may help your browsing performance.
 
+### Bug Fixes
+
+- Clarify and restrict the use of the hashtag symbol (`#`) when creating tag filters ([#57](https://github.com/rthaut/deviantART-Filter/issues/57))
+
 ## Version 5.0.3 (June 22, 2018)
 
 ### Bug Fixes
