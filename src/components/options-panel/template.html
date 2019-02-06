@@ -32,8 +32,8 @@
                 <label class="control-label">{{option.name}}</label>
                 <span class="help-block">{{option.description}}</span>
                 <select class="form-control" name="{{option.id}}" id="{{option.id}}" ng-model="option.value" ng-change="changeOption(option)">
-                <option ng-repeat="opt in option.values" ng-disabled="opt.disabled" value="{{opt.value}}">{{opt.label}}</option>
-            </select>
+                    <option ng-repeat="opt in option.values" ng-disabled="opt.disabled" value="{{opt.value}}">{{opt.label}}</option>
+                </select>
             </div>
 
             <div ng-switch-when="range">
@@ -54,7 +54,7 @@
             </div>
 
             <div ng-switch-when="text">
-                <label for="{{option.id}}" class="col-sm-2 control-label">{{option.name}}</label>
+                <label for="{{option.id}}" class="control-label">{{option.name}}</label>
                 <span class="help-block">{{option.description}}</span>
                 <input type="text" class="form-control" name="{{option.id}}" id="{{option.id}}" ng-model="option.value" ng-model-options="{'debounce': 500}" ng-disabled="option.disabled" ng-change="changeOption(option)" required/>
                 <div class="help-block" ng-messages="OptionsPanelCtrlForm[option.id].$error">
