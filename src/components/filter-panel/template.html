@@ -29,12 +29,12 @@
 
                             <input ng-switch-when="text" type="text" class="form-control" name="{{property.field}}" id="{{property.field}}" ng-model="newFilterItem[property.field]" placeholder="{{property.title}}" ng-pattern="property.pattern" ng-required="property.required">
 
-                            <div ng-switch-when="boolean" class="radio">
-                                <label>
-                                    <input type="radio" name="{{property.field}}" id="{{property.field}}Yes" ng-model="newFilterItem[property.field]" ng-value="true" ng-required="property.required"> Yes
+                            <div ng-switch-when="boolean">
+                                <label class="radio-inline">
+                                    <input type="radio" name="{{property.field}}" id="{{property.field}}Yes" ng-model="newFilterItem[property.field]" ng-value="true" ng-required="property.required"> {{labels.booleanYes}}
                                 </label>
-                                <label>
-                                    <input type="radio" name="{{property.field}}" id="{{property.field}}No" ng-model="newFilterItem[property.field]" ng-value="false" ng-required="property.required"> No
+                                <label class="radio-inline">
+                                    <input type="radio" name="{{property.field}}" id="{{property.field}}No" ng-model="newFilterItem[property.field]" ng-value="false" ng-required="property.required"> {{labels.booleanNo}}
                                 </label>
                             </div>
 
@@ -44,8 +44,8 @@
 
                             <span class="help-block" ng-show="property.hint" ng-bind-html="property.hint"></span>
                             <div ng-messages="form[property.field].$error" role="alert" ng-hide="form.$pristine">
-                                <span ng-message="required" class="help-block">Please enter a value for this field.</span>
-                                <span ng-message="pattern" class="help-block">This value is not valid.</span>
+                                <span ng-message="required" class="help-block">{{labels.propertyRequired}}</span>
+                                <span ng-message="pattern" class="help-block">{{labels.propertyInvalidPattern}}</span>
                             </div>
 
                         </div>

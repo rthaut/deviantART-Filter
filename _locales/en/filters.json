@@ -140,5 +140,19 @@
   },
   "FilterTypeGenericPropertyDateHint": {
     "message": ""
+  },
+  "FilterPropertyRequiredMessage": {
+    "message": "Please enter a value for this field.",
+    "description": "The error message displayed when creating a filter if a required property is not set."
+  },
+  "FilterPropertyInvalidPatternMessage": {
+    "message": "This value is not valid.",
+    "description": "The error message displayed when creating a filter if a property's values does not match the pattern."
+  },
+  "LabelBooleanYes": {
+    "message": "Yes"
+  },
+  "LabelBooleanNo": {
+    "message": "No"
   }
 }

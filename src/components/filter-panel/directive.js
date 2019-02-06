@@ -9,6 +9,10 @@ angular.module('deviantArtFilter.components.FilterPanel', ['ngMessages', 'ngTabl
             'createFilter': browser.i18n.getMessage('LabelCreateFilter'),
             'removeFilter': browser.i18n.getMessage('LabelRemoveFilter'),
             'removingFilter': browser.i18n.getMessage('LabelRemovingFilter'),
+            'propertyRequired': browser.i18n.getMessage('FilterPropertyRequiredMessage'),
+            'propertyInvalidPattern': browser.i18n.getMessage('FilterPropertyInvalidPatternMessage'),
+            'booleanYes': browser.i18n.getMessage('LabelBooleanYes'),
+            'booleanNo': browser.i18n.getMessage('LabelBooleanNo')
         };
 
         $scope.alerts = [];
