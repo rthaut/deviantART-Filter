@@ -22,6 +22,6 @@ jspm_packages
 dist
 
 # Miscellaneous
-.config.ini
+.env
 certs
 Thumbs.db
