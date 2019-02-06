@@ -5,12 +5,6 @@ import { PLACEHOLDER_CSS, PLACEHOLDER_LOGO_CSS } from '../../../helpers/constant
 
 const CSSFilter = (() => {
 
-    const DEFAULT_VARS = {
-        'placeholderBGColor': '#DDE6DA',
-        'placeholderLogoColor': '#B4C0B0',
-        'placeholderTextColor': '#B4C0B0'
-    };
-
     class CSSFilter extends Filter {
 
         /**
@@ -22,22 +16,6 @@ const CSSFilter = (() => {
             super(id, name);
 
             this.styleSheet = StyleSheet.Create();
-
-            this.varStyleSheet = StyleSheet.Create();
-            this.setVariables();
-        }
-
-        async setVariables() {
-            console.log('[Content] CSSFilter.setVariables()');
-
-            StyleSheet.Reset(this.varStyleSheet);
-
-            const vars = await browser.storage.sync.get(DEFAULT_VARS);
-            this.varStyleSheet.insertRule(`:root {
-                --placeholder-bg-color: ${vars.placeholderBGColor};
-                --placeholder-logo-color: ${vars.placeholderLogoColor};
-                --placeholder-text-color: ${vars.placeholderTextColor};
-            }`);
         }
 
         /**
