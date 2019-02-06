@@ -19,8 +19,10 @@ export const PLACEHOLDER_CSS = [
     'color: var(--placeholder-text-color);',
     'font-weight: bold;',
     'line-height: 1.25em;',
-    'padding: 1.25em;',
+    'padding: 1.5em;',
     'text-align: center;',
+    'display: flex;',
+    'flex-direction: column-reverse;'
 ].join('\n');
 
 export const PLACEHOLDER_LOGO_CSS = [
