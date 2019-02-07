@@ -40,4 +40,8 @@ export const PLACEHOLDER_LOGO_CSS = [
     'mask-position: center center;',
     'mask-repeat: no-repeat;',
     'mask-size: 80% 50%;',
+    `-webkit-mask-image: url(${browser.runtime.getURL('images/placeholder.svg')});`,
+    '-webkit-mask-position: center center;',
+    '-webkit-mask-repeat: no-repeat;',
+    '-webkit-mask-size: 80% 50%;',
 ].join('\n');
