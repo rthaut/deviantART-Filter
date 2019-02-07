@@ -71,7 +71,6 @@ DeviantArt Filter allows you to export and import filters from a JSON file. This
 2. An `x` icon will appear in the top-left corner of the thumbnail.
 3. Click on the `x` to filter that user.
 
-
 [chrome-url]: https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp
 [chrome-image-download]: https://img.shields.io/chrome-web-store/d/odlmamilbohnpnoomjclomghphbajikp.svg
 [chrome-image-version]: https://img.shields.io/chrome-web-store/v/odlmamilbohnpnoomjclomghphbajikp.svg

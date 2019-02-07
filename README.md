@@ -1,7 +1,7 @@
 [<img align="right" src="https://travis-ci.com/rthaut/deviantART-Filter.svg?branch=master" alt="Build Status"/>](https://travis-ci.com/rthaut/deviantART-Filter)
 [<img align="right" src="https://badges.greenkeeper.io/rthaut/deviantART-Filter.svg" alt="Greenkeeper badge"/>](https://greenkeeper.io/)
 
-# DeviantArt Filter 5.1.0
+# DeviantArt Filter 5.1.1
 
 > Allows configurable filtering/removal of deviations by user, tag, and/or category on DeviantArt
 
@@ -178,4 +178,3 @@ This setting, as the description states, is primarily for troubleshooting and de
 ### Browse Page with Placeholders Disabled
 
 ![Screenshot of DeviantArt with placeholders disabled for filtered deviations](/screenshots/No-Placeholders.png?raw=true)
-
