@@ -71,7 +71,6 @@ DeviantArt Filter allows you to export and import filters from a JSON file. This
 2. An `x` icon will appear in the top-left corner of the thumbnail.
 3. Click on the `x` to filter that user.
 
-
 [firefox-url]: https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/
 [firefox-image-download]: https://img.shields.io/amo/d/deviantart-filter.svg
 [firefox-image-version]: https://img.shields.io/amo/v/deviantart-filter.svg
