@@ -83,7 +83,7 @@
     "verb-toc": "^0.2.9",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^2.0.0",
-    "web-ext": "^2.7.0"
+    "web-ext": "^3.0.0"
   },
   "verb": {
     "silent": true,
