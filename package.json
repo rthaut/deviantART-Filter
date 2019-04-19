@@ -32,7 +32,7 @@
     "angular-bootstrap-slider": "github:seiyria/angular-bootstrap-slider",
     "angular-messages": "^1.7.5",
     "angular-sanitize": "^1.7.5",
-    "bootstrap": "3.4.1",
+    "bootstrap": "4.3.1",
     "bootstrap-slider": "^10.6.0",
     "jquery": "^3.2.1",
     "ng-table": "^3.0.1",
