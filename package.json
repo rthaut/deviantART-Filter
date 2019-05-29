@@ -76,7 +76,7 @@
     "rollup-stream": "^1.24.1",
     "through2": "^3.0.0",
     "time-stamp": "^2.0.0",
-    "trash-cli": "^2.0.0",
+    "trash-cli": "^3.0.0",
     "uglify-es": "^3.3.9",
     "verb": "github:verbose/verb#dev",
     "verb-generate-readme": "^0.8.0",
