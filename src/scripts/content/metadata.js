@@ -80,7 +80,7 @@ const Metadata = (() => {
 
                 links.forEach((link) => {
                     if (link !== undefined && link !== null) {
-                        const thumb = link.parentElement;
+                        const thumb = link.closest('span.thumb');
                         const target = (thumb !== undefined && thumb !== null) ? thumb : link;
 
                         if (meta.uuid) {
