@@ -20,10 +20,10 @@ const Metadata = (() => {
 
             this.handleThumbs(document.querySelectorAll('span.thumb'));
 
-            if (this.useCache) {
-                MetadataCache.trim(metadataCacheTTL);
-            } else {
-                MetadataCache.clear();
+            try {
+                this.useCache ? MetadataCache.trim(metadataCacheTTL) : MetadataCache.clear();
+            } catch (error) {
+                console.error('[Content] Metadata.init() :: Failed to trim/clear cache', error);
             }
 
             const { metadataDebug } = await browser.storage.sync.get('metadataDebug');
@@ -43,17 +43,21 @@ const Metadata = (() => {
                 switch (message.action) {
                     case 'set-metadata':
                         if (this.useCache) {
-                            MetadataCache.save(message.data.metadata);
+                            try {
+                                MetadataCache.save(message.data.metadata);
+                            } catch (error) {
+                                console.error('[Content] Metadata.onMessage() :: Failed to cache metadata', error);
+                            }
                         }
                         this.setMetadataOnThumbnails(message.data.metadata, false);
                         break;
 
                     case 'metadata-cache-ttl-changed':
                         this.useCache = parseInt(message.data.metadataCacheTTL, 10) > 0;
-                        if (this.useCache) {
-                            MetadataCache.trim(message.data.metadataCacheTTL);
-                        } else {
-                            MetadataCache.clear();
+                        try {
+                            this.useCache ? MetadataCache.trim(message.data.metadataCacheTTL) : MetadataCache.clear();
+                        } catch (error) {
+                            console.error('[Content] Metadata.onMessage() :: Failed to trim/clear cache', error);
                         }
                         break;
 
@@ -80,7 +84,7 @@ const Metadata = (() => {
 
                 links.forEach((link) => {
                     if (link !== undefined && link !== null) {
-                        const thumb = link.parentElement;
+                        const thumb = link.closest('span.thumb');
                         const target = (thumb !== undefined && thumb !== null) ? thumb : link;
 
                         if (meta.uuid) {
@@ -165,7 +169,12 @@ const Metadata = (() => {
                     }
                 });
 
-                const metadata = await MetadataCache.get(slugs);
+                let metadata;
+                try {
+                    metadata = await MetadataCache.get(slugs);
+                } catch (error) {
+                    console.error('[Content] Metadata.handleThumbs() :: Failed to retrieve metadata from cache', error);
+                }
                 if (metadata.length) {
                     this.setMetadataOnThumbnails(metadata, true);
                     return;

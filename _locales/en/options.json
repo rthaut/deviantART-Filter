@@ -86,26 +86,6 @@
     "message": "Set a custom color for the text of the placeholder shown in place of filtered deviations.",
     "description": ""
   },
-  "OptionPrivateStorageName": {
-    "message": "Use Filters in Private/Incognito Mode",
-    "description": ""
-  },
-  "OptionPrivateStorageDescription": {
-    "message": "This option determines if filters that are created in normal browsing mode are available while in Private/Incognito mode.",
-    "description": ""
-  },
-  "OptionPrivateStorageValueWrite": {
-    "message": "Yes, and save changes",
-    "description": ""
-  },
-  "OptionPrivateStorageValueRead": {
-    "message": "Yes, but do NOT save changes",
-    "description": ""
-  },
-  "OptionPrivateStorageValueNone": {
-    "message": "No",
-    "description": ""
-  },
   "OptionUpdateError": {
     "message": "An error occurred while updating the $OPTION$ option: $ERROR$",
     "description": "The error message displayed if an option fails to update correctly.",

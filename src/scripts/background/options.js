@@ -17,8 +17,7 @@ const Options = (() => {
                 'placeholders': true,
                 'placeholderBGColor': '#DDE6DA',
                 'placeholderLogoColor': '#B4C0B0',
-                'placeholderTextColor': '#B4C0B0',
-                'privateStorage': 'read'
+                'placeholderTextColor': '#B4C0B0'
             };
 
             const data = await browser.storage.sync.get();
