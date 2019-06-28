@@ -34,7 +34,17 @@ module.exports = {
         },
         'uglify': {
             'compress': {
-                'drop_console': true
+                'drop_console': false,
+                'pure_funcs': [
+                    'console.group',
+                    'console.groupCollapsed',
+                    'console.groupEnd',
+                    'console.debug',
+                    'console.log',
+                    'console.info',
+                    'console.warning',
+                    //'console.error'   // intentionally keeping console.error for troubleshooting release builds
+                ]
             },
             'mangle': true
         }
