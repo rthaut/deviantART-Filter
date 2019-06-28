@@ -1,7 +1,7 @@
 [<img align="right" src="https://travis-ci.com/rthaut/deviantART-Filter.svg?branch=master" alt="Build Status"/>](https://travis-ci.com/rthaut/deviantART-Filter)
 [<img align="right" src="https://badges.renovateapi.com/github/rthaut/deviantART-Filter" alt="Renovate Status"/>](https://renovatebot.com/)
 
-# DeviantArt Filter 5.1.1
+# DeviantArt Filter 5.1.2
 
 > Allows configurable filtering/removal of deviations by user, tag, and/or category on DeviantArt
 

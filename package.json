@@ -1,7 +1,7 @@
 {
   "name": "deviantart-filter",
   "title": "DeviantArt Filter",
-  "version": "5.1.1",
+  "version": "5.1.2",
   "description": "Allows configurable filtering/removal of deviations by user, tag, and/or category on DeviantArt",
   "author": "Ryan Thaut <rthaut@gmail.com> (http://ryanthaut.com)",
   "homepage": "https://github.com/rthaut/deviantART-Filter",
