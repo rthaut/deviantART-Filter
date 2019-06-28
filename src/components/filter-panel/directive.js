@@ -103,7 +103,7 @@ angular.module('deviantArtFilter.components.FilterPanel', ['ngMessages', 'ngTabl
                     'type': 'danger',
                     'msg': browser.i18n.getMessage('GenericLoadingError', [browser.i18n.getMessage('LabelFilters'), error.message])
                 });
-            }).finally(() => {
+            }).then(() => {
                 console.log('[Component] FilterPanelCtrl.getItems() :: Finally');
                 $scope.loading = false;
                 $scope.$apply();
@@ -138,7 +138,7 @@ angular.module('deviantArtFilter.components.FilterPanel', ['ngMessages', 'ngTabl
                     'type': 'danger',
                     'msg': browser.i18n.getMessage('CreateFilterError', [error.message || ''])
                 });
-            }).finally(() => {
+            }).then(() => {
                 console.log('[Component] FilterPanelCtrl.addItemToFilter() :: Finally');
                 $event.target.removeAttribute('disabled');
                 $event.target.textContent = $scope.labels.createFilter;
