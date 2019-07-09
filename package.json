@@ -43,7 +43,7 @@
     "ansi-colors": "^4.0.1",
     "cross-env": "^5.2.0",
     "cssnano": "^4.1.10",
-    "del": "^4.1.1",
+    "del": "^5.0.0",
     "env-path": "^1.0.7",
     "fancy-log": "^1.3.3",
     "filterhtml": "^0.6.0",
