@@ -36,7 +36,7 @@
     "bootstrap-slider": "^10.6.1",
     "idb": "^3.0.2",
     "jquery": "^3.4.1",
-    "ng-table": "^3.0.1",
+    "ng-table": "^4.0.0",
     "webextension-polyfill": "^0.5.0"
   },
   "devDependencies": {
