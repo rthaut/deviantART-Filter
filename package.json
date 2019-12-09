@@ -50,7 +50,7 @@
     "gulp": "^4.0.2",
     "gulp-angular-embed-templates": "^2.3.0",
     "gulp-concat": "^2.6.1",
-    "gulp-ejs": "^4.1.1",
+    "gulp-ejs": "^5.0.0",
     "gulp-eslint": "^6.0.0",
     "gulp-header": "^2.0.5",
     "gulp-if": "^3.0.0",
