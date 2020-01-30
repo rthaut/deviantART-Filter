@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "ansi-colors": "^4.0.1",
-    "cross-env": "^6.0.0",
+    "cross-env": "^7.0.0",
     "cssnano": "^4.1.10",
     "del": "^5.0.0",
     "env-path": "^1.0.7",
