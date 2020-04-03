@@ -1,0 +1,135 @@
+body.theme-dark {
+    --da-filter-bg-color: #161a1f;
+    --da-filter-logo-color: #5d5d6c;
+    --da-filter-text-color: #5d5d6c;
+    --da-filter-border-color: #5d5d6c;
+}
+body.theme-light {
+    --da-filter-bg-color: #fffdfd;
+    --da-filter-logo-color: #d0d0d4;
+    --da-filter-text-color: #d0d0d4;
+    --da-filter-border-color: #d0d0d4;
+}
+body.theme-light.light-green {
+    --da-filter-bg-color: #53695a;
+    --da-filter-logo-color: #869f8d;
+    --da-filter-text-color: #869f8d;
+    --da-filter-border-color: #869f8d;
+}
+
+
+[da-filter-category],
+[da-filter-keyword],
+[da-filter-user] {
+    position: relative;
+}
+
+[da-filter-category]::before,
+[da-filter-keyword]::before,
+[da-filter-user]::before {
+    z-index: 4;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    background-color: var(--da-filter-bg-color);
+    color: var(--da-filter-text-color);
+    border: 1px solid;
+    border-color: var(--da-filter-border-color);
+    font-weight: light;
+    line-height: 1.25em;
+    padding: 1.5em;
+    text-align: center;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+[da-filter-category]::after,
+[da-filter-keyword]::after,
+[da-filter-user]::after {
+    z-index: 4;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: "";
+    background-color: var(--da-filter-logo-color);
+    mask-image: url('../images/placeholder.svg');
+    mask-position: center center;
+    mask-repeat: no-repeat;
+    mask-size: 80% 50%;
+    /* TOOD: are the -webkit- prefixes still needed? does the build tool include autoprefixer? */
+    -webkit-mask-image: url('../images/placeholder.svg');
+    -webkit-mask-position: center center;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: 80% 50%;
+}
+
+[da-filter-user]::before {
+    content: "Filtered User: " attr(da-filter-user);
+}
+
+[da-filter-keyword]::before {
+    content: "Filtered Keyword: " attr(da-filter-keyword);
+}
+
+[da-filter-keyword][da-filter-keyword-attribute]::before {
+    content: "Filtered Keyword in " attr(da-filter-keyword-attribute) ": " attr(da-filter-keyword);
+}
+
+
+/* QUICK HIDE CONTROL */
+[data-hook="deviation_std_thumb"] [da-filter-quick-hide] {
+    position: absolute;
+    z-index: 1; /* keep it below the placeholder */
+    top: 0;
+    left: 0;
+    width: 38px;
+    height: 26px;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAaCAYAAADbhS54AAAAsUlEQVRIic3VPQuCYBSG4bvoA4fAIaKlpcHFoSASGpoaGgJDEMX//0dcEkTMXgPf8zxw7xdnOQCVYAUCiL5OirAcWCnCYj6zhrTLgIUiLKI1a0xTCswVYUc6swZVwAuYKcIOXZQC7NmHUoDtFWGPbyhr2FYRdh9CWcJCRdjtF8oCVgIbRdjVBeUbVgCBIuzsivIJy4G1GiwFdmNQPmAJsByLmhL2ZuBBuyyboAt/XqlZDcPEGXawh1sVAAAAAElFTkSuQmCC');
+    background-position: center left;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    text-indent: 5px;
+    font-family: DA-brandicons;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1;
+    color: #EAF2EE;
+    cursor: pointer;
+    transition: all .2s cubic-bezier(0, 0, .58, 1);
+    white-space: nowrap;
+}
+
+[data-hook="deviation_std_thumb"] [da-filter-quick-hide]:hover {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAaCAYAAADbhS54AAAAvklEQVRIic3OMQ7BcBxH8cdgQiQmu7W7zcQBnMAFXMAFxGoxdHWA3sAB7FaNhbGLSAxq0aRpilbT/+/7krd/AGLBbwgg8l4pwiKgpwhb8s4akv4CtBVhC1JZY5JDoKUIm5PJGhQDR6CpCJtlUQqwA9BQhE3yUNaw/SeUNWykCAu+oaxgT8BThO1+oSxgD2CoCNsWQbmG3YGBImxdFOUSFgF9NdgJGJdBuYD5QKcsqk7YGZj+A0q61vAG6FZBvQCzZyZfoGzu2QAAAABJRU5ErkJggg==');
+    color: #D32800;
+}
+
+[data-hook="deviation_std_thumb"]:hover [da-filter-quick-hide] {
+    opacity: 1;
+}
+
+[data-hook="deviation_std_thumb"] [da-filter-quick-hide]::after {
+    content: "\e632";
+    margin-right: 5px;
+    display: inline;
+}
+
+
+/* DEBUG OUTLINES */
+[data-hook="deviation_std_thumb"]:not([data-username]) {
+    outline: #e59b00 solid 2px;
+}
+
+/* [data-hook="deviation_std_thumb"][data-username]:not([data-username=""]) {
+    outline: #00e59b solid 1px;
+} */

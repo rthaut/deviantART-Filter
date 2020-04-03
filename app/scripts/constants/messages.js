@@ -1,0 +1,6 @@
+
+export const LOCAL_STORAGE_CHANGED = 'LOCAL_STORAGE_CHANGED';
+export const ADD_FILTER = 'ADD_FILTER';
+export const REMOVE_FILTER = 'REMOVE_FILTER';
+export const UPDATE_FILTER = 'UPDATE_FILTER';
+export const SAVE_FILTERS = 'SAVE_FILTER';
