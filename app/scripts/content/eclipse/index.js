@@ -1,7 +1,9 @@
 import { SetMetadataOnThumbnail } from './metadata';
+import * as CategoriesFilter from './filters/categories';
 import * as KeywordsFilter from './filters/keywords';
 import * as UsersFilter from './filters/users';
 export const FILTERS = [
+    CategoriesFilter,
     KeywordsFilter,
     UsersFilter
 ];

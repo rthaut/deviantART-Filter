@@ -72,8 +72,8 @@ body.theme-light.light-green {
     -webkit-mask-size: 80% 50%;
 }
 
-[da-filter-user]::before {
-    content: "Filtered User: " attr(da-filter-user);
+[da-filter-category]::before {
+    content: "Filtered Category: " attr(da-filter-category);
 }
 
 [da-filter-keyword]::before {
@@ -82,6 +82,10 @@ body.theme-light.light-green {
 
 [da-filter-keyword][da-filter-keyword-attribute]::before {
     content: "Filtered Keyword in " attr(da-filter-keyword-attribute) ": " attr(da-filter-keyword);
+}
+
+[da-filter-user]::before {
+    content: "Filtered User: " attr(da-filter-user);
 }
 
 
