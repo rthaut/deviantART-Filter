@@ -12,7 +12,7 @@ const USERNAME_URL_REGEX = /([^\/]+)\/art|journal/;
 * @param {HTMLElement} thumbnail the thumbnail DOM node
  * @param {object[]} filters the list of filters to apply
 */
-export const FilterThumbnail = (thumbnail, filters = null) => {
+export const FilterThumbnail = (thumbnail, filters) => {
     const usernames = filters.map(filter => filter.username.toLowerCase());
 
     const username = GetUsernameForThumbnail(thumbnail);
