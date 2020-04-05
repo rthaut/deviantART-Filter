@@ -4,9 +4,21 @@ import {
     Switch as RouterSwitch,
     Route,
 } from 'react-router-dom';
+
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
+
 import {
+    createMuiTheme,
+    makeStyles,
+    ThemeProvider,
+} from '@material-ui/core/styles';
+import {
+    grey,
+    red,
+} from '@material-ui/core/colors';
+
+import {
+    useMediaQuery,
     AppBar,
     CssBaseline,
     IconButton,
@@ -15,7 +27,10 @@ import {
     Drawer,
     Divider,
     Container,
+    FormControlLabel,
+    Switch,
 } from '@material-ui/core';
+
 import {
     ChevronLeft as ChevronLeftIcon,
     Menu as MenuIcon,
@@ -100,6 +115,18 @@ export const useStyles = makeStyles((theme) => ({
 }));
 
 const App = () => {
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+    const [darkMode, setDarkMode] = React.useState(prefersDarkMode);
+
+    const theme = React.useMemo(() => createMuiTheme({
+        'palette': {
+            'primary': red,
+            'secondary': grey,
+            'type': darkMode ? 'dark' : 'light',
+        },
+    }), [darkMode]);
+
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
@@ -111,54 +138,67 @@ const App = () => {
     };
 
     return (
-        <Router>
-            <div className={classes.root}>
-                <CssBaseline />
-                <AppBar position="absolute" color="primary" className={clsx(classes.appBar, open && classes.appBarShift)}>
-                    <Toolbar className={classes.toolbar}>
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            onClick={handleDrawerOpen}
-                            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography component="h1" variant="h6">
-                            DeviantArt Filter
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
-                <Drawer variant="permanent" classes={{ 'paper': clsx(classes.drawerPaper, !open && classes.drawerPaperClose) }} open={open}>
-                    <div className={classes.toolbarIcon}>
-                        <IconButton onClick={handleDrawerClose}>
-                            <ChevronLeftIcon />
-                        </IconButton>
-                    </div>
-                    <Divider />
-                    <SidebarMenu />
-                </Drawer>
-                <main className={classes.content}>
-                    <div className={classes.appBarSpacer} />
-                    <Container maxWidth="lg" className={classes.container}>
-                        <RouterSwitch>
-                            <Route path="/users">
-                                <UsersFilterView />
-                            </Route>
-                            <Route path="/keywords">
-                                <KeywordsFilterView />
-                            </Route>
-                            <Route path="/categories">
-                                <CategoriesFilterView />
-                            </Route>
-                            <Route path="/">
-                                <DashboardView />
-                            </Route>
-                        </RouterSwitch>
-                    </Container>
-                </main>
-            </div>
-        </Router>
+        <ThemeProvider theme={theme}>
+            <Router>
+                <div className={classes.root}>
+                    <CssBaseline />
+                    <AppBar position="absolute" color="primary" className={clsx(classes.appBar, open && classes.appBarShift)}>
+                        <Toolbar className={classes.toolbar}>
+                            <IconButton
+                                edge="start"
+                                color="inherit"
+                                onClick={handleDrawerOpen}
+                                className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography component="h1" variant="h6" className={classes.title}>
+                                DeviantArt Filter
+                            </Typography>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={darkMode}
+                                        onChange={event => setDarkMode(event.target.checked)}
+                                        color="secondary"
+                                        name="darkMode"
+                                    />
+                                }
+                                label="Dark Mode"
+                            />
+                        </Toolbar>
+                    </AppBar>
+                    <Drawer variant="permanent" classes={{ 'paper': clsx(classes.drawerPaper, !open && classes.drawerPaperClose) }} open={open}>
+                        <div className={classes.toolbarIcon}>
+                            <IconButton onClick={handleDrawerClose}>
+                                <ChevronLeftIcon />
+                            </IconButton>
+                        </div>
+                        <Divider />
+                        <SidebarMenu />
+                    </Drawer>
+                    <main className={classes.content}>
+                        <div className={classes.appBarSpacer} />
+                        <Container maxWidth="lg" className={classes.container}>
+                            <RouterSwitch>
+                                <Route path="/users">
+                                    <UsersFilterView />
+                                </Route>
+                                <Route path="/keywords">
+                                    <KeywordsFilterView />
+                                </Route>
+                                <Route path="/categories">
+                                    <CategoriesFilterView />
+                                </Route>
+                                <Route path="/">
+                                    <DashboardView />
+                                </Route>
+                            </RouterSwitch>
+                        </Container>
+                    </main>
+                </div>
+            </Router>
+        </ThemeProvider>
     );
 };
 
