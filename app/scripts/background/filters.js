@@ -45,3 +45,13 @@ export const UpdateFilter = async (filterKey, oldFilter, newFilter) => {
 
     console.timeEnd('UpdateFilter()');
 };
+
+export const SaveFilter = async (filterKey, filters) => {
+    console.time('SaveFilter()');
+
+    const data = {};
+    data[filterKey] = uniqWith(filters, isEqual);
+    await browser.storage.local.set(data);
+
+    console.timeEnd('SaveFilter()');
+};

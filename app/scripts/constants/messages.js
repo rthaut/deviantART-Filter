@@ -4,3 +4,4 @@ export const ADD_FILTER = 'ADD_FILTER';
 export const REMOVE_FILTER = 'REMOVE_FILTER';
 export const UPDATE_FILTER = 'UPDATE_FILTER';
 export const SAVE_FILTERS = 'SAVE_FILTER';
+export const FETCH_METADATA = 'FETCH_METADATA';

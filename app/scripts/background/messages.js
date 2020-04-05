@@ -1,22 +1,20 @@
-import { AddFilter, RemoveFilter, UpdateFilter } from './filters';
-import { ADD_FILTER, REMOVE_FILTER, UPDATE_FILTER, SAVE_FILTERS } from '../constants/messages';
+import * as FILTERS from './filters';
+import * as MESSAGES from '../constants/messages';
 
 export const OnRuntimeMessage = (message) => {
     switch (message.action) {
-        case ADD_FILTER:
-            return AddFilter(message.data.key, message.data.value);
-        case REMOVE_FILTER:
-            return RemoveFilter(message.data.key, message.data.value);
-        case UPDATE_FILTER:
-            return UpdateFilter(message.data.key, message.data.value.old, message.data.value.new);
-        case SAVE_FILTERS:
+        case MESSAGES.ADD_FILTER:
+            return FILTERS.AddFilter(message.data.key, message.data.value);
+        case MESSAGES.REMOVE_FILTER:
+            return FILTERS.RemoveFilter(message.data.key, message.data.value);
+        case MESSAGES.UPDATE_FILTER:
+            return FILTERS.UpdateFilter(message.data.key, message.data.value.old, message.data.value.new);
+        case MESSAGES.SAVE_FILTERS:
             console.time('SAVE_FILTER');
-            // eslint-disable-next-line no-case-declarations
-            const data = {};
-            data[message.data.key] = message.data.value;
-            return browser.storage.local.set(data).then(() => {
-                console.timeEnd('SAVE_FILTER');
-            });
+            return FILTERS.SaveFilter(message.data.key, message.data.value);
+        case MESSAGES.FETCH_METADATA:
+            return fetch(new URL(`https://backend.deviantart.com/oembed?url=${message.data.url}`))
+                .then(response => response.json());
     }
 };
 

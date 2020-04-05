@@ -1,10 +1,7 @@
-const axios = require('axios');
-
 import { GetDeviationURLForThumbnail } from './utils';
+import { FETCH_METADATA } from '../../constants/messages';
 
 // TODO: re-implement localStorage cache?
-
-// TODO: refactor this to be version-agnostic, only pulling in util methods from Eclipse or Classic libs?
 
 /**
  * Retrieves and sets the metadata on a thumbnail
@@ -16,15 +13,15 @@ export const SetMetadataOnThumbnail = async (thumbnail) => {
         throw Error('Failed to Determine URL for Thumbnail');
     }
 
-    // TODO: should this request be done in the background script (using browser messages)?
-    const result = await axios.get('https://backend.deviantart.com/oembed', {
-        'params': {
+    const metadata = await browser.runtime.sendMessage({
+        'action': FETCH_METADATA,
+        'data': {
             url
         }
     });
 
-    if (result && result.data) {
-        SetMetadataAttributesOnThumbnail(thumbnail, result.data);
+    if (metadata) {
+        SetMetadataAttributesOnThumbnail(thumbnail, metadata);
     }
 };
 
