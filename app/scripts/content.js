@@ -20,9 +20,11 @@ const WatchForNewThumbs = (selector) => {
 
         for (const { addedNodes } of mutations) {
             for (const addedNode of addedNodes) {
-                const addedNodeThumbnails = addedNode.querySelectorAll(selector);
-                if (addedNodeThumbnails.length) {
-                    thumbnails = new Set([...thumbnails, ...addedNodeThumbnails]);
+                if (typeof addedNode.querySelectorAll === 'function') {
+                    const addedNodeThumbnails = addedNode.querySelectorAll(selector);
+                    if (addedNodeThumbnails.length) {
+                        thumbnails = new Set([...thumbnails, ...addedNodeThumbnails]);
+                    }
                 }
             }
         }
