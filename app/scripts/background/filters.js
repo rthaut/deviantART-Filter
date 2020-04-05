@@ -4,7 +4,7 @@ export const AddFilter = async (filterKey, newFilter) => {
     console.time('AddFilter()');
 
     const storageData = await browser.storage.local.get(filterKey);
-    const filters = Array.from(storageData[filterKey]);
+    const filters = Array.from(storageData[filterKey] ?? []);
 
     filters.push(newFilter);
 
@@ -19,7 +19,7 @@ export const RemoveFilter = async (filterKey, oldFilter) => {
     console.time('RemoveFilter()');
 
     const storageData = await browser.storage.local.get(filterKey);
-    let filters = Array.from(storageData[filterKey]);
+    let filters = Array.from(storageData[filterKey] ?? []);
 
     filters = differenceWith(filters, [oldFilter], isEqual);
 
@@ -34,7 +34,7 @@ export const UpdateFilter = async (filterKey, oldFilter, newFilter) => {
     console.time('UpdateFilter()');
 
     const storageData = await browser.storage.local.get(filterKey);
-    const filters = Array.from(storageData[filterKey]);
+    const filters = Array.from(storageData[filterKey] ?? []);
 
     const index = findIndex(filters, oldFilter);
     filters[index] = newFilter;

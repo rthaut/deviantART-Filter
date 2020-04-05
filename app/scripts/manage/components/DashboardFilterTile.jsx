@@ -30,7 +30,7 @@ const DashboardFilterTile = ({ filterKey, title, link }) => {
         const getFilterCount = async () => {
             try {
                 const data = await browser.storage.local.get(filterKey);
-                setFilterCount(data[filterKey].length);
+                setFilterCount(Array.from(data[filterKey]?? [])?.length);
             }
             catch (ex) {
                 // console.error(ex);

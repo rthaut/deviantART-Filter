@@ -65,7 +65,7 @@ const FilterTable = ({filterKey, columns, ...rest}) => {
 
     const loadData = async () => {
         const storageData = await browser.storage.local.get(filterKey);
-        setData(Array.from(storageData[filterKey]));
+        setData(Array.from(storageData[filterKey] ?? []));
     };
 
     const [data, setData] = useState([]);

@@ -89,7 +89,7 @@ export const HandleThumbnails = async (thumbnails) => {
     const data = {};
     for (const F of FILTERS) {
         const storageData = await browser.storage.local.get(F.STORAGE_KEY);
-        data[F.STORAGE_KEY] = storageData[F.STORAGE_KEY];
+        data[F.STORAGE_KEY] = storageData[F.STORAGE_KEY] ?? [];
     }
 
     // start loading metadata and applying filters that do require metadata first (asynchronously)
@@ -100,11 +100,15 @@ export const HandleThumbnails = async (thumbnails) => {
             console.error('Failed to set metadata on thumbnail', e, thumbnail);
         }
 
-        FILTERS.filter(F => F.REQUIRES_METADATA).forEach(F => F.FilterThumbnail(thumbnail, data[F.STORAGE_KEY]));
+        FILTERS
+            .filter(F => F.REQUIRES_METADATA && data[F.STORAGE_KEY] && data[F.STORAGE_KEY].length)
+            .forEach(F => F.FilterThumbnail(thumbnail, data[F.STORAGE_KEY]));
     });
 
     // apply filters that do NOT require metadata last
     thumbnails.forEach(thumbnail => {
-        FILTERS.filter(F => !F.REQUIRES_METADATA).forEach(F => F.FilterThumbnail(thumbnail, data[F.STORAGE_KEY]));
+        FILTERS
+            .filter(F => !F.REQUIRES_METADATA && data[F.STORAGE_KEY] && data[F.STORAGE_KEY].length)
+            .forEach(F => F.FilterThumbnail(thumbnail, data[F.STORAGE_KEY]));
     });
 };
