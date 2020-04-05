@@ -1,4 +1,5 @@
-import { onRuntimeMessage } from './background/messages';
+import { MENUS, OnMenuClicked, OnMenuShown } from './background/menus';
+import { OnRuntimeMessage } from './background/messages';
 import { OnLocalStorageChanged } from './background/storage';
 
 browser.runtime.onInstalled.addListener(async (details) => {
@@ -21,15 +22,22 @@ browser.runtime.onInstalled.addListener(async (details) => {
     // await browser.storage.local.set({ keywords });
 });
 
+/* Page Action */
 browser.pageAction.onClicked.addListener((tab) => {
-    console.debug('pageAction', tab);
     browser.tabs.create({
         'url': browser.runtime.getURL('pages/manage.html')
     });
 });
+browser.tabs.onUpdated.addListener((tabId) => {
+    browser.pageAction.show(tabId);
+});
 
-browser.runtime.onMessage.addListener(onRuntimeMessage);
 
+/* Runtime Messages */
+browser.runtime.onMessage.addListener(OnRuntimeMessage);
+
+
+/* Storage */
 browser.storage.onChanged.addListener((changes, areaName) => {
     switch (areaName) {
         case 'local':
@@ -38,6 +46,8 @@ browser.storage.onChanged.addListener((changes, areaName) => {
     }
 });
 
-browser.tabs.onUpdated.addListener((tabId) => {
-    browser.pageAction.show(tabId);
-});
+
+/* Context Menus */
+MENUS.forEach(menu => browser.contextMenus.create(menu));
+browser.contextMenus.onClicked.addListener(OnMenuClicked);
+browser.contextMenus.onShown.addListener(OnMenuShown);

@@ -1,8 +1,7 @@
 import { AddFilter, RemoveFilter, UpdateFilter } from './filters';
 import { ADD_FILTER, REMOVE_FILTER, UPDATE_FILTER, SAVE_FILTERS } from '../constants/messages';
 
-export const onRuntimeMessage = (message) => {
-    console.log('Browser Runtime Message', message);
+export const OnRuntimeMessage = (message) => {
     switch (message.action) {
         case ADD_FILTER:
             return AddFilter(message.data.key, message.data.value);
