@@ -17,7 +17,7 @@ export const MENUS = [
 export const OnMenuClicked = (info, tab) => {
     switch (info.menuItemId) {
         case 'filter-tag':
-            if (/\/tag\/([^\/]+)/i.matches(info.linkUrl)) {
+            if (/\/tag\/([^\/]+)/i.test(info.linkUrl)) {
                 // eslint-disable-next-line no-case-declarations
                 const keyword = /\/tag\/([^\/]+)/i.exec(info.linkUrl)[1];
                 AddFilter('keywords', { keyword, 'wildcard': false });
@@ -36,12 +36,12 @@ export const OnMenuClicked = (info, tab) => {
  */
 export const OnMenuShown = (info, tab) => {
     // TODO: this logic works while we only have one custom menu, but will need reworked for multiple menus
-    // NOTE: `menuItemId` is not available on the `info` object; maybe test `linkUrl` against applicable patterns?
+    // NOTE: `menuItemId` is not available on the `info` object; maybe test `linkUrl` against applicable patterns for each configured menu?
 
-    if (/\/tag\/([^\/]+)/i.matches(info.linkUrl)) {
+    if (/\/tag\/([^\/]+)/i.test(info.linkUrl)) {
         const keyword = /\/tag\/([^\/]+)/i.exec(info.linkUrl)[1];
         UpdateMenuItem('filter-tag', {
-            'title': `Create Keyword Filter for "${keyword}" Tag`
+            'title': `Create Keyword Filter for "${keyword}"`
         });
     }
 };
