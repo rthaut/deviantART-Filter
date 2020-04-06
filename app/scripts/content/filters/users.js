@@ -1,8 +1,8 @@
-import { THUMBNAIL_SELECTOR } from '..';
 import { GetDeviationURLForThumbnail } from '../utils';
 
 export const STORAGE_KEY = 'users';
 
+//TODO: a VERY small portion thumbnails don't have a username available until AFTER metadata is loaded (the known case is for thumbnails of Stash items); it doesn't make sense to wait for metadata to load for all thumbnails, but having a way to re-apply this filter after metadata loads (for thumbnails that have NOT already been processed) would be useful
 export const REQUIRES_METADATA = false;
 
 const USERNAME_URL_REGEX = /([^\/]+)\/art|journal/;
@@ -28,28 +28,10 @@ export const FilterThumbnail = (thumbnail, filters) => {
  * Applies filters to the page
  * Used primarily for handling added filters when local storage changes
  * @param {object[]} filters list of filters to apply
+ * @param {string} selector CSS selector for thumbnails
  */
-export const ApplyFiltersToDocument = (filters) => {
-    // the following (unused) logic requires the metadata that is injected into thumbnails (data-username)
-    // since this filter is marked as NOT requiring metadata, this is inappropriate,
-    // even though it might be more efficient than the used logic further down
-    // an alternative would be to querySelector links to the user's page (which have a native data-username attribute),
-    // and then "jump" to the parent thumbnail node, but that becomes highly coupled to DOM structure
-    // (and I don't know what sort of performance that would yield)
-
-    /*
-    const usernames = filters.map(filter => filter.username.toLowerCase());
-
-    for (const username of usernames) {
-        const thumbnails = document.querySelectorAll(`[data-username="${username.toLowerCase()}" i]`);
-        for (const thumbnail of thumbnails) {
-            SetFilterAttributesOnThumbnail(thumbnail, username);
-        }
-    }
-    */
-
-    // TODO: this is not very efficient; see above note
-    const thumbnails = document.querySelectorAll(THUMBNAIL_SELECTOR);
+export const ApplyFiltersToDocument = (filters, selector) => {
+    const thumbnails = document.querySelectorAll(selector);
     thumbnails.forEach(thumbnail => FilterThumbnail(thumbnail, filters));
 };
 
@@ -80,10 +62,12 @@ export const GetUsernameForThumbnail = (thumbnail) => {
     let username = thumbnail.getAttribute('data-username') || thumbnail.querySelector('[data-username]')?.getAttribute('data-username');
 
     if (!username) {
-        console.warn('Attempting to parse username from thumbnail link');
         const url = GetDeviationURLForThumbnail(thumbnail);
         if (USERNAME_URL_REGEX.test(url)) {
             username = USERNAME_URL_REGEX.exec(url)[1];
+
+            // set the username attribute now to avoid parsing the URL again
+            thumbnail.setAttribute('data-username', username);
         }
     }
 

@@ -1,7 +1,5 @@
 import { GetDeviationURLForThumbnail } from './utils';
-import { FETCH_METADATA } from '../../constants/messages';
-
-// TODO: re-implement localStorage cache?
+import { FETCH_METADATA } from '../constants/messages';
 
 /**
  * Retrieves and sets the metadata on a thumbnail

@@ -1,4 +1,4 @@
-export const THUMBNAIL_SELECTOR = '[data-hook="deviation_link"]';
+export const THUMBNAIL_SELECTOR = '.thumb';
 
 /**
  * Gets the Deviation's URL from a thumbnail
@@ -6,7 +6,7 @@ export const THUMBNAIL_SELECTOR = '[data-hook="deviation_link"]';
  * @returns {string} the URL
  */
 export const GetDeviationURLForThumbnail = (thumbnail) => {
-    const selector = 'a[data-hook="deviation_link"]';
+    const selector = '[href]';
 
     if (thumbnail.matches(selector)) {
         return thumbnail.getAttribute('href');

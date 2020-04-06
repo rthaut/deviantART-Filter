@@ -1,33 +1,56 @@
 body.theme-dark {
-    --da-filter-bg-color: #161a1f;
+    --da-filter-bg-color: #15191e;
     --da-filter-logo-color: #5d5d6c;
     --da-filter-text-color: #5d5d6c;
-    --da-filter-border-color: #5d5d6c;
+    --da-filter-border-color: #22272b;
+    --da-filter-placeholder-z-index: 4;
+    --da-filter-font-weight: light;
 }
 body.theme-light {
-    --da-filter-bg-color: #fffdfd;
-    --da-filter-logo-color: #d0d0d4;
-    --da-filter-text-color: #d0d0d4;
+    --da-filter-bg-color: #f2f2f2;
+    --da-filter-logo-color: #606070;
+    --da-filter-text-color: #606070;
     --da-filter-border-color: #d0d0d4;
+    --da-filter-placeholder-z-index: 4;
+    --da-filter-font-weight: light;
 }
 body.theme-light.light-green {
-    --da-filter-bg-color: #53695a;
+    --da-filter-bg-color: #dae5d6;
     --da-filter-logo-color: #869f8d;
     --da-filter-text-color: #869f8d;
-    --da-filter-border-color: #869f8d;
+    --da-filter-border-color: #92a093;
+    --da-filter-placeholder-z-index: 4;
+    --da-filter-font-weight: light;
 }
 
+body#deviantART-v7 {
+    --da-filter-bg-color: #dde6da;
+    --da-filter-logo-color: #b4c0b0;
+    --da-filter-text-color: #b4c0b0;
+    --da-filter-border-color: transparent;
+    --da-filter-placeholder-z-index: 7;
+    --da-filter-font-weight: bold;
+}
 
 [da-filter-category],
 [da-filter-keyword],
 [da-filter-user] {
     position: relative;
+    pointer-events: none;
+    display: inline-block;
+}
+
+[data-hook="deviation_std_thumb"] [data-hook="deviation_link"][da-filter-category],
+[data-hook="deviation_std_thumb"] [data-hook="deviation_link"][da-filter-keyword],
+[data-hook="deviation_std_thumb"] [data-hook="deviation_link"][da-filter-user] {
+    position: absolute;
+    pointer-events: none;
 }
 
 [da-filter-category]::before,
 [da-filter-keyword]::before,
 [da-filter-user]::before {
-    z-index: 4;
+    z-index: var(--da-filter-placeholder-z-index);
     position: absolute;
     top: 0;
     right: 0;
@@ -40,7 +63,7 @@ body.theme-light.light-green {
     color: var(--da-filter-text-color);
     border: 1px solid;
     border-color: var(--da-filter-border-color);
-    font-weight: light;
+    font-weight: var(--da-filter-font-weight);
     line-height: 1.25em;
     padding: 1.5em;
     text-align: center;
@@ -51,7 +74,7 @@ body.theme-light.light-green {
 [da-filter-category]::after,
 [da-filter-keyword]::after,
 [da-filter-user]::after {
-    z-index: 4;
+    z-index: var(--da-filter-placeholder-z-index);
     position: absolute;
     top: 0;
     right: 0;
@@ -65,7 +88,6 @@ body.theme-light.light-green {
     mask-position: center center;
     mask-repeat: no-repeat;
     mask-size: 80% 50%;
-    /* TOOD: are the -webkit- prefixes still needed? does the build tool include autoprefixer? */
     -webkit-mask-image: url('../images/placeholder.svg');
     -webkit-mask-position: center center;
     -webkit-mask-repeat: no-repeat;
@@ -88,11 +110,16 @@ body.theme-light.light-green {
     content: "Filtered User: " attr(da-filter-user);
 }
 
+[da-filter-user][data-username]:not([data-username=""])::before {
+    /* use the username from metadata instead if it is available, as it will always have correct casing */
+    content: "Filtered User: " attr(data-username);
+}
+
 
 /* QUICK HIDE CONTROL */
-[data-hook="deviation_std_thumb"] [da-filter-quick-hide] {
+[da-filter-quick-hide] {
     position: absolute;
-    z-index: 1; /* keep it below the placeholder */
+    z-index: calc(var(--da-filter-placeholder-z-index) - 1); /* keep it below the placeholder */
     top: 0;
     left: 0;
     width: 38px;
@@ -113,16 +140,16 @@ body.theme-light.light-green {
     white-space: nowrap;
 }
 
-[data-hook="deviation_std_thumb"] [da-filter-quick-hide]:hover {
+[da-filter-quick-hide]:hover {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAaCAYAAADbhS54AAAAvklEQVRIic3OMQ7BcBxH8cdgQiQmu7W7zcQBnMAFXMAFxGoxdHWA3sAB7FaNhbGLSAxq0aRpilbT/+/7krd/AGLBbwgg8l4pwiKgpwhb8s4akv4CtBVhC1JZY5JDoKUIm5PJGhQDR6CpCJtlUQqwA9BQhE3yUNaw/SeUNWykCAu+oaxgT8BThO1+oSxgD2CoCNsWQbmG3YGBImxdFOUSFgF9NdgJGJdBuYD5QKcsqk7YGZj+A0q61vAG6FZBvQCzZyZfoGzu2QAAAABJRU5ErkJggg==');
     color: #D32800;
 }
 
-[data-hook="deviation_std_thumb"]:hover [da-filter-quick-hide] {
+[data-username]:hover [da-filter-quick-hide] {
     opacity: 1;
 }
 
-[data-hook="deviation_std_thumb"] [da-filter-quick-hide]::after {
+[da-filter-quick-hide]::after {
     content: "\e632";
     margin-right: 5px;
     display: inline;
@@ -130,10 +157,11 @@ body.theme-light.light-green {
 
 
 /* DEBUG OUTLINES */
-[data-hook="deviation_std_thumb"]:not([data-username]) {
-    outline: #e59b00 solid 2px;
+.thumb:not([data-title]):not([data-title]),
+[data-hook="deviation_link"]:not([data-title]) {
+    outline: #e59b00 solid 1px;
 }
 
-/* [data-hook="deviation_std_thumb"][data-username]:not([data-username=""]) {
+/* [data-hook="deviation_link"][data-title]:not([data-title=""]) {
     outline: #00e59b solid 1px;
 } */

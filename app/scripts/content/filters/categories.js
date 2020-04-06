@@ -1,5 +1,3 @@
-import { THUMBNAIL_SELECTOR } from '..';
-
 export const STORAGE_KEY = 'categories';
 
 export const REQUIRES_METADATA = true;
@@ -22,9 +20,10 @@ export const FilterThumbnail = (thumbnail, filters) => {
  * Applies filters to the page
  * Used primarily for handling added filters when local storage changes
  * @param {object[]} filters list of filters to apply
+ * @param {string} selector CSS selector for thumbnails
  */
-export const ApplyFiltersToDocument = (filters) => {
-    const thumbnails = document.querySelectorAll(THUMBNAIL_SELECTOR);
+export const ApplyFiltersToDocument = (filters, selector) => {
+    const thumbnails = document.querySelectorAll(selector);
     thumbnails.forEach(thumbnail => FilterThumbnail(thumbnail, filters));
 };
 
