@@ -61,13 +61,13 @@ const SidebarMenu = () => {
             </List>
             <Divider />
             <List>
-                <ListItem button>
+                {/* <ListItem button component={NavLink} exact to="/settings" activeClassName={classes.activeNavLink}>
                     <ListItemIcon>
                         <SettingsIcon />
                     </ListItemIcon>
                     <ListItemText primary="Settings" />
-                </ListItem>
-                <ListItem button>
+                </ListItem> */}
+                <ListItem button component={NavLink} exact to="/import-export" activeClassName={classes.activeNavLink}>
                     <ListItemIcon>
                         <ImportExportIcon />
                     </ListItemIcon>

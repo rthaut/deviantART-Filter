@@ -40,6 +40,8 @@ import DashboardView from './views/DashboardView';
 import CategoriesFilterView from './views/CategoriesFilterView';
 import KeywordsFilterView from './views/KeywordsFilterView';
 import UsersFilterView from './views/UsersFilterView';
+import ImportExportView from './views/ImportExportView';
+
 import SidebarMenu from './components/SidebarMenu';
 
 const drawerWidth = 240;
@@ -189,6 +191,9 @@ const App = () => {
                                 </Route>
                                 <Route path="/categories">
                                     <CategoriesFilterView />
+                                </Route>
+                                <Route path="/import-export">
+                                    <ImportExportView />
                                 </Route>
                                 <Route path="/">
                                     <DashboardView />

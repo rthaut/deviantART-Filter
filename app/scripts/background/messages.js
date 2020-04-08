@@ -9,12 +9,19 @@ export const OnRuntimeMessage = (message) => {
             return FILTERS.RemoveFilter(message.data.key, message.data.value);
         case MESSAGES.UPDATE_FILTER:
             return FILTERS.UpdateFilter(message.data.key, message.data.value.old, message.data.value.new);
-        case MESSAGES.SAVE_FILTERS:
-            console.time('SAVE_FILTER');
+        case MESSAGES.SAVE_FILTER:
             return FILTERS.SaveFilter(message.data.key, message.data.value);
+        case MESSAGES.RESET_FILTERS:
+            return browser.storage.local.set({
+                'users': [],
+                'keywords': [],
+                'categories': []
+            });
         case MESSAGES.FETCH_METADATA:
             return fetch(new URL(`https://backend.deviantart.com/oembed?url=${message.data.url}`))
                 .then(response => response.json());
+        case MESSAGES.IMPORT_FILTERS:
+            return FILTERS.ImportFromFileData(message.data);
     }
 };
 
