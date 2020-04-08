@@ -13,8 +13,8 @@ import {
     ThemeProvider,
 } from '@material-ui/core/styles';
 import {
-    grey,
     red,
+    teal,
 } from '@material-ui/core/colors';
 
 import {
@@ -123,8 +123,8 @@ const App = () => {
 
     const theme = React.useMemo(() => createMuiTheme({
         'palette': {
-            'primary': red,
-            'secondary': grey,
+            'primary': teal,
+            'secondary': red,
             'type': darkMode ? 'dark' : 'light',
         },
     }), [darkMode]);
@@ -162,7 +162,7 @@ const App = () => {
                                     <Switch
                                         checked={darkMode}
                                         onChange={event => setDarkMode(event.target.checked)}
-                                        color="secondary"
+                                        color="default"
                                         name="darkMode"
                                     />
                                 }
