@@ -1,17 +1,17 @@
 {
-  "appName": {
+  "ExtensionName": {
     "message": "DeviantArt Filter",
     "description": "The name of the application"
   },
-  "appShortName": {
+  "ExtensionShortName": {
     "message": "daFilter",
     "description": "The short_name (maximum of 12 characters recommended) is a short version of the app's name."
   },
-  "appDescription": {
+  "ExtensionDescription": {
     "message": "Allows configurable filtering/removal of deviations by user, keyword, and/or category on DeviantArt.",
     "description": "The description of the application"
   },
-  "browserActionTitle": {
+  "BrowserActionTitle": {
     "message": "DeviantArt Filter",
     "description": "The title of the browser action button"
   }

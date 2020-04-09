@@ -1,7 +1,7 @@
 {
-  "name": "__MSG_appName__",
-  "short_name": "__MSG_appShortName__",
-  "description": "__MSG_appDescription__",
+  "name": "__MSG_ExtensionName__",
+  "short_name": "__MSG_ExtensionShortName__",
+  "description": "__MSG_ExtensionDescription__",
   "version": "0.0.0",
   "manifest_version": 2,
   "default_locale": "en",
@@ -19,7 +19,7 @@
       "19": "images/icon-19.png",
       "38": "images/icon-38.png"
     },
-    "default_title": "__MSG_browserActionTitle__"
+    "default_title": "__MSG_BrowserActionTitle__"
   },
   "content_scripts": [
     {
