@@ -17,11 +17,13 @@ export const OnRuntimeMessage = (message) => {
                 'keywords': [],
                 'categories': []
             });
+        case MESSAGES.IMPORT_FILTERS:
+            return FILTERS.ImportFromFileData(message.data);
+        case MESSAGES.EXPORT_FILTERS:
+            return FILTERS.GetAllFilters();
         case MESSAGES.FETCH_METADATA:
             return fetch(new URL(`https://backend.deviantart.com/oembed?url=${message.data.url}`))
                 .then(response => response.json());
-        case MESSAGES.IMPORT_FILTERS:
-            return FILTERS.ImportFromFileData(message.data);
     }
 };
 

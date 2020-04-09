@@ -14,10 +14,9 @@ class CategoriesFilterView extends React.Component {
             'columns': [
                 {
                     'title': 'Category Name',
-                    'field': 'path',
+                    'field': 'name',
                     'editComponent': props => (
                         <VirtualizedAutoComplete
-                            // TODO: this should use the background script to fetch categories via the API
                             options={require('../../../data/categories.json')}
                             label="Select a Category"
                             noOptionsText="No matching categories"

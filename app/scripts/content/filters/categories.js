@@ -9,8 +9,8 @@ export const REQUIRES_METADATA = true;
 */
 export const FilterThumbnail = (thumbnail, filters) => {
     for (const filter of filters) {
-        if (thumbnail.matches(`[data-category^="${filter.path}" i]`)) {
-            SetFilterAttributesOnThumbnail(thumbnail, filter.path, 'Category');
+        if (thumbnail.matches(`[data-category^="${filter.name}" i]`)) {
+            SetFilterAttributesOnThumbnail(thumbnail, filter.name, 'Category');
             continue;
         }
     }
@@ -35,7 +35,7 @@ export const ApplyFiltersToDocument = (filters, selector) => {
  */
 export const RemoveFiltersFromDocument = (removedFilters, activeFilters) => {
     for (const filter of removedFilters) {
-        const thumbnails = document.querySelectorAll(`[da-filter-category="${filter.path}" i]`);
+        const thumbnails = document.querySelectorAll(`[da-filter-category="${filter.name}" i]`);
         for (const thumbnail of thumbnails) {
             RemoveFilterAttributesOnThumbnail(thumbnail);
             FilterThumbnail(thumbnail, activeFilters);
