@@ -48,6 +48,6 @@ browser.storage.onChanged.addListener((changes, areaName) => {
 
 
 /* Context Menus */
-MENUS.forEach(menu => browser.contextMenus.create(menu));
+MENUS.forEach(menu => browser.contextMenus.remove(menu.id).finally(browser.contextMenus.create(menu)));
 browser.contextMenus.onClicked.addListener(OnMenuClicked);
 browser.contextMenus.onShown.addListener(OnMenuShown);
