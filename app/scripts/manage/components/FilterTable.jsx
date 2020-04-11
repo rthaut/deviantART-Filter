@@ -135,6 +135,7 @@ const FilterTable = ({ filterKey, columns, ...rest }) => {
                     'draggable': false,
                     'pageSize': 10,
                     'pageSizeOptions': [10, 25, 50, 100],
+                    'addRowPosition': 'first'
                 }}
                 editable={{
                     'onRowAdd': (newData) => new Promise((resolve, reject) => {
