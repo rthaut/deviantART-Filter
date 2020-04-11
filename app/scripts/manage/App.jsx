@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocalStorage } from 'react-use';
 import {
     HashRouter as Router,
     Switch as RouterSwitch,
@@ -119,7 +120,7 @@ export const useStyles = makeStyles((theme) => ({
 const App = () => {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-    const [darkMode, setDarkMode] = React.useState(prefersDarkMode);
+    const [darkMode, setDarkMode] = useLocalStorage('dark-mode', prefersDarkMode);
 
     const theme = React.useMemo(() => createMuiTheme({
         'palette': {
