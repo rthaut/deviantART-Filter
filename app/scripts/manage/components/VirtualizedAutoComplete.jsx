@@ -17,7 +17,7 @@ import matchSorter from 'match-sorter';
 
 const LISTBOX_PADDING = 8; // px
 
-function renderRow(props) {
+const RenderRow = (props) => {
     const { data, index, style } = props;
     return React.cloneElement(data[index], {
         'style': {
@@ -25,7 +25,7 @@ function renderRow(props) {
             'top': style.top + LISTBOX_PADDING,
         },
     });
-}
+};
 
 const OuterElementContext = React.createContext({});
 
@@ -35,7 +35,7 @@ const OuterElementType = React.forwardRef((props, ref) => {
 });
 
 // adapter for react-window
-const VirtualizedListboxComponent = React.forwardRef(function ListboxComponent(props, ref) {
+const VirtualizedListboxComponent = React.forwardRef((props, ref) => {
     const { children, ...other } = props;
     const itemData = React.Children.toArray(children);
     const theme = useTheme();
@@ -72,7 +72,7 @@ const VirtualizedListboxComponent = React.forwardRef(function ListboxComponent(p
                     overscanCount={5}
                     itemCount={itemCount}
                 >
-                    {renderRow}
+                    {RenderRow}
                 </VariableSizeList>
             </OuterElementContext.Provider>
         </div>
@@ -113,7 +113,7 @@ export default function VirtualizedAutoComplete({label, onChange, ...props}) {
                     </Typography>
                 );
             }}
-            onChange={(event, value) => onChange(value)}
+            onChange={(_event, value) => onChange(value)}
             {...props}
         />
     );

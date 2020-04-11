@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import {
-    Grid,
-} from '@material-ui/core';
-import FilterTable from '../components/FilterTable';
+import { Grid } from '@material-ui/core';
 import VirtualizedAutoComplete from '../components/VirtualizedAutoComplete';
+
+import FilterTable from '../components/FilterTable';
 
 class CategoriesFilterView extends React.Component {
 
@@ -13,7 +12,7 @@ class CategoriesFilterView extends React.Component {
         this.state = {
             'columns': [
                 {
-                    'title': 'Category Name',
+                    'title': 'Category',
                     'field': 'name',
                     'editComponent': props => (
                         <VirtualizedAutoComplete
@@ -25,6 +24,7 @@ class CategoriesFilterView extends React.Component {
                             autoHighlight
                             disableListWrap
                             filterSelectedOptions
+                            selectOnFocus
                             size="small"
                         />
                     )
