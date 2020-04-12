@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import {
     HashRouter as Router,
@@ -30,6 +30,8 @@ import {
     Container,
     FormControlLabel,
     Switch,
+    Box,
+    Link,
 } from '@material-ui/core';
 
 import {
@@ -107,22 +109,33 @@ export const useStyles = makeStyles((theme) => ({
     },
     'appBarSpacer': theme.mixins.toolbar,
     'content': {
+        'display': 'flex',
+        'flexDirection': 'column',
         'flexGrow': 1,
         'height': '100vh',
         'overflow': 'auto',
     },
     'container': {
+        'flexGrow': 1,
         'paddingTop': theme.spacing(4),
         'paddingBottom': theme.spacing(4),
+    },
+    'footer': {
+        'padding': theme.spacing(0, 4),
+    },
+    'footerDivider': {
+        'margin': theme.spacing(2, 0),
     }
 }));
 
 const App = () => {
+    const classes = useStyles();
+
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
     const [darkMode, setDarkMode] = useLocalStorage('dark-mode', prefersDarkMode);
 
-    const theme = React.useMemo(() => createMuiTheme({
+    const theme = useMemo(() => createMuiTheme({
         'palette': {
             'primary': teal,
             'secondary': red,
@@ -130,15 +143,19 @@ const App = () => {
         },
     }), [darkMode]);
 
-    const classes = useStyles();
-
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const handleDrawerOpen = () => {
         setOpen(true);
     };
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const [info, setInfo] = useState({});
+
+    useEffect(() => {
+        browser.management.getSelf().then(_info => setInfo(_info));
+    }, []);
 
     return (
         <ThemeProvider theme={theme}>
@@ -202,6 +219,14 @@ const App = () => {
                                 </Route>
                             </RouterSwitch>
                         </Container>
+                        {info && (
+                            <Box className={classes.footer} color="text.secondary">
+                                <Divider className={classes.footerDivider} />
+                                <Typography paragraph variant="caption" align="right">
+                                    <Link href={info.homepageUrl} target="_blank" rel="noopener noreferrer">{info.name || info.shortName} {info.versionName || info.version}</Link> by <Link href="https://ryan.thaut.me/" target="_blank" rel="noopener noreferrer">Ryan Thaut</Link>.
+                                </Typography>
+                            </Box>
+                        )}
                     </main>
                 </div>
             </Router>
