@@ -18,7 +18,7 @@ export const OnRuntimeMessage = (message) => {
                 'categories': []
             });
         case MESSAGES.IMPORT_FILTERS:
-            return FILTERS.ImportFromFileData(message.data);
+            return FILTERS.ImportFilters(message.data);
         case MESSAGES.EXPORT_FILTERS:
             return FILTERS.GetAllFilters();
         case MESSAGES.FETCH_METADATA:

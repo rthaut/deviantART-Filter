@@ -1,25 +1,22 @@
+const semver = require('semver');
+
 import { MENUS, OnMenuClicked, OnMenuShown } from './background/menus';
 import { OnRuntimeMessage } from './background/messages';
 import { OnLocalStorageChanged } from './background/storage';
+import { ImportFilters } from './background/filters';
 
 browser.runtime.onInstalled.addListener(async (details) => {
-    console.debug('previousVersion', details.previousVersion);
+    const { previousVersion } = details;
 
-    // console.debug('Resetting stored filters');
-    // await browser.storage.local.set({
-    //     'users': [],
-    //     'keywords': [],
-    //     'categories': []
-    // });
-
-    // console.debug('Importing test filters into storage');
-    // const list = require('../../tests/shanimiyano\'s_deviantart_fetish_filter_list.json');
-    // const list = require('../../tests/frontpage_test_filters.json');
-    // await browser.storage.local.set(list);
-    // const users = require('../../tests/random_usernames.json');
-    // await browser.storage.local.set({ users });
-    // const keywords = require('../../tests/random_keywords.json');
-    // await browser.storage.local.set({ keywords });
+    if (semver.valid(previousVersion) && semver.lt(previousVersion, '6.0.0')) {
+        const data = await browser.storage.local.get('tags');
+        if (data?.tags) {
+            console.warn('Converting tag filters to keyword filters');
+            await ImportFilters(data);
+            // TODO: is it appropriate to delete tag filters from previous versions?
+            // await browser.storage.local.remove('tags');
+        }
+    }
 });
 
 /* Page Action */

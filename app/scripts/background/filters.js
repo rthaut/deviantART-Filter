@@ -78,8 +78,8 @@ export const UpdateFilter = async (storageKey, oldFilter, newFilter) => {
     console.timeEnd(`UpdateFilter() [${storageKey}]`);
 };
 
-export const ImportFilters = async (storageKey, filters) => {
-    console.time(`ImportFilters() [${storageKey}]`);
+export const ImportFilter = async (storageKey, filters) => {
+    console.time(`ImportFilter() [${storageKey}]`);
 
     const existingFilters = await GetFilter(storageKey);
     const newFilters = differenceWith(filters, existingFilters, isEqual);
@@ -91,12 +91,12 @@ export const ImportFilters = async (storageKey, filters) => {
         'duplicate': filters.length - newFilters.length
     };
 
-    console.timeEnd(`ImportFilters() [${storageKey}]`);
+    console.timeEnd(`ImportFilter() [${storageKey}]`);
     return results;
 };
 
-export const ImportFromFileData = async (data) => {
-    console.time('ImportFromFileData()');
+export const ImportFilters = async (data) => {
+    console.time('ImportFilters()');
 
     const results = {};
     for (const dataKey of Object.keys(data)) {
@@ -116,7 +116,7 @@ export const ImportFromFileData = async (data) => {
 
         if (SUPPORTED_FILTERS.includes(storageKey)) {
             fileFilters.forEach(value => { delete value.created; });
-            results[storageKey] = await ImportFilters(storageKey, fileFilters);
+            results[storageKey] = await ImportFilter(storageKey, fileFilters);
         } else {
             results[storageKey] = {
                 'error': 'Unsupported filter type'
@@ -124,6 +124,6 @@ export const ImportFromFileData = async (data) => {
         }
     }
 
-    console.timeEnd('ImportFromFileData()');
+    console.timeEnd('ImportFilters()');
     return results;
 };
