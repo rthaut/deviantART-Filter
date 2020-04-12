@@ -5,7 +5,7 @@
   },
   "ExtensionShortName": {
     "message": "daFilter",
-    "description": "The short_name (maximum of 12 characters recommended) is a short version of the app's name."
+    "description": "The short_name (maximum of 12 characters recommended) is a short version of the app's name"
   },
   "ExtensionDescription": {
     "message": "Allows configurable filtering/removal of deviations by user, keyword, and/or category on DeviantArt.",
@@ -14,5 +14,171 @@
   "BrowserActionTitle": {
     "message": "DeviantArt Filter",
     "description": "The title of the browser action button"
+  },
+  "FilterNameWithCount": {
+    "message": "$COUNT$ $NAME$ Filter(s)",
+    "description": "A formatted string to display the name of a filter with the count",
+    "example": "13 Keyword Filter(s)",
+    "placeholders": {
+      "count" : {
+        "content" : "$1"
+      },
+      "name" : {
+        "content" : "$2"
+      }
+    }
+  },
+  "ManageFilterText": {
+    "message": "View / Manage",
+    "description": "The text displayed on links/buttons to manage a filter"
+  },
+  "ImportHeading": {
+    "message": "Import Filters from File(s)",
+    "description": "The heading displayed above the import section on the Import/Export view"
+  },
+  "ImportInstructions": {
+    "message": "Drag &amp; drop a <em>DeviantArt Filter</em> file here<br/>(or click anywhere in this box to select a file)",
+    "description": "The text displayed on the import drag-and-drop target box"
+  },
+  "InvalidImportFileTypeMessage": {
+    "message": "Error: That is not an accepted file format for import",
+    "description": "The message displayed when an invalid file format is detected during import"
+  },
+  "ImportResultsColumnHeader_FileName": {
+    "message": "File Name"
+  },
+  "ImportResultsColumnHeader_FilterType": {
+    "message": "Filter Type"
+  },
+  "ImportResultsColumnHeader_TotalCount": {
+    "message": "Total"
+  },
+  "ImportResultsColumnHeader_NewCount": {
+    "message": "New"
+  },
+  "ImportResultsColumnHeader_DuplicateCount": {
+    "message": "Duplicates"
+  },
+  "ImportResultsProcessingMessage": {
+    "message": "Processing File..."
+  },
+  "ExportHeading": {
+    "message": "Export Filters to a File",
+    "description": "The heading displayed above the export section on the Import/Export view"
+  },
+  "ExportHelpText": {
+    "message": "Use this to export all of your current filters to a file (for backup or migration purposes)",
+    "description": "The help text displayed above the export section on the Import/Export view"
+  },
+  "ExportButtonLabel": {
+    "message": "Export Filter Data",
+    "description": "The text for the button to export filters to a file."
+  },
+  "DeleteAllFiltersButtonTooltip": {
+    "message": "Delete All",
+    "description": "The tooltip displayed on the button/icon to delete all filters for a specific filter type"
+  },
+  "ConfirmAllFiltersDeletePrompt": {
+    "message": "Are you sure you want to delete all $COUNT$ of your $NAME$ filters?",
+    "description": "The message displayed on the modal when asking for confirmation to delete all filters for a specific filter type",
+    "placeholders": {
+      "count" : {
+        "content" : "$1"
+      },
+      "name" : {
+        "content" : "$2"
+      }
+    }
+  },
+  "ConfirmAllFiltersDeleteTitle": {
+    "message": "Confirm Filter Deletion",
+    "description": "The title displayed on the modal when asking for confirmation to delete all filters for a specific filter type"
+  },
+  "ConfirmAllFiltersDeleteButton_Accept": {
+    "message": "Yes"
+  },
+  "ConfirmAllFiltersDeleteButton_Decline": {
+    "message": "No"
+  },
+  "SidebarLink_Dashboard": {
+    "message": "Dashboard"
+  },
+  "SidebarLink_Settings": {
+    "message": "Settings"
+  },
+  "SidebarLink_ImportExport": {
+    "message": "Import/Export"
+  },
+  "SidebarLink_Categories": {
+    "message": "Category Filters"
+  },
+  "SidebarLink_Keywords": {
+    "message": "Keyword Filters"
+  },
+  "SidebarLink_Users": {
+    "message": "User Filters"
+  },
+  "FilterTitle_Category": {
+    "message": "Category"
+  },
+  "FilterTitle_Keyword": {
+    "message": "Keyword"
+  },
+  "FilterTitle_User": {
+    "message": "User"
+  },
+  "FilterTitle_Categories": {
+    "message": "Categories"
+  },
+  "FilterTitle_Keywords": {
+    "message": "Keywords"
+  },
+  "FilterTitle_Users": {
+    "message": "Users"
+  },
+  "FilteredTitle_Categories": {
+    "message": "Filtered Categories"
+  },
+  "FilteredTitle_Keywords": {
+    "message": "Filtered Keywords"
+  },
+  "FilteredTitle_Users": {
+    "message": "Filtered Users"
+  },
+  "Filter_Categories_PropTitle_Name": {
+    "message": "Category"
+  },
+  "Filter_Keywords_PropTitle_Keyword": {
+    "message": "Keyword"
+  },
+  "Filter_Keywords_PropTitle_Wildcard": {
+    "message": "Is Wildcard"
+  },
+  "Filter_Users_PropTitle_Username": {
+    "message": "Username"
+  },
+  "CategoriesMenuLabel": {
+    "message": "Select a category (type to search)",
+    "description": "The label shown on the categories autocomplete menu"
+  },
+  "CategoriesMenuNoOptionsText": {
+    "message": "No matching categories",
+    "description": "The text shown on the categories autocomplete menu when no options match the entered value"
+  },
+  "DarkModeSwitchLabel": {
+    "message": "Dark Mode",
+    "description": "The message displayed on the switch for toggling Dark Mode"
+  },
+  "Placeholder_Category": {
+    "message": "Filtered Category"
+  },
+  "Placeholder_Keyword": {
+    "message": "Filtered Keyword"
+  },
+  "Placeholder_KeywordIn": {
+    "message": "Filtered Keyword in"
+  },
+  "Placeholder_User": {
+    "message": "Filtered User"
   }
 }

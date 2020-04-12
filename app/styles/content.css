@@ -95,24 +95,24 @@ body#deviantART-v7 {
 }
 
 [da-filter-category]::before {
-    content: "Filtered Category: " attr(da-filter-category);
+    content: "__MSG_Placeholder_Category__: " attr(da-filter-category);
 }
 
 [da-filter-keyword]::before {
-    content: "Filtered Keyword: " attr(da-filter-keyword);
+    content: "__MSG_Placeholder_Keyword__: " attr(da-filter-keyword);
 }
 
 [da-filter-keyword][da-filter-keyword-attribute]::before {
-    content: "Filtered Keyword in " attr(da-filter-keyword-attribute) ": " attr(da-filter-keyword);
+    content: "__MSG_Placeholder_KeywordIn__ " attr(da-filter-keyword-attribute) ": " attr(da-filter-keyword);
 }
 
 [da-filter-user]::before {
-    content: "Filtered User: " attr(da-filter-user);
+    content: "__MSG_Placeholder_User__: " attr(da-filter-user);
 }
 
 [da-filter-user][data-username]:not([data-username=""])::before {
     /* use the username from metadata instead if it is available, as it will always have correct casing */
-    content: "Filtered User: " attr(data-username);
+    content: "__MSG_Placeholder_User__: " attr(data-username);
 }
 
 

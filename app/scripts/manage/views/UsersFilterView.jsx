@@ -12,7 +12,7 @@ class UsersFilterView extends React.Component {
         this.state = {
             'columns': [
                 {
-                    'title': 'Username',
+                    'title': browser.i18n.getMessage('Filter_Users_PropTitle_Username'),
                     'field': 'username',
                     'editComponent': props => (
                         // TODO: use a library, like react-text-mask, to enforce pattern and/or show validity?
@@ -27,7 +27,7 @@ class UsersFilterView extends React.Component {
         return (
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <FilterTable columns={this.state.columns} filterKey='users' title='Filtered Users' />
+                    <FilterTable columns={this.state.columns} filterKey='users' title={browser.i18n.getMessage('FilterTitle_User')} />
                 </Grid>
             </Grid>
         );

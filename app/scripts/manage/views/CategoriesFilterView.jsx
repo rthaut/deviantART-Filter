@@ -12,13 +12,13 @@ class CategoriesFilterView extends React.Component {
         this.state = {
             'columns': [
                 {
-                    'title': 'Category',
+                    'title': browser.i18n.getMessage('Filter_Categories_PropTitle_Name'),
                     'field': 'name',
                     'editComponent': props => (
                         <VirtualizedAutoComplete
                             options={require('../../../data/categories.json')}
-                            label="Select a Category"
-                            noOptionsText="No matching categories"
+                            label={browser.i18n.getMessage('CategoriesMenuLabel')}
+                            noOptionsText={browser.i18n.getMessage('CategoriesMenuNoOptionsText')}
                             value={props.value}
                             onChange={props.onChange}
                             autoHighlight
@@ -37,7 +37,7 @@ class CategoriesFilterView extends React.Component {
         return (
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <FilterTable columns={this.state.columns} filterKey='categories' title='Filtered Categories' />
+                    <FilterTable columns={this.state.columns} filterKey='categories' title={browser.i18n.getMessage('FilterTitle_Category')} />
                 </Grid>
             </Grid>
         );

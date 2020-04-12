@@ -155,8 +155,9 @@ const App = () => {
                             >
                                 <MenuIcon />
                             </IconButton>
+                            {/* TODO: Add the icon/logo here? */}
                             <Typography component="h1" variant="h6" className={classes.title}>
-                                DeviantArt Filter
+                                {browser.i18n.getMessage('ExtensionName')}
                             </Typography>
                             <FormControlLabel
                                 control={
@@ -167,7 +168,7 @@ const App = () => {
                                         name="darkMode"
                                     />
                                 }
-                                label="Dark Mode"
+                                label={browser.i18n.getMessage('DarkModeSwitchLabel')}
                             />
                         </Toolbar>
                     </AppBar>

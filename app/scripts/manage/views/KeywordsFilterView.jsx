@@ -12,7 +12,7 @@ class KeywordsFilterView extends React.Component {
         this.state = {
             'columns': [
                 {
-                    'title': 'Keyword',
+                    'title': browser.i18n.getMessage('Filter_Keywords_PropTitle_Keyword'),
                     'field': 'keyword',
                     'editComponent': props => (
                         // TODO: use a library, like react-text-mask, to enforce pattern and/or show validity?
@@ -20,7 +20,7 @@ class KeywordsFilterView extends React.Component {
                     ),
                 },
                 {
-                    'title': 'Is Wildcard',
+                    'title': browser.i18n.getMessage('Filter_Keywords_PropTitle_Wildcard'),
                     'field': 'wildcard',
                     'type': 'boolean',
                     'editComponent': props => (
@@ -35,7 +35,7 @@ class KeywordsFilterView extends React.Component {
         return (
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <FilterTable columns={this.state.columns} filterKey='keywords' title='Filtered Keywords' />
+                    <FilterTable columns={this.state.columns} filterKey='keywords' title={browser.i18n.getMessage('FilterTitle_Keyword')} />
                 </Grid>
             </Grid>
         );

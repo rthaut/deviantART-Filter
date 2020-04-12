@@ -63,7 +63,7 @@ const errorTheme = createMuiTheme({
     },
 });
 
-const FilterTable = ({ filterKey, columns, ...rest }) => {
+const FilterTable = ({ filterKey, columns, title, ...props }) => {
 
     const onStorageChanged = (changes, areaName) => {
         console.time('onStorageChanged()');
@@ -110,7 +110,7 @@ const FilterTable = ({ filterKey, columns, ...rest }) => {
     const [confirmation, setConfirmation] = useState('');
 
     const confirmReset = () => {
-        setConfirmation(`Are you sure you want to delete all ${data.length} of your ${filterKey} filters?`);
+        setConfirmation(browser.i18n.getMessage('ConfirmAllFiltersDeletePrompt', [data.length, title.toLowerCase()]));
     };
 
     const resetFilter = async () => {
@@ -128,6 +128,7 @@ const FilterTable = ({ filterKey, columns, ...rest }) => {
     return (
         <>
             <MaterialTable
+                title={browser.i18n.getMessage('FilterNameWithCount', [data.length, title])}
                 icons={tableIcons}
                 columns={columns}
                 data={data}
@@ -163,16 +164,16 @@ const FilterTable = ({ filterKey, columns, ...rest }) => {
                 actions={[
                     {
                         'icon': tableIcons.DeleteSweep,
-                        'tooltip': 'Delete All',
+                        'tooltip': browser.i18n.getMessage('DeleteAllFiltersButtonTooltip'),
                         'onClick': () => confirmReset(data),
                         'isFreeAction': true,
                         'disabled': data.length < 2
                     }
                 ]}
-                {...rest}
+                {...props}
             />
             <Dialog open={(confirmation?.length > 1)} onClose={closeConfirmation}>
-                <DialogTitle>Confirm</DialogTitle>
+                <DialogTitle>{browser.i18n.getMessage('ConfirmAllFiltersDeleteTitle')}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         {confirmation}
@@ -180,11 +181,11 @@ const FilterTable = ({ filterKey, columns, ...rest }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closeConfirmation} color="primary" variant="contained" autoFocus>
-                        No
+                        {browser.i18n.getMessage('ConfirmAllFiltersDeleteButton_Decline')}
                     </Button>
                     <ThemeProvider theme={errorTheme}>
                         <Button onClick={resetFilter} color="primary" variant="outlined">
-                            Yes
+                        {browser.i18n.getMessage('ConfirmAllFiltersDeleteButton_Accept')}
                         </Button>
                     </ThemeProvider>
                 </DialogActions>
@@ -195,8 +196,9 @@ const FilterTable = ({ filterKey, columns, ...rest }) => {
 };
 
 FilterTable.propTypes = {
-    'filterKey': PropTypes.string,
-    'columns': PropTypes.array
+    'filterKey': PropTypes.string.isRequired,
+    'columns': PropTypes.array.isRequired,
+    'title': PropTypes.string.isRequired,
 };
 
 export default FilterTable;

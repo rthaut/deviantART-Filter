@@ -97,11 +97,9 @@ const FiltersImporter = () => {
         <>
             <div className={clsx(classes.dropzone, isDragActive && classes.dropzoneActive, isDragReject && classes.dropzoneReject)} variant="outlined" {...getRootProps()}>
                 <input {...getInputProps()} />
-                <Typography component="p" variant="subtitle2">
-                    Drag &amp; drop your <em>DeviantArt Filter</em> file(s) here<br />
-                    (or click anywhere in this box to open your file browser)
+                <Typography component="p" variant="subtitle2" dangerouslySetInnerHTML={{'__html': browser.i18n.getMessage('ImportInstructions')}}>
                 </Typography>
-                {isDragReject && <Typography component="p" variant="h6">That is not an accepted file format.</Typography>}
+                {isDragReject && <Typography component="p" variant="h6">{browser.i18n.getMessage('InvalidImportFileTypeMessage')}</Typography>}
             </div>
             {imports.length > 0 && <div className={classes.results}>
                 <ImportFilterResultsTable results={imports} />

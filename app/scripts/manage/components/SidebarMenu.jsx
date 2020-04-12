@@ -35,7 +35,7 @@ const SidebarMenu = () => {
                     <ListItemIcon>
                         <DashboardIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Dashboard" />
+                    <ListItemText primary={browser.i18n.getMessage('SidebarLink_Dashboard')} />
                 </ListItem>
             </List>
             <Divider />
@@ -44,19 +44,19 @@ const SidebarMenu = () => {
                     <ListItemIcon>
                         <PeopleIcon />
                     </ListItemIcon>
-                    <ListItemText primary="User Filters" />
+                    <ListItemText primary={browser.i18n.getMessage('SidebarLink_Users')} />
                 </ListItem>
                 <ListItem button component={NavLink} exact to="/keywords" activeClassName={classes.activeNavLink}>
                     <ListItemIcon>
                         <LabelIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Keyword Filters" />
+                    <ListItemText primary={browser.i18n.getMessage('SidebarLink_Keywords')} />
                 </ListItem>
                 <ListItem button component={NavLink} exact to="/categories" activeClassName={classes.activeNavLink}>
                     <ListItemIcon>
                         <CategoryIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Category Filters" />
+                    <ListItemText primary={browser.i18n.getMessage('SidebarLink_Categories')} />
                 </ListItem>
             </List>
             <Divider />
@@ -65,13 +65,13 @@ const SidebarMenu = () => {
                     <ListItemIcon>
                         <SettingsIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Settings" />
+                    <ListItemText primary={browser.i18n.getMessage('SidebarLink_Settings')} />
                 </ListItem> */}
                 <ListItem button component={NavLink} exact to="/import-export" activeClassName={classes.activeNavLink}>
                     <ListItemIcon>
                         <ImportExportIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Import/Export" />
+                    <ListItemText primary={browser.i18n.getMessage('SidebarLink_ImportExport')} />
                 </ListItem>
             </List>
         </>

@@ -61,19 +61,19 @@ const DashboardFilterTile = ({ filterKey, title, link }) => {
         <Grid item xs={12} md={4}>
             <Paper className={classes.paper}>
                 <Typography component="h2" variant="h6" color="textSecondary" gutterBottom>
-                    {filterCount} {title}
+                    {browser.i18n.getMessage('FilterNameWithCount', [filterCount, title])}
                 </Typography>
                 <Divider className={classes.paperDivider} />
-                <Link color="primary" component={NavLink} to={link}>View / Manage</Link>
+                <Link color="primary" component={NavLink} to={link}>{browser.i18n.getMessage('ManageFilterText')}</Link>
             </Paper>
         </Grid>
     );
 };
 
 DashboardFilterTile.propTypes = {
-    'filterKey': PropTypes.string,
-    'title': PropTypes.string,
-    'link': PropTypes.string,
+    'filterKey': PropTypes.string.isRequired,
+    'title': PropTypes.string.isRequired,
+    'link': PropTypes.string.isRequired,
 };
 
 export default DashboardFilterTile;

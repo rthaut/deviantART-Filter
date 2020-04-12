@@ -43,12 +43,12 @@ const ImportExportView = () => {
                 <Card>
                     <CardContent>
                         <Typography component="h2" variant="h6" color="textSecondary" gutterBottom>
-                            Export Filters to File
+                            {browser.i18n.getMessage('ExportHeading')}
                         </Typography>
                         <Typography component="p" variant="body2" color="textSecondary" className={classes.helpText}>
-                            Use this to export all of your current filters to a file (for backup or migration purposes)
+                            {browser.i18n.getMessage('ExportHelpText')}
                         </Typography>
-                        <Button variant="contained" color="primary" onClick={exportFilters}>Export Filter Data</Button>
+                        <Button variant="contained" color="primary" onClick={exportFilters}>{browser.i18n.getMessage('ExportButtonLabel')}</Button>
                     </CardContent>
                 </Card>
             </Grid>
@@ -56,7 +56,7 @@ const ImportExportView = () => {
                 <Card>
                     <CardContent>
                         <Typography component="h2" variant="h6" color="textSecondary" gutterBottom>
-                            Import Filters from File(s)
+                            {browser.i18n.getMessage('ImportHeading')}
                         </Typography>
                         <FiltersImporter />
                     </CardContent>

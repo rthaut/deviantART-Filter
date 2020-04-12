@@ -5,9 +5,21 @@ import DashboardFilterTile from '../components/DashboardFilterTile';
 const DashboardView = () => {
     return (
         <Grid container spacing={3}>
-            <DashboardFilterTile filterKey="users" title="User Filters" link="/users" />
-            <DashboardFilterTile filterKey="keywords" title="Keyword Filters" link="/keywords" />
-            <DashboardFilterTile filterKey="categories" title="Category Filters" link="/categories" />
+            <DashboardFilterTile
+                filterKey="users"
+                title={browser.i18n.getMessage('FilterTitle_User')}
+                link="/users"
+            />
+            <DashboardFilterTile
+                filterKey="keywords"
+                title={browser.i18n.getMessage('FilterTitle_Keyword')}
+                link="/keywords"
+            />
+            <DashboardFilterTile
+                filterKey="categories"
+                title={browser.i18n.getMessage('FilterTitle_Category')}
+                link="/categories"
+            />
         </Grid>
     );
 };

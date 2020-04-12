@@ -35,7 +35,7 @@ export const Processing = ({ text, color = 'inherit', ...props }) => {
 };
 
 Processing.propTypes = {
-    'text': PropTypes.string,
+    'text': PropTypes.string.isRequired,
     'color': PropTypes.string,
 };
 
@@ -47,11 +47,11 @@ const ImportFilterResultsTable = ({ results }) => {
             <Table className={classes.resultsTable}>
                 <TableHead>
                     <TableRow>
-                        <TableCell>File Name</TableCell>
-                        <TableCell>Filter Type</TableCell>
-                        <TableCell align="right">Total</TableCell>
-                        <TableCell align="right">New</TableCell>
-                        <TableCell align="right">Duplicates</TableCell>
+                        <TableCell>{browser.i18n.getMessage('ImportResultsColumnHeader_FileName')}</TableCell>
+                        <TableCell>{browser.i18n.getMessage('ImportResultsColumnHeader_FilterType')}</TableCell>
+                        <TableCell align="right">{browser.i18n.getMessage('ImportResultsColumnHeader_TotalCount')}</TableCell>
+                        <TableCell align="right">{browser.i18n.getMessage('ImportResultsColumnHeader_NewCount')}</TableCell>
+                        <TableCell align="right">{browser.i18n.getMessage('ImportResultsColumnHeader_DuplicateCount')}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -66,7 +66,7 @@ const ImportFilterResultsTable = ({ results }) => {
                             <TableCell align="right">{result.results[key].duplicate}</TableCell>
                         </TableRow>)) : (<TableRow>
                             <TableCell colSpan={4}>
-                                <Processing text="Processing..." />
+                                <Processing text={browser.i18n.getMessage('ImportResultsProcessingMessage')} />
                             </TableCell>
                         </TableRow>)}
                     </React.Fragment>))}
@@ -77,7 +77,7 @@ const ImportFilterResultsTable = ({ results }) => {
 };
 
 ImportFilterResultsTable.propTypes = {
-    'results': PropTypes.arrayOf(PropTypes.object),
+    'results': PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default ImportFilterResultsTable;
