@@ -45,6 +45,16 @@ browser.storage.onChanged.addListener((changes, areaName) => {
 
 
 /* Context Menus */
-MENUS.forEach(menu => browser.contextMenus.remove(menu.id).finally(browser.contextMenus.create(menu)));
-browser.contextMenus.onClicked.addListener(OnMenuClicked);
-browser.contextMenus.onShown.addListener(OnMenuShown);
+try {
+    MENUS.forEach(menu => browser.contextMenus.remove(menu.id).finally(browser.contextMenus.create(menu)));
+    browser.contextMenus.onClicked.addListener(OnMenuClicked);
+} catch (ex) {
+    console.error('Failed to setup context menus', ex);
+}
+
+try {
+    browser.contextMenus.onShown.addListener(OnMenuShown);
+} catch (ex) {
+    // chrome doesn't support the onShown event, but we don't use it for major functionality, so just ignore it
+    void(ex);
+}
