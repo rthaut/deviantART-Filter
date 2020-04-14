@@ -1,9 +1,10 @@
 const semver = require('semver');
 
+import { GetCategories } from './background/categories';
+import { ImportFilters } from './background/filters';
 import { MENUS, OnMenuClicked, OnMenuShown } from './background/menus';
 import { OnRuntimeMessage } from './background/messages';
 import { OnLocalStorageChanged } from './background/storage';
-import { ImportFilters } from './background/filters';
 
 browser.runtime.onInstalled.addListener(async (details) => {
     const { previousVersion } = details;
@@ -17,6 +18,9 @@ browser.runtime.onInstalled.addListener(async (details) => {
             // await browser.storage.local.remove('tags');
         }
     }
+
+    // fetch and store the latest category paths
+    await GetCategories();
 });
 
 /* Page Action */

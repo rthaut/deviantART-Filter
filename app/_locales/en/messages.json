@@ -165,6 +165,10 @@
     "message": "No matching categories",
     "description": "The text shown on the categories autocomplete menu when no options match the entered value"
   },
+  "CategoriesMenuErrorOption": {
+    "message": "Failed to load category data",
+    "description": "The option shown (disabled) when category data cannot be loaded"
+  },
   "DarkModeSwitchLabel": {
     "message": "Dark Mode",
     "description": "The message displayed on the switch for toggling Dark Mode"

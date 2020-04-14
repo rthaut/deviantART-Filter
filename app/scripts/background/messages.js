@@ -1,3 +1,4 @@
+import { GetCategories } from './categories';
 import * as FILTERS from './filters';
 import * as MESSAGES from '../constants/messages';
 
@@ -24,6 +25,8 @@ export const OnRuntimeMessage = (message) => {
         case MESSAGES.FETCH_METADATA:
             return fetch(new URL(`https://backend.deviantart.com/oembed?url=${message.data.url}`))
                 .then(response => response.json());
+        case MESSAGES.FETCH_CATEGORIES:
+            return GetCategories();
     }
 };
 

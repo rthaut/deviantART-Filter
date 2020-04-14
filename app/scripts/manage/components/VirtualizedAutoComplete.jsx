@@ -6,6 +6,7 @@ import {
     ListSubheader,
     TextField,
     Typography,
+    CircularProgress,
 } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useTheme, makeStyles } from '@material-ui/core/styles';
@@ -97,7 +98,20 @@ export default function VirtualizedAutoComplete({label, onChange, ...props}) {
             filterOptions={(options, { inputValue }) => matchSorter(options, inputValue)}
             ListboxComponent={VirtualizedListboxComponent}
             renderInput={(params) => (
-                <TextField {...params} variant="outlined" label={label} />
+                <TextField
+                    {...params}
+                    label={label}
+                    variant="outlined"
+                    InputProps={{
+                        ...params.InputProps,
+                        'endAdornment': (
+                            <>
+                                {props.loading ? <CircularProgress color="inherit" size={20} /> : null}
+                                {params.InputProps.endAdornment}
+                            </>
+                        ),
+                    }}
+                />
             )}
             renderOption={(option, { inputValue }) => {
                 const matches = match(option, inputValue);
