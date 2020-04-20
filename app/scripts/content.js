@@ -1,5 +1,9 @@
 import { THUMBNAIL_SELECTOR as ECLIPSE_THUMBNAIL_SELECTOR } from './content/eclipse';
 import { THUMBNAIL_SELECTOR as CLASSIC_THUMBNAIL_SELECTOR } from './content/classic';
+const SELECTORS = [
+    ECLIPSE_THUMBNAIL_SELECTOR,
+    CLASSIC_THUMBNAIL_SELECTOR,
+];
 
 import {
     ADD_FILTER,
@@ -146,7 +150,7 @@ export const OnLocalStorageChanged = async (key, changes) => {
             if (added.length) {
                 console.debug('Applying new filters to document', added);
                 console.time(`ApplyFiltersToDocument() [${key}]`);
-                F.ApplyFiltersToDocument(added, ECLIPSE_THUMBNAIL_SELECTOR);
+                F.ApplyFiltersToDocument(added, SELECTORS.join(', '));
                 console.timeEnd(`ApplyFiltersToDocument() [${key}]`);
             }
 
@@ -184,11 +188,9 @@ const OnRuntimeMessage = message => {
     }
 
     // setup observers for thumbnails loaded after initial render next
-    WatchForNewThumbs(ECLIPSE_THUMBNAIL_SELECTOR);
-    WatchForNewThumbs(CLASSIC_THUMBNAIL_SELECTOR);
+    WatchForNewThumbs(SELECTORS.join(', '));
 
     // get all thumbnails on the page and work with them
-    await HandleThumbnails(document.querySelectorAll(ECLIPSE_THUMBNAIL_SELECTOR));
-    await HandleThumbnails(document.querySelectorAll(CLASSIC_THUMBNAIL_SELECTOR));
+    await HandleThumbnails(document.querySelectorAll(SELECTORS.join(', ')));
 
 })();
