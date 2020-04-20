@@ -1,8 +1,13 @@
 # DeviantArt Filter Changelog
 
-## Version 6.0.0 Alpha 1 (April 14, 2020)
+## Version 6.0.0 Alpha
 
-*(**Tote**: This entry may be updated and/or replaced with future version 6.0.0 alpha/beta/final/etc release information.)*
+*(**Note**: This entry may be updated and/or replaced with future version 6.0.0 alpha/beta/final/etc release information.)*
+
+| Version | Release Date   | Release Tag |
+|  ------ | -------------- | ----------- |
+| Alpha 2 | April 20, 2020 | [v6.0.0-alpha.2](https://github.com/rthaut/deviantART-Filter/releases/tag/v6.0.0-alpha.2) |
+| Alpha 1 | April 14, 2020 | [v6.0.0-alpha.1](https://github.com/rthaut/deviantART-Filter/releases/tag/v6.0.0-alpha.1) |
 
 ### New Features
 
@@ -12,7 +17,7 @@
 - **Quick Filter Tag Context Menu**. A new context (right-click) menu is available on all tag links; use this to quickly create a keyword filter for the linked tag.
 - **Faster Metadata Lookup**. DeviantArt Filter v6+ uses faster APIs to load metadata (tags and categories) while you browse, so filters should apply faster than they did in v5.x.
 
-### Known issues
+### Known Issues
 
 - **Filters are not validated**. When creating/updating filters, no restrictions or validations are implemented to help prevent invalid filters from being created.
 - **Options are missing**. There are currently no configurable options for DeviantArt Filter v6.0.0.
