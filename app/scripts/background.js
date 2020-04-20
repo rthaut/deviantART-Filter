@@ -6,6 +6,8 @@ import { MENUS, OnMenuClicked, OnMenuShown } from './background/menus';
 import { OnRuntimeMessage } from './background/messages';
 import { OnLocalStorageChanged } from './background/storage';
 
+import { REGEX } from './constants/url';
+
 browser.runtime.onInstalled.addListener(async (details) => {
     const { previousVersion } = details;
 
@@ -24,13 +26,31 @@ browser.runtime.onInstalled.addListener(async (details) => {
 });
 
 /* Page Action */
-browser.pageAction.onClicked.addListener((tab) => {
-    browser.tabs.create({
-        'url': browser.runtime.getURL('pages/manage.html')
+browser.pageAction.onClicked.addListener(async (tab) => {
+    const MANAGEMENT_URL = browser.runtime.getURL('pages/manage.html');
+
+    const tabs = await browser.tabs.query({
+        'currentWindow': true,
+        'url': MANAGEMENT_URL
+    });
+
+    if (tabs.length) {
+        return browser.tabs.update(tabs[0].id, {
+            'active': true
+        });
+    }
+
+    return browser.tabs.create({
+        'url': MANAGEMENT_URL
     });
 });
-browser.tabs.onUpdated.addListener((tabId) => {
-    browser.pageAction.show(tabId);
+
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (REGEX.test(tab.url)) {
+        browser.pageAction.show(tabId);
+    } else {
+        chrome.pageAction.hide(tabId);
+    }
 });
 
 
