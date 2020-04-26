@@ -7,6 +7,14 @@ const API_TYPE = 'oauth2';
 const CLIENT_ID = '3309';
 const CLIENT_SECRET = 'ea9f3e16a80ed47a5221a67b7d0715ff';
 
+// TODO: make this configurable? also, if a way to force-refresh cache is implemented, this could possibly be increased significantly (weeks or maybe even months)
+const DAYS_TO_CACHE = 1;
+
+/**
+ * Returns an access token for the DeviantArt API
+ * @returns {string} the access token
+ */
+// TODO: should this (and related API configs) be moved to a separate library/file for re-use?
 const GetToken = async () => {
     try {
         const response = await fetch(`${API_BASE}/${API_TYPE}/token?` + new URLSearchParams({
@@ -24,6 +32,12 @@ const GetToken = async () => {
     }
 };
 
+/**
+ * Returns category data for the given path
+ * @param {string} path the category path, formatted for DeviantArt's category tree API
+ * @param {string} token a valid DeviantArt API access token
+ * @returns {object[]} the category data
+ */
 const GetCategoriesForPath = async (path, token) => {
     try {
         const response = await fetch(`${API_BASE}/${API_PATH}/${API_TYPE}/browse/categorytree?` + new URLSearchParams({
@@ -41,6 +55,12 @@ const GetCategoriesForPath = async (path, token) => {
     }
 };
 
+/**
+ * Returns the full category title (with optional parent title's prepended)
+ * @param {string} title the title of a category
+ * @param {string} [parentTitle] (optional) the title of the parent category
+ * @returns {string} the full formatted title
+ */
 const GetFullCategoryTitle = (title, parentTitle = null) => {
     if (parentTitle) {
         title = parentTitle + ' > ' + title;
@@ -48,6 +68,12 @@ const GetFullCategoryTitle = (title, parentTitle = null) => {
     return title;
 };
 
+/**
+ * Recursively adds all child paths for a given category to the `paths` array
+ * @param {string} path the category path
+ * @param {string} token a valid DeviantArt API access token
+ * @param {string} [parentTitle] (optional) the title of the parent category
+ */
 const PushPathsForCategory = async (path, token, parentTitle = null) => {
     const categories = await GetCategoriesForPath(path, token);
     if (Array.isArray(categories) && categories.length) {
@@ -61,15 +87,34 @@ const PushPathsForCategory = async (path, token, parentTitle = null) => {
     }
 };
 
+/**
+ * Returns all DeviantArt Category paths; data is cached for `DAYS_TO_CACHE` days
+ */
+// TODO: instead of logging remaining time for cache time here, it would be much more useful to display it somewhere (perhaps on the dashboard?) and/or provide a way to force the cache to be refreshed
 export const GetCategories = async () => {
     console.time('GetCategories()');
-    const { 'category_cache': categories } = await browser.storage.local.get('category_cache');
-    if (categories && categories?.paths.length) {
-        console.info('Cached Category Data', categories);
-        if (categories?.date.getTime() + (7 * 24 * 60 * 60 * 1000) >= new Date().getTime()) {
-            console.timeEnd('GetCategories()');
-            return categories.paths;
+
+    try {
+        const { 'category_cache': categories } = await browser.storage.local.get('category_cache');
+        console.info('Cached category data', categories);
+        if (categories?.date && categories?.paths?.length) {
+            const remainingMilliseconds = categories?.date + (DAYS_TO_CACHE * 86400 * 1000) - new Date().getTime();
+            if (remainingMilliseconds > 0) {
+
+                // formatting the remaining time this way only works
+                // if/when the remaining time is less than 24 hours
+                const date = new Date(0);
+                date.setSeconds(remainingMilliseconds / 1000);
+                console.info('Cached category data expires in', date.toISOString().substr(11, 8));
+
+                console.timeEnd('GetCategories()');
+                return categories.paths;
+            } else {
+                console.info('Cached category data is expired');
+            }
         }
+    } catch (ex) {
+        console.error('Failed to retrieve categories from cache', ex);
     }
 
     const token = await GetToken();
@@ -81,12 +126,16 @@ export const GetCategories = async () => {
 
     paths.sort((a, b) => a.localeCompare(b));
 
-    await browser.storage.local.set({
-        'category_cache': {
-            paths,
-            'date': new Date()
-        }
-    });
+    try {
+        await browser.storage.local.set({
+            'category_cache': {
+                paths,
+                'date': new Date().getTime()
+            }
+        });
+    } catch (ex) {
+        console.error('Failed to store categories in cache', ex);
+    }
 
     console.timeEnd('GetCategories()');
     return paths;
