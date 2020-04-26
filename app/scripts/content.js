@@ -32,9 +32,7 @@ const AddQuickHideControl = (thumbnail) => {
 
         if (!username) {
             console.warn('Failed to Identify Username for Thumbnail', thumbnail);
-        }
-
-        if (username !== undefined && username !== null) {
+        } else {
             control = document.createElement('span');
             control.setAttribute('da-filter-quick-hide', username);
             control.setAttribute('title', `Create User Filter for "${username}"`);
@@ -43,8 +41,8 @@ const AddQuickHideControl = (thumbnail) => {
                 event.stopPropagation();
 
                 // immediately filter this thumbnails
-                // OnLocalStorageChanged() will catch the change, too, but for large filter lists,
-                // it will be delayed
+                // OnLocalStorageChanged() will catch the change, too,
+                // but for large filter lists, it could be delayed
                 UsersFilter.FilterThumbnail(thumbnail, [{ username }]);
 
                 browser.runtime.sendMessage({
