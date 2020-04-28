@@ -1,46 +1,56 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React from 'react';
-import { Grid } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Grid, Chip } from '@material-ui/core';
 import { MTableEditField } from 'material-table';
 
 import FilterTable from '../components/FilterTable';
 
-class KeywordsFilterView extends React.Component {
+const KeywordsFilterView = () => {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            'columns': [
-                {
-                    'title': browser.i18n.getMessage('Filter_Keywords_PropTitle_Keyword'),
-                    'field': 'keyword',
-                    'editComponent': props => (
-                        // TODO: use a library, like react-text-mask, to enforce pattern and/or show validity?
-                        <MTableEditField {...props} inputProps={{ 'pattern': '[a-zA-Z0-9]+\\S*', 'required': true }} />
-                    ),
-                },
-                {
-                    'title': browser.i18n.getMessage('Filter_Keywords_PropTitle_Wildcard'),
-                    'field': 'wildcard',
-                    'type': 'boolean',
-                    'editComponent': props => (
-                        <MTableEditField {...props} color="primary" />
-                    ),
-                }
-            ]
-        };
-    }
+    const [keywordError, setKeywordError] = useState({
+        'error': false,
+        'helperText': '',
+    });
 
-    render() {
-        return (
-            <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <FilterTable columns={this.state.columns} filterKey='keywords' title={browser.i18n.getMessage('FilterTitle_Keyword')} />
-                </Grid>
+    const columns = [
+        {
+            'title': browser.i18n.getMessage('Filter_Keywords_PropTitle_Keyword'),
+            'field': 'keyword',
+            'editComponent': props => (
+                <MTableEditField {...props}
+                    error={keywordError.error}
+                    helperText={keywordError.helperText ?? ''}
+                />
+            ),
+            'required': true,
+            'pattern': {
+                'regex': /^[a-zA-Z0-9]+\S*$/,
+                'hint': browser.i18n.getMessage('Filter_Keywords_PropPatternHint_Keyword'),
+            },
+            'setError': setKeywordError,
+        },
+        {
+            'title': browser.i18n.getMessage('Filter_Keywords_PropTitle_Wildcard'),
+            'field': 'wildcard',
+            'type': 'boolean',
+            'editComponent': props => (<MTableEditField {...props} color="primary" />),
+            'render': rowData => (<Chip
+                size='small'
+                variant={rowData.wildcard ? 'default' : 'outlined'}
+                label={rowData.wildcard ? 'Yes' : 'No'}
+            />),
+        }
+    ];
+
+    return (
+        <Grid container spacing={3}>
+            <Grid item xs={12}>
+                <FilterTable columns={columns} filterKey='keywords' title={browser.i18n.getMessage('FilterTitle_Keyword')} />
             </Grid>
-        );
-    }
+        </Grid>
+    );
 
-}
+};
 
 export default KeywordsFilterView;

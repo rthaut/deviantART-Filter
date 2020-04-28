@@ -6,6 +6,8 @@ import {
     Route,
 } from 'react-router-dom';
 
+import { SnackbarProvider } from 'notistack';
+
 import clsx from 'clsx';
 
 import {
@@ -14,6 +16,9 @@ import {
     ThemeProvider,
 } from '@material-ui/core/styles';
 import {
+    amber,
+    blue,
+    green,
     red,
     teal,
 } from '@material-ui/core/colors';
@@ -32,6 +37,7 @@ import {
     Switch,
     Box,
     Link,
+    Button,
 } from '@material-ui/core';
 
 import {
@@ -125,7 +131,23 @@ export const useStyles = makeStyles((theme) => ({
     },
     'footerDivider': {
         'margin': theme.spacing(2, 0),
-    }
+    },
+    'snackbarVariantSuccess': {
+        'backgroundColor': green[600], // green
+        'color': green[50],
+    },
+    'snackbarVariantError': {
+        'backgroundColor': red[700], // dark red
+        'color': red[50],
+    },
+    'snackbarVariantWarning': {
+        'backgroundColor': blue['A400'], // nice blue
+        'color': blue[50],
+    },
+    'snackbarVariantInfo': {
+        'backgroundColor': amber[700], // amber
+        'color': amber[50],
+    },
 }));
 
 const App = () => {
@@ -157,79 +179,98 @@ const App = () => {
         browser.management.getSelf().then(_info => setInfo(_info));
     }, []);
 
+    const notistackRef = React.createRef();
+    const notistackDismiss = key => () => {
+        notistackRef.current.closeSnackbar(key);
+    };
+
     return (
         <ThemeProvider theme={theme}>
-            <Router>
-                <div className={classes.root}>
-                    <CssBaseline />
-                    <AppBar position="absolute" color="primary" className={clsx(classes.appBar, open && classes.appBarShift)}>
-                        <Toolbar className={classes.toolbar}>
-                            <IconButton
-                                edge="start"
-                                color="inherit"
-                                onClick={handleDrawerOpen}
-                                className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                            {/* TODO: Add the icon/logo here? */}
-                            <Typography component="h1" variant="h6" className={classes.title}>
-                                {browser.i18n.getMessage('ExtensionName')}
-                            </Typography>
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={darkMode}
-                                        onChange={event => setDarkMode(event.target.checked)}
-                                        color="default"
-                                        name="darkMode"
-                                    />
-                                }
-                                label={browser.i18n.getMessage('DarkModeSwitchLabel')}
-                            />
-                        </Toolbar>
-                    </AppBar>
-                    <Drawer variant="permanent" classes={{ 'paper': clsx(classes.drawerPaper, !open && classes.drawerPaperClose) }} open={open}>
-                        <div className={classes.toolbarIcon}>
-                            <IconButton onClick={handleDrawerClose}>
-                                <ChevronLeftIcon />
-                            </IconButton>
-                        </div>
-                        <Divider />
-                        <SidebarMenu />
-                    </Drawer>
-                    <main className={classes.content}>
-                        <div className={classes.appBarSpacer} />
-                        <Container maxWidth="lg" className={classes.container}>
-                            <RouterSwitch>
-                                <Route path="/users">
-                                    <UsersFilterView />
-                                </Route>
-                                <Route path="/keywords">
-                                    <KeywordsFilterView />
-                                </Route>
-                                <Route path="/categories">
-                                    <CategoriesFilterView />
-                                </Route>
-                                <Route path="/import-export">
-                                    <ImportExportView />
-                                </Route>
-                                <Route path="/">
-                                    <DashboardView />
-                                </Route>
-                            </RouterSwitch>
-                        </Container>
-                        {info && (
-                            <Box className={classes.footer} color="text.secondary">
-                                <Divider className={classes.footerDivider} />
-                                <Typography paragraph variant="caption" align="right">
-                                    <Link href={info.homepageUrl} target="_blank" rel="noopener noreferrer">{info.name || info.shortName} {info.versionName || info.version}</Link> by <Link href="https://ryan.thaut.me/" target="_blank" rel="noopener noreferrer">Ryan Thaut</Link>.
+            <SnackbarProvider
+                ref={notistackRef}
+                maxSnack={3}
+                classes={{
+                    'variantSuccess': classes.snackbarVariantSuccess,
+                    'variantError': classes.snackbarVariantError,
+                    'variantWarning': classes.snackbarVariantWarning,
+                    'variantInfo': classes.snackbarVariantInfo,
+                }}
+                action={(key) => (
+                    <Button onClick={notistackDismiss(key)}>Dismiss</Button>
+                )}
+            >
+                <Router>
+                    <div className={classes.root}>
+                        <CssBaseline />
+                        <AppBar position="absolute" color="primary" className={clsx(classes.appBar, open && classes.appBarShift)}>
+                            <Toolbar className={classes.toolbar}>
+                                <IconButton
+                                    edge="start"
+                                    color="inherit"
+                                    onClick={handleDrawerOpen}
+                                    className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+                                >
+                                    <MenuIcon />
+                                </IconButton>
+                                {/* TODO: Add the icon/logo here? */}
+                                <Typography component="h1" variant="h6" className={classes.title}>
+                                    {browser.i18n.getMessage('ExtensionName')}
                                 </Typography>
-                            </Box>
-                        )}
-                    </main>
-                </div>
-            </Router>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={darkMode}
+                                            onChange={event => setDarkMode(event.target.checked)}
+                                            color="default"
+                                            name="darkMode"
+                                        />
+                                    }
+                                    label={browser.i18n.getMessage('DarkModeSwitchLabel')}
+                                />
+                            </Toolbar>
+                        </AppBar>
+                        <Drawer variant="permanent" classes={{ 'paper': clsx(classes.drawerPaper, !open && classes.drawerPaperClose) }} open={open}>
+                            <div className={classes.toolbarIcon}>
+                                <IconButton onClick={handleDrawerClose}>
+                                    <ChevronLeftIcon />
+                                </IconButton>
+                            </div>
+                            <Divider />
+                            <SidebarMenu />
+                        </Drawer>
+                        <main className={classes.content}>
+                            <div className={classes.appBarSpacer} />
+                            <Container maxWidth="lg" className={classes.container}>
+                                <RouterSwitch>
+                                    <Route path="/users">
+                                        <UsersFilterView />
+                                    </Route>
+                                    <Route path="/keywords">
+                                        <KeywordsFilterView />
+                                    </Route>
+                                    <Route path="/categories">
+                                        <CategoriesFilterView />
+                                    </Route>
+                                    <Route path="/import-export">
+                                        <ImportExportView />
+                                    </Route>
+                                    <Route path="/">
+                                        <DashboardView />
+                                    </Route>
+                                </RouterSwitch>
+                            </Container>
+                            {info && (
+                                <Box className={classes.footer} color="text.secondary">
+                                    <Divider className={classes.footerDivider} />
+                                    <Typography paragraph variant="caption" align="right">
+                                        <Link href={info.homepageUrl} target="_blank" rel="noopener noreferrer">{info.name || info.shortName} {info.versionName || info.version}</Link> by <Link href="https://ryan.thaut.me/" target="_blank" rel="noopener noreferrer">Ryan Thaut</Link>.
+                                    </Typography>
+                                </Box>
+                            )}
+                        </main>
+                    </div>
+                </Router>
+            </SnackbarProvider>
         </ThemeProvider>
     );
 };

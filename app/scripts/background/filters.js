@@ -1,4 +1,4 @@
-import { isEqual, differenceWith, mapKeys, uniqWith, findIndex } from 'lodash';
+import { differenceBy, mapKeys, uniqBy, find, findIndex } from 'lodash';
 
 export const SUPPORTED_FILTERS = [
     'users',
@@ -14,6 +14,32 @@ export const MIGRATED_FILTERS = {
             'tag': 'keyword'
         },
     }
+};
+
+/**
+ * Common methods used for each supported filter where logic is (or can be) unique per filter type
+ */
+// TODO: should these be put somewhere else, like maybe a file per filter that available to all scripts?
+// TODO: these methods are case-sensitive, but ideally filters should be case-insensitive
+export const FILTER_METHODS = {
+    'users': {
+        'diff': (array, values) => differenceBy(array, values, 'username'),
+        'uniq': (array) => uniqBy(array, 'username'),
+        'find': (array, value) => find(array, ['username', value.username]),
+        'findIndex': (array, value) => findIndex(array, ['username', value.username]),
+    },
+    'keywords': {
+        'diff': (array, values) => differenceBy(array, values, 'keyword'),
+        'uniq': (array) => uniqBy(array, 'keyword'),
+        'find': (array, value) => find(array, ['keyword', value.keyword]),
+        'findIndex': (array, value) => findIndex(array, ['keyword', value.keyword]),
+    },
+    'categories': {
+        'diff': (array, values) => differenceBy(array, values, 'name'),
+        'uniq': (array) => uniqBy(array, 'name'),
+        'find': (array, value) => find(array, ['name', value.name]),
+        'findIndex': (array, value) => findIndex(array, ['name', value.name]),
+    },
 };
 
 export const GetAllFilters = async () => {
@@ -41,7 +67,7 @@ export const SaveFilter = async (storageKey, filters) => {
     console.time(`SaveFilter() [${storageKey}]`);
 
     const data = {};
-    data[storageKey] = uniqWith(filters, isEqual);
+    data[storageKey] = FILTER_METHODS[storageKey].uniq(filters);
     await browser.storage.local.set(data);
 
     console.timeEnd(`SaveFilter() [${storageKey}]`);
@@ -61,7 +87,7 @@ export const RemoveFilter = async (storageKey, oldFilter) => {
     console.time(`RemoveFilter() [${storageKey}]`);
 
     let filters = await GetFilter(storageKey);
-    filters = differenceWith(filters, [oldFilter], isEqual);
+    filters = FILTER_METHODS[storageKey].diff(filters, [oldFilter]);
     await SaveFilter(storageKey, filters);
 
     console.timeEnd(`RemoveFilter() [${storageKey}]`);
@@ -71,18 +97,37 @@ export const UpdateFilter = async (storageKey, oldFilter, newFilter) => {
     console.time(`UpdateFilter() [${storageKey}]`);
 
     const filters = await GetFilter(storageKey);
-    const index = findIndex(filters, oldFilter);
+    const index = FILTER_METHODS[storageKey].findIndex(filters, oldFilter);
     filters[index] = newFilter;
     await SaveFilter(storageKey, filters);
 
     console.timeEnd(`UpdateFilter() [${storageKey}]`);
 };
 
+export const ValidateFilter = async (storageKey, newFilter) => {
+    console.time(`ValidateFilter() [${storageKey}]`);
+
+    const result = {
+        'isValid': true
+    };
+
+    const filters = await GetFilter(storageKey);
+    const index = FILTER_METHODS[storageKey].findIndex(filters, newFilter);
+
+    if (index > -1) {
+        result.isValid = false;
+        result.message = browser.i18n.getMessage('DuplicateFilterWarning');
+    }
+
+    console.timeEnd(`ValidateFilter() [${storageKey}]`);
+    return result;
+};
+
 export const ImportFilter = async (storageKey, filters) => {
     console.time(`ImportFilter() [${storageKey}]`);
 
     const existingFilters = await GetFilter(storageKey);
-    const newFilters = differenceWith(filters, existingFilters, isEqual);
+    const newFilters = FILTER_METHODS[storageKey].diff(filters, existingFilters);
     await SaveFilter(storageKey, Array.from([...existingFilters, ...newFilters]));
 
     const results = {

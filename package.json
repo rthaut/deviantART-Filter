@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "webextension-toolbox dev",
     "build": "webextension-toolbox build",
-    "start:firefox": "web-ext run --source-dir=./dist/firefox/"
+    "start:firefox": "web-ext run --source-dir=./dist/firefox/",
+    "start:firefox:nr": "npm run start:firefox -- --no-reload"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "lodash": "^4.17.15",
     "match-sorter": "^4.1.0",
     "material-table": "^1.57.2",
+    "notistack": "^0.9.11",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-dropzone": "^10.2.2",

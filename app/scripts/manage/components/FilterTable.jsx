@@ -1,7 +1,12 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
+/* eslint-disable no-async-promise-executor */
 import React, { forwardRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import MaterialTable from 'material-table';
+import MaterialTable, { MTableEditRow } from 'material-table';
+import { useSnackbar } from 'notistack';
+
+import { isEqual } from 'lodash';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
@@ -34,7 +39,13 @@ import {
     ViewColumn,
 } from '@material-ui/icons';
 
-import { ADD_FILTER, REMOVE_FILTER, SAVE_FILTER, UPDATE_FILTER } from '../../constants/messages';
+import {
+    ADD_FILTER,
+    REMOVE_FILTER,
+    SAVE_FILTER,
+    UPDATE_FILTER,
+    VALIDATE_FILTER,
+} from '../../constants/messages';
 
 const tableIcons = {
     'Add': forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -64,6 +75,8 @@ const errorTheme = createMuiTheme({
 });
 
 const FilterTable = ({ filterKey, columns, title, ...props }) => {
+
+    const { enqueueSnackbar } = useSnackbar();
 
     const onStorageChanged = (changes, areaName) => {
         console.time('onStorageChanged()');
@@ -96,15 +109,16 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
     }, [filterKey]);
 
     const sendFilterMessage = async (action, value) => {
-        console.time('sendFilterMessage()');
-        await browser.runtime.sendMessage({
+        console.time(`sendFilterMessage(${action})`);
+        const response = await browser.runtime.sendMessage({
             action,
             'data': {
                 'key': filterKey,
                 value
             }
         });
-        console.timeEnd('sendFilterMessage()');
+        console.timeEnd(`sendFilterMessage(${action})`);
+        return response;
     };
 
     const [confirmation, setConfirmation] = useState('');
@@ -123,11 +137,55 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
         setConfirmation('');
     };
 
+    const validateFilter = async filter => {
+        for (const column of columns) {
+            if (column.required) {
+                if (filter[column.field] === undefined || !filter[column.field].length) {
+                    column.setError?.({
+                        'error': true,
+                        'helperText': `${column.title} is required`
+                    });
+                    return false;
+                }
+            }
+
+            if (column.pattern) {
+                if (!column.pattern?.regex?.test?.(filter[column.field])) {
+                    column.setError?.({
+                        'error': true,
+                        'helperText': 'Value is invalid' + (column.pattern?.hint ? ` (${column.pattern.hint})` : '')
+                    });
+                    return false;
+                }
+            }
+
+            column.setError?.({
+                'error': false,
+                'helperText': ''
+            });
+        }
+
+        const validation = await sendFilterMessage(VALIDATE_FILTER, filter);
+        if (!validation.isValid) {
+            enqueueSnackbar(validation.message, {
+                'variant': 'error',
+                'preventDuplicate': true,
+                'anchorOrigin': {
+                    'vertical': 'top',
+                    'horizontal': 'center',
+                },
+            });
+            return false;
+        }
+
+        return true;
+    };
+
     const stripTableData = ({ tableData, ...data }) => data;
 
     return (
         <>
-            <MaterialTable
+            <MaterialTable {...props}
                 title={browser.i18n.getMessage('FilterNameWithCount', [data.length, title])}
                 icons={tableIcons}
                 columns={columns}
@@ -139,26 +197,43 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
                     'addRowPosition': 'first'
                 }}
                 editable={{
-                    'onRowAdd': (newData) => new Promise((resolve, reject) => {
+                    'onRowAdd': (newData) => new Promise(async (resolve, reject) => {
                         const newFilterData = stripTableData(newData);
 
-                        sendFilterMessage(ADD_FILTER, newFilterData).then(resolve, reject);
+                        const isValid = await validateFilter(newFilterData);
+                        if (!isValid) {
+                            reject();
+                            return;
+                        }
+
+                        return sendFilterMessage(ADD_FILTER, newFilterData).then(resolve, reject);
                     }),
                     'onRowDelete': (oldData) => new Promise((resolve, reject) => {
                         const oldFilterData = stripTableData(oldData);
 
-                        sendFilterMessage(REMOVE_FILTER, oldFilterData).then(resolve, reject);
+                        return sendFilterMessage(REMOVE_FILTER, oldFilterData).then(resolve, reject);
                     }),
-                    'onRowUpdate': (newData, oldData) => new Promise((resolve, reject) => {
+                    'onRowUpdate': (newData, oldData) => new Promise(async (resolve, reject) => {
                         const newFilterData = stripTableData(newData);
                         const oldFilterData = stripTableData(oldData);
+
+                        if (isEqual(oldFilterData, newFilterData)) {
+                            resolve();
+                            return;
+                        }
+
+                        const isValid = await validateFilter(newFilterData);
+                        if (!isValid) {
+                            reject();
+                            return;
+                        }
 
                         const value = {
                             'old': oldFilterData,
                             'new': newFilterData
                         };
 
-                        sendFilterMessage(UPDATE_FILTER, value).then(resolve, reject);
+                        return sendFilterMessage(UPDATE_FILTER, value).then(resolve, reject);
                     })
                 }}
                 actions={[
@@ -170,7 +245,22 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
                         'disabled': data.length < 2
                     }
                 ]}
-                {...props}
+                components={{
+                    'EditRow': ({onEditingApproved, onEditingCanceled, ...props}) => {
+                        return (
+                            <MTableEditRow {...props}
+                                onEditingApproved={(mode, newData, oldData) => {
+                                    columns.forEach(column => column.setError?.({ 'error': false }));
+                                    onEditingApproved(mode, newData, oldData);
+                                }}
+                                onEditingCanceled={(mode, rowData) => {
+                                    columns.forEach(column => column.setError?.({ 'error': false }));
+                                    onEditingCanceled(mode, rowData);
+                                }}
+                            />
+                        );
+                    }
+                }}
             />
             <Dialog open={(confirmation?.length > 1)} onClose={closeConfirmation}>
                 <DialogTitle>{browser.i18n.getMessage('ConfirmAllFiltersDeleteTitle')}</DialogTitle>

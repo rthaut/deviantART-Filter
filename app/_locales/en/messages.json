@@ -151,11 +151,20 @@
   "Filter_Keywords_PropTitle_Keyword": {
     "message": "Keyword"
   },
+  "Filter_Keywords_PropPatternHint_Keyword": {
+    "message": "Letters and numbers only -- NO hashtag symbol"
+  },
   "Filter_Keywords_PropTitle_Wildcard": {
     "message": "Is Wildcard"
   },
   "Filter_Users_PropTitle_Username": {
     "message": "Username"
+  },
+  "Filter_Users_PropPatternHint_Username": {
+    "message": "No spaces allowed"
+  },
+  "DuplicateFilterWarning": {
+    "message": "Filter already exists"
   },
   "CategoriesMenuLabel": {
     "message": "Select a category (type to search)",

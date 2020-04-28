@@ -13,6 +13,11 @@ const CategoriesFilterView = () => {
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState('options', []);
 
+    const [categoryNameError, setCategoryNameError] = useState({
+        'error': false,
+        'helperText': '',
+    });
+
     useEffect(() => {
         const loadOptions = async () => {
             setLoading(true);
@@ -48,8 +53,12 @@ const CategoriesFilterView = () => {
                     selectOnFocus
                     size="small"
                     loading={loading}
+                    error={categoryNameError.error}
+                    helperText={categoryNameError.helperText ?? ''}
                 />
-            )
+            ),
+            'required': true,
+            'setError': setCategoryNameError,
         }
     ];
 

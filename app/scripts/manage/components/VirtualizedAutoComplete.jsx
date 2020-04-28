@@ -89,7 +89,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function VirtualizedAutoComplete({label, onChange, ...props}) {
+export default function VirtualizedAutoComplete({label, onChange, error, helperText, ...props}) {
     const classes = useStyles();
 
     return (
@@ -111,6 +111,8 @@ export default function VirtualizedAutoComplete({label, onChange, ...props}) {
                             </>
                         ),
                     }}
+                    error={error}
+                    helperText={helperText}
                 />
             )}
             renderOption={(option, { inputValue }) => {
