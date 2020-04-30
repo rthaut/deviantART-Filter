@@ -157,7 +157,7 @@ body#deviantART-v7 {
 
 
 /* DEBUG OUTLINES */
-.thumb:not([data-title]):not([data-title]),
+#output .thumb:not([data-title]),
 [data-hook="deviation_link"]:not([data-title]) {
     outline: #e59b00 solid 1px;
 }

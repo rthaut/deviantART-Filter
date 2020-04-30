@@ -1,4 +1,4 @@
-export const THUMBNAIL_SELECTOR = '.thumb';
+export const THUMBNAIL_SELECTOR = '#output .thumb';
 
 /**
  * Gets the Deviation's URL from a thumbnail
