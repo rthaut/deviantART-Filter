@@ -11,15 +11,19 @@ export const SetMetadataOnThumbnail = async (thumbnail) => {
         throw Error('Failed to Determine URL for Thumbnail');
     }
 
-    const metadata = await browser.runtime.sendMessage({
-        'action': FETCH_METADATA,
-        'data': {
-            url
-        }
-    });
+    if (url.toLowerCase().startsWith('http')) {
+        const metadata = await browser.runtime.sendMessage({
+            'action': FETCH_METADATA,
+            'data': {
+                url
+            }
+        });
 
-    if (metadata) {
-        SetMetadataAttributesOnThumbnail(thumbnail, metadata);
+        if (metadata) {
+            SetMetadataAttributesOnThumbnail(thumbnail, metadata);
+        }
+    } else {
+        console.warn('Thumbnail URL is not valid for oEmbed API:', url);
     }
 };
 
