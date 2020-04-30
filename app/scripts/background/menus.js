@@ -34,11 +34,10 @@ export const OnMenuClicked = (info, tab) => {
  * @param {object} info menu info
  * @param {object} tab tab info
  */
+// TODO: match linkUrl RegExps used here to items in MENUS array? or derive the RegExp from the targetUrlPatterns?
 export const OnMenuShown = (info, tab) => {
-    // TODO: this logic works while we only have one custom menu, but will need reworked for multiple menus
-    // NOTE: `menuItemId` is not available on the `info` object; maybe test `linkUrl` against applicable patterns for each configured menu?
-
     if (/\/tag\/([^\/]+)/i.test(info.linkUrl)) {
+        // filter-tag menu
         const keyword = /\/tag\/([^\/]+)/i.exec(info.linkUrl)[1];
         UpdateMenuItem('filter-tag', {
             'title': `Create Keyword Filter for "${keyword}"`

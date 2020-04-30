@@ -20,7 +20,7 @@ export const MIGRATED_FILTERS = {
  * Common methods used for each supported filter where logic is (or can be) unique per filter type
  */
 // TODO: should these be put somewhere else, like maybe a file per filter that available to all scripts?
-// TODO: these methods are case-sensitive, but ideally filters should be case-insensitive
+// TODO: these methods are all currently case-sensitive, but they really should be case-insensitive
 export const FILTER_METHODS = {
     'users': {
         'diff': (array, values) => differenceBy(array, values, 'username'),
