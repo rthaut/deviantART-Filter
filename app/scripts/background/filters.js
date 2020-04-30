@@ -1,4 +1,8 @@
-import { differenceBy, mapKeys, uniqBy, find, findIndex } from 'lodash';
+import differenceBy from 'lodash/differenceBy';
+import find from 'lodash/find';
+import findIndex from 'lodash/findIndex';
+import mapKeys from 'lodash/mapKeys';
+import uniqBy from 'lodash/uniqBy';
 
 export const SUPPORTED_FILTERS = [
     'users',

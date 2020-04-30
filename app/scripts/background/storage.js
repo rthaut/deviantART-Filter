@@ -1,4 +1,5 @@
-import { differenceWith, isEqual } from 'lodash';
+import differenceWith from 'lodash/differenceWith';
+import isEqual from 'lodash/isEqual';
 import { SendMessageToAllTabs } from './messages';
 import { LOCAL_STORAGE_CHANGED } from '../constants/messages';
 
