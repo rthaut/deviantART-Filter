@@ -44,7 +44,8 @@ import {
     REMOVE_FILTER,
     SAVE_FILTER,
     UPDATE_FILTER,
-    VALIDATE_FILTER,
+    VALIDATE_NEW_FILTER,
+    VALIDATE_UPDATED_FILTER,
 } from '../../constants/messages';
 
 const tableIcons = {
@@ -137,13 +138,13 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
         setConfirmation('');
     };
 
-    const validateFilter = async filter => {
+    const validateFilterProperties = filter => {
         for (const column of columns) {
             if (column.required) {
                 if (filter[column.field] === undefined || !filter[column.field].length) {
                     column.setError?.({
                         'error': true,
-                        'helperText': `${column.title} is required`
+                        'helperText': browser.i18n.getMessage('RequiredFieldLabel', [column.title])
                     });
                     return false;
                 }
@@ -153,7 +154,7 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
                 if (!column.pattern?.regex?.test?.(filter[column.field])) {
                     column.setError?.({
                         'error': true,
-                        'helperText': 'Value is invalid' + (column.pattern?.hint ? ` (${column.pattern.hint})` : '')
+                        'helperText': column.pattern?.hint ? browser.i18n.getMessage('InvalidFieldLabelWithHint', [column.pattern.hint]) : browser.i18n.getMessage('InvalidFieldLabel')
                     });
                     return false;
                 }
@@ -165,7 +166,11 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
             });
         }
 
-        const validation = await sendFilterMessage(VALIDATE_FILTER, filter);
+        return true;
+    };
+
+    const validateFilter = async (action, value) => {
+        const validation = await sendFilterMessage(action, value);
         if (!validation.isValid) {
             enqueueSnackbar(validation.message, {
                 'variant': 'error',
@@ -179,6 +184,22 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
         }
 
         return true;
+    };
+
+    const validateNewFilter = async (newFilter) => {
+        if (!validateFilterProperties(newFilter)) {
+            return false;
+        }
+
+        return await validateFilter(VALIDATE_NEW_FILTER, newFilter);
+    };
+
+    const validateUpdatedFilter = async (newFilter, oldFilter) => {
+        if (!validateFilterProperties(newFilter)) {
+            return false;
+        }
+
+        return await validateFilter(VALIDATE_UPDATED_FILTER, { 'new': newFilter, 'old': oldFilter });
     };
 
     const stripTableData = ({ tableData, ...data }) => data;
@@ -200,7 +221,7 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
                     'onRowAdd': (newData) => new Promise(async (resolve, reject) => {
                         const newFilterData = stripTableData(newData);
 
-                        const isValid = await validateFilter(newFilterData);
+                        const isValid = await validateNewFilter(newFilterData);
                         if (!isValid) {
                             reject();
                             return;
@@ -222,7 +243,7 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
                             return;
                         }
 
-                        const isValid = await validateFilter(newFilterData);
+                        const isValid = await validateUpdatedFilter(newFilterData, oldFilterData);
                         if (!isValid) {
                             reject();
                             return;
@@ -250,11 +271,17 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
                         return (
                             <MTableEditRow {...props}
                                 onEditingApproved={(mode, newData, oldData) => {
-                                    columns.forEach(column => column.setError?.({ 'error': false }));
+                                    columns.forEach(column => column.setError?.({
+                                        'error': false,
+                                        'helperText': ''
+                                    }));
                                     onEditingApproved(mode, newData, oldData);
                                 }}
                                 onEditingCanceled={(mode, rowData) => {
-                                    columns.forEach(column => column.setError?.({ 'error': false }));
+                                    columns.forEach(column => column.setError?.({
+                                        'error': false,
+                                        'helperText': ''
+                                    }));
                                     onEditingCanceled(mode, rowData);
                                 }}
                             />

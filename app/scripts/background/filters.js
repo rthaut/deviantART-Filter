@@ -45,9 +45,7 @@ export const FILTER_METHODS = {
 export const GetAllFilters = async () => {
     console.time('GetAllFilters()');
 
-    console.debug(SUPPORTED_FILTERS);
     const storageData = await browser.storage.local.get(SUPPORTED_FILTERS);
-    console.debug(storageData);
 
     console.timeEnd('GetAllFilters()');
     return storageData;
@@ -78,6 +76,7 @@ export const AddFilter = async (storageKey, newFilter) => {
 
     const filters = await GetFilter(storageKey);
     filters.push(newFilter);
+
     await SaveFilter(storageKey, filters);
 
     console.timeEnd(`AddFilter() [${storageKey}]`);
@@ -88,6 +87,7 @@ export const RemoveFilter = async (storageKey, oldFilter) => {
 
     let filters = await GetFilter(storageKey);
     filters = FILTER_METHODS[storageKey].diff(filters, [oldFilter]);
+
     await SaveFilter(storageKey, filters);
 
     console.timeEnd(`RemoveFilter() [${storageKey}]`);
@@ -97,29 +97,51 @@ export const UpdateFilter = async (storageKey, oldFilter, newFilter) => {
     console.time(`UpdateFilter() [${storageKey}]`);
 
     const filters = await GetFilter(storageKey);
+
     const index = FILTER_METHODS[storageKey].findIndex(filters, oldFilter);
     filters[index] = newFilter;
+
     await SaveFilter(storageKey, filters);
 
     console.timeEnd(`UpdateFilter() [${storageKey}]`);
 };
 
-export const ValidateFilter = async (storageKey, newFilter) => {
-    console.time(`ValidateFilter() [${storageKey}]`);
+export const ValidateNewFilter = async (storageKey, newFilter) => {
+    console.time(`ValidateNewFilter() [${storageKey}]`);
 
     const result = {
         'isValid': true
     };
 
     const filters = await GetFilter(storageKey);
-    const index = FILTER_METHODS[storageKey].findIndex(filters, newFilter);
 
+    const index = FILTER_METHODS[storageKey].findIndex(filters, newFilter);
     if (index > -1) {
         result.isValid = false;
         result.message = browser.i18n.getMessage('DuplicateFilterWarning');
     }
 
-    console.timeEnd(`ValidateFilter() [${storageKey}]`);
+    console.timeEnd(`ValidateNewFilter() [${storageKey}]`);
+    return result;
+};
+
+export const ValidateUpdatedFilter = async (storageKey, oldFilter, newFilter) => {
+    console.time(`ValidateUpdatedFilter() [${storageKey}]`);
+
+    const result = {
+        'isValid': true
+    };
+
+    const filters = await GetFilter(storageKey);
+    filters.splice(FILTER_METHODS[storageKey].findIndex(filters, oldFilter), 1);
+
+    const index = FILTER_METHODS[storageKey].findIndex(filters, newFilter);
+    if (index > -1) {
+        result.isValid = false;
+        result.message = browser.i18n.getMessage('DuplicateFilterWarning');
+    }
+
+    console.timeEnd(`ValidateUpdatedFilter() [${storageKey}]`);
     return result;
 };
 
@@ -164,7 +186,7 @@ export const ImportFilters = async (data) => {
             results[storageKey] = await ImportFilter(storageKey, fileFilters);
         } else {
             results[storageKey] = {
-                'error': 'Unsupported filter type'
+                'error': browser.i18n.getMessage('UnsupportedFilterError')
             };
         }
     }

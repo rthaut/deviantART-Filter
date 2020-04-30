@@ -166,6 +166,9 @@
   "DuplicateFilterWarning": {
     "message": "Filter already exists"
   },
+  "UnsupportedFilterError": {
+    "message": "Unsupported filter type"
+  },
   "CategoriesMenuLabel": {
     "message": "Select a category (type to search)",
     "description": "The label shown on the categories autocomplete menu"
@@ -193,5 +196,27 @@
   },
   "Placeholder_User": {
     "message": "Filtered User"
+  },
+  "RequiredFieldLabel": {
+    "message": "$FIELD$ is required",
+    "description": "A formatted string that is displayed when a required field is not filled out",
+    "placeholders": {
+      "field" : {
+        "content" : "$1"
+      }
+    }
+  },
+  "InvalidFieldLabel": {
+    "message": "Value is invalid",
+    "description": "A string that is displayed when a field's value is invalid"
+  },
+  "InvalidFieldLabelWithHint": {
+    "message": "Value is invalid ($HINT$)",
+    "description": "A formatted string (with hint text) that is displayed when a field's value is invalid",
+    "placeholders": {
+      "hint" : {
+        "content" : "$1"
+      }
+    }
   }
 }

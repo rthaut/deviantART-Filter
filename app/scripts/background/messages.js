@@ -13,8 +13,11 @@ export const OnRuntimeMessage = (message) => {
         case MESSAGES.UPDATE_FILTER:
             return FILTERS.UpdateFilter(message.data.key, message.data.value.old, message.data.value.new);
 
-        case MESSAGES.VALIDATE_FILTER:
-            return FILTERS.ValidateFilter(message.data.key, message.data.value);
+        case MESSAGES.VALIDATE_NEW_FILTER:
+            return FILTERS.ValidateNewFilter(message.data.key, message.data.value);
+
+        case MESSAGES.VALIDATE_UPDATED_FILTER:
+            return FILTERS.ValidateUpdatedFilter(message.data.key, message.data.value.old, message.data.value.new);
 
         case MESSAGES.SAVE_FILTER:
             return FILTERS.SaveFilter(message.data.key, message.data.value);
