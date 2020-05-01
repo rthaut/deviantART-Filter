@@ -40,9 +40,9 @@ body#deviantART-v7 {
 [da-filter-category],
 [da-filter-keyword],
 [da-filter-user] {
-    position: relative;
-    pointer-events: none;
-    visibility: visible;
+    position: relative !important;
+    pointer-events: none !important;
+    visibility: visible !important;
 }
 
 /* === ECLIPSE === */
@@ -50,22 +50,22 @@ body#deviantART-v7 {
 [data-hook="deviation_link"][da-filter-keyword],
 [data-hook="deviation_link"][da-filter-user] {
     /* thumbnails on notification pages */
-    display: block;
-    position: absolute;
+    display: block !important;
+    position: absolute !important;
 }
 [data-hook="deviation_std_thumb"] [data-hook="deviation_link"][da-filter-category],
 [data-hook="deviation_std_thumb"] [data-hook="deviation_link"][da-filter-keyword],
 [data-hook="deviation_std_thumb"] [data-hook="deviation_link"][da-filter-user] {
     /* thumbnails on browse/search pages, profile/group pages */
-    display: inline-block;
-    position: absolute;
+    display: inline-block !important;
+    position: absolute !important;
 }
 [role="complementary"] [data-hook="deviation_link"][da-filter-category],
 [role="complementary"] [data-hook="deviation_link"][da-filter-keyword],
 [role="complementary"] [data-hook="deviation_link"][da-filter-user] {
     /* thumbnails in sidebar on individual deviation pages */
-    display: inline-block;
-    position: relative;
+    display: inline-block !important;
+    position: relative !important;
 }
 
 /* === CLASSIC === */
@@ -73,7 +73,7 @@ body#deviantART-v7 {
 #messages [da-filter-keyword],
 #messages [da-filter-user] {
     /* thumbnails on notification pages */
-    position: static;
+    position: static !important;
 }
 /* === SHARED === */
 [da-filter-category]::before,
