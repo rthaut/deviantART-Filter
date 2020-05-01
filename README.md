@@ -1,4 +1,4 @@
-# DeviantArt Filter 6.0.0 Alpha 1
+# DeviantArt Filter 6.0.0
 
 > Allows configurable filtering/removal of deviations by user, keyword, and/or category on DeviantArt
 
@@ -81,10 +81,10 @@ The Tabs permission is used to apply filter changes from the Management Page to 
 
 DeviantArt Filter allows you to export and import filters from a JSON file. This is mostly for keeping your filters in sync between browsers/computers, but is handy for backup purposes as well.
 
-1. After [opening the Management Page](#opening-the-management-page), navigate to the [Import/Export Filters](#importexport-filters) view.
+1. Open the [Management Page](#opening-the-management-page).
 2. To export your current filters to a JSON file, click the `Export Filter Data` button, then open/save the file when prompted (it will use your browser's native download functionality).
-3. To import filters from a JSON file, either drag and drop the file onto the designated box, or click the box to open a File Browser dialog and select your JSON file.
-    - After the import has finished, a table showing the results of the import will be displayed. This includes how many filters were imported successfully, as well as how many filters failed to import and how many were duplicates.
+3. To import filters from one or more JSON file(s), either drag and drop the file(s) onto the designated box, or click the box to open a File Browser dialog and select your JSON file(s).
+    - After the import has finished, a [table showing the results](#dashboard---import-results) of the import will be displayed. This includes how many filters were imported successfully, as well as how many filters failed to import and how many were duplicates.
 
 ### Quick Hiding Users While Browsing
 
@@ -104,20 +104,64 @@ DeviantArt Filter allows you to export and import filters from a JSON file. This
 
 ### Dashboard
 
-![Screenshot of the DeviantArt Filter Dashboard](/screenshots/Dashboard.png?raw=true)
+Screenshot of the DeviantArt Filter Dashboard
+![Screenshot of the DeviantArt Filter dashboard](/screenshots/Dashboard-Light.png?raw=true)
+
+Screenshot of the DeviantArt Filter Dashboard (Using Dark Mode)
+![Screenshot of the DeviantArt Filter dashboard (using Dark Mode)](/screenshots/Dashboard-Dark.png?raw=true)
+
+### Dashboard - Import Results
+
+Screenshot of the Filter Import Results
+![Screenshot of the filter import results](/screenshots/Dashboard-Import-Results-Light.png?raw=true)
+
+Screenshot of the Filter Import Results (Using Dark Mode)
+![Screenshot of the filter import results (using Dark Mode)](/screenshots/Dashboard-Import-Results-Dark.png?raw=true)
 
 ### Manage Users
 
-![Screenshot of the DeviantArt Filter Manage Users](/screenshots/Users.png?raw=true)
+Screenshot of the Filtered Users View
+![Screenshot of the filtered users view](/screenshots/Users-Light.png?raw=true)
+
+Screenshot of the Filtered Users View (Using Dark Mode)
+![Screenshot of the filtered users view (using Dark Mode)](/screenshots/Users-Dark.png?raw=true)
+
+### Manage Users - Editing a Filter
+
+Screenshot of Editing a User Filter
+![Screenshot of editing a user filter](/screenshots/Users-Editing-Light.png?raw=true)
+
+Screenshot of Editing a User Filter (Using Dark Mode)
+![Screenshot of editing a user filter (using Dark Mode)](/screenshots/Users-Editing-Dark.png?raw=true)
 
 ### Manage Keywords
 
-![Screenshot of the DeviantArt Filter Manage Keywords](/screenshots/Keywords.png?raw=true)
+Screenshot of the Filtered Keywords View
+![Screenshot of the filtered keywords view](/screenshots/Keywords-Light.png?raw=true)
+
+Screenshot of the Filtered Keywords View (Using Dark Mode)
+![Screenshot of the filtered keywords view (using Dark Mode)](/screenshots/Keywords-Dark.png?raw=true)
+
+### Manage Keywords - Editing a Filter
+
+Screenshot of Editing a Keyword Filter
+![Screenshot of editing a keyword filter](/screenshots/Keywords-Editing-Light.png?raw=true)
+
+Screenshot of Editing a Keyword Filter (Using Dark Mode)
+![Screenshot of editing a keyword filter (using Dark Mode)](/screenshots/Keywords-Editing-Dark.png?raw=true)
 
 ### Manage Categories
 
-![Screenshot of the DeviantArt Filter Manage Categories](/screenshots/Categories.png?raw=true)
+Screenshot of the Filtered Categories View
+![Screenshot of the filtered categories view](/screenshots/Categories-Light.png?raw=true)
 
-### Import/Export Filters
+Screenshot of the Filtered Categories View (Using Dark Mode)
+![Screenshot of the filtered categories view (using Dark Mode)](/screenshots/Categories-Dark.png?raw=true)
 
-![Screenshot of the DeviantArt Filter Import/Export](/screenshots/Import-Export.png?raw=true)
+### Manage Categories - Editing a Filter
+
+Screenshot of Editing a Category Filter
+![Screenshot of editing a category filter](/screenshots/Categories-Editing-Light.png?raw=true)
+
+Screenshot of Editing a Category Filter (Using Dark Mode)
+![Screenshot of editing a category filter (using Dark Mode)](/screenshots/Categories-Editing-Dark.png?raw=true)
