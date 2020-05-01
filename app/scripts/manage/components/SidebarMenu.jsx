@@ -16,7 +16,6 @@ import {
     Label as LabelIcon,
     Category as CategoryIcon,
     Settings as SettingsIcon,
-    ImportExport as ImportExportIcon,
 } from '@material-ui/icons';
 
 export const useStyles = makeStyles((theme) => ({
@@ -59,21 +58,15 @@ const SidebarMenu = () => {
                     <ListItemText primary={browser.i18n.getMessage('SidebarLink_Categories')} />
                 </ListItem>
             </List>
-            <Divider />
+            {/* <Divider />
             <List>
-                {/* <ListItem button component={NavLink} exact to="/settings" activeClassName={classes.activeNavLink}>
+                <ListItem button component={NavLink} exact to="/settings" activeClassName={classes.activeNavLink}>
                     <ListItemIcon>
                         <SettingsIcon />
                     </ListItemIcon>
                     <ListItemText primary={browser.i18n.getMessage('SidebarLink_Settings')} />
-                </ListItem> */}
-                <ListItem button component={NavLink} exact to="/import-export" activeClassName={classes.activeNavLink}>
-                    <ListItemIcon>
-                        <ImportExportIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={browser.i18n.getMessage('SidebarLink_ImportExport')} />
                 </ListItem>
-            </List>
+            </List> */}
         </>
     );
 };

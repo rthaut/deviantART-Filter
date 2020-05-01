@@ -1,29 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import {
     Typography,
     Divider,
-    Grid,
-    Paper,
-    Link,
+    Card,
+    CardContent,
+    CardActions,
+    Button,
 } from '@material-ui/core';
 
-const useStyles = makeStyles((theme) => ({
-    'paper': {
-        'padding': theme.spacing(2),
-        'overflow': 'auto',
-    },
-    'paperDivider': {
-        'marginTop': theme.spacing(4),
-        'marginBottom': theme.spacing(2),
-    }
-}));
-
-const DashboardFilterTile = ({ filterKey, title, link }) => {
-    const classes = useStyles();
-
+const DashboardFilterCard = ({ filterKey, title, link }) => {
     const [filterCount, setFilterCount] = useState(0);
 
     useEffect(() => {
@@ -58,22 +45,26 @@ const DashboardFilterTile = ({ filterKey, title, link }) => {
     }, []);
 
     return (
-        <Grid item xs={12} md={4}>
-            <Paper className={classes.paper}>
-                <Typography component="h2" variant="h6" color="textSecondary" gutterBottom>
+        <Card>
+            <CardContent>
+                <Typography component="h2" variant="h6" gutterBottom>
                     {browser.i18n.getMessage('FilterNameWithCount', [filterCount, title])}
                 </Typography>
-                <Divider className={classes.paperDivider} />
-                <Link color="primary" component={NavLink} to={link}>{browser.i18n.getMessage('ManageFilterText')}</Link>
-            </Paper>
-        </Grid>
+            </CardContent>
+            <Divider variant="middle" />
+            <CardActions>
+                <Button color="primary" component={NavLink} to={link}>
+                    {browser.i18n.getMessage('ManageFilterText')}
+                </Button>
+            </CardActions>
+        </Card>
     );
 };
 
-DashboardFilterTile.propTypes = {
+DashboardFilterCard.propTypes = {
     'filterKey': PropTypes.string.isRequired,
     'title': PropTypes.string.isRequired,
     'link': PropTypes.string.isRequired,
 };
 
-export default DashboardFilterTile;
+export default DashboardFilterCard;
