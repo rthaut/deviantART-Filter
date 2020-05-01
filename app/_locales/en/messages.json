@@ -37,7 +37,7 @@
     "description": "The heading displayed above the import section on the Import/Export view"
   },
   "ImportInstructions": {
-    "message": "Drag &amp; drop a <em>DeviantArt Filter</em> file here<br/>(or click anywhere in this box to select a file)",
+    "message": "Drag &amp; drop one or more <em>DeviantArt Filter</em> file(s) here<br/>(or click anywhere in this box to select file(s) from your device)",
     "description": "The text displayed on the import drag-and-drop target box"
   },
   "InvalidImportFileTypeMessage": {
