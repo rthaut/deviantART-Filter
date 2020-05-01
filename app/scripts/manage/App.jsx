@@ -18,9 +18,10 @@ import {
 import {
     amber,
     blue,
+    deepOrange,
+    grey,
     green,
     red,
-    teal,
 } from '@material-ui/core/colors';
 
 import {
@@ -153,13 +154,12 @@ const App = () => {
     const classes = useStyles();
 
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-
     const [darkMode, setDarkMode] = useLocalStorage('dark-mode', prefersDarkMode);
 
     const theme = useMemo(() => createMuiTheme({
         'palette': {
-            'primary': teal,
-            'secondary': red,
+            'primary': deepOrange,
+            'secondary': grey,
             'type': darkMode ? 'dark' : 'light',
         },
     }), [darkMode]);
@@ -220,7 +220,7 @@ const App = () => {
                                         <Switch
                                             checked={darkMode}
                                             onChange={event => setDarkMode(event.target.checked)}
-                                            color="default"
+                                            color="secondary"
                                             name="darkMode"
                                         />
                                     }
