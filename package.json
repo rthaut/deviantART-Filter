@@ -11,7 +11,9 @@
     "dev": "webextension-toolbox dev",
     "build": "webextension-toolbox build",
     "start:firefox": "web-ext run --source-dir=./dist/firefox/",
-    "start:firefox:nr": "npm run start:firefox -- --no-reload"
+    "start:firefox:nr": "npm run start:firefox -- --no-reload",
+    "test": "npm run test:firefox",
+    "test:firefox": "npm run build firefox && web-ext lint --source-dir=./dist/firefox/"
   },
   "repository": {
     "type": "git",
