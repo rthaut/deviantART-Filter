@@ -2,7 +2,7 @@
   "name": "deviantart-filter",
   "title": "DeviantArt Filter",
   "version": "6.0.0",
-  "description": "Allows configurable filtering/removal of deviations by user, tag, and/or category on DeviantArt",
+  "description": "Allows configurable filtering/removal of deviations by user, keyword, and/or category on DeviantArt",
   "author": "Ryan Thaut <rthaut@gmail.com> (http://ryanthaut.com)",
   "homepage": "https://github.com/rthaut/deviantART-Filter",
   "license": "GPL-3.0",
@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "webextension-toolbox dev",
     "build": "webextension-toolbox build",
+    "analyze": "cross-env ANALYZE=true webextension-toolbox build",
     "start:firefox": "web-ext run --source-dir=./dist/firefox/",
     "start:firefox:nr": "npm run start:firefox -- --no-reload",
     "test": "npm run test:firefox",
@@ -27,7 +28,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.49",
     "autosuggest-highlight": "^3.1.1",
-    "lodash": "^4.17.15",
+    "lodash-es": "^4.17.15",
     "match-sorter": "^4.1.0",
     "material-table": "^1.57.2",
     "notistack": "^0.9.11",
@@ -37,17 +38,20 @@
     "react-router-dom": "^5.1.2",
     "react-use": "^14.1.1",
     "react-window": "^1.8.5",
-    "semver": "^7.2.2",
-    "xml2js": "^0.4.23"
+    "semver": "^7.2.2"
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
     "@babel/plugin-proposal-optional-chaining": "^7.9.0",
+    "@babel/preset-react": "^7.9.4",
     "babel-eslint": "^10.1.0",
+    "babel-plugin-lodash": "^3.3.4",
+    "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-plugin-no-unsanitized": "^3.1.0",
     "eslint-plugin-react": "^7.19.0",
     "web-ext": "^4.1.0",
-    "webextension-toolbox": "latest"
+    "webextension-toolbox": "latest",
+    "webpack-bundle-analyzer": "^3.7.0"
   }
 }

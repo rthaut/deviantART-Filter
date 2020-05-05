@@ -1,4 +1,5 @@
-const semver = require('semver');
+import semverLT from 'semver/functions/lt';
+import semverValid from 'semver/functions/valid';
 
 import { GetCategories } from './background/categories';
 import { ImportFilters } from './background/filters';
@@ -11,7 +12,7 @@ import { REGEX } from './constants/url';
 browser.runtime.onInstalled.addListener(async (details) => {
     const { previousVersion } = details;
 
-    if (semver.valid(previousVersion) && semver.lt(previousVersion, '6.0.0')) {
+    if (semverValid(previousVersion) && semverLT(previousVersion, '6.0.0')) {
         const data = await browser.storage.local.get('tags');
         if (data?.tags) {
             console.warn('Converting tag filters to keyword filters');

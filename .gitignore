@@ -3,3 +3,5 @@ dist/
 packages/
 
 .env
+/stats
+/test-data

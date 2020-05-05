@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import MaterialTable, { MTableEditRow } from 'material-table';
 import { useSnackbar } from 'notistack';
 
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash-es';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
