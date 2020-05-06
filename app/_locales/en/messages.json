@@ -218,5 +218,8 @@
         "content" : "$1"
       }
     }
+  },
+  "TagFiltersMigratedNotificationMessage": {
+    "message": "Your old tag filters have been converted to new keyword filters automatically.\n\nClick this notification to view your keyword filters."
   }
 }

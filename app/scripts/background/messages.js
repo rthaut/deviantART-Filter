@@ -50,7 +50,6 @@ export const OnRuntimeMessage = (message) => {
 export const SendMessageToAllTabs = async (action, data) => {
     const tabs = await browser.tabs.query({ 'url': '*://*.deviantart.com/*' });
     for (const tab of tabs) {
-        console.debug(tab);
         browser.tabs.sendMessage(tab.id, { action, data });
     }
 };
@@ -58,7 +57,6 @@ export const SendMessageToAllTabs = async (action, data) => {
 export const SendMessageToScriptPage = async (page, action, data) => {
     const tabs = await browser.tabs.query({ 'url': browser.runtime.getURL(page) });
     for (const tab of tabs) {
-        console.debug(tab);
         browser.tabs.sendMessage(tab.id, { action, data });
     }
 };

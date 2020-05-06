@@ -8,6 +8,23 @@ export const MONITORED_STORAGE_KEYS = [
     'users',
 ];
 
+/**
+ * Event handler for all storage changes
+ * @param {object} changes the storage changes
+ * @param {string} areaName the name of the changed storage area
+ */
+export const OnStorageChanged = (changes, areaName) => {
+    switch (areaName) {
+        case 'local':
+            OnLocalStorageChanged(changes);
+            break;
+    }
+};
+
+/**
+ * Event handler for local storage changes
+ * @param {object} changes the storage changes
+ */
 export const OnLocalStorageChanged = (changes) => {
     console.time('OnLocalStorageChanged()');
     for (const key of Object.keys(changes)) {
