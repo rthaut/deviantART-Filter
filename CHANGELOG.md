@@ -6,6 +6,7 @@
 
 | Version | Release Date   | Release Tag |
 | ------- | -------------- | ----------- |
+| Beta 2  | May 5, 2020    | [v6.0.0-beta.2](https://github.com/rthaut/deviantART-Filter/releases/tag/v6.0.0-beta.2)   |
 | Beta 1  | May 3, 2020    | [v6.0.0-beta.1](https://github.com/rthaut/deviantART-Filter/releases/tag/v6.0.0-beta.1)   |
 | Alpha 2 | April 20, 2020 | [v6.0.0-alpha.2](https://github.com/rthaut/deviantART-Filter/releases/tag/v6.0.0-alpha.2) |
 | Alpha 1 | April 14, 2020 | [v6.0.0-alpha.1](https://github.com/rthaut/deviantART-Filter/releases/tag/v6.0.0-alpha.1) |
