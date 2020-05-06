@@ -8,7 +8,8 @@
         "browser": true
     },
     "extends": [
-        "eslint:recommended"
+        "eslint:recommended",
+        "plugin:no-unsanitized/DOM"
     ],
     "parser": "babel-eslint",
     "rules": {
