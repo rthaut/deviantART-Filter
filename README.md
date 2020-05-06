@@ -43,7 +43,7 @@ The History permission is used to remove the DeviantArt Filter Management Page f
 
 ### Display notifications to you
 
-The Notifications permission is used to display a notification message when upgrading from version 4.x to version 5.x.
+The Notifications permission is used to display a notification message when upgrading from version 5.x to version 6.x after converting tag filters to keyword filters.
 
 ### Access browser tabs
 
