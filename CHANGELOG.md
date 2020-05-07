@@ -1,5 +1,32 @@
 # DeviantArt Filter Changelog
 
+## Version 6.0.0 Pre-Release Versions
+
+*(**Note**: This entry may be updated and/or replaced with future version 6.0.0 alpha/beta/final/etc release information.)*
+
+| Version | Release Date   | Release Tag |
+| ------- | -------------- | ----------- |
+| Beta 2  | May 5, 2020    | [v6.0.0-beta.2](https://github.com/rthaut/deviantART-Filter/releases/tag/v6.0.0-beta.2)   |
+| Beta 1  | May 3, 2020    | [v6.0.0-beta.1](https://github.com/rthaut/deviantART-Filter/releases/tag/v6.0.0-beta.1)   |
+| Alpha 2 | April 20, 2020 | [v6.0.0-alpha.2](https://github.com/rthaut/deviantART-Filter/releases/tag/v6.0.0-alpha.2) |
+| Alpha 1 | April 14, 2020 | [v6.0.0-alpha.1](https://github.com/rthaut/deviantART-Filter/releases/tag/v6.0.0-alpha.1) |
+
+### New Features
+
+- **Eclipse Support**. DeviantArt Filter now supports [the new site (a.k.a Eclipse)](https://www.deviantarteclipse.com/). It also supports the "classic" site fore users who are not yet using Eclipse.
+- **New Management Page**. The management page has been completely rewritten using more modern frameworks.
+- **Filter by Title**. Tag filters have been replaced with keyword filters, which apply to both tags and titles for all deviations.
+- **Quick Filter Tag Context Menu**. A new context (right-click) menu is available on all tag links; use this to quickly create a keyword filter for the linked tag.
+- **Faster Metadata Lookup**. DeviantArt Filter v6+ uses faster APIs to load metadata (tags and categories) while you browse, so filters should apply sooner than they did in v5.x.
+
+### Known Issues & Limitations
+
+- ~~**Filters are not validated**. When creating/updating filters, no restrictions or validations are implemented to help prevent invalid filters from being created.~~ Implemented in v6.0.0 Beta 1.
+- **Options are missing**. There are currently no configurable options for DeviantArt Filter v6.0.0.
+  - **Placeholders**: Placeholders cannot be disabled for the new Eclipse site, as the Eclipse layout calculates grid positions for each thumbnail, and removing an item from the grid breaks the layout. The ability to turn off placeholders may be re-implemented for the classic site in the future, but there are currently no plans to bring it back.
+  - **Placeholder Colors**: The colors for placeholders cannot currently be adjusted, but are instead hard-coded for each site theme (dark/light/green for Eclipse, and classic).
+  - **Metadata Caching**: DeviantArt Filter v6.0.0 does not currently cache metadata like v5.x did; if metadata caching is re-implemented, the corresponding options will be brought back to allow users to disable/configure the caching behavior.
+
 ## Version 5.1 (February 6, 2019)
 
 ### New Features
