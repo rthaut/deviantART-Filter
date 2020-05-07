@@ -21,7 +21,18 @@ Have you ever want to block/filter deviations (a.k.a. submissions) while browsin
 
 ## Installation
 
-***Find the latest alpha/beta builds on the [releases](https://github.com/rthaut/deviantART-Filter/releases) page.***
+| Web Browser | Information | Download Link |
+| ----------- | ----------- | ------------- |
+| Google Chrome | [![Chrome Web Store][chrome-image-version]][chrome-url] [![Chrome Web Store][chrome-image-download]][chrome-url] | [Download from the Chrome Web Store][chrome-url] |
+| Mozilla Firefox | [![Mozilla Add-on][firefox-image-version]][firefox-url] [![Mozilla Add-on][firefox-image-download]][firefox-url] | [Download from Mozilla Add-ons][firefox-url] |
+
+[chrome-url]: https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp
+[chrome-image-download]: https://img.shields.io/chrome-web-store/d/odlmamilbohnpnoomjclomghphbajikp.svg
+[chrome-image-version]: https://img.shields.io/chrome-web-store/v/odlmamilbohnpnoomjclomghphbajikp.svg
+
+[firefox-url]: https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/
+[firefox-image-download]: https://img.shields.io/amo/d/deviantart-filter.svg
+[firefox-image-version]: https://img.shields.io/amo/v/deviantart-filter.svg
 
 * * *
 
