@@ -12,7 +12,7 @@ These are some basic instructions for using DeviantArt Filter.
 
 ## Opening the Management Page
 
-1. While on DeviantArt, click the orange logo that appears on the right side of the address bar. ![DeviantArt Filter Page Action Demo](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Page-Action-Demo.png?raw=true)
+1. While on DeviantArt, click the orange logo that appears on the right side of the address bar. ![DeviantArt Filter Page Action Demo](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Page-Action-Demo-Transparent.png?raw=true)
 2. The configuration screen will open automatically when you click the icon.
 
 * * *
