@@ -21,7 +21,7 @@ These are some basic instructions for using DeviantArt Filter.
 
 ### You can filter deviations by artist, category, and/or keyword through the management page
 
-1. After opening the [Management Page](/screenshots#dashboard), navigate to any of the Manage [Users](/screenshots#manage-users)/[Keywords](/screenshots#manage-keywords)/[Categories](/screenshots#manage-categories) views.
+1. After opening the [Management Page]({{ '/screenshots#dashboard' | absolute_url }}), navigate to any of the Manage [Users]({{ '/screenshots#manage-users' | absolute_url }})/[Keywords]({{ '/screenshots#manage-keywords' | absolute_url }})/[Categories]({{ '/screenshots#manage-categories' | absolute_url }}) views.
 2. Use the table that is displayed to view all of your existing filters.
     - You can sort the table by clicking the heading of any column.
     - You can page through your filters using the pagination controls below the table.
@@ -42,10 +42,10 @@ These are some basic instructions for using DeviantArt Filter.
 
 DeviantArt Filter allows you to export and import filters from a JSON file. This is mostly for keeping your filters in sync between browsers/computers, but is handy for backup purposes as well.
 
-1. Open the [Management Page](/screenshots#opening-the-management-page).
+1. Open the [Management Page]({{ '/screenshots#opening-the-management-page' | absolute_url }}).
 2. To export your current filters to a JSON file, click the `Export Filter Data` button, then open/save the file when prompted (it will use your browser's native download functionality).
 3. To import filters from one or more JSON file(s), either drag and drop the file(s) onto the designated box, or click the box to open a File Browser dialog and select your JSON file(s).
-    - After the import has finished, a [table showing the results](/screenshots#dashboard---import-results) of the import will be displayed. This includes how many filters were imported successfully, as well as how many filters failed to import and how many were duplicates.
+    - After the import has finished, a [table showing the results]({{ '/screenshots#dashboard---import-results' | absolute_url }}) of the import will be displayed. This includes how many filters were imported successfully, as well as how many filters failed to import and how many were duplicates.
 
 * * *
 

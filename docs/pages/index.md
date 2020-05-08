@@ -17,7 +17,7 @@ Have you ever want to block/filter deviations (a.k.a. submissions) while browsin
 
 ![DeviantArt Filter Promotional Image](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Promo.png?raw=true)
 
-> **Looking for some more screenshots? Check out the [screenshots page](/screenshots)!**
+> **Looking for some more screenshots? Check out the [screenshots page]({{ '/screenshots' | absolute_url }})!**
 
 * * *
 
