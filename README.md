@@ -10,10 +10,11 @@ Have you ever want to block/filter deviations (a.k.a. submissions) while browsin
 
 ### Features
 
-* Hide all deviations for specific users
-* Hide all deviations submitted to specific categories
-* Hide all deviations with specific tags
-* Hide all deviations with specific keywords in the title
+* Fully-featured management panel for maintaining your filters and controlling functionality.
+* Quickly filter a user in a single click from any of their deviation thumbnails.
+* Filter deviations by keywords in titles and/or tags (with wildcard support).
+* Filter all deviations from specific categories.
+* Import and export filter lists for easy backup and migration.
 
 #### For more information, head to the [DeviantArt Filter website](https://rthaut.github.io/deviantART-Filter/).
 
