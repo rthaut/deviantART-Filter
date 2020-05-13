@@ -10,6 +10,8 @@ import {
     LOCAL_STORAGE_CHANGED,
 } from './constants/messages';
 
+import { PAGES } from './constants/url';
+
 import { SetMetadataOnThumbnail } from './content/metadata';
 
 import * as CategoriesFilter from './content/filters/categories';
@@ -176,9 +178,43 @@ const OnRuntimeMessage = message => {
 };
 
 /**
+ * Determines if the user has disabled DeviantArt Filter for the current page
+ */
+const IsPageDisabled = async (url) => {
+    const data = await browser.storage.local.get('options');
+
+    const pages = data?.options?.pages;
+    if (pages !== undefined && Object.keys(pages).length) {
+        const pageURL = new URL(url);
+
+        const disabledPages = Object.keys(pages).filter(page => pages[page] === false);
+        for (const page of disabledPages) {
+            let matches = true;
+
+            const properties = PAGES[page];
+            for (const prop of Object.keys(properties)) {
+                matches = matches && properties[prop].some(pattern => pageURL[prop].match(pattern));
+            }
+
+            if (matches) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+};
+
+/**
  * Run once the content script is loaded
  */
 (async () => {
+
+    if (await IsPageDisabled(window.location)) {
+        return;
+    }
+
+    document.body.classList.add('enable-metadata-indicators');
 
     // setup message handlers first
     if (!browser.runtime.onMessage.hasListener(OnRuntimeMessage)) {

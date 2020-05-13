@@ -193,13 +193,13 @@ body#deviantART-v7 {
 /* === METADATA STATUS/INDICATORS === */
 /* TODO: make these optional? */
 /* these need to match the thumbnail selectors used in the content script */
-#output .thumb:not([data-title]),
-[data-hook="deviation_link"]:not([data-title]) {
+body.enable-metadata-indicators #output .thumb:not([data-title]),
+body.enable-metadata-indicators [data-hook="deviation_link"]:not([data-title]) {
     outline: #e59b00 solid 1px;
 }
 /*
-#output .thumb[data-title]:not([data-title=""]),
-[data-hook="deviation_link"][data-title]:not([data-title=""]) {
+body.enable-metadata-indicators #output .thumb[data-title]:not([data-title=""]),
+body.enable-metadata-indicators [data-hook="deviation_link"][data-title]:not([data-title=""]) {
     outline: #00e59b solid 1px;
 }
 */
