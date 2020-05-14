@@ -1,4 +1,4 @@
-# DeviantArt Filter 6.0.0
+# DeviantArt Filter 6.1.0
 
 > This browser extension allows you to filter/block/hide deviations by user, keyword, and/or category on DeviantArt
 

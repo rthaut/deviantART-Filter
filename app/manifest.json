@@ -2,7 +2,7 @@
   "name": "__MSG_ExtensionName__",
   "short_name": "__MSG_ExtensionShortName__",
   "description": "__MSG_ExtensionDescription__",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "homepage_url": "https://github.com/rthaut/deviantART-Filter",
   "manifest_version": 2,
   "default_locale": "en",

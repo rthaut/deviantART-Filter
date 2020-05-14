@@ -1,6 +1,16 @@
 # DeviantArt Filter Changelog
 
-## Version 6.0.0
+## Version 6.1.0 (Release Date TBD)
+
+### New Features
+
+`// @TODO`
+
+### Bug Fixes
+
+`// @TODO`
+
+## Version 6.0.0 (May 7, 2020)
 
 ### New Features
 
