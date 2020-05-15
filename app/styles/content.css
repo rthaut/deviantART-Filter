@@ -75,6 +75,12 @@ body#deviantART-v7 {
     /* thumbnails on notification pages */
     position: static !important;
 }
+#thread [da-filter-category],
+#thread [da-filter-keyword],
+#thread [da-filter-user] {
+    /* thumbnails on forums post pages */
+    display: inline-block !important;
+}
 /* === SHARED === */
 [da-filter-category]::before,
 [da-filter-keyword]::before,
