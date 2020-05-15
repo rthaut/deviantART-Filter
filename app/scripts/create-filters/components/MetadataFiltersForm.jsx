@@ -21,20 +21,15 @@ import {
 } from '@material-ui/core';
 
 import {
-    Clear as ClearIcon,
-    Done as DoneIcon,
+    CheckCircleOutline as CheckCircleOutlineIcon,
+    RadioButtonUncheckedOutlined as RadioButtonUncheckedOutlinedIcon,
     NavigateNext as NavigateNextIcon,
 } from '@material-ui/icons';
 
 export const useStyles = makeStyles((theme) => ({
-    'form': {
-        'display': 'flex',
-        'flexDirection': 'column',
-        'margin': 'auto',
-        'width': 'fit-content',
-    },
     'fieldset': {
         'margin': theme.spacing(0, 0, 2),
+        'width': '100%',
     },
     'legend': {
         'padding': theme.spacing(0),
@@ -110,11 +105,11 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
     };
 
     return (
-        <form className={classes.form} noValidate>
+        <form noValidate>
 
             {username && (<FormControl component='fieldset' className={classes.fieldset}>
-                <Typography component='legend' className={classes.legend}>Username</Typography>{/* TODO: i18n */}
-                <Typography component='p' variant='body2' color='textSecondary' gutterBottom><strong>Optional.</strong> Toggle the switch to create a new user filter.</Typography>{/* TODO: i18n */}
+                <Typography component='legend' className={classes.legend}>{browser.i18n.getMessage('FilterTitle_User')}</Typography>
+                <Typography component='p' variant='body2' color='textSecondary' gutterBottom><strong>{browser.i18n.getMessage('CreateFiltersFromDeviation_OptionalIndicator')}</strong> {browser.i18n.getMessage('CreateFiltersFromDeviation_Username_Help')}</Typography>
                 <FormControlLabel
                     control={<Switch
                         color='primary'
@@ -128,8 +123,8 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
             {username && categories && <Divider className={classes.divider} />}
 
             {categories && (<FormControl component='fieldset' className={classes.fieldset}>
-                <Typography component='legend' className={classes.legend}>Category</Typography>{/* TODO: i18n */}
-                <Typography component='p' variant='body2' color='textSecondary' gutterBottom><strong>Optional.</strong> Click on sections of the following category hierarchy to create a new category filter.<br />(You can click on a selected section to unselect it.)</Typography>{/* TODO: i18n */}
+                <Typography component='legend' className={classes.legend}>{browser.i18n.getMessage('FilterTitle_Category')}</Typography>
+                <Typography component='p' variant='body2' color='textSecondary' gutterBottom><strong>{browser.i18n.getMessage('CreateFiltersFromDeviation_OptionalIndicator')}</strong> {browser.i18n.getMessage('CreateFiltersFromDeviation_Category_Help')}</Typography>
                 <Breadcrumbs separator={<NavigateNextIcon />}>
                     {categories.map((category, index, categories) => {
                         const current = categories.slice(0, index + 1).join(' > ').trim();
@@ -139,12 +134,12 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
                             <Chip
                                 key={index}
                                 size='small'
-                                variant={selected ? 'default' : 'outlined'}
                                 color={selected ? 'primary' : 'default'}
                                 label={category}
                                 clickable
+                                disableRipple
                                 onClick={() => selected && selectedCategory === current ? setSelectedCategory(previous) : setSelectedCategory(current)}
-                                icon={selected ? <DoneIcon /> : <ClearIcon />}
+                                icon={selected ? <CheckCircleOutlineIcon /> : <RadioButtonUncheckedOutlinedIcon />}
                             />
                         );
                     })}
@@ -154,9 +149,9 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
             {(username || categories) && tags && <Divider className={classes.divider} />}
 
             {tags && (<FormControl component='fieldset' className={classes.fieldset}>
-                <Typography component='legend' className={classes.legend}>Keywords</Typography>{/* TODO: i18n */}
-                <Typography component='p' variant='body2' color='textSecondary' gutterBottom><strong>Optional.</strong> Select one or more of the following tags to create new keyword filters.</Typography>{/* TODO: i18n */}
-                <List className={classes.checkboxList} dense>
+                <Typography component='legend' className={classes.legend}>{browser.i18n.getMessage('FilterTitle_Keywords')}</Typography>
+                <Typography component='p' variant='body2' color='textSecondary' gutterBottom><strong>{browser.i18n.getMessage('CreateFiltersFromDeviation_OptionalIndicator')}</strong> {browser.i18n.getMessage('CreateFiltersFromDeviation_Tags_Help')}</Typography>
+                <List className={classes.checkboxList} dense disablePadding>
                     {tags.map((tag, index) => (
                         <ListItem key={index} button disableRipple role={undefined} dense disableGutters onClick={() => toggleTag(tag)} className={classes.checkboxListItem}>
                             <ListItemIcon className={classes.checkboxListIcon}>

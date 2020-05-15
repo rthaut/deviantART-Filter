@@ -11,7 +11,7 @@ export const MENUS = [
     },
     {
         'id': 'show-filter-modal-deviation',
-        'title': 'Create Filter(s) for this Deviation',
+        'title': browser.i18n.getMessage('CreateFiltersFromDeviation_ContextMenuLabel'),
         'contexts': ['link'],
         'targetUrlPatterns': ['*://*.deviantart.com/*/art/*']
     }

@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useLocalStorage } from 'react-use';
 
 import {
     createMuiTheme,
+    makeStyles,
     ThemeProvider,
 } from '@material-ui/core/styles';
 import {
@@ -10,6 +12,7 @@ import {
 } from '@material-ui/core/colors';
 
 import {
+    useMediaQuery,
     Dialog,
     DialogActions,
     DialogContent,
@@ -18,6 +21,7 @@ import {
     Typography,
     Button,
     Grid,
+    SvgIcon,
 } from '@material-ui/core';
 
 import {
@@ -37,18 +41,42 @@ import MetadataFiltersResults from './components/MetadataFiltersResults';
 
 const initialFilters = {
     'users': [],
-    'keywords': [],
     'categories': [],
+    'keywords': [],
 };
 
-const theme = createMuiTheme({
-    'palette': {
-        'primary': deepOrange,
-        'secondary': grey,
+function LogoIcon(props) {
+    return (
+        <SvgIcon {...props} viewBox="0 0 38 24">
+            <path d="M 30.382812 23.636719 L 31.0625 24 L 37.953125 24 L 37.953125 16.949219 L 37.257812 16.246094 L 31.0625 12.917969 L 30.371094 11.871094 L 30.371094 0 L 20.90625 0 L 20.90625 6.527344 L 20.21875 7.109375 L 7.617188 0.363281 L 6.9375 0 L 0.046875 0 L 0.046875 7.050781 L 0.738281 7.753906 L 6.9375 11.082031 L 7.628906 12.128906 L 7.628906 24 L 17.09375 24 L 17.09375 17.472656 L 17.785156 16.890625 Z M 30.382812 23.636719 "/>
+        </SvgIcon>
+    );
+}
+
+const useStyles = makeStyles((theme) => ({
+    'dialogHeader': {
+        'display': 'flex',
+        'flexDirection': 'row',
+        'alignItems': 'center',
     },
-});
+    'dialogIcon': {
+        'marginRight': theme.spacing(1)
+    },
+}));
 
 const CreateFiltersApp = () => {
+    const classes = useStyles();
+
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const [darkMode] = useLocalStorage('dark-mode', prefersDarkMode);
+
+    const theme = useMemo(() => createMuiTheme({
+        'palette': {
+            'primary': deepOrange,
+            'secondary': grey,
+            'type': darkMode ? 'dark' : 'light',
+        },
+    }), [darkMode]);
 
     const [error, setError] = useState({
         'help': '',
@@ -59,7 +87,7 @@ const CreateFiltersApp = () => {
     const [filters, setFilters] = useState(initialFilters);
     const [results, setResults] = useState(null);
 
-    const [title, setTitle] = useState('Create Filters from Deviation'); // TODO: i18n
+    const [title, setTitle] = useState(browser.i18n.getMessage('CreateFiltersFromDeviation_Title'));
     const [working, setWorking] = useState(false);
 
     const onRuntimeMessage = (message) => {
@@ -92,12 +120,7 @@ const CreateFiltersApp = () => {
     const reset = () => {
         setFilters(initialFilters);
         setResults(null);
-
-        if (metadata?.title) {
-            setTitle(`Create Filters for Deviation "<em>${metadata.title}</em>"`); // TODO: i18n
-        } else {
-            setTitle('Create Filters for Deviation'); // TODO: i18n
-        }
+        setTitle(browser.i18n.getMessage('CreateFiltersFromDeviation_Title'));
     };
 
     useEffect(() => {
@@ -107,8 +130,9 @@ const CreateFiltersApp = () => {
     const closeModal = () => {
         browser.runtime.sendMessage({
             'action': HIDE_FILTER_DEVIATION_MODAL
+        }).then(() => {
+            reset();
         });
-        reset();
     };
 
     const mapCount = (obj, property) => Object.values(obj).reduce((prev, cur) => prev += cur[property], 0);
@@ -126,7 +150,7 @@ const CreateFiltersApp = () => {
             setMetadata(_metadata);
         } catch (error) {
             setError({
-                'help': 'An error occurred while retrieving deviation metadata. Please try again.', // TODO: i18n
+                'help': browser.i18n.getMessage('CreateFiltersFromDeviation_Error_FetchingMetadata'),
                 error
             });
             setMetadata(null);
@@ -146,10 +170,10 @@ const CreateFiltersApp = () => {
             setResults(_results);
 
             const count = mapCount(_results, 'new');
-            setTitle(`Created ${count} ${count === 1 ? 'Filter' : 'Filters'} Successfully`); // TODO: i18n
+            setTitle(browser.i18n.getMessage(`CreateFiltersFromDeviation_Title_SuccessWithCount_${count == 1 ? 'Singular' : 'Plural'}`, [count]));
         } catch (error) {
             setError({
-                'help': 'An error occurred while creating filters. Please try again.', // TODO: i18n
+                'help': browser.i18n.getMessage('CreateFiltersFromDeviation_Error_CreatingFilters'),
                 error
             });
             setResults(null);
@@ -160,20 +184,22 @@ const CreateFiltersApp = () => {
 
     return (
         <ThemeProvider theme={theme}>
-            <Dialog open={true} onClose={closeModal}>
+            <Dialog open={true} onClose={closeModal} maxWidth='sm'>
 
                 <DialogTitle disableTypography>
-                    <Typography variant='h6' dangerouslySetInnerHTML={{ '__html': title }} />
+                    <div className={classes.dialogHeader}>
+                        <LogoIcon color='primary' fontSize="large" className={classes.dialogIcon} />
+                        <Typography variant='h5'>{title}</Typography>
+                    </div>
+                    {(metadata?.title && !results) && <Typography variant='h6'>{metadata.title}</Typography>}
                 </DialogTitle>
 
                 <DialogContent>
 
                     {error?.error && (<Alert severity='error'>
                         <AlertTitle><strong>{error.help}</strong></AlertTitle>
-                        <Typography gutterBottom>
-                            If the problem persists, please report it with the following information: {/* TODO: i18n */}
-                            <code>{error.error.message}</code>
-                        </Typography>
+                        <Typography gutterBottom>{browser.i18n.getMessage('CreateFiltersFromDeviation_Error_Instructions')}</Typography>
+                        <Typography component='code' variant='overline'>{error.error.message}</Typography>
                     </Alert>)}
 
                     {working ?
@@ -186,10 +212,10 @@ const CreateFiltersApp = () => {
 
                 <DialogActions>
                     {results ? (<>
-                        <Button variant='contained' color='primary' onClick={closeModal}>Close</Button>{/* TODO: i18n */}
+                        <Button variant='contained' color='secondary' onClick={closeModal}>{browser.i18n.getMessage('CreateFiltersFromDeviation_Button_Close')}</Button>
                     </>): (<>
-                        <Button onClick={closeModal}>Cancel</Button>{/* TODO: i18n */}
-                        <Button variant='contained' color='primary' onClick={createFilters} disabled={mapCount(filters, 'length') < 1}>Create Filters</Button>{/* TODO: i18n */}
+                        <Button onClick={closeModal}>{browser.i18n.getMessage('CreateFiltersFromDeviation_Button_Cancel')}</Button>
+                        <Button variant='contained' color='primary' onClick={createFilters} disabled={mapCount(filters, 'length') < 1}>{browser.i18n.getMessage(`CreateFiltersFromDeviation_Button_CreateWithCount_${mapCount(filters, 'length') == 1 ? 'Singular' : 'Plural'}`, [mapCount(filters, 'length')])}</Button>
                     </>)}
                 </DialogActions>
 

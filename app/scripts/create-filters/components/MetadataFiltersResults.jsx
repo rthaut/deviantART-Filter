@@ -27,15 +27,15 @@ const MetadataFiltersResults = ({ results }) => {
     const classes = useStyles();
 
     return (
-        <List>
+        <List dense disablePadding>
             {Object.keys(results).map((result, index) => (
-                <ListItem key={index}>
+                <ListItem key={index} dense disableGutters>
                     <ListItemAvatar>
                         <Avatar className={(results[result].new > 0) ? classes.avatarPrimary : ''}>
                         {(results[result].new > 0) ? <DoneIcon /> : <ClearIcon />}
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={`${results[result].new} ${result}`} secondary={`${results[result].duplicate} duplicates`} />{/* TODO: i18n */}
+                    <ListItemText primary={`${results[result].new} ${browser.i18n.getMessage(`FilterTitle_${result}`)}`} secondary={`${results[result].duplicate} ${browser.i18n.getMessage('ImportResultsColumnHeader_DuplicateCount')}`} />
                 </ListItem>
             ))}
         </List>
