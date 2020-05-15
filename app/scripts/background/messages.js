@@ -2,7 +2,7 @@ import { GetCategories } from './categories';
 import * as FILTERS from './filters';
 import * as MESSAGES from '../constants/messages';
 
-export const OnRuntimeMessage = (message) => {
+export const OnRuntimeMessage = (message, sender) => {
     switch (message.action) {
         case MESSAGES.ADD_FILTER:
             return FILTERS.AddFilter(message.data.key, message.data.value);
@@ -44,6 +44,10 @@ export const OnRuntimeMessage = (message) => {
 
         case MESSAGES.FETCH_CATEGORIES:
             return GetCategories();
+
+        case MESSAGES.HIDE_FILTER_DEVIATION_MODAL:
+            // send the message right back to the original tab
+            return browser.tabs.sendMessage(sender.tab.id, { 'action': message.action });
     }
 };
 

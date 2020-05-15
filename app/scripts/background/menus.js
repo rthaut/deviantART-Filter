@@ -1,4 +1,6 @@
 import { AddFilter } from './filters';
+import { SendMessageToAllTabs } from './messages';
+import { SHOW_FILTER_DEVIATION_MODAL } from '../constants/messages';
 
 export const MENUS = [
     {
@@ -6,6 +8,12 @@ export const MENUS = [
         'title': 'Create Keyword Filter for this Tag',
         'contexts': ['link'],
         'targetUrlPatterns': ['*://*.deviantart.com/tag/*']
+    },
+    {
+        'id': 'show-filter-modal-deviation',
+        'title': 'Create Filter(s) for this Deviation',
+        'contexts': ['link'],
+        'targetUrlPatterns': ['*://*.deviantart.com/*/art/*']
     }
 ];
 
@@ -42,6 +50,12 @@ export const OnMenuClicked = (info, tab) => {
                 AddFilter('keywords', { keyword, 'wildcard': false });
             }
             break;
+
+            case 'show-filter-modal-deviation':
+                SendMessageToAllTabs(SHOW_FILTER_DEVIATION_MODAL, {
+                    'link': info.linkUrl
+                });
+                break;
 
         default:
             break;
