@@ -69,7 +69,7 @@ const DashboardView = () => {
                     </CardContent>
                 </Card>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={8} lg={6}>
                 <OptionsCard />
             </Grid>
         </Grid>

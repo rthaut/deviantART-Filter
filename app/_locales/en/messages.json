@@ -100,6 +100,44 @@
   "ConfirmAllFiltersDeleteButton_Decline": {
     "message": "No"
   },
+  "ConfirmOptionsResetPrompt": {
+    "message": "Are you sure you want to reset all options to their default values?",
+    "description": "The message displayed on the modal when asking for confirmation to reset options to defaults"
+  },
+  "ConfirmOptionsResetTitle": {
+    "message": "Confirm Reset",
+    "description": "The title displayed on the modal when asking for confirmation to reset options to defaults"
+  },
+  "ConfirmOptionsResetButton_Accept": {
+    "message": "Yes"
+  },
+  "ConfirmOptionsResetButton_Decline": {
+    "message": "No"
+  },
+  "OptionsTitle": {
+    "message": "Options"
+  },
+  "Options_EnabledPages_Header": {
+    "message": "Enabled Pages"
+  },
+  "Options_EnabledPages_HelpText": {
+    "message": "Enable or disable DeviantArt Filter on certain pages."
+  },
+  "Options_EnabledPages_PageLabel_DailyDeviations": {
+    "message": "Daily Deviations Page"
+  },
+  "Options_EnabledPages_PageLabel_Forums": {
+    "message": "Forum Pages"
+  },
+  "Options_EnabledPages_PageLabel_Notifications": {
+    "message": "Notifications Page"
+  },
+  "OptionsResetButtonLabel": {
+    "message": "Reset to Defaults"
+  },
+  "OptionsChangePagesRequireReload": {
+    "message": "Open pages must be refreshed/reloaded for changes to take effect."
+  },
   "SidebarLink_Dashboard": {
     "message": "Dashboard"
   },

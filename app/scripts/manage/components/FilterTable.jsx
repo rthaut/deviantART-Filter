@@ -3,22 +3,12 @@
 /* eslint-disable no-async-promise-executor */
 import React, { forwardRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import MaterialTable, { MTableEditRow } from 'material-table';
+import { useConfirm } from 'material-ui-confirm';
 import { useSnackbar } from 'notistack';
 
+import MaterialTable, { MTableEditRow } from 'material-table';
+
 import { isEqual } from 'lodash-es';
-
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { red } from '@material-ui/core/colors';
-
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-} from '@material-ui/core';
 
 import {
     AddBox,
@@ -69,14 +59,9 @@ const tableIcons = {
     'ViewColumn': forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-const errorTheme = createMuiTheme({
-    'palette': {
-        'primary': red,
-    },
-});
-
 const FilterTable = ({ filterKey, columns, title, ...props }) => {
 
+    const confirm = useConfirm();
     const { enqueueSnackbar } = useSnackbar();
 
     const onStorageChanged = (changes, areaName) => {
@@ -122,20 +107,20 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
         return response;
     };
 
-    const [confirmation, setConfirmation] = useState('');
-
-    const confirmReset = () => {
-        setConfirmation(browser.i18n.getMessage('ConfirmAllFiltersDeletePrompt', [data.length, title.toLowerCase()]));
+    const confirmReset = data => {
+        confirm({
+            'title': browser.i18n.getMessage('ConfirmAllFiltersDeleteTitle'),
+            'description': browser.i18n.getMessage('ConfirmAllFiltersDeletePrompt', [data.length, title.toLowerCase()]),
+            'confirmationText': browser.i18n.getMessage('ConfirmAllFiltersDeleteButton_Accept'),
+            'cancellationText': browser.i18n.getMessage('ConfirmAllFiltersDeleteButton_Decline'),
+        }).then(() => {
+            resetFilter();
+        }).catch(() => {});
     };
 
     const resetFilter = async () => {
         await sendFilterMessage(SAVE_FILTER, []);
         setData([]);
-        setConfirmation('');
-    };
-
-    const closeConfirmation = () => {
-        setConfirmation('');
     };
 
     const validateFilterProperties = filter => {
@@ -205,109 +190,89 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
     const stripTableData = ({ tableData, ...data }) => data;
 
     return (
-        <>
-            <MaterialTable {...props}
-                title={browser.i18n.getMessage('FilterNameWithCount', [data.length, title])}
-                icons={tableIcons}
-                columns={columns}
-                data={data}
-                options={{
-                    'draggable': false,
-                    'pageSize': 10,
-                    'pageSizeOptions': [10, 25, 50, 100],
-                    'addRowPosition': 'first'
-                }}
-                editable={{
-                    'onRowAdd': (newData) => new Promise(async (resolve, reject) => {
-                        const newFilterData = stripTableData(newData);
+        <MaterialTable {...props}
+            title={browser.i18n.getMessage('FilterNameWithCount', [data.length, title])}
+            icons={tableIcons}
+            columns={columns}
+            data={data}
+            options={{
+                'draggable': false,
+                'pageSize': 10,
+                'pageSizeOptions': [10, 25, 50, 100],
+                'addRowPosition': 'first'
+            }}
+            editable={{
+                'onRowAdd': (newData) => new Promise(async (resolve, reject) => {
+                    const newFilterData = stripTableData(newData);
 
-                        const isValid = await validateNewFilter(newFilterData);
-                        if (!isValid) {
-                            reject();
-                            return;
-                        }
-
-                        return sendFilterMessage(ADD_FILTER, newFilterData).then(resolve, reject);
-                    }),
-                    'onRowDelete': (oldData) => new Promise((resolve, reject) => {
-                        const oldFilterData = stripTableData(oldData);
-
-                        return sendFilterMessage(REMOVE_FILTER, oldFilterData).then(resolve, reject);
-                    }),
-                    'onRowUpdate': (newData, oldData) => new Promise(async (resolve, reject) => {
-                        const newFilterData = stripTableData(newData);
-                        const oldFilterData = stripTableData(oldData);
-
-                        if (isEqual(oldFilterData, newFilterData)) {
-                            resolve();
-                            return;
-                        }
-
-                        const isValid = await validateUpdatedFilter(newFilterData, oldFilterData);
-                        if (!isValid) {
-                            reject();
-                            return;
-                        }
-
-                        const value = {
-                            'old': oldFilterData,
-                            'new': newFilterData
-                        };
-
-                        return sendFilterMessage(UPDATE_FILTER, value).then(resolve, reject);
-                    })
-                }}
-                actions={[
-                    {
-                        'icon': tableIcons.DeleteSweep,
-                        'tooltip': browser.i18n.getMessage('DeleteAllFiltersButtonTooltip'),
-                        'onClick': () => confirmReset(data),
-                        'isFreeAction': true,
-                        'disabled': data.length < 2
+                    const isValid = await validateNewFilter(newFilterData);
+                    if (!isValid) {
+                        reject();
+                        return;
                     }
-                ]}
-                components={{
-                    'EditRow': ({onEditingApproved, onEditingCanceled, ...props}) => {
-                        return (
-                            <MTableEditRow {...props}
-                                onEditingApproved={(mode, newData, oldData) => {
-                                    columns.forEach(column => column.setError?.({
-                                        'error': false,
-                                        'helperText': ''
-                                    }));
-                                    onEditingApproved(mode, newData, oldData);
-                                }}
-                                onEditingCanceled={(mode, rowData) => {
-                                    columns.forEach(column => column.setError?.({
-                                        'error': false,
-                                        'helperText': ''
-                                    }));
-                                    onEditingCanceled(mode, rowData);
-                                }}
-                            />
-                        );
+
+                    return sendFilterMessage(ADD_FILTER, newFilterData).then(resolve, reject);
+                }),
+                'onRowDelete': (oldData) => new Promise((resolve, reject) => {
+                    const oldFilterData = stripTableData(oldData);
+
+                    return sendFilterMessage(REMOVE_FILTER, oldFilterData).then(resolve, reject);
+                }),
+                'onRowUpdate': (newData, oldData) => new Promise(async (resolve, reject) => {
+                    const newFilterData = stripTableData(newData);
+                    const oldFilterData = stripTableData(oldData);
+
+                    if (isEqual(oldFilterData, newFilterData)) {
+                        resolve();
+                        return;
                     }
-                }}
-            />
-            <Dialog open={(confirmation?.length > 1)} onClose={closeConfirmation}>
-                <DialogTitle>{browser.i18n.getMessage('ConfirmAllFiltersDeleteTitle')}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        {confirmation}
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={closeConfirmation} color="primary" variant="contained" autoFocus>
-                        {browser.i18n.getMessage('ConfirmAllFiltersDeleteButton_Decline')}
-                    </Button>
-                    <ThemeProvider theme={errorTheme}>
-                        <Button onClick={resetFilter} color="primary" variant="outlined">
-                        {browser.i18n.getMessage('ConfirmAllFiltersDeleteButton_Accept')}
-                        </Button>
-                    </ThemeProvider>
-                </DialogActions>
-            </Dialog>
-        </>
+
+                    const isValid = await validateUpdatedFilter(newFilterData, oldFilterData);
+                    if (!isValid) {
+                        reject();
+                        return;
+                    }
+
+                    const value = {
+                        'old': oldFilterData,
+                        'new': newFilterData
+                    };
+
+                    return sendFilterMessage(UPDATE_FILTER, value).then(resolve, reject);
+                })
+            }}
+            actions={[
+                {
+                    'icon': tableIcons.DeleteSweep,
+                    'tooltip': browser.i18n.getMessage('DeleteAllFiltersButtonTooltip'),
+                    'onClick': () => confirmReset(data),
+                    'isFreeAction': true,
+                    'disabled': data.length < 2
+                }
+            ]}
+            components={{
+                'EditRow': ({onEditingApproved, onEditingCanceled, ...props}) => {
+                    return (
+                        <MTableEditRow {...props}
+                            onEditingApproved={(mode, newData, oldData) => {
+                                columns.forEach(column => column.setError?.({
+                                    'error': false,
+                                    'helperText': ''
+                                }));
+                                onEditingApproved(mode, newData, oldData);
+                            }}
+                            onEditingCanceled={(mode, rowData) => {
+                                columns.forEach(column => column.setError?.({
+                                    'error': false,
+                                    'helperText': ''
+                                }));
+                                onEditingCanceled(mode, rowData);
+                            }}
+                        />
+                    );
+                }
+            }}
+        />
     );
 
 };

@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useConfirm } from 'material-ui-confirm';
+import { useSnackbar } from 'notistack';
+
 import {
     Typography,
     Divider,
@@ -11,7 +14,6 @@ import {
     FormControlLabel,
     Switch,
 } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
 
 import useExtensionStorage from '../hooks/useExtensionStorage';
 
@@ -24,9 +26,9 @@ const initialOptions = {
 };
 
 const OptionsCard = () => {
-    const [alerts, setAlerts] = useState({
-        'pages': false
-    });
+
+    const confirm = useConfirm();
+    const { enqueueSnackbar } = useSnackbar();
 
     const [options, setOptions] = useExtensionStorage({
         'type': 'local',
@@ -34,9 +36,16 @@ const OptionsCard = () => {
         'initialValue': initialOptions
     });
 
-    const resetOptions = e => {
-        // TODO: this needs to have a confirmation (or remove the functionality altogether)
-        setOptions(initialOptions);
+    const resetOptions = event => {
+        confirm({
+            'title': browser.i18n.getMessage('ConfirmOptionsResetTitle'),
+            'description': browser.i18n.getMessage('ConfirmOptionsResetPrompt'),
+            'confirmationText': browser.i18n.getMessage('ConfirmOptionsResetButton_Accept'),
+            'cancellationText': browser.i18n.getMessage('ConfirmOptionsResetButton_Decline'),
+        }).then(() => {
+            setOptions(initialOptions);
+            showReloadRequired();
+        }).catch(() => {});
     };
 
     const togglePageEnabled = event => {
@@ -47,29 +56,35 @@ const OptionsCard = () => {
                 [event.target.name]: event.target.checked
             }
         });
-        setAlerts({
-            ...alerts,
-            'pages': true
+        showReloadRequired();
+    };
+
+    const showReloadRequired = () => {
+        enqueueSnackbar(browser.i18n.getMessage('OptionsChangePagesRequireReload'), {
+            'variant': 'default',
+            'preventDuplicate': true,
+            'anchorOrigin': {
+                'vertical': 'top',
+                'horizontal': 'center',
+            },
         });
     };
 
     return (
         <Card>
             <CardContent>
-                <Typography component="h2" variant="h6" gutterBottom>
-                    Options {/* TODO: i18n */}
-                </Typography>
-                {options?.pages && <FormControl component="fieldset">
-                    <Typography component="legend" variant="subtitle1">Enabled Pages</Typography> {/* TODO: i18n */}
-                    <Typography component="p" variant="body2" color="textSecondary" gutterBottom>Enable or disable DeviantArt Filter on certain pages.</Typography> {/* TODO: i18n */}
+                <Typography component='h2' variant='h6' gutterBottom>{browser.i18n.getMessage('OptionsTitle')}</Typography>
+                {options?.pages && <FormControl component='fieldset'>
+                    <Typography component='legend' variant='subtitle1'>{browser.i18n.getMessage('Options_EnabledPages_Header')}</Typography>
+                    <Typography component='p' variant='body2' color='textSecondary' gutterBottom>{browser.i18n.getMessage('Options_EnabledPages_HelpText')}</Typography>
                     <FormGroup>
                         {Object.keys(options?.pages).map((key, index) => (
                             <FormControlLabel
                                 key={index}
-                                label={key} // TODO: i18n (key will be part of message name, ex: PageName_Forums)
+                                label={browser.i18n.getMessage(`Options_EnabledPages_PageLabel_${key}`)}
                                 control={
                                     <Switch
-                                        color="primary"
+                                        color='primary'
                                         checked={options?.pages[key]}
                                         onChange={togglePageEnabled} name={key}
                                     />
@@ -77,14 +92,11 @@ const OptionsCard = () => {
                             />
                         ))}
                     </FormGroup>
-                    {alerts?.pages && <Alert severity="info"><strong>Note:</strong> Changes are saved immediately, but open pages must be refreshed/reloaded for changes to take effect.</Alert>} {/* TODO: i18n */}
                 </FormControl>}
             </CardContent>
-            <Divider variant="middle" />
+            <Divider variant='middle' />
             <CardActions>
-                <Button color="primary" onClick={resetOptions}>
-                    Reset to Defaults {/* TODO: i18n */}
-                </Button>
+                <Button color='primary' onClick={resetOptions}>{browser.i18n.getMessage('OptionsResetButtonLabel')}</Button>
             </CardActions>
         </Card>
     );
