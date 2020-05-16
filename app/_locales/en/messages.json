@@ -259,5 +259,70 @@
   },
   "TagFiltersMigratedNotificationMessage": {
     "message": "Your old tag filters have been converted to new keyword filters automatically.\n\nClick this notification to view your keyword filters."
+  },
+  "CreateFiltersFromDeviation_ContextMenuLabel": {
+    "message": "Create Filters from this Deviation"
+  },
+  "CreateFiltersFromDeviation_Title": {
+    "message": "Create Filters from Deviation"
+  },
+  "CreateFiltersFromDeviation_Title_SuccessWithCount_Singular": {
+    "message": "Created $COUNT$ Filter Successfully",
+    "placeholders": {
+      "count" : {
+        "content" : "$1"
+      }
+    }
+  },
+  "CreateFiltersFromDeviation_Title_SuccessWithCount_Plural": {
+    "message": "Created $COUNT$ Filters Successfully",
+    "placeholders": {
+      "count" : {
+        "content" : "$1"
+      }
+    }
+  },
+  "CreateFiltersFromDeviation_OptionalIndicator": {
+    "message": "Optional."
+  },
+  "CreateFiltersFromDeviation_Username_Help": {
+    "message": "Toggle the switch to create a new user filter."
+  },
+  "CreateFiltersFromDeviation_Category_Help": {
+    "message": "Click on sections of the following category hierarchy to create a new category filter. (You can click on a selected section to unselect it.)"
+  },
+  "CreateFiltersFromDeviation_Tags_Help": {
+    "message": "Select one or more of the following tags to create new keyword filters."
+  },
+  "CreateFiltersFromDeviation_Button_CreateWithCount_Singular": {
+    "message": "Create $COUNT$ Filter",
+    "placeholders": {
+      "count" : {
+        "content" : "$1"
+      }
+    }
+  },
+  "CreateFiltersFromDeviation_Button_CreateWithCount_Plural": {
+    "message": "Create $COUNT$ Filters",
+    "placeholders": {
+      "count" : {
+        "content" : "$1"
+      }
+    }
+  },
+  "CreateFiltersFromDeviation_Button_Cancel": {
+    "message": "Cancel"
+  },
+  "CreateFiltersFromDeviation_Button_Close": {
+    "message": "Close"
+  },
+  "CreateFiltersFromDeviation_Error_FetchingMetadata": {
+    "message": "An error occurred while retrieving deviation metadata. Please try again."
+  },
+  "CreateFiltersFromDeviation_Error_CreatingFilters": {
+    "message": "An error occurred while creating filters. Please try again."
+  },
+  "CreateFiltersFromDeviation_Error_Instructions": {
+    "message": "If the problem persists, please report it with the following information:"
   }
 }

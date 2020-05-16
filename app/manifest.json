@@ -46,6 +46,9 @@
     "storage",
     "tabs"
   ],
+  "web_accessible_resources": [
+      "pages/create-filters.html"
+  ],
   "__chrome__key": "odlmamilbohnpnoomjclomghphbajikp",
   "__chrome__minimum_chrome_version": "42.0",
   "__edge__minimum_edge_version": "33.14281.1000.0",
