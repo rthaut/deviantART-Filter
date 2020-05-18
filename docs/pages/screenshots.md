@@ -8,58 +8,82 @@ nav_order: 4
 
 # Screenshots
 
-These are screenshots showing DeviantArt Filter v6.0.0.
-
 |:---------- |
-| ![Screenshot of DeviantArt Filter in use](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Promo.png?raw=true) |
+| ![Screenshot of DeviantArt Filter in use](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/promo/Screenshot_1280x800.png) |
 
 * * *
 
 ## Dashboard
 
+*Screenshots from DeviantArt Filter v6.0.0.*
+{: .fs-2 }
+
 |:---------- |:--------- |
-| ![Screenshot of the DeviantArt Filter dashboard](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Light.png?raw=true) | ![Screenshot of the DeviantArt Filter dashboard (using Dark Mode](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Dark.png?raw=true) |
+| ![Screenshot of the DeviantArt Filter dashboard](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Light.png) | ![Screenshot of the DeviantArt Filter dashboard (using Dark Mode](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Dark.png) |
 
 ### Dashboard - Import Results
 
+*Screenshots from DeviantArt Filter v6.0.0.*
+{: .fs-2 }
+
 |:---------- |:--------- |
-| ![Screenshot of the filter import results](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Import-Results-Light.png?raw=true) | ![Screenshot of the filter import results (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Import-Results-Dark.png?raw=true) |
+| ![Screenshot of the filter import results](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Import-Results-Light.png) | ![Screenshot of the filter import results (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Import-Results-Dark.png) |
 
 * * *
 
 ## Manage Users
 
+*Screenshots from DeviantArt Filter v6.0.0.*
+{: .fs-2 }
+
 |:---------- |:--------- |
-| ![Screenshot of the filtered users view](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Users-Light.png?raw=true) | ![Screenshot of the filtered users view (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Users-Dark.png?raw=true) |
+| ![Screenshot of the filtered users view](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Users-Light.png) | ![Screenshot of the filtered users view (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Users-Dark.png) |
 
 ### Manage Users - Editing a Filter
 
+*Screenshots from DeviantArt Filter v6.0.0.*
+{: .fs-2 }
+
 |:---------- |:--------- |
-| ![Screenshot of editing a user filter](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Users-Editing-Light.png?raw=true) | ![Screenshot of editing a user filter (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Users-Editing-Dark.png?raw=true) |
+| ![Screenshot of editing a user filter](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Users-Editing-Light.png) | ![Screenshot of editing a user filter (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Users-Editing-Dark.png) |
 
 * * *
 
 ## Manage Keywords
 
+*Screenshots from DeviantArt Filter v6.0.0.*
+{: .fs-2 }
+
 |:---------- |:--------- |
-| ![Screenshot of the filtered keywords view](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Keywords-Light.png?raw=true) | ![Screenshot of the filtered keywords view (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Keywords-Dark.png?raw=true) |
+| ![Screenshot of the filtered keywords view](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Keywords-Light.png) | ![Screenshot of the filtered keywords view (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Keywords-Dark.png) |
 
 ### Manage Keywords - Editing a Filter
 
+*Screenshots from DeviantArt Filter v6.0.0.*
+{: .fs-2 }
+
 |:---------- |:--------- |
-| ![Screenshot of editing a keyword filter](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Keywords-Editing-Light.png?raw=true) | ![Screenshot of editing a keyword filter (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Keywords-Editing-Dark.png?raw=true) |
+| ![Screenshot of editing a keyword filter](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Keywords-Editing-Light.png) | ![Screenshot of editing a keyword filter (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Keywords-Editing-Dark.png) |
 
 * * *
 
 ## Manage Categories
 
+*Screenshots from DeviantArt Filter v6.0.0.*
+{: .fs-2 }
+
 |:---------- |:--------- |
-| ![Screenshot of the filtered categories view](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Light.png?raw=true) | ![Screenshot of the filtered categories view (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Dark.png?raw=true) |
+| ![Screenshot of the filtered categories view](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Light.png) | ![Screenshot of the filtered categories view (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Dark.png) |
 
 ### Manage Categories - Editing a Filter
 
+*Screenshots from DeviantArt Filter v6.0.0.*
+{: .fs-2 }
+
 |:---------- |:--------- |
-| ![Screenshot of editing a category filter](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Editing-Light.png?raw=true) | ![Screenshot of editing a category filter (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Editing-Dark.png?raw=true) |
+| ![Screenshot of editing a category filter](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Editing-Light.png) | ![Screenshot of editing a category filter (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Editing-Dark.png) |
+
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js" integrity="sha256-1tyXmT1+SAOus10OmiTwOT7OtD3l9/8PDkN/GwWupOI=" crossorigin="anonymous"></script>
 
