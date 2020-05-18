@@ -13,6 +13,25 @@ nav_order: 4
 
 * * *
 
+## Create Filter Modal
+
+*Screenshots from DeviantArt Filter v6.1.0.*
+{: .fs-2 }
+
+|:---------- |:--------- |
+| ![Screenshot of the filter creation modal](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Initial-Light.png) | ![Screenshot of the filter creation modal (using Dark Mode](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Initial-Dark.png) |
+| ![Screenshot of the filter creation modal after selecting a category and some tags](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Selected-Light.png) | ![Screenshot of the filter creation modal after selecting a category and some tags (using Dark Mode](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Selected-Dark.png) |
+
+### Create Filter Modal - Results
+
+*Screenshots from DeviantArt Filter v6.1.0.*
+{: .fs-2 }
+
+|:---------- |:--------- |
+| ![Screenshot of the filter creation results](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Results-Light.png) | ![Screenshot of the filter creation results (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Results-Dark.png) |
+
+* * *
+
 ## Dashboard
 
 *Screenshots from DeviantArt Filter v6.0.0.*

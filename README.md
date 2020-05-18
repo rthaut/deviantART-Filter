@@ -1,4 +1,4 @@
-# DeviantArt Filter 6.0.0
+# DeviantArt Filter 6.1.0
 
 > This browser extension allows you to filter/block/hide deviations by user, keyword, and/or category on DeviantArt
 
@@ -6,12 +6,12 @@
 
 Have you ever want to block/filter deviations (a.k.a. submissions) while browsing [DeviantArt](https://www.deviantart.com)? **Well now you can!** Simply [install DeviantArt Filter](#installation) in your web browser of choice and start filtering by user, keyword, and/or category.
 
-![DeviantArt Filter Promotional Image](/screenshots/Promo.png?raw=true)
+![DeviantArt Filter Promotional Image](/promo/Screenshot_1280x800.png?raw=true)
 
 ### Features
 
 * Fully-featured management panel for maintaining your filters and controlling functionality.
-* Quickly filter a user in a single click from any of their deviation thumbnails.
+* Quickly create filters from any deviation thumbnail or link.
 * Filter deviations by keywords in titles and/or tags (with wildcard support).
 * Filter all deviations from specific categories.
 * Import and export filter lists for easy backup and migration.
@@ -53,7 +53,7 @@ To build the extension from source code, you will need to use [Node Package Mana
 npm install
 ```
 
-To build a production version of the extension, use the `npm run dev <browser>` command, which will compile the source code from the `/app` directory to the `/dist`directory and create a ZIP archive in the `/packages` directory.
+To build a production version of the extension, use the `npm run dev <browser>` command, which will compile the source code from the `/app` directory to the `/dist` directory and create a ZIP archive in the `/packages` directory.
 
 ```sh
 npm run build firefox # OR npm run build chrome

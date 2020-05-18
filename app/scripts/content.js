@@ -6,9 +6,12 @@ const SELECTORS = [
 ];
 
 import {
-    ADD_FILTER,
     LOCAL_STORAGE_CHANGED,
+    SHOW_FILTER_DEVIATION_MODAL,
+    HIDE_FILTER_DEVIATION_MODAL,
 } from './constants/messages';
+
+import { PAGES } from './constants/url';
 
 import { SetMetadataOnThumbnail } from './content/metadata';
 
@@ -21,52 +24,13 @@ const FILTERS = [
     UsersFilter
 ];
 
-/**
- * Adds the quick hide control to the given thumbnail
- * @param {HTMLElement} thumbnail the thumbnail DOM node
- */
-const AddQuickHideControl = (thumbnail) => {
-    let control = thumbnail.querySelector('span[da-filter-quick-hide]');
-    if (control === undefined || control === null) {
-        const username = UsersFilter.GetUsernameForThumbnail(thumbnail);
-
-        if (!username) {
-            console.warn('Failed to Identify Username for Thumbnail', thumbnail);
-        } else {
-            control = document.createElement('span');
-            control.setAttribute('da-filter-quick-hide', username);
-            control.setAttribute('title', `Create User Filter for "${username}"`);
-            control.addEventListener('click', async (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-
-                // immediately filter this thumbnails
-                // OnLocalStorageChanged() will catch the change, too,
-                // but for large filter lists, it could be delayed
-                UsersFilter.FilterThumbnail(thumbnail, [{ username }]);
-
-                browser.runtime.sendMessage({
-                    'action': ADD_FILTER,
-                    'data': {
-                        'key': 'users',
-                        'value': { username }
-                    }
-                });
-            }, false);
-            thumbnail.appendChild(control);
-        }
-    } else {
-        console.info('Quick Hide Control already exists for thumbnail', control);
-    }
-};
+let ENABLED = true;
 
 /**
  * Runs all applicable logic on thumbnails (applying metadata, filtering, etc.)
  * @param {HTMLElement[]} thumbnails the list of thumbnail DOM nodes
  */
 export const HandleThumbnails = async (thumbnails) => {
-    thumbnails.forEach(thumbnail => AddQuickHideControl(thumbnail));
-
     const data = {};
     for (const F of FILTERS) {
         const storageData = await browser.storage.local.get(F.STORAGE_KEY);
@@ -84,7 +48,6 @@ export const HandleThumbnails = async (thumbnails) => {
         }
 
         if (metadataApplied) {
-            // TODO: we could invoke `AddQuickHideControl()` here, but for 99% of thumbnails we don't need to wait for metadata; ideally we keep a list of thumbnails to retry and handle them here
             FILTERS
                 .filter(F => F.REQUIRES_METADATA && data[F.STORAGE_KEY] && data[F.STORAGE_KEY].length)
                 .forEach(F => F.FilterThumbnail(thumbnail, data[F.STORAGE_KEY]));
@@ -141,6 +104,10 @@ const WatchForNewThumbs = (selector) => {
  * @param {string} changes the local storage changes
  */
 export const OnLocalStorageChanged = async (key, changes) => {
+    if (!ENABLED) {
+        return;
+    }
+
     for (const F of FILTERS) {
         if (key === F.STORAGE_KEY) {
             const { added, removed, newValue } = changes;
@@ -167,12 +134,89 @@ export const OnLocalStorageChanged = async (key, changes) => {
  * @param {object} message the message
  */
 const OnRuntimeMessage = message => {
-    console.debug('Message from background script', message);
     switch (message.action) {
         case LOCAL_STORAGE_CHANGED:
             OnLocalStorageChanged(message.data.key, message.data.changes);
             break;
+
+        case SHOW_FILTER_DEVIATION_MODAL:
+            InitFilterFrame();
+            ShowFilterFrame(message.data.link);
+            break;
+
+        case HIDE_FILTER_DEVIATION_MODAL:
+            HideFilterFrame();
+            break;
     }
+};
+
+const InitFilterFrame = () => {
+    const id = 'filter-frame';
+    let iframe = document.getElementById(id);
+    if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.setAttribute('id', id);
+        iframe.setAttribute('role', 'dialog');
+        iframe.setAttribute('src', browser.runtime.getURL('pages/create-filters.html'));
+        Object.assign(iframe.style, {
+            'display': 'none',
+            'zIndex': 9999,
+            'margin': 0,
+            'padding': 0,
+            'background': 'transparent',
+            'border': 'none',
+            'position': 'fixed',
+            'top': 0,
+            'left': 0,
+            'width': '100vw',
+            'height': '100vh',
+        });
+        document.body.prepend(iframe);
+    }
+};
+
+const ShowFilterFrame = (url) => {
+    const iframe = document.getElementById('filter-frame');
+    if (iframe) {
+        document.body.style.overflowY = 'hidden';
+        iframe.style.display = 'block';
+    }
+};
+
+const HideFilterFrame = () => {
+    const iframe = document.getElementById('filter-frame');
+    if (iframe) {
+        iframe.style.display = 'none';
+        document.body.style.overflowY = '';
+    }
+};
+
+/**
+ * Determines if the user has disabled DeviantArt Filter for the current page
+ */
+const IsPageDisabled = async (url) => {
+    const data = await browser.storage.local.get('options');
+
+    const pages = data?.options?.pages;
+    if (pages !== undefined && Object.keys(pages).length) {
+        const pageURL = new URL(url);
+
+        const disabledPages = Object.keys(pages).filter(page => pages[page] === false);
+        for (const page of disabledPages) {
+            let matches = true;
+
+            const properties = PAGES[page];
+            for (const prop of Object.keys(properties)) {
+                matches = matches && properties[prop].some(pattern => pageURL[prop].match(pattern));
+            }
+
+            if (matches) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 };
 
 /**
@@ -180,15 +224,24 @@ const OnRuntimeMessage = message => {
  */
 (async () => {
 
-    // setup message handlers first
+    // create the filter frame first so it responds to messages
+    InitFilterFrame();
+
+    ENABLED = !(await IsPageDisabled(window.location));
+
+    // setup message handlers as soon as we are ready to receive them
     if (!browser.runtime.onMessage.hasListener(OnRuntimeMessage)) {
         browser.runtime.onMessage.addListener(OnRuntimeMessage);
     }
 
-    // setup observers for thumbnails loaded after initial render next
-    WatchForNewThumbs(SELECTORS.join(', '));
+    if (ENABLED) {
+        document.body.classList.add('enable-metadata-indicators');
 
-    // get all thumbnails on the page and work with them
-    await HandleThumbnails(document.querySelectorAll(SELECTORS.join(', ')));
+        // setup observers for thumbnails loaded after initial render next
+        WatchForNewThumbs(SELECTORS.join(', '));
+
+        // get all thumbnails on the page and work with them
+        await HandleThumbnails(document.querySelectorAll(SELECTORS.join(', ')));
+    }
 
 })();

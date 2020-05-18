@@ -75,6 +75,12 @@ body#deviantART-v7 {
     /* thumbnails on notification pages */
     position: static !important;
 }
+#thread [da-filter-category],
+#thread [da-filter-keyword],
+#thread [da-filter-user] {
+    /* thumbnails on forums post pages */
+    display: inline-block !important;
+}
 /* === SHARED === */
 [da-filter-category]::before,
 [da-filter-keyword]::before,
@@ -193,13 +199,13 @@ body#deviantART-v7 {
 /* === METADATA STATUS/INDICATORS === */
 /* TODO: make these optional? */
 /* these need to match the thumbnail selectors used in the content script */
-#output .thumb:not([data-title]),
-[data-hook="deviation_link"]:not([data-title]) {
+body.enable-metadata-indicators #output .thumb:not([data-title]),
+body.enable-metadata-indicators [data-hook="deviation_link"]:not([data-title]) {
     outline: #e59b00 solid 1px;
 }
 /*
-#output .thumb[data-title]:not([data-title=""]),
-[data-hook="deviation_link"][data-title]:not([data-title=""]) {
+body.enable-metadata-indicators #output .thumb[data-title]:not([data-title=""]),
+body.enable-metadata-indicators [data-hook="deviation_link"][data-title]:not([data-title=""]) {
     outline: #00e59b solid 1px;
 }
 */
