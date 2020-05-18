@@ -62,12 +62,12 @@ const MigrateTagFiltersToKeywordFilters = async () => {
 };
 
 const ShowInstalledPage = async () => {
-    const url = 'http://localhost:4000/installed';
+    const url = 'https://rthaut.github.io/deviantART-Filter/installed';
     await browser.tabs.create({ url });
 };
 
 
 const ShowUpdatedPage = async (currentVersion, previousVersion) => {
-    const url = `http://localhost:4000/releases/v${currentVersion}/?from=v${previousVersion}`;
+    const url = `https://rthaut.github.io/deviantART-Filter/releases/v${currentVersion}/?from=v${previousVersion}`;
     await browser.tabs.create({ url });
 };
