@@ -1,0 +1,17 @@
+---
+layout: default
+---
+
+<script>
+    const url = new URL(window.location);
+    if (url.searchParams.has('from')) {
+        document.write(`
+        <div class="alert">
+            <p class="fs-6 mb-2">DeviantArt Filter was just updated!</p>
+            <p class="fs-4 mb-0">Please review the following information to learn about new features and/or bug fixes.</p>
+        </div>
+        `);
+    }
+</script>
+
+{{ content }}
