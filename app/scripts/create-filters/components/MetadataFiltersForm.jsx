@@ -51,6 +51,10 @@ export const useStyles = makeStyles((theme) => ({
 const MetadataFiltersForm = ({ metadata, setFilter }) => {
     const classes = useStyles();
 
+    if (!metadata) {
+        return null;
+    }
+
     const [selectedUsername, setSelectedUsername] = useState('');
     const [selectedTags, setSelectedTags] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -174,7 +178,7 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
 };
 
 MetadataFiltersForm.propTypes = {
-    'metadata': PropTypes.object.isRequired,
+    'metadata': PropTypes.object,
     'setFilter': PropTypes.func.isRequired,
 };
 
