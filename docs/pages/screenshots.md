@@ -19,8 +19,8 @@ nav_order: 4
 {: .fs-2 }
 
 |:---------- |:--------- |
-| ![Screenshot of the filter creation modal](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Initial-Light.png) | ![Screenshot of the filter creation modal (using Dark Mode](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Initial-Dark.png) |
-| ![Screenshot of the filter creation modal after selecting a category and some tags](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Selected-Light.png) | ![Screenshot of the filter creation modal after selecting a category and some tags (using Dark Mode](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Selected-Dark.png) |
+| ![Screenshot of the filter creation modal](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Initial-Light.png) | ![Screenshot of the filter creation modal (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Initial-Dark.png) |
+| ![Screenshot of the filter creation modal after selecting a category and some tags](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Selected-Light.png) | ![Screenshot of the filter creation modal after selecting a category and some tags (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Selected-Dark.png) |
 
 ### Create Filter Modal - Results
 
@@ -38,7 +38,7 @@ nav_order: 4
 {: .fs-2 }
 
 |:---------- |:--------- |
-| ![Screenshot of the DeviantArt Filter dashboard](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Light.png) | ![Screenshot of the DeviantArt Filter dashboard (using Dark Mode](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Dark.png) |
+| ![Screenshot of the DeviantArt Filter dashboard](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Light.png) | ![Screenshot of the DeviantArt Filter dashboard (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Dark.png) |
 
 ### Dashboard - Import Results
 
