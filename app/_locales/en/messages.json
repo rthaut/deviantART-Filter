@@ -121,7 +121,7 @@
     "message": "Enabled Pages"
   },
   "Options_EnabledPages_HelpText": {
-    "message": "Enable or disable DeviantArt Filter on certain pages."
+    "message": "Enable or disable filters on certain pages."
   },
   "Options_EnabledPages_PageLabel_DailyDeviations": {
     "message": "Daily Deviations Page"

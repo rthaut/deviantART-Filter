@@ -24,6 +24,8 @@ const FILTERS = [
     UsersFilter
 ];
 
+let ENABLED = true;
+
 /**
  * Runs all applicable logic on thumbnails (applying metadata, filtering, etc.)
  * @param {HTMLElement[]} thumbnails the list of thumbnail DOM nodes
@@ -102,6 +104,10 @@ const WatchForNewThumbs = (selector) => {
  * @param {string} changes the local storage changes
  */
 export const OnLocalStorageChanged = async (key, changes) => {
+    if (!ENABLED) {
+        return;
+    }
+
     for (const F of FILTERS) {
         if (key === F.STORAGE_KEY) {
             const { added, removed, newValue } = changes;
@@ -128,7 +134,6 @@ export const OnLocalStorageChanged = async (key, changes) => {
  * @param {object} message the message
  */
 const OnRuntimeMessage = message => {
-    console.debug('Message from background script', message);
     switch (message.action) {
         case LOCAL_STORAGE_CHANGED:
             OnLocalStorageChanged(message.data.key, message.data.changes);
@@ -219,25 +224,24 @@ const IsPageDisabled = async (url) => {
  */
 (async () => {
 
-    if (await IsPageDisabled(window.location)) {
-        return;
-    }
-
-    document.body.classList.add('enable-metadata-indicators');
-
-    // setup message handlers first
     // create the filter frame first so it responds to messages
     InitFilterFrame();
+
+    ENABLED = !(await IsPageDisabled(window.location));
 
     // setup message handlers as soon as we are ready to receive them
     if (!browser.runtime.onMessage.hasListener(OnRuntimeMessage)) {
         browser.runtime.onMessage.addListener(OnRuntimeMessage);
     }
 
-    // setup observers for thumbnails loaded after initial render next
-    WatchForNewThumbs(SELECTORS.join(', '));
+    if (ENABLED) {
+        document.body.classList.add('enable-metadata-indicators');
 
-    // get all thumbnails on the page and work with them
-    await HandleThumbnails(document.querySelectorAll(SELECTORS.join(', ')));
+        // setup observers for thumbnails loaded after initial render next
+        WatchForNewThumbs(SELECTORS.join(', '));
+
+        // get all thumbnails on the page and work with them
+        await HandleThumbnails(document.querySelectorAll(SELECTORS.join(', ')));
+    }
 
 })();
