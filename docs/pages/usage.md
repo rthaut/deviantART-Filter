@@ -7,8 +7,15 @@ has_toc: false
 ---
 
 # Usage
+{: .no_toc }
 
-These are some basic instructions for using DeviantArt Filter.
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+* * *
 
 ## Opening the Management Page
 
@@ -19,7 +26,17 @@ These are some basic instructions for using DeviantArt Filter.
 
 ## Creating and Removing Filters
 
-### You can filter deviations by artist, category, and/or keyword through the management page
+### Creating Filters While Browsing
+
+You can quickly create filters for any deviation you see while browsing from a context (right-click) menu.
+
+1. While browsing DeviantArt, right click on any thumbnail image or link to a deviation.
+2. Click the "Create Filters from this Deviation" option.
+3. Use the [form in the modal dialog]({{ '/screenshots#create-filter-modal' | absolute_url }}) that is displayed to create a user filter, a category filter, and/or keyword filters.
+
+### Creating Filters Through the Management Page
+
+For more advanced control of your filters, you should use the management page.
 
 1. After opening the [Management Page]({{ '/screenshots#dashboard' | absolute_url }}), navigate to any of the Manage [Users]({{ '/screenshots#manage-users' | absolute_url }})/[Keywords]({{ '/screenshots#manage-keywords' | absolute_url }})/[Categories]({{ '/screenshots#manage-categories' | absolute_url }}) views.
 2. Use the table that is displayed to view all of your existing filters.
@@ -49,8 +66,10 @@ DeviantArt Filter allows you to export and import filters from a JSON file. This
 
 * * *
 
-## Quick Hiding Users While Browsing
+## Disabling on Certain Pages
 
-1. While browsing on DeviantArt, when you see a deviation from a user you wish to filter, hover over the thumbnail image.
-2. An `x` icon will appear in the top-left corner of the thumbnail.
-3. Click on the `x` to filter that user.
+Filters can be disabled from being applied on certain pages.
+
+1. Open the [Management Page]({{ '/screenshots#opening-the-management-page' | absolute_url }}).
+2. Under the "Options" section on the dashboard, use the toggle switch for the desired page(s) to disable/enable filters for the listed page(s).
+    - You will need to refresh/reload any open pages to apply the changes.
