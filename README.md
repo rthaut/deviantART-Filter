@@ -16,7 +16,7 @@ Have you ever want to block/filter deviations (a.k.a. submissions) while browsin
 * Filter all deviations from specific categories.
 * Import and export filter lists for easy backup and migration.
 
-#### For more information, head to the [DeviantArt Filter website](https://rthaut.github.io/DeviantArt-Filter/).
+#### For more information, head to the [DeviantArt Filter website](https://rthaut.github.io/deviantART-Filter/).
 
 * * *
 
@@ -39,11 +39,11 @@ Have you ever want to block/filter deviations (a.k.a. submissions) while browsin
 
 ## Contributing
 
-Contributions are always welcome! Even if you aren't comfortable coding, you can always submit [new ideas](https://github.com/rthaut/DeviantArt-Filter/issues/new?labels=enhancement) and [bug reports](https://github.com/rthaut/DeviantArt-Filter/issues/new?labels=bug).
+Contributions are always welcome! Even if you aren't comfortable coding, you can always submit [new ideas](https://github.com/rthaut/deviantART-Filter/issues/new?labels=enhancement) and [bug reports](https://github.com/rthaut/deviantART-Filter/issues/new?labels=bug).
 
 ### Localization/Translation
 
-This extension is setup to be fully localized/translated into multiple languages, but for now English is the only language with full translations. If you are able to help localize/translate, please [check out this guide](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Internationalization). All of the text for the extension is stored [here in the `/app/_locales` directory](https://github.com/rthaut/DeviantArt-Filter/tree/master/app/_locales).
+This extension is setup to be fully localized/translated into multiple languages, but for now English is the only language with full translations. If you are able to help localize/translate, please [check out this guide](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Internationalization). All of the text for the extension is stored [here in the `/app/_locales` directory](https://github.com/rthaut/deviantART-Filter/tree/master/app/_locales).
 
 ### Building the Extension
 

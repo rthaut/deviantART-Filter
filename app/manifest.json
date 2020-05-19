@@ -3,7 +3,7 @@
   "short_name": "__MSG_ExtensionShortName__",
   "description": "__MSG_ExtensionDescription__",
   "version": "6.1.0",
-  "homepage_url": "https://rthaut.github.io/DeviantArt-Filter",
+  "homepage_url": "https://rthaut.github.io/deviantART-Filter",
   "manifest_version": 2,
   "default_locale": "en",
   "icons": {

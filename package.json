@@ -4,7 +4,7 @@
   "version": "6.1.0",
   "description": "Allows configurable filtering/removal of deviations by user, keyword, and/or category on DeviantArt",
   "author": "Ryan Thaut <rthaut@gmail.com> (http://ryanthaut.com)",
-  "homepage": "https://github.com/rthaut/DeviantArt-Filter",
+  "homepage": "https://github.com/rthaut/deviantART-Filter",
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
@@ -18,10 +18,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://https://github.com/rthaut/DeviantArt-Filter.git"
+    "url": "git://https://github.com/rthaut/deviantART-Filter.git"
   },
   "bugs": {
-    "url": "https://github.com/rthaut/DeviantArt-Filter/issues"
+    "url": "https://github.com/rthaut/deviantART-Filter/issues"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.10",

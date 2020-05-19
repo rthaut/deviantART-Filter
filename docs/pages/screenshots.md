@@ -9,7 +9,7 @@ nav_order: 4
 # Screenshots
 
 |:---------- |
-| ![Screenshot of DeviantArt Filter in use](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/promo/Screenshot_1280x800.png) |
+| ![Screenshot of DeviantArt Filter in use](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/promo/Screenshot_1280x800.png) |
 
 * * *
 
@@ -19,8 +19,8 @@ nav_order: 4
 {: .fs-2 }
 
 |:---------- |:--------- |
-| ![Screenshot of the filter creation modal](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Create-Filter-Modal-Initial-Light.png) | ![Screenshot of the filter creation modal (using Dark Mode)](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Create-Filter-Modal-Initial-Dark.png) |
-| ![Screenshot of the filter creation modal after selecting a category and some tags](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Create-Filter-Modal-Selected-Light.png) | ![Screenshot of the filter creation modal after selecting a category and some tags (using Dark Mode)](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Create-Filter-Modal-Selected-Dark.png) |
+| ![Screenshot of the filter creation modal](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Initial-Light.png) | ![Screenshot of the filter creation modal (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Initial-Dark.png) |
+| ![Screenshot of the filter creation modal after selecting a category and some tags](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Selected-Light.png) | ![Screenshot of the filter creation modal after selecting a category and some tags (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Selected-Dark.png) |
 
 ### Create Filter Modal - Results
 
@@ -28,7 +28,7 @@ nav_order: 4
 {: .fs-2 }
 
 |:---------- |:--------- |
-| ![Screenshot of the filter creation results](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Create-Filter-Modal-Results-Light.png) | ![Screenshot of the filter creation results (using Dark Mode)](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Create-Filter-Modal-Results-Dark.png) |
+| ![Screenshot of the filter creation results](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Results-Light.png) | ![Screenshot of the filter creation results (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Results-Dark.png) |
 
 * * *
 
@@ -38,7 +38,7 @@ nav_order: 4
 {: .fs-2 }
 
 |:---------- |:--------- |
-| ![Screenshot of the DeviantArt Filter dashboard](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Dashboard-Light.png) | ![Screenshot of the DeviantArt Filter dashboard (using Dark Mode)](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Dashboard-Dark.png) |
+| ![Screenshot of the DeviantArt Filter dashboard](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Light.png) | ![Screenshot of the DeviantArt Filter dashboard (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Dark.png) |
 
 ### Dashboard - Import Results
 
@@ -46,7 +46,7 @@ nav_order: 4
 {: .fs-2 }
 
 |:---------- |:--------- |
-| ![Screenshot of the filter import results](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Dashboard-Import-Results-Light.png) | ![Screenshot of the filter import results (using Dark Mode)](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Dashboard-Import-Results-Dark.png) |
+| ![Screenshot of the filter import results](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Import-Results-Light.png) | ![Screenshot of the filter import results (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Dashboard-Import-Results-Dark.png) |
 
 * * *
 
@@ -56,7 +56,7 @@ nav_order: 4
 {: .fs-2 }
 
 |:---------- |:--------- |
-| ![Screenshot of the filtered users view](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Users-Light.png) | ![Screenshot of the filtered users view (using Dark Mode)](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Users-Dark.png) |
+| ![Screenshot of the filtered users view](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Users-Light.png) | ![Screenshot of the filtered users view (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Users-Dark.png) |
 
 ### Manage Users - Editing a Filter
 
@@ -64,7 +64,7 @@ nav_order: 4
 {: .fs-2 }
 
 |:---------- |:--------- |
-| ![Screenshot of editing a user filter](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Users-Editing-Light.png) | ![Screenshot of editing a user filter (using Dark Mode)](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Users-Editing-Dark.png) |
+| ![Screenshot of editing a user filter](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Users-Editing-Light.png) | ![Screenshot of editing a user filter (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Users-Editing-Dark.png) |
 
 * * *
 
@@ -74,7 +74,7 @@ nav_order: 4
 {: .fs-2 }
 
 |:---------- |:--------- |
-| ![Screenshot of the filtered keywords view](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Keywords-Light.png) | ![Screenshot of the filtered keywords view (using Dark Mode)](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Keywords-Dark.png) |
+| ![Screenshot of the filtered keywords view](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Keywords-Light.png) | ![Screenshot of the filtered keywords view (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Keywords-Dark.png) |
 
 ### Manage Keywords - Editing a Filter
 
@@ -82,7 +82,7 @@ nav_order: 4
 {: .fs-2 }
 
 |:---------- |:--------- |
-| ![Screenshot of editing a keyword filter](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Keywords-Editing-Light.png) | ![Screenshot of editing a keyword filter (using Dark Mode)](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Keywords-Editing-Dark.png) |
+| ![Screenshot of editing a keyword filter](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Keywords-Editing-Light.png) | ![Screenshot of editing a keyword filter (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Keywords-Editing-Dark.png) |
 
 * * *
 
@@ -92,7 +92,7 @@ nav_order: 4
 {: .fs-2 }
 
 |:---------- |:--------- |
-| ![Screenshot of the filtered categories view](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Categories-Light.png) | ![Screenshot of the filtered categories view (using Dark Mode)](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Categories-Dark.png) |
+| ![Screenshot of the filtered categories view](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Light.png) | ![Screenshot of the filtered categories view (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Dark.png) |
 
 ### Manage Categories - Editing a Filter
 
@@ -100,7 +100,7 @@ nav_order: 4
 {: .fs-2 }
 
 |:---------- |:--------- |
-| ![Screenshot of editing a category filter](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Categories-Editing-Light.png) | ![Screenshot of editing a category filter (using Dark Mode)](https://raw.githubusercontent.com/rthaut/DeviantArt-Filter/master/screenshots/Categories-Editing-Dark.png) |
+| ![Screenshot of editing a category filter](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Editing-Light.png) | ![Screenshot of editing a category filter (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Editing-Dark.png) |
 
 
 
