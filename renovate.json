@@ -3,12 +3,5 @@
     "config:base",
     ":preserveSemverRanges"
   ],
-  "packageRules": [
-    {
-      "packageNames": [
-        "bootstrap"
-      ],
-      "rangeStrategy": "pin"
-    }
-  ]
+  "packageRules": []
 }
