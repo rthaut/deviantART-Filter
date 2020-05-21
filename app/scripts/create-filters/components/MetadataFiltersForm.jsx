@@ -26,7 +26,7 @@ import {
     NavigateNext as NavigateNextIcon,
 } from '@material-ui/icons';
 
-export const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
     'fieldset': {
         'margin': theme.spacing(0, 0, 2),
         'width': '100%',
