@@ -17,10 +17,6 @@ Please [submit a new issue](https://github.com/rthaut/deviantART-Filter/issues/n
 
 This permission is used to apply filters to DeviantArt pages and to add the quick-hide icon in the upper-left corner of deviation thumbnails.
 
-## Access browsing history
-
-The History permission is used to remove the DeviantArt Filter Management Page from your browser's history.
-
 ## Display notifications to you
 
 The Notifications permission is used to display a notification message when upgrading from version 5.x to version 6.x after converting tag filters to keyword filters.
