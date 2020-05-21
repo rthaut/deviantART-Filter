@@ -1,5 +1,4 @@
 import { AddFilter } from './filters';
-import { SendMessageToAllTabs } from './messages';
 import { SHOW_FILTER_DEVIATION_MODAL } from '../constants/messages';
 
 export const MENUS = [
@@ -52,8 +51,11 @@ export const OnMenuClicked = (info, tab) => {
             break;
 
             case 'show-filter-modal-deviation':
-                SendMessageToAllTabs(SHOW_FILTER_DEVIATION_MODAL, {
-                    'link': info.linkUrl
+                browser.tabs.sendMessage(tab.id, {
+                    'action': SHOW_FILTER_DEVIATION_MODAL,
+                    'data': {
+                        'link': info.linkUrl
+                    }
                 });
                 break;
 
