@@ -2,8 +2,10 @@
     "cSpell.enabled": true,
     "cSpell.language": "en",
     "cSpell.words": [
+        "browserslist",
         "deviantart",
         "greasemonkey",
+        "notistack",
         "polyfill",
         "subdomain",
         "subdomains",
