@@ -26,9 +26,7 @@ import useExtensionStorage from '../hooks/useExtensionStorage';
 import { PAGES } from '../../constants/url';
 
 const initialOptions = {
-    'pages': Object.fromEntries(
-        Object.keys(PAGES).map(page => [page, true])
-    ),
+    'pages': Object.keys(PAGES).map(page => [page, true]).reduce((acc, val) => (acc[val[0]] = val[1], acc), {}),
     'showUpdatedPageOnUpdate': 'patch'
 };
 
