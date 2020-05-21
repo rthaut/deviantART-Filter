@@ -8,12 +8,13 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
+    "lint": "eslint ./app/",
     "dev": "webextension-toolbox dev",
     "build": "webextension-toolbox build",
     "analyze": "cross-env ANALYZE=true webextension-toolbox build",
     "start:firefox": "web-ext run --source-dir=./dist/firefox/",
     "start:firefox:nr": "npm run start:firefox -- --no-reload",
-    "test": "npm run test:firefox",
+    "test": "npm run lint && npm run test:firefox",
     "test:firefox": "npm run build firefox && web-ext lint --source-dir=./dist/firefox/"
   },
   "repository": {
@@ -23,6 +24,10 @@
   "bugs": {
     "url": "https://github.com/rthaut/deviantART-Filter/issues"
   },
+  "browserslist": [
+    "chrome >= 49",
+    "firefox >= 62"
+  ],
   "dependencies": {
     "@material-ui/core": "^4.9.10",
     "@material-ui/icons": "^4.9.1",
@@ -47,12 +52,14 @@
     "@babel/preset-react": "^7.9.4",
     "babel-eslint": "^10.1.0",
     "babel-plugin-lodash": "^3.3.4",
+    "browserslist": "^4.12.0",
     "cross-env": "^7.0.2",
     "eslint": "^7.0.0",
+    "eslint-plugin-compat": "^3.6.0",
     "eslint-plugin-no-unsanitized": "^3.1.0",
     "eslint-plugin-react": "^7.19.0",
     "web-ext": "^4.1.0",
-    "webextension-toolbox": "latest",
+    "webextension-toolbox": "^3.0.0",
     "webpack-bundle-analyzer": "^3.7.0"
   }
 }

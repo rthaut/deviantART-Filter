@@ -4,13 +4,15 @@
         "es6": true,
         "webextensions": true
     },
+    "extends": [
+        "eslint:recommended",
+        "plugin:compat/recommended",
+        "plugin:no-unsanitized/DOM",
+        "plugin:react/recommended"
+    ],
     "globals": {
         "browser": true
     },
-    "extends": [
-        "eslint:recommended",
-        "plugin:no-unsanitized/DOM"
-    ],
     "parser": "babel-eslint",
     "rules": {
         "curly": ["error", "multi-line"],
@@ -21,8 +23,14 @@
         }],
         "no-useless-escape": "off",
         "prefer-const": ["error"],
-        "semi": ["error", "always"],
+        "quote-props": ["error", "always"],
         "quotes": ["error", "single"],
-        "quote-props": ["error", "always"]
+        "react/jsx-uses-react": 1,
+        "semi": ["error", "always"]
+    },
+    "settings": {
+        "react": {
+          "version": "latest"
+        }
     }
 }
