@@ -1,4 +1,5 @@
 import semverClean from 'semver/functions/clean';
+import semverDiff from 'semver/functions/diff';
 import semverLT from 'semver/functions/lt';
 
 import { GetCategories } from './categories';
@@ -13,7 +14,7 @@ export const OnInstalled = ({ previousVersion, reason, temporary }) => {
 
     if (temporary) {
         // use this to simulate installs/updates for testing purposes
-        // previousVersion = '6.0.0';
+        // previousVersion = '6.1.0';
         // reason = 'install';
     }
 
@@ -40,7 +41,34 @@ const OnUpdated = async (previousVersion) => {
         }
     }
 
-    await ShowUpdatedPage(currentVersion, previousVersion);
+    let showUpdatedPageToUser = false;
+    try {
+        const releaseType = semverDiff(currentVersion, previousVersion);
+        if (releaseType !== null) {
+            const releaseTypes = await GetReleaseTypesFromOptions();
+            showUpdatedPageToUser = releaseTypes.includes(releaseType);
+        }
+    } catch (error) {
+        console.error('Failed to determine version difference on upgrade', error);
+    }
+
+    if (showUpdatedPageToUser) {
+        await ShowUpdatedPage(currentVersion, previousVersion);
+    }
+};
+
+const GetReleaseTypesFromOptions = async () => {
+    const { options } = await browser.storage.local.get('options');
+    const releaseType = options?.showUpdatedPageOnUpdate ?? 'patch';
+    const releaseTypes = [];
+
+    switch (releaseType) { /* eslint-disable no-fallthrough */
+        case 'patch': releaseTypes.push('patch');
+        case 'minor': releaseTypes.push('minor');
+        case 'major': releaseTypes.push('major');
+    }
+
+    return releaseTypes;
 };
 
 const MigrateTagFiltersToKeywordFilters = async () => {

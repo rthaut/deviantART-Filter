@@ -132,6 +132,24 @@
   "Options_EnabledPages_PageLabel_Notifications": {
     "message": "Notifications Page"
   },
+  "Options_ShowUpdatedPage_Header": {
+    "message": "Show Release Notes for Updates"
+  },
+  "Options_ShowUpdatedPage_HelpText": {
+    "message": "Use this to control if/when release notes are shown after the extension is updated."
+  },
+  "Options_ShowUpdatedPage_OptionLabel_Major": {
+    "message": "Show for Major Updates Only"
+  },
+  "Options_ShowUpdatedPage_OptionLabel_Minor": {
+    "message": "Show for Most Updates"
+  },
+  "Options_ShowUpdatedPage_OptionLabel_Patch": {
+    "message": "Show for Every Update"
+  },
+  "Options_ShowUpdatedPage_OptionLabel_None": {
+    "message": "Never Show for Any Updates"
+  },
   "OptionsResetButtonLabel": {
     "message": "Reset to Defaults"
   },

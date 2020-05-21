@@ -3,6 +3,10 @@ import { useConfirm } from 'material-ui-confirm';
 import { useSnackbar } from 'notistack';
 
 import {
+    makeStyles,
+} from '@material-ui/core/styles';
+
+import {
     Typography,
     Divider,
     Card,
@@ -13,6 +17,8 @@ import {
     FormControl,
     FormControlLabel,
     Switch,
+    Select,
+    MenuItem,
 } from '@material-ui/core';
 
 import useExtensionStorage from '../hooks/useExtensionStorage';
@@ -22,10 +28,22 @@ import { PAGES } from '../../constants/url';
 const initialOptions = {
     'pages': Object.fromEntries(
         Object.keys(PAGES).map(page => [page, true])
-    )
+    ),
+    'showUpdatedPageOnUpdate': 'patch'
 };
 
+const useStyles = makeStyles((theme) => ({
+    'fieldset': {
+        'width': '100%',
+        'margin': theme.spacing(1, 0, 2),
+    },
+    'legend': {
+        'padding': theme.spacing(0),
+    },
+}));
+
 const OptionsCard = () => {
+    const classes = useStyles();
 
     const confirm = useConfirm();
     const { enqueueSnackbar } = useSnackbar();
@@ -59,6 +77,13 @@ const OptionsCard = () => {
         showReloadRequired();
     };
 
+    const handleUpdatePageChange = event => {
+        setOptions({
+            ...options,
+            'showUpdatedPageOnUpdate': event.target.value
+        });
+    };
+
     const showReloadRequired = () => {
         enqueueSnackbar(browser.i18n.getMessage('OptionsChangePagesRequireReload'), {
             'variant': 'default',
@@ -74,8 +99,9 @@ const OptionsCard = () => {
         <Card>
             <CardContent>
                 <Typography component='h2' variant='h6' gutterBottom>{browser.i18n.getMessage('OptionsTitle')}</Typography>
-                {options?.pages && <FormControl component='fieldset'>
-                    <Typography component='legend' variant='subtitle1'>{browser.i18n.getMessage('Options_EnabledPages_Header')}</Typography>
+
+                {options?.pages && <FormControl component='fieldset' className={classes.fieldset}>
+                    <Typography component='legend' className={classes.legend}>{browser.i18n.getMessage('Options_EnabledPages_Header')}</Typography>
                     <Typography component='p' variant='body2' color='textSecondary' gutterBottom>{browser.i18n.getMessage('Options_EnabledPages_HelpText')}</Typography>
                     <FormGroup>
                         {Object.keys(options?.pages).map((key, index) => (
@@ -84,15 +110,27 @@ const OptionsCard = () => {
                                 label={browser.i18n.getMessage(`Options_EnabledPages_PageLabel_${key}`)}
                                 control={
                                     <Switch
+                                        name={key}
                                         color='primary'
                                         checked={options?.pages[key]}
-                                        onChange={togglePageEnabled} name={key}
+                                        onChange={togglePageEnabled}
                                     />
                                 }
                             />
                         ))}
                     </FormGroup>
                 </FormControl>}
+
+                {options?.showUpdatedPageOnUpdate && <FormControl component='fieldset' className={classes.fieldset} variant='outlined' size='small'>
+                    <Typography component='legend' className={classes.legend}>{browser.i18n.getMessage('Options_ShowUpdatedPage_Header')}</Typography>
+                    <Typography component='p' variant='body2' color='textSecondary' gutterBottom>{browser.i18n.getMessage('Options_ShowUpdatedPage_HelpText')}</Typography>
+                    <Select value={options?.showUpdatedPageOnUpdate} onChange={handleUpdatePageChange}>
+                        {['patch', 'minor', 'major', 'none'].map((key, index) => (
+                            <MenuItem key={index} value={key}>{browser.i18n.getMessage(`Options_ShowUpdatedPage_OptionLabel_${key}`)}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>}
+
             </CardContent>
             <Divider variant='middle' />
             <CardActions>
