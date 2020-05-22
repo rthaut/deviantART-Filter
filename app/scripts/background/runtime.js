@@ -8,7 +8,6 @@ import { ImportFilters } from './filters';
 import { TAG_FILTERS_MIGRATED } from '../constants/notifications';
 
 export const OnInstalled = ({ previousVersion, reason, temporary }) => {
-
     // fetch and store the latest category paths
     GetCategories();
 
@@ -89,13 +88,17 @@ const MigrateTagFiltersToKeywordFilters = async () => {
     }
 };
 
-const ShowInstalledPage = async () => {
-    const url = 'https://rthaut.github.io/deviantART-Filter/installed';
-    await browser.tabs.create({ url });
+const ShowInstalledPage = () => {
+    return browser.tabs.create({
+        'url': 'https://rthaut.github.io/deviantART-Filter/installed',
+        'active': true
+    });
 };
 
 
-const ShowUpdatedPage = async (currentVersion, previousVersion) => {
-    const url = `https://rthaut.github.io/deviantART-Filter/releases/v${currentVersion}/?from=v${previousVersion}`;
-    await browser.tabs.create({ url });
+const ShowUpdatedPage = (currentVersion, previousVersion) => {
+    return browser.tabs.create({
+        'url': `https://rthaut.github.io/deviantART-Filter/releases/v${currentVersion}/?from=v${previousVersion}`,
+        'active': false
+    });
 };
