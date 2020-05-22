@@ -79,7 +79,7 @@ const CreateFiltersApp = () => {
     }), [darkMode]);
 
     const [error, setError] = useState({
-        'help': '',
+        'message': '',
         'error': ''
     });
 
@@ -127,12 +127,11 @@ const CreateFiltersApp = () => {
         reset();
     }, [metadata]);
 
-    const closeModal = () => {
-        browser.runtime.sendMessage({
+    const closeModal = async () => {
+        await browser.runtime.sendMessage({
             'action': HIDE_FILTER_DEVIATION_MODAL
-        }).then(() => {
-            reset();
         });
+        setMetadata(null);
     };
 
     const mapCount = (obj, property) => Object.values(obj).reduce((prev, cur) => prev += cur[property], 0);
@@ -150,7 +149,7 @@ const CreateFiltersApp = () => {
             setMetadata(_metadata);
         } catch (error) {
             setError({
-                'help': browser.i18n.getMessage('CreateFiltersFromDeviation_Error_FetchingMetadata'),
+                'message': browser.i18n.getMessage('CreateFiltersFromDeviation_Error_FetchingMetadata'),
                 error
             });
             setMetadata(null);
@@ -173,7 +172,7 @@ const CreateFiltersApp = () => {
             setTitle(browser.i18n.getMessage(`CreateFiltersFromDeviation_Title_SuccessWithCount_${count == 1 ? 'Singular' : 'Plural'}`, [count]));
         } catch (error) {
             setError({
-                'help': browser.i18n.getMessage('CreateFiltersFromDeviation_Error_CreatingFilters'),
+                'message': browser.i18n.getMessage('CreateFiltersFromDeviation_Error_CreatingFilters'),
                 error
             });
             setResults(null);
@@ -196,11 +195,17 @@ const CreateFiltersApp = () => {
 
                 <DialogContent>
 
-                    {error?.error && (<Alert severity='error'>
-                        <AlertTitle><strong>{error.help}</strong></AlertTitle>
-                        <Typography gutterBottom>{browser.i18n.getMessage('CreateFiltersFromDeviation_Error_Instructions')}</Typography>
-                        <Typography component='code' variant='overline'>{error.error.message}</Typography>
-                    </Alert>)}
+                    {error?.message && (
+                        <Alert severity='error'>
+                            <AlertTitle><strong>{error.message}</strong></AlertTitle>
+                            {error.error?.message ? (<>
+                                <Typography variant='body1' gutterBottom>{browser.i18n.getMessage('CreateFiltersFromDeviation_Error_Instructions_HasError')}</Typography>
+                                <Typography component='code' variant='inherit'>{error.error.message}</Typography>
+                            </>): (
+                                <Typography variant='body1' gutterBottom>{browser.i18n.getMessage('CreateFiltersFromDeviation_Error_Instructions')}</Typography>
+                            )}
+                        </Alert>
+                    )}
 
                     {working ?
                         <Grid container direction='column' justify='center' alignItems='center'><CircularProgress /></Grid> : results ?

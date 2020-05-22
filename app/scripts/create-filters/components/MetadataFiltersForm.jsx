@@ -51,10 +51,6 @@ const useStyles = makeStyles((theme) => ({
 const MetadataFiltersForm = ({ metadata, setFilter }) => {
     const classes = useStyles();
 
-    if (!metadata) {
-        return null;
-    }
-
     const [selectedUsername, setSelectedUsername] = useState('');
     const [selectedTags, setSelectedTags] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -107,6 +103,10 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
             setSelectedTags([...selectedTags, tag]);
         }
     };
+
+    if (!metadata) {
+        return null;
+    }
 
     return (
         <form noValidate>
