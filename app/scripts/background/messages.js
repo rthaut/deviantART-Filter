@@ -38,9 +38,7 @@ export const OnRuntimeMessage = (message, sender) => {
         case MESSAGES.FETCH_METADATA:
             return fetch(new URL(`https://backend.deviantart.com/oembed?url=${message.data.url}`))
                 .then(response => response.json())
-                .catch(() => {
-                    throw new Error(`Invalid API Response for Deviation URL: ${message.data.url}`);
-                });
+                .catch(() => Promise.reject(new Error(`Invalid API Response for Deviation URL: ${message.data.url}`)));
 
         case MESSAGES.FETCH_CATEGORIES:
             return GetCategories();
