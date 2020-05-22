@@ -139,16 +139,16 @@
     "message": "Use this to control if/when release notes are shown after the extension is updated."
   },
   "Options_ShowUpdatedPage_OptionLabel_Major": {
-    "message": "Show for Major Updates Only"
+    "message": "Show for major updates only"
   },
   "Options_ShowUpdatedPage_OptionLabel_Minor": {
-    "message": "Show for Most Updates"
+    "message": "Show for most updates"
   },
   "Options_ShowUpdatedPage_OptionLabel_Patch": {
-    "message": "Show for Every Update"
+    "message": "Show for every update"
   },
   "Options_ShowUpdatedPage_OptionLabel_None": {
-    "message": "Never Show for Any Updates"
+    "message": "Never show for any updates"
   },
   "OptionsResetButtonLabel": {
     "message": "Reset to Defaults"

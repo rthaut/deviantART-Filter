@@ -102,9 +102,9 @@ const OptionsCard = () => {
                     <Typography component='legend' className={classes.legend}>{browser.i18n.getMessage('Options_EnabledPages_Header')}</Typography>
                     <Typography component='p' variant='body2' color='textSecondary' gutterBottom>{browser.i18n.getMessage('Options_EnabledPages_HelpText')}</Typography>
                     <FormGroup>
-                        {Object.keys(options?.pages).map((key, index) => (
+                        {Object.keys(options?.pages).map((key) => (
                             <FormControlLabel
-                                key={index}
+                                key={key}
                                 label={browser.i18n.getMessage(`Options_EnabledPages_PageLabel_${key}`)}
                                 control={
                                     <Switch
@@ -123,8 +123,8 @@ const OptionsCard = () => {
                     <Typography component='legend' className={classes.legend}>{browser.i18n.getMessage('Options_ShowUpdatedPage_Header')}</Typography>
                     <Typography component='p' variant='body2' color='textSecondary' gutterBottom>{browser.i18n.getMessage('Options_ShowUpdatedPage_HelpText')}</Typography>
                     <Select value={options?.showUpdatedPageOnUpdate} onChange={handleUpdatePageChange}>
-                        {['patch', 'minor', 'major', 'none'].map((key, index) => (
-                            <MenuItem key={index} value={key}>{browser.i18n.getMessage(`Options_ShowUpdatedPage_OptionLabel_${key}`)}</MenuItem>
+                        {['patch', 'minor', 'major', 'none'].map((key) => (
+                            <MenuItem key={key} value={key}>{browser.i18n.getMessage(`Options_ShowUpdatedPage_OptionLabel_${key}`)}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>}
