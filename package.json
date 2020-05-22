@@ -29,22 +29,22 @@
     "firefox >= 62"
   ],
   "dependencies": {
-    "@material-ui/core": "^4.9.10",
+    "@material-ui/core": "^4.9.14",
     "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.49",
+    "@material-ui/lab": "^4.0.0-alpha.53",
     "autosuggest-highlight": "^3.1.1",
     "lodash-es": "^4.17.15",
     "match-sorter": "^4.1.0",
     "material-table": "^1.57.2",
     "material-ui-confirm": "^2.0.4",
-    "notistack": "^0.9.11",
+    "notistack": "^0.9.16",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.0.0",
-    "react-router-dom": "^5.1.2",
+    "react-router-dom": "^5.2.0",
     "react-use": "^15.0.2",
     "react-window": "^1.8.5",
-    "semver": "^7.2.2"
+    "semver": "^7.3.2"
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
@@ -56,10 +56,10 @@
     "cross-env": "^7.0.2",
     "eslint": "^7.0.0",
     "eslint-plugin-compat": "^3.6.0",
-    "eslint-plugin-no-unsanitized": "^3.1.0",
-    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-no-unsanitized": "^3.1.1",
+    "eslint-plugin-react": "^7.20.0",
     "web-ext": "^4.1.0",
     "webextension-toolbox": "^3.0.0",
-    "webpack-bundle-analyzer": "^3.7.0"
+    "webpack-bundle-analyzer": "^3.8.0"
   }
 }
