@@ -11,7 +11,7 @@ has_toc: false
 
 | Version                                                       | Release Date     |
 | :------------------------------------------------------------ | :--------------- |
-| [**Version 6.1.1**]({{ '/releases/v6.1.1/' | absolute_url }}) | RELEASE DATE TBD |
+| [**Version 6.1.1**]({{ '/releases/v6.1.1/' | absolute_url }}) | May 23, 2020     |
 | [**Version 6.1.0**]({{ '/releases/v6.1.0/' | absolute_url }}) | May 18, 2020     |
 | [**Version 6.0.0**]({{ '/releases/v6.0.0/' | absolute_url }}) | May 7, 2020      |
 | [**Version 5.1.0**]({{ '/releases/v5.1.0/' | absolute_url }}) | February 6, 2019 |
