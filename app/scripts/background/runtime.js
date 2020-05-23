@@ -1,4 +1,5 @@
 import semverClean from 'semver/functions/clean';
+import semverDiff from 'semver/functions/diff';
 import semverLT from 'semver/functions/lt';
 
 import { GetCategories } from './categories';
@@ -7,13 +8,12 @@ import { ImportFilters } from './filters';
 import { TAG_FILTERS_MIGRATED } from '../constants/notifications';
 
 export const OnInstalled = ({ previousVersion, reason, temporary }) => {
-
     // fetch and store the latest category paths
     GetCategories();
 
     if (temporary) {
         // use this to simulate installs/updates for testing purposes
-        // previousVersion = '6.0.0';
+        // previousVersion = '6.1.0';
         // reason = 'install';
     }
 
@@ -40,7 +40,34 @@ const OnUpdated = async (previousVersion) => {
         }
     }
 
-    await ShowUpdatedPage(currentVersion, previousVersion);
+    let showUpdatedPageToUser = false;
+    try {
+        const releaseType = semverDiff(currentVersion, previousVersion);
+        if (releaseType !== null) {
+            const releaseTypes = await GetReleaseTypesFromOptions();
+            showUpdatedPageToUser = releaseTypes.includes(releaseType);
+        }
+    } catch (error) {
+        console.error('Failed to determine version difference on upgrade', error);
+    }
+
+    if (showUpdatedPageToUser) {
+        await ShowUpdatedPage(currentVersion, previousVersion);
+    }
+};
+
+const GetReleaseTypesFromOptions = async () => {
+    const { options } = await browser.storage.local.get('options');
+    const releaseType = options?.showUpdatedPageOnUpdate ?? 'patch';
+    const releaseTypes = [];
+
+    switch (releaseType) { /* eslint-disable no-fallthrough */
+        case 'patch': releaseTypes.push('patch');
+        case 'minor': releaseTypes.push('minor');
+        case 'major': releaseTypes.push('major');
+    }
+
+    return releaseTypes;
 };
 
 const MigrateTagFiltersToKeywordFilters = async () => {
@@ -61,13 +88,17 @@ const MigrateTagFiltersToKeywordFilters = async () => {
     }
 };
 
-const ShowInstalledPage = async () => {
-    const url = 'https://rthaut.github.io/deviantART-Filter/installed';
-    await browser.tabs.create({ url });
+const ShowInstalledPage = () => {
+    return browser.tabs.create({
+        'url': 'https://rthaut.github.io/deviantART-Filter/installed',
+        'active': true
+    });
 };
 
 
-const ShowUpdatedPage = async (currentVersion, previousVersion) => {
-    const url = `https://rthaut.github.io/deviantART-Filter/releases/v${currentVersion}/?from=v${previousVersion}`;
-    await browser.tabs.create({ url });
+const ShowUpdatedPage = (currentVersion, previousVersion) => {
+    return browser.tabs.create({
+        'url': `https://rthaut.github.io/deviantART-Filter/releases/v${currentVersion}/?from=v${previousVersion}`,
+        'active': false
+    });
 };

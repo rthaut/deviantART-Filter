@@ -132,6 +132,24 @@
   "Options_EnabledPages_PageLabel_Notifications": {
     "message": "Notifications Page"
   },
+  "Options_ShowUpdatedPage_Header": {
+    "message": "Show Release Notes for Updates"
+  },
+  "Options_ShowUpdatedPage_HelpText": {
+    "message": "Use this to control if/when release notes are shown after the extension is updated."
+  },
+  "Options_ShowUpdatedPage_OptionLabel_Major": {
+    "message": "Show for major updates only"
+  },
+  "Options_ShowUpdatedPage_OptionLabel_Minor": {
+    "message": "Show for most updates"
+  },
+  "Options_ShowUpdatedPage_OptionLabel_Patch": {
+    "message": "Show for every update"
+  },
+  "Options_ShowUpdatedPage_OptionLabel_None": {
+    "message": "Never show for any updates"
+  },
   "OptionsResetButtonLabel": {
     "message": "Reset to Defaults"
   },
@@ -317,12 +335,15 @@
     "message": "Close"
   },
   "CreateFiltersFromDeviation_Error_FetchingMetadata": {
-    "message": "An error occurred while retrieving deviation metadata. Please try again."
+    "message": "An error occurred while retrieving deviation metadata."
   },
   "CreateFiltersFromDeviation_Error_CreatingFilters": {
-    "message": "An error occurred while creating filters. Please try again."
+    "message": "An error occurred while creating filters."
   },
   "CreateFiltersFromDeviation_Error_Instructions": {
-    "message": "If the problem persists, please report it with the following information:"
+    "message": "Please refresh the page and try again. If the problem persists, please report it."
+  },
+  "CreateFiltersFromDeviation_Error_Instructions_HasError": {
+    "message": "Please refresh the page and try again. If the problem persists, please report it with the following information:"
   }
 }

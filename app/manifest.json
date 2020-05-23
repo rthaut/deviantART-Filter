@@ -2,7 +2,6 @@
   "name": "__MSG_ExtensionName__",
   "short_name": "__MSG_ExtensionShortName__",
   "description": "__MSG_ExtensionDescription__",
-  "version": "6.1.0",
   "homepage_url": "https://rthaut.github.io/deviantART-Filter",
   "manifest_version": 2,
   "default_locale": "en",
@@ -41,7 +40,6 @@
     "*://*.deviantart.com/*",
     "activeTab",
     "contextMenus",
-    "history",
     "notifications",
     "storage",
     "tabs"
@@ -50,12 +48,12 @@
       "pages/create-filters.html"
   ],
   "__chrome__key": "odlmamilbohnpnoomjclomghphbajikp",
-  "__chrome__minimum_chrome_version": "42.0",
+  "__chrome__minimum_chrome_version": "49.0",
   "__edge__minimum_edge_version": "33.14281.1000.0",
   "__firefox__applications": {
     "gecko": {
       "id": "{a2ce7c11-e47d-42cf-b6db-ede36265cf6c}",
-      "strict_min_version": "55.0"
+      "strict_min_version": "62.0"
     }
   }
 }

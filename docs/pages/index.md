@@ -5,7 +5,7 @@ permalink: /
 nav_order: 1
 ---
 
-# DeviantArt Filter 6.1.0
+# DeviantArt Filter
 
 DeviantArt Filter allows configurable filtering/removal of deviations by user, keyword, and/or category on DeviantArt.
 

@@ -5,7 +5,7 @@ export const STORAGE_KEY = 'users';
 //TODO: a VERY small portion thumbnails don't have a username available until AFTER metadata is loaded (the known case is for thumbnails of Stash items); it doesn't make sense to wait for metadata to load for all thumbnails, but having a way to re-apply this filter after metadata loads (for thumbnails that have NOT already been processed) would be useful
 export const REQUIRES_METADATA = false;
 
-const USERNAME_URL_REGEX = /([^\/]+)\/art|journal/;
+const USERNAME_URL_REGEX = /([^\/]+)\/(?:art|journal|status-update)\//;
 
 /**
 * Applies filters to a given thumbnails
