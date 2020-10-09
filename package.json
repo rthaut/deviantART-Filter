@@ -37,7 +37,7 @@
     "match-sorter": "^4.1.0",
     "material-table": "^1.57.2",
     "material-ui-confirm": "^2.0.4",
-    "notistack": "^0.9.16",
+    "notistack": "^1.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.0.0",
