@@ -4,8 +4,8 @@ title: DeviantArt Filter
 email: rthaut@gmail.com
 description: >-
   Have you ever want to block/filter deviations (a.k.a. submissions) while browsing DeviantArt? Well now you can! Simply install DeviantArt Filter in your web browser of choice and start filtering by user, keyword, and/or category.
-baseurl: ""
-url: "https://rthaut.github.io/deviantART-Filter"
+baseurl: "/deviantART-Filter"
+url: "https://rthaut.github.io"
 plugins:
   - jekyll-feed
   - jekyll-remote-theme
@@ -13,6 +13,7 @@ plugins:
 ga_tracking:
 
 # Just the Docs theme configuration
+color_scheme: deviantart
 logo:
 aux_links:
   # "DeviantArt Filter on DeviantArt":
