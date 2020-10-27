@@ -13,7 +13,7 @@ import { useTheme, makeStyles } from '@material-ui/core/styles';
 import { VariableSizeList } from 'react-window';
 import parse from 'autosuggest-highlight/parse';
 import match from 'autosuggest-highlight/match';
-import matchSorter from 'match-sorter';
+import { matchSorter } from 'match-sorter';
 
 
 const LISTBOX_PADDING = 8; // px
