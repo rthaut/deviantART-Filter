@@ -60,6 +60,6 @@
     "eslint-plugin-react": "^7.20.0",
     "web-ext": "^5.0.0",
     "webextension-toolbox": "^3.0.0",
-    "webpack-bundle-analyzer": "^3.8.0"
+    "webpack-bundle-analyzer": "^4.0.0"
   }
 }
