@@ -36,7 +36,7 @@
     "lodash-es": "^4.17.15",
     "match-sorter": "^6.0.0",
     "material-table": "^1.57.2",
-    "material-ui-confirm": "^2.0.4",
+    "material-ui-confirm": "^2.1.2",
     "notistack": "^1.0.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
