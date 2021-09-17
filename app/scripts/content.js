@@ -225,6 +225,17 @@ const IsPageDisabled = async (url) => {
 };
 
 /**
+ * Gets the value of an option specific to placeholder functionality from storage
+ * @param {string} optionName the placeholder option name
+ * @param {*} defaultValue the default value (if the option is not set in storage)
+ * @returns {*} the value of the placeholder option from storage (or the supplied default value)
+ */
+const GetPlaceholderOption = async (optionName, defaultValue) => {
+  const data = await browser.storage.local.get("options");
+  return data?.options?.placeholders?.[optionName] ?? defaultValue;
+};
+
+/**
  * Run once the content script is loaded
  */
 (async () => {
@@ -240,6 +251,14 @@ const IsPageDisabled = async (url) => {
 
   if (ENABLED) {
     document.body.classList.add("enable-metadata-indicators");
+
+    if (!(await GetPlaceholderOption("preventClick", true))) {
+      document.body.classList.add("clickable-placeholders");
+    }
+
+    if (!(await GetPlaceholderOption("showFilterText", true))) {
+      document.body.classList.add("hide-placeholder-text");
+    }
 
     // setup observers for thumbnails loaded after initial render next
     WatchForNewThumbs(SELECTORS.join(", "));
