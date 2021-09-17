@@ -35,8 +35,6 @@ body#deviantART-v7 {
 
 
 /* === PLACEHOLDERS ===*/
-
-/* === BASE === */
 [da-filter-category],
 [da-filter-keyword],
 [da-filter-user] {
@@ -50,7 +48,6 @@ body:not(.clickable-placeholders) [da-filter-user] {
     pointer-events: none !important;
 }
 
-/* === ECLIPSE === */
 [data-hook="deviation_link"][da-filter-category],
 [data-hook="deviation_link"][da-filter-keyword],
 [data-hook="deviation_link"][da-filter-user] {
@@ -58,6 +55,7 @@ body:not(.clickable-placeholders) [da-filter-user] {
     display: block !important;
     position: absolute !important;
 }
+
 [data-hook="deviation_std_thumb"] [data-hook="deviation_link"][da-filter-category],
 [data-hook="deviation_std_thumb"] [data-hook="deviation_link"][da-filter-keyword],
 [data-hook="deviation_std_thumb"] [data-hook="deviation_link"][da-filter-user] {
@@ -65,6 +63,7 @@ body:not(.clickable-placeholders) [da-filter-user] {
     display: inline-block !important;
     position: absolute !important;
 }
+
 [role="complementary"] [data-hook="deviation_link"][da-filter-category],
 [role="complementary"] [data-hook="deviation_link"][da-filter-keyword],
 [role="complementary"] [data-hook="deviation_link"][da-filter-user] {
@@ -73,20 +72,6 @@ body:not(.clickable-placeholders) [da-filter-user] {
     position: relative !important;
 }
 
-/* === CLASSIC === */
-#messages [da-filter-category],
-#messages [da-filter-keyword],
-#messages [da-filter-user] {
-    /* thumbnails on notification pages */
-    position: static !important;
-}
-#thread [da-filter-category],
-#thread [da-filter-keyword],
-#thread [da-filter-user] {
-    /* thumbnails on forums post pages */
-    display: inline-block !important;
-}
-/* === SHARED === */
 [da-filter-category]::before,
 [da-filter-keyword]::before,
 [da-filter-user]::before {
@@ -168,48 +153,6 @@ body.hide-placeholder-text [da-filter-user][data-username]:not([data-username=""
     as the `before` pseudo-element, which has the background that blocks out the thumbnail, won't render without it
     */
     content: "" !important;
-}
-
-
-/* === QUICK HIDE CONTROL === */
-[da-filter-quick-hide] {
-    /* quick hide shape+background */
-    position: absolute;
-    z-index: calc(var(--da-filter-placeholder-z-index) - 1); /* keep it below the placeholder */
-    top: 0;
-    left: 0;
-    width: 38px;
-    height: 26px;
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAaCAYAAADbhS54AAAAsUlEQVRIic3VPQuCYBSG4bvoA4fAIaKlpcHFoSASGpoaGgJDEMX//0dcEkTMXgPf8zxw7xdnOQCVYAUCiL5OirAcWCnCYj6zhrTLgIUiLKI1a0xTCswVYUc6swZVwAuYKcIOXZQC7NmHUoDtFWGPbyhr2FYRdh9CWcJCRdjtF8oCVgIbRdjVBeUbVgCBIuzsivIJy4G1GiwFdmNQPmAJsByLmhL2ZuBBuyyboAt/XqlZDcPEGXawh1sVAAAAAElFTkSuQmCC');
-    background-position: center left;
-    opacity: 0;
-    display: flex;
-    align-items: center;
-    text-indent: 5px;
-    font-family: DA-brandicons;
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 1;
-    color: #EAF2EE;
-    cursor: pointer;
-    transition: all .2s cubic-bezier(0, 0, .58, 1);
-    white-space: nowrap;
-}
-
-[da-filter-quick-hide]:hover {
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAaCAYAAADbhS54AAAAvklEQVRIic3OMQ7BcBxH8cdgQiQmu7W7zcQBnMAFXMAFxGoxdHWA3sAB7FaNhbGLSAxq0aRpilbT/+/7krd/AGLBbwgg8l4pwiKgpwhb8s4akv4CtBVhC1JZY5JDoKUIm5PJGhQDR6CpCJtlUQqwA9BQhE3yUNaw/SeUNWykCAu+oaxgT8BThO1+oSxgD2CoCNsWQbmG3YGBImxdFOUSFgF9NdgJGJdBuYD5QKcsqk7YGZj+A0q61vAG6FZBvQCzZyZfoGzu2QAAAABJRU5ErkJggg==');
-    color: #D32800;
-}
-
-[data-username]:hover [da-filter-quick-hide] {
-    opacity: 1;
-}
-
-[da-filter-quick-hide]::after {
-    /* quick hide icon (x) */
-    content: "\e632";
-    margin-right: 5px;
-    display: inline;
 }
 
 
