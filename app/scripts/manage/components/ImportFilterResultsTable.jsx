@@ -92,15 +92,25 @@ const ImportFilterResultsTable = ({ results }) => {
                 Object.keys(result.results).map((key, index) => (
                   <TableRow key={index}>
                     <TableCell variant="head">{key}</TableCell>
-                    <TableCell align="right">
-                      {result.results[key].total}
-                    </TableCell>
-                    <TableCell align="right">
-                      {result.results[key].new}
-                    </TableCell>
-                    <TableCell align="right">
-                      {result.results[key].duplicate}
-                    </TableCell>
+                    {result.results[key].error ? (
+                      <TableCell align="center" colSpan={3}>
+                        <Typography color="error">
+                          {result.results[key].error}
+                        </Typography>
+                      </TableCell>
+                    ) : (
+                      <>
+                        <TableCell align="right">
+                          {result.results[key].total}
+                        </TableCell>
+                        <TableCell align="right">
+                          {result.results[key].new}
+                        </TableCell>
+                        <TableCell align="right">
+                          {result.results[key].duplicate}
+                        </TableCell>
+                      </>
+                    )}
                   </TableRow>
                 ))
               ) : (

@@ -16,7 +16,11 @@
     "start:firefox": "web-ext run --source-dir=./dist/firefox/ --target firefox-desktop",
     "start:firefox:nr": "npm run start:firefox -- --no-reload",
     "test": "npm run lint && npm run test:firefox",
-    "test:firefox": "npm run build firefox && web-ext lint --source-dir=./dist/firefox/"
+    "test:firefox": "npm run build firefox && web-ext lint --source-dir=./dist/firefox/",
+    "docs": "npm-run-all docs:build --parallel docs:serve docs:watch",
+    "docs:build": "cd docs && bundle exec jekyll build",
+    "docs:watch": "cd docs && bundle exec jekyll build --watch",
+    "docs:serve": "browser-sync docs/_site -w --extensions html --no-notify"
   },
   "repository": {
     "type": "git",
@@ -46,8 +50,10 @@
     "semver": "^7.3.5"
   },
   "devDependencies": {
+    "browser-sync": "^2.27.5",
     "eslint": "^7.32.0",
     "eslint-plugin-react": "^7.25.1",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.3.2",
     "svg2png": "^4.1.1",
     "web-ext": "^6.4.0",
