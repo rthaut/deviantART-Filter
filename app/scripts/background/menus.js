@@ -21,13 +21,10 @@ export const MENUS = [
 /**
  * Initializes menus and event handlers
  */
-export const InitMenus = () => {
+export const InitMenus = async () => {
   try {
-    MENUS.forEach((menu) =>
-      browser.contextMenus
-        .remove(menu.id)
-        .finally(browser.contextMenus.create(menu))
-    );
+    await browser.contextMenus.removeAll();
+    await Promise.all(MENUS.map((menu) => browser.contextMenus.create(menu)));
     browser.contextMenus.onClicked.addListener(OnMenuClicked);
   } catch (ex) {
     console.error("Failed to setup context menus", ex);
