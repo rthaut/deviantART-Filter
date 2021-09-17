@@ -7,13 +7,13 @@ nav_order: 1
 
 # DeviantArt Filter
 
-DeviantArt Filter allows configurable filtering/removal of deviations by user, keyword, and/or category on DeviantArt.
+DeviantArt Filter allows configurable filtering/removal of deviations by user and/or keyword on DeviantArt.
 
 * * *
 
 ## Overview
 
-Have you ever want to block/filter deviations (a.k.a. submissions) while browsing DeviantArt? **Well now you can!** Simply [install DeviantArt Filter](#installation) in your web browser of choice and start filtering by user, keyword, and/or category.
+Have you ever want to block/filter deviations (a.k.a. submissions) while browsing DeviantArt? **Well now you can!** Simply [install DeviantArt Filter](#installation) in your web browser of choice and start filtering by user and/or keyword.
 
 ![DeviantArt Filter Promotional Image](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/promo/Screenshot_1280x800.png)
 

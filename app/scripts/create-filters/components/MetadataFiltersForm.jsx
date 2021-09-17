@@ -9,20 +9,12 @@ import {
   FormControl,
   FormControlLabel,
   Switch,
-  Breadcrumbs,
-  Chip,
   Checkbox,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
 } from "@material-ui/core";
-
-import {
-  CheckCircleOutline as CheckCircleOutlineIcon,
-  RadioButtonUncheckedOutlined as RadioButtonUncheckedOutlinedIcon,
-  NavigateNext as NavigateNextIcon,
-} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   fieldset: {
@@ -51,12 +43,10 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
 
   const [selectedUsername, setSelectedUsername] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     setSelectedUsername("");
     setSelectedTags([]);
-    setSelectedCategory("");
   }, [metadata]);
 
   useEffect(() => {
@@ -70,18 +60,6 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
       setFilter("users", []);
     }
   }, [selectedUsername]);
-
-  useEffect(() => {
-    if (selectedCategory.length) {
-      setFilter("categories", [
-        {
-          name: selectedCategory,
-        },
-      ]);
-    } else {
-      setFilter("categories", []);
-    }
-  }, [selectedCategory]);
 
   useEffect(() => {
     if (selectedTags.length) {
@@ -99,9 +77,6 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
 
   const username = metadata?.author_name?.trim();
   const tags = metadata?.tags?.split(",").map((tag) => tag.trim());
-  const categories = metadata?.category
-    ?.split(" > ")
-    .map((category) => category.trim());
 
   const toggleTag = (tag) => {
     if (selectedTags.includes(tag)) {
@@ -152,66 +127,7 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
         </FormControl>
       )}
 
-      {username && categories && <Divider className={classes.divider} />}
-
-      {categories && (
-        <FormControl component="fieldset" className={classes.fieldset}>
-          <Typography component="legend" className={classes.legend}>
-            {browser.i18n.getMessage("FilterTitle_Category")}
-          </Typography>
-          <Typography
-            component="p"
-            variant="body2"
-            color="textSecondary"
-            gutterBottom
-          >
-            <strong>
-              {browser.i18n.getMessage(
-                "CreateFiltersFromDeviation_OptionalIndicator"
-              )}
-            </strong>{" "}
-            {browser.i18n.getMessage(
-              "CreateFiltersFromDeviation_Category_Help"
-            )}
-          </Typography>
-          <Breadcrumbs separator={<NavigateNextIcon />}>
-            {categories.map((category, index, categories) => {
-              const current = categories
-                .slice(0, index + 1)
-                .join(" > ")
-                .trim();
-              const previous = categories.slice(0, index).join(" > ").trim();
-              const selected = selectedCategory.includes(current);
-              return (
-                <Chip
-                  key={index}
-                  size="small"
-                  color={selected ? "primary" : "default"}
-                  label={category}
-                  clickable
-                  disableRipple
-                  onClick={() =>
-                    selected && selectedCategory === current
-                      ? setSelectedCategory(previous)
-                      : setSelectedCategory(current)
-                  }
-                  icon={
-                    selected ? (
-                      <CheckCircleOutlineIcon />
-                    ) : (
-                      <RadioButtonUncheckedOutlinedIcon />
-                    )
-                  }
-                />
-              );
-            })}
-          </Breadcrumbs>
-        </FormControl>
-      )}
-
-      {(username || categories) && tags && (
-        <Divider className={classes.divider} />
-      )}
+      {username && tags && <Divider className={classes.divider} />}
 
       {tags && (
         <FormControl component="fieldset" className={classes.fieldset}>

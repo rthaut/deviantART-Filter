@@ -33,7 +33,7 @@ export const SetMetadataOnThumbnail = async (thumbnail) => {
  * @param {object} metadata the metadata
  */
 export const SetMetadataAttributesOnThumbnail = (thumbnail, metadata) => {
-  const { author_name, title, category, tags } = metadata;
+  const { author_name, title, tags } = metadata;
 
   if (author_name) {
     thumbnail.setAttribute("data-username", author_name);
@@ -41,10 +41,6 @@ export const SetMetadataAttributesOnThumbnail = (thumbnail, metadata) => {
 
   if (title) {
     thumbnail.setAttribute("data-title", title);
-  }
-
-  if (category) {
-    thumbnail.setAttribute("data-category", category);
   }
 
   if (tags) {

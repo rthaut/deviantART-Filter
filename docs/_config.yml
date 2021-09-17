@@ -3,7 +3,7 @@ remote_theme: pmarsceill/just-the-docs
 title: DeviantArt Filter
 email: rthaut@gmail.com
 description: >-
-  Have you ever want to block/filter deviations (a.k.a. submissions) while browsing DeviantArt? Well now you can! Simply install DeviantArt Filter in your web browser of choice and start filtering by user, keyword, and/or category.
+  Have you ever want to block/filter deviations (a.k.a. submissions) while browsing DeviantArt? Well now you can! Simply install DeviantArt Filter in your web browser of choice and start filtering by user and/or keyword.
 baseurl: "/deviantART-Filter"
 url: "https://rthaut.github.io"
 plugins:

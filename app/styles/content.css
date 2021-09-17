@@ -37,7 +37,6 @@ body#deviantART-v7 {
 /* === PLACEHOLDERS ===*/
 
 /* === BASE === */
-[da-filter-category],
 [da-filter-keyword],
 [da-filter-user] {
     position: relative !important;
@@ -46,21 +45,18 @@ body#deviantART-v7 {
 }
 
 /* === ECLIPSE === */
-[data-hook="deviation_link"][da-filter-category],
 [data-hook="deviation_link"][da-filter-keyword],
 [data-hook="deviation_link"][da-filter-user] {
     /* thumbnails on notification pages */
     display: block !important;
     position: absolute !important;
 }
-[data-hook="deviation_std_thumb"] [data-hook="deviation_link"][da-filter-category],
 [data-hook="deviation_std_thumb"] [data-hook="deviation_link"][da-filter-keyword],
 [data-hook="deviation_std_thumb"] [data-hook="deviation_link"][da-filter-user] {
     /* thumbnails on browse/search pages, profile/group pages */
     display: inline-block !important;
     position: absolute !important;
 }
-[role="complementary"] [data-hook="deviation_link"][da-filter-category],
 [role="complementary"] [data-hook="deviation_link"][da-filter-keyword],
 [role="complementary"] [data-hook="deviation_link"][da-filter-user] {
     /* thumbnails in sidebar on individual deviation pages */
@@ -69,20 +65,17 @@ body#deviantART-v7 {
 }
 
 /* === CLASSIC === */
-#messages [da-filter-category],
 #messages [da-filter-keyword],
 #messages [da-filter-user] {
     /* thumbnails on notification pages */
     position: static !important;
 }
-#thread [da-filter-category],
 #thread [da-filter-keyword],
 #thread [da-filter-user] {
     /* thumbnails on forums post pages */
     display: inline-block !important;
 }
 /* === SHARED === */
-[da-filter-category]::before,
 [da-filter-keyword]::before,
 [da-filter-user]::before {
     /* the placeholder text and background, placed overtop the thumbnail */
@@ -107,7 +100,6 @@ body#deviantART-v7 {
     flex-direction: column-reverse;
 }
 
-[da-filter-category]::after,
 [da-filter-keyword]::after,
 [da-filter-user]::after {
     /* the placeholder image ONLY, uses an SVG mask imitate programmatic color */
@@ -130,10 +122,6 @@ body#deviantART-v7 {
     -webkit-mask-position: center center;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: 80% 50%;
-}
-
-[da-filter-category]::before {
-    content: "__MSG_Placeholder_Category__: " attr(da-filter-category);
 }
 
 [da-filter-keyword]::before {
