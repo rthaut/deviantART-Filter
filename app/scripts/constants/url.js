@@ -1,5 +1,6 @@
-export const WILDCARD = '*://*.deviantart.com/*';
-export const REGEX = /^https ?:\/\/(?:(\S+)\.)?deviantart\.com\/([^\?]*)(?:\?(.*))?/i;
+export const WILDCARD = "*://*.deviantart.com/*";
+export const REGEX =
+  /^https ?:\/\/(?:(\S+)\.)?deviantart\.com\/([^\?]*)(?:\?(.*))?/i;
 
 /**
  * Configuration for pages where the extension can be disabled.
@@ -12,19 +13,19 @@ export const REGEX = /^https ?:\/\/(?:(\S+)\.)?deviantart\.com\/([^\?]*)(?:\?(.*
  * At least one RegEx must match from all parts.
  */
 export const PAGES = {
-    'DailyDeviations': {
-        'pathname': ['^/daily-deviations']
-    },
-    'Forums': {
-        'hostname': ['forum.deviantart.com']
-    },
-    'Notifications': {
-        'pathname': ['^/notifications']
-    },
+  DailyDeviations: {
+    pathname: ["^/daily-deviations"],
+  },
+  Forums: {
+    hostname: ["forum.deviantart.com"],
+  },
+  Notifications: {
+    pathname: ["^/notifications"],
+  },
 };
 
 export default {
-    WILDCARD,
-    REGEX,
-    PAGES,
+  WILDCARD,
+  REGEX,
+  PAGES,
 };

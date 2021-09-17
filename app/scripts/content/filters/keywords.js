@@ -1,23 +1,25 @@
-export const STORAGE_KEY = 'keywords';
+export const STORAGE_KEY = "keywords";
 
 export const REQUIRES_METADATA = true;
 
 /**
-* Applies filters to a given thumbnails
-* @param {HTMLElement} thumbnail the thumbnail DOM node
+ * Applies filters to a given thumbnails
+ * @param {HTMLElement} thumbnail the thumbnail DOM node
  * @param {object[]} filters the list of filters to apply
-*/
+ */
 export const FilterThumbnail = (thumbnail, filters) => {
-    for (const filter of filters) {
-        const operator = filter.wildcard ? '*' : '~';
-        if (thumbnail.matches(`[data-tags${operator}="${filter.keyword}" i]`)) {
-            SetFilterAttributesOnThumbnail(thumbnail, filter.keyword, 'Tags');
-            continue;
-        } else if (thumbnail.matches(`[data-title${operator}="${filter.keyword}" i]`)) {
-            SetFilterAttributesOnThumbnail(thumbnail, filter.keyword, 'Title');
-            continue;
-        }
+  for (const filter of filters) {
+    const operator = filter.wildcard ? "*" : "~";
+    if (thumbnail.matches(`[data-tags${operator}="${filter.keyword}" i]`)) {
+      SetFilterAttributesOnThumbnail(thumbnail, filter.keyword, "Tags");
+      continue;
+    } else if (
+      thumbnail.matches(`[data-title${operator}="${filter.keyword}" i]`)
+    ) {
+      SetFilterAttributesOnThumbnail(thumbnail, filter.keyword, "Title");
+      continue;
     }
+  }
 };
 
 /**
@@ -27,8 +29,8 @@ export const FilterThumbnail = (thumbnail, filters) => {
  * @param {string} selector CSS selector for thumbnails
  */
 export const ApplyFiltersToDocument = (filters, selector) => {
-    const thumbnails = document.querySelectorAll(selector);
-    thumbnails.forEach(thumbnail => FilterThumbnail(thumbnail, filters));
+  const thumbnails = document.querySelectorAll(selector);
+  thumbnails.forEach((thumbnail) => FilterThumbnail(thumbnail, filters));
 };
 
 /**
@@ -38,13 +40,15 @@ export const ApplyFiltersToDocument = (filters, selector) => {
  * @param {object[]} activeFilters list of filters that are still active
  */
 export const RemoveFiltersFromDocument = (removedFilters, activeFilters) => {
-    for (const filter of removedFilters) {
-        const thumbnails = document.querySelectorAll(`[da-filter-keyword="${filter.keyword}" i]`);
-        for (const thumbnail of thumbnails) {
-            RemoveFilterAttributesOnThumbnail(thumbnail);
-            FilterThumbnail(thumbnail, activeFilters);
-        }
+  for (const filter of removedFilters) {
+    const thumbnails = document.querySelectorAll(
+      `[da-filter-keyword="${filter.keyword}" i]`
+    );
+    for (const thumbnail of thumbnails) {
+      RemoveFilterAttributesOnThumbnail(thumbnail);
+      FilterThumbnail(thumbnail, activeFilters);
     }
+  }
 };
 
 /**
@@ -53,12 +57,16 @@ export const RemoveFiltersFromDocument = (removedFilters, activeFilters) => {
  * @param {string} keyword the keyword that matched a filter
  * @param {string} [attribute] the thumbnail attribute that matched a filter
  */
-const SetFilterAttributesOnThumbnail = (thumbnail, keyword, attribute = null) => {
-    thumbnail.setAttribute('da-filter-keyword', keyword);
+const SetFilterAttributesOnThumbnail = (
+  thumbnail,
+  keyword,
+  attribute = null
+) => {
+  thumbnail.setAttribute("da-filter-keyword", keyword);
 
-    if (attribute) {
-        thumbnail.setAttribute('da-filter-keyword-attribute', attribute);
-    }
+  if (attribute) {
+    thumbnail.setAttribute("da-filter-keyword-attribute", attribute);
+  }
 };
 
 /**
@@ -66,6 +74,6 @@ const SetFilterAttributesOnThumbnail = (thumbnail, keyword, attribute = null) =>
  * @param {HTMLElement} thumbnail the thumbnail DOM node
  */
 const RemoveFilterAttributesOnThumbnail = (thumbnail) => {
-    thumbnail.removeAttribute('da-filter-keyword');
-    thumbnail.removeAttribute('da-filter-keyword-attribute');
+  thumbnail.removeAttribute("da-filter-keyword");
+  thumbnail.removeAttribute("da-filter-keyword-attribute");
 };

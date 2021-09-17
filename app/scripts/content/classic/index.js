@@ -1,4 +1,4 @@
-export const THUMBNAIL_SELECTOR = '#output .thumb';
+export const THUMBNAIL_SELECTOR = "#output .thumb";
 
 /**
  * Gets the Deviation's URL from a thumbnail
@@ -6,11 +6,11 @@ export const THUMBNAIL_SELECTOR = '#output .thumb';
  * @returns {string} the URL
  */
 export const GetDeviationURLForThumbnail = (thumbnail) => {
-    const selector = '[href]';
+  const selector = "[href]";
 
-    if (thumbnail.matches(selector)) {
-        return thumbnail.getAttribute('href');
-    }
+  if (thumbnail.matches(selector)) {
+    return thumbnail.getAttribute("href");
+  }
 
-    return thumbnail.querySelector(selector)?.getAttribute('href');
+  return thumbnail.querySelector(selector)?.getAttribute("href");
 };

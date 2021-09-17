@@ -2,11 +2,18 @@
   "name": "__MSG_ExtensionName__",
   "short_name": "__MSG_ExtensionShortName__",
   "description": "__MSG_ExtensionDescription__",
-  "homepage_url": "https://rthaut.github.io/deviantART-Filter",
   "manifest_version": 2,
   "default_locale": "en",
+  "homepage_url": "https://rthaut.github.io/deviantART-Filter",
   "icons": {
     "16": "images/icon-16.png",
+    "19": "images/icon-19.png",
+    "24": "images/icon-24.png",
+    "32": "images/icon-32.png",
+    "38": "images/icon-38.png",
+    "48": "images/icon-48.png",
+    "64": "images/icon-64.png",
+    "96": "images/icon-96.png",
     "128": "images/icon-128.png"
   },
   "background": {
@@ -16,24 +23,31 @@
   },
   "page_action": {
     "default_icon": {
+      "16": "images/icon-16.png",
       "19": "images/icon-19.png",
-      "38": "images/icon-38.png"
+      "24": "images/icon-24.png",
+      "32": "images/icon-32.png",
+      "38": "images/icon-38.png",
+      "48": "images/icon-48.png",
+      "64": "images/icon-64.png",
+      "96": "images/icon-96.png",
+      "128": "images/icon-128.png"
     },
     "default_title": "__MSG_BrowserActionTitle__"
   },
   "content_scripts": [
     {
-      "matches": [
-        "*://*.deviantart.com/*"
-      ],
+      "all_frames": false,
       "css": [
         "styles/content.css"
       ],
       "js": [
         "scripts/content.js"
       ],
-      "run_at": "document_end",
-      "all_frames": false
+      "matches": [
+        "*://*.deviantart.com/*"
+      ],
+      "run_at": "document_end"
     }
   ],
   "permissions": [
@@ -45,10 +59,10 @@
     "tabs"
   ],
   "web_accessible_resources": [
-      "pages/create-filters.html"
+    "pages/create-filters.html"
   ],
   "__chrome__minimum_chrome_version": "49.0",
-  "__edge__minimum_edge_version": "33.14281.1000.0",
+  "__edge__minimum_edge_version": "79.0",
   "__firefox__applications": {
     "gecko": {
       "id": "{a2ce7c11-e47d-42cf-b6db-ede36265cf6c}",

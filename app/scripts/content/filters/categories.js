@@ -1,19 +1,19 @@
-export const STORAGE_KEY = 'categories';
+export const STORAGE_KEY = "categories";
 
 export const REQUIRES_METADATA = true;
 
 /**
-* Applies filters to a given thumbnails
-* @param {HTMLElement} thumbnail the thumbnail DOM node
+ * Applies filters to a given thumbnails
+ * @param {HTMLElement} thumbnail the thumbnail DOM node
  * @param {object[]} filters the list of filters to apply
-*/
+ */
 export const FilterThumbnail = (thumbnail, filters) => {
-    for (const filter of filters) {
-        if (thumbnail.matches(`[data-category^="${filter.name}" i]`)) {
-            SetFilterAttributesOnThumbnail(thumbnail, filter.name, 'Category');
-            continue;
-        }
+  for (const filter of filters) {
+    if (thumbnail.matches(`[data-category^="${filter.name}" i]`)) {
+      SetFilterAttributesOnThumbnail(thumbnail, filter.name, "Category");
+      continue;
     }
+  }
 };
 
 /**
@@ -23,8 +23,8 @@ export const FilterThumbnail = (thumbnail, filters) => {
  * @param {string} selector CSS selector for thumbnails
  */
 export const ApplyFiltersToDocument = (filters, selector) => {
-    const thumbnails = document.querySelectorAll(selector);
-    thumbnails.forEach(thumbnail => FilterThumbnail(thumbnail, filters));
+  const thumbnails = document.querySelectorAll(selector);
+  thumbnails.forEach((thumbnail) => FilterThumbnail(thumbnail, filters));
 };
 
 /**
@@ -34,13 +34,15 @@ export const ApplyFiltersToDocument = (filters, selector) => {
  * @param {object[]} activeFilters list of filters that are still active
  */
 export const RemoveFiltersFromDocument = (removedFilters, activeFilters) => {
-    for (const filter of removedFilters) {
-        const thumbnails = document.querySelectorAll(`[da-filter-category="${filter.name}" i]`);
-        for (const thumbnail of thumbnails) {
-            RemoveFilterAttributesOnThumbnail(thumbnail);
-            FilterThumbnail(thumbnail, activeFilters);
-        }
+  for (const filter of removedFilters) {
+    const thumbnails = document.querySelectorAll(
+      `[da-filter-category="${filter.name}" i]`
+    );
+    for (const thumbnail of thumbnails) {
+      RemoveFilterAttributesOnThumbnail(thumbnail);
+      FilterThumbnail(thumbnail, activeFilters);
     }
+  }
 };
 
 /**
@@ -49,7 +51,7 @@ export const RemoveFiltersFromDocument = (removedFilters, activeFilters) => {
  * @param {string} category the category that matched a filter
  */
 const SetFilterAttributesOnThumbnail = (thumbnail, category) => {
-    thumbnail.setAttribute('da-filter-category', category);
+  thumbnail.setAttribute("da-filter-category", category);
 };
 
 /**
@@ -57,5 +59,5 @@ const SetFilterAttributesOnThumbnail = (thumbnail, category) => {
  * @param {HTMLElement} thumbnail the thumbnail DOM node
  */
 const RemoveFilterAttributesOnThumbnail = (thumbnail) => {
-    thumbnail.removeAttribute('da-filter-category');
+  thumbnail.removeAttribute("da-filter-category");
 };
