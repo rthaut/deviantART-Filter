@@ -20,11 +20,11 @@
     "description": "A formatted string to display the name of a filter with the count",
     "example": "13 Keyword Filter(s)",
     "placeholders": {
-      "count" : {
-        "content" : "$1"
+      "count": {
+        "content": "$1"
       },
-      "name" : {
-        "content" : "$2"
+      "name": {
+        "content": "$2"
       }
     }
   },
@@ -82,11 +82,11 @@
     "message": "Are you sure you want to delete all $COUNT$ of your $NAME$ filters?",
     "description": "The message displayed on the modal when asking for confirmation to delete all filters for a specific filter type",
     "placeholders": {
-      "count" : {
-        "content" : "$1"
+      "count": {
+        "content": "$1"
       },
-      "name" : {
-        "content" : "$2"
+      "name": {
+        "content": "$2"
       }
     }
   },
@@ -257,8 +257,8 @@
     "message": "$FIELD$ is required",
     "description": "A formatted string that is displayed when a required field is not filled out",
     "placeholders": {
-      "field" : {
-        "content" : "$1"
+      "field": {
+        "content": "$1"
       }
     }
   },
@@ -270,8 +270,8 @@
     "message": "Value is invalid ($HINT$)",
     "description": "A formatted string (with hint text) that is displayed when a field's value is invalid",
     "placeholders": {
-      "hint" : {
-        "content" : "$1"
+      "hint": {
+        "content": "$1"
       }
     }
   },
@@ -287,16 +287,16 @@
   "CreateFiltersFromDeviation_Title_SuccessWithCount_Singular": {
     "message": "Created $COUNT$ Filter Successfully",
     "placeholders": {
-      "count" : {
-        "content" : "$1"
+      "count": {
+        "content": "$1"
       }
     }
   },
   "CreateFiltersFromDeviation_Title_SuccessWithCount_Plural": {
     "message": "Created $COUNT$ Filters Successfully",
     "placeholders": {
-      "count" : {
-        "content" : "$1"
+      "count": {
+        "content": "$1"
       }
     }
   },
@@ -315,16 +315,16 @@
   "CreateFiltersFromDeviation_Button_CreateWithCount_Singular": {
     "message": "Create $COUNT$ Filter",
     "placeholders": {
-      "count" : {
-        "content" : "$1"
+      "count": {
+        "content": "$1"
       }
     }
   },
   "CreateFiltersFromDeviation_Button_CreateWithCount_Plural": {
     "message": "Create $COUNT$ Filters",
     "placeholders": {
-      "count" : {
-        "content" : "$1"
+      "count": {
+        "content": "$1"
       }
     }
   },
