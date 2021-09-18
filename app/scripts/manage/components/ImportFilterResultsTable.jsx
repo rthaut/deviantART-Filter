@@ -27,7 +27,7 @@ export const Processing = ({ text, color = "inherit", ...props }) => {
       container
       spacing={2}
       direction="row"
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       {...props}
     >

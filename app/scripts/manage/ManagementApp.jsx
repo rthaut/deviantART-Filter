@@ -13,7 +13,7 @@ import { SnackbarProvider } from "notistack";
 import clsx from "clsx";
 
 import {
-  createMuiTheme,
+  createTheme,
   makeStyles,
   ThemeProvider,
 } from "@material-ui/core/styles";
@@ -282,7 +282,7 @@ const ManagementApp = () => {
 
   const theme = useMemo(
     () =>
-      createMuiTheme({
+      createTheme({
         palette: {
           primary: deepOrange,
           secondary: grey,
