@@ -8,7 +8,7 @@
     "description": "The short_name (maximum of 12 characters recommended) is a short version of the app's name"
   },
   "ExtensionDescription": {
-    "message": "Allows configurable filtering/removal of deviations by user, keyword, and/or category on DeviantArt.",
+    "message": "Allows configurable filtering/removal of deviations by user and/or keyword on DeviantArt.",
     "description": "The description of the application"
   },
   "BrowserActionTitle": {
@@ -20,11 +20,11 @@
     "description": "A formatted string to display the name of a filter with the count",
     "example": "13 Keyword Filter(s)",
     "placeholders": {
-      "count" : {
-        "content" : "$1"
+      "count": {
+        "content": "$1"
       },
-      "name" : {
-        "content" : "$2"
+      "name": {
+        "content": "$2"
       }
     }
   },
@@ -82,11 +82,11 @@
     "message": "Are you sure you want to delete all $COUNT$ of your $NAME$ filters?",
     "description": "The message displayed on the modal when asking for confirmation to delete all filters for a specific filter type",
     "placeholders": {
-      "count" : {
-        "content" : "$1"
+      "count": {
+        "content": "$1"
       },
-      "name" : {
-        "content" : "$2"
+      "name": {
+        "content": "$2"
       }
     }
   },
@@ -177,17 +177,11 @@
   "SidebarLink_ImportExport": {
     "message": "Import/Export"
   },
-  "SidebarLink_Categories": {
-    "message": "Category Filters"
-  },
   "SidebarLink_Keywords": {
     "message": "Keyword Filters"
   },
   "SidebarLink_Users": {
     "message": "User Filters"
-  },
-  "FilterTitle_Category": {
-    "message": "Category"
   },
   "FilterTitle_Keyword": {
     "message": "Keyword"
@@ -195,26 +189,17 @@
   "FilterTitle_User": {
     "message": "User"
   },
-  "FilterTitle_Categories": {
-    "message": "Categories"
-  },
   "FilterTitle_Keywords": {
     "message": "Keywords"
   },
   "FilterTitle_Users": {
     "message": "Users"
   },
-  "FilteredTitle_Categories": {
-    "message": "Filtered Categories"
-  },
   "FilteredTitle_Keywords": {
     "message": "Filtered Keywords"
   },
   "FilteredTitle_Users": {
     "message": "Filtered Users"
-  },
-  "Filter_Categories_PropTitle_Name": {
-    "message": "Category"
   },
   "Filter_Keywords_PropTitle_Keyword": {
     "message": "Keyword"
@@ -237,24 +222,9 @@
   "UnsupportedFilterError": {
     "message": "Unsupported filter type"
   },
-  "CategoriesMenuLabel": {
-    "message": "Select a category (type to search)",
-    "description": "The label shown on the categories autocomplete menu"
-  },
-  "CategoriesMenuNoOptionsText": {
-    "message": "No matching categories",
-    "description": "The text shown on the categories autocomplete menu when no options match the entered value"
-  },
-  "CategoriesMenuErrorOption": {
-    "message": "Failed to load category data",
-    "description": "The option shown (disabled) when category data cannot be loaded"
-  },
   "DarkModeSwitchLabel": {
     "message": "Dark Mode",
     "description": "The message displayed on the switch for toggling Dark Mode"
-  },
-  "Placeholder_Category": {
-    "message": "Filtered Category"
   },
   "Placeholder_Keyword": {
     "message": "Filtered Keyword"
@@ -269,8 +239,8 @@
     "message": "$FIELD$ is required",
     "description": "A formatted string that is displayed when a required field is not filled out",
     "placeholders": {
-      "field" : {
-        "content" : "$1"
+      "field": {
+        "content": "$1"
       }
     }
   },
@@ -282,8 +252,8 @@
     "message": "Value is invalid ($HINT$)",
     "description": "A formatted string (with hint text) that is displayed when a field's value is invalid",
     "placeholders": {
-      "hint" : {
-        "content" : "$1"
+      "hint": {
+        "content": "$1"
       }
     }
   },
@@ -299,16 +269,16 @@
   "CreateFiltersFromDeviation_Title_SuccessWithCount_Singular": {
     "message": "Created $COUNT$ Filter Successfully",
     "placeholders": {
-      "count" : {
-        "content" : "$1"
+      "count": {
+        "content": "$1"
       }
     }
   },
   "CreateFiltersFromDeviation_Title_SuccessWithCount_Plural": {
     "message": "Created $COUNT$ Filters Successfully",
     "placeholders": {
-      "count" : {
-        "content" : "$1"
+      "count": {
+        "content": "$1"
       }
     }
   },
@@ -318,25 +288,22 @@
   "CreateFiltersFromDeviation_Username_Help": {
     "message": "Toggle the switch to create a new user filter."
   },
-  "CreateFiltersFromDeviation_Category_Help": {
-    "message": "Click on sections of the following category hierarchy to create a new category filter. (You can click on a selected section to unselect it.)"
-  },
   "CreateFiltersFromDeviation_Tags_Help": {
     "message": "Select one or more of the following tags to create new keyword filters."
   },
   "CreateFiltersFromDeviation_Button_CreateWithCount_Singular": {
     "message": "Create $COUNT$ Filter",
     "placeholders": {
-      "count" : {
-        "content" : "$1"
+      "count": {
+        "content": "$1"
       }
     }
   },
   "CreateFiltersFromDeviation_Button_CreateWithCount_Plural": {
     "message": "Create $COUNT$ Filters",
     "placeholders": {
-      "count" : {
-        "content" : "$1"
+      "count": {
+        "content": "$1"
       }
     }
   },
@@ -357,5 +324,16 @@
   },
   "CreateFiltersFromDeviation_Error_Instructions_HasError": {
     "message": "Please refresh the page and try again. If the problem persists, please report it with the following information:"
+  },
+  "CreateKeywordFilterFromTag_ContextMenuLabel": {
+    "message": "Create Keyword Filter for this Tag"
+  },
+  "CreateKeywordFilterForTag_ContextMenuLabel": {
+    "message": "Create Keyword Filter for \"$TAG$\"",
+    "placeholders": {
+      "tag": {
+        "content": "$1"
+      }
+    }
   }
 }

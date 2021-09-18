@@ -11,10 +11,9 @@ import { PAGES } from "./constants/url";
 
 import { SetMetadataOnThumbnail } from "./content/metadata";
 
-import * as CategoriesFilter from "./content/filters/categories";
 import * as KeywordsFilter from "./content/filters/keywords";
 import * as UsersFilter from "./content/filters/users";
-const FILTERS = [CategoriesFilter, KeywordsFilter, UsersFilter];
+const FILTERS = [KeywordsFilter, UsersFilter];
 
 let ENABLED = true;
 

@@ -24,8 +24,11 @@ export const PAGES = {
   },
 };
 
+export const TAG_URL_REGEX = /\/tag\/([^\/]+)/i;
+
 export default {
   WILDCARD,
   REGEX,
   PAGES,
+  TAG_URL_REGEX,
 };

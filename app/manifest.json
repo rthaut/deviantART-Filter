@@ -62,7 +62,7 @@
     "pages/create-filters.html"
   ],
   "__chrome__minimum_chrome_version": "49.0",
-  "__edge__minimum_edge_version": "79.0",
+  "__edge__minimum_chrome_version": "79.0",
   "__firefox__applications": {
     "gecko": {
       "id": "{a2ce7c11-e47d-42cf-b6db-ede36265cf6c}",

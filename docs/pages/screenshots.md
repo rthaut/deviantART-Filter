@@ -20,7 +20,7 @@ nav_order: 4
 
 |:---------- |:--------- |
 | ![Screenshot of the filter creation modal](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Initial-Light.png) | ![Screenshot of the filter creation modal (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Initial-Dark.png) |
-| ![Screenshot of the filter creation modal after selecting a category and some tags](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Selected-Light.png) | ![Screenshot of the filter creation modal after selecting a category and some tags (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Selected-Dark.png) |
+| ![Screenshot of the filter creation modal after selecting the user and some tags](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Selected-Light.png) | ![Screenshot of the filter creation modal after selecting the user and some tags (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Create-Filter-Modal-Selected-Dark.png) |
 
 ### Create Filter Modal - Results
 
@@ -83,24 +83,6 @@ nav_order: 4
 
 |:---------- |:--------- |
 | ![Screenshot of editing a keyword filter](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Keywords-Editing-Light.png) | ![Screenshot of editing a keyword filter (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Keywords-Editing-Dark.png) |
-
-* * *
-
-## Manage Categories
-
-*Screenshots from DeviantArt Filter v6.0.0.*
-{: .fs-2 }
-
-|:---------- |:--------- |
-| ![Screenshot of the filtered categories view](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Light.png) | ![Screenshot of the filtered categories view (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Dark.png) |
-
-### Manage Categories - Editing a Filter
-
-*Screenshots from DeviantArt Filter v6.0.0.*
-{: .fs-2 }
-
-|:---------- |:--------- |
-| ![Screenshot of editing a category filter](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Editing-Light.png) | ![Screenshot of editing a category filter (using Dark Mode)](https://raw.githubusercontent.com/rthaut/deviantART-Filter/master/screenshots/Categories-Editing-Dark.png) |
 
 
 

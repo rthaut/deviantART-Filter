@@ -2,7 +2,7 @@
   "name": "deviantart-filter",
   "title": "DeviantArt Filter",
   "version": "6.1.1",
-  "description": "Allows configurable filtering/removal of deviations by user, keyword, and/or category on DeviantArt",
+  "description": "Allows configurable filtering/removal of deviations by user and/or keyword on DeviantArt",
   "author": "Ryan Thaut <rthaut@gmail.com> (http://ryanthaut.com)",
   "homepage": "https://github.com/rthaut/deviantART-Filter",
   "license": "GPL-3.0",
@@ -39,9 +39,7 @@
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
-    "autosuggest-highlight": "^3.1.1",
     "lodash-es": "^4.17.21",
-    "match-sorter": "^6.3.1",
     "material-ui-confirm": "^2.1.3",
     "notistack": "^1.0.10",
     "react": "^17.0.2",
@@ -49,7 +47,6 @@
     "react-dropzone": "^11.4.0",
     "react-router-dom": "^5.3.0",
     "react-use": "^17.3.1",
-    "react-window": "^1.8.6",
     "semver": "^7.3.5"
   },
   "devDependencies": {

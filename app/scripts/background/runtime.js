@@ -2,15 +2,11 @@ import semverClean from "semver/functions/clean";
 import semverDiff from "semver/functions/diff";
 import semverLT from "semver/functions/lt";
 
-import { GetCategories } from "./categories";
 import { ImportFilters } from "./filters";
 
 import { TAG_FILTERS_MIGRATED } from "../constants/notifications";
 
 export const OnInstalled = ({ previousVersion, reason, temporary }) => {
-  // fetch and store the latest category paths
-  GetCategories();
-
   if (temporary) {
     // use this to simulate installs/updates for testing purposes
     // previousVersion = '6.1.0';

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useLocalStorage } from "react-use";
 
 import {
-  createMuiTheme,
+  createTheme,
   makeStyles,
   ThemeProvider,
 } from "@material-ui/core/styles";
@@ -35,7 +35,6 @@ import MetadataFiltersResults from "./components/MetadataFiltersResults";
 
 const initialFilters = {
   users: [],
-  categories: [],
   keywords: [],
 };
 
@@ -66,7 +65,7 @@ const CreateFiltersApp = () => {
 
   const theme = useMemo(
     () =>
-      createMuiTheme({
+      createTheme({
         palette: {
           primary: deepOrange,
           secondary: grey,
@@ -241,7 +240,7 @@ const CreateFiltersApp = () => {
             <Grid
               container
               direction="column"
-              justify="center"
+              justifyContent="center"
               alignItems="center"
             >
               <CircularProgress />
