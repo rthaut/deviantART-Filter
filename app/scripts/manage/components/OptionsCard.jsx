@@ -27,6 +27,10 @@ const initialOptions = {
   pages: Object.keys(PAGES)
     .map((page) => [page, true])
     .reduce((acc, val) => ((acc[val[0]] = val[1]), acc), {}),
+  placeholders: {
+    preventClick: true,
+    showFilterText: true,
+  },
   showUpdatedPageOnUpdate: "patch",
 };
 
@@ -75,6 +79,17 @@ const OptionsCard = () => {
       ...options,
       pages: {
         ...options.pages,
+        [event.target.name]: event.target.checked,
+      },
+    });
+    showReloadRequired();
+  };
+
+  const togglePlaceholderOption = (event) => {
+    setOptions({
+      ...options,
+      placeholders: {
+        ...options.placeholders,
         [event.target.name]: event.target.checked,
       },
     });
@@ -135,6 +150,40 @@ const OptionsCard = () => {
                       color="primary"
                       checked={options?.pages[key]}
                       onChange={togglePageEnabled}
+                    />
+                  }
+                />
+              ))}
+            </FormGroup>
+          </FormControl>
+        )}
+
+        {options?.placeholders && (
+          <FormControl component="fieldset" className={classes.fieldset}>
+            <Typography component="legend" className={classes.legend}>
+              {browser.i18n.getMessage("Options_PlaceholderFunctionality_Header")}
+            </Typography>
+            <Typography
+              component="p"
+              variant="body2"
+              color="textSecondary"
+              gutterBottom
+            >
+              {browser.i18n.getMessage("Options_PlaceholderFunctionality_HelpText")}
+            </Typography>
+            <FormGroup>
+              {Object.keys(options?.placeholders).map((key) => (
+                <FormControlLabel
+                  key={key}
+                  label={browser.i18n.getMessage(
+                    `Options_PlaceholderFunctionality_OptionLabel_${key}`
+                  )}
+                  control={
+                    <Switch
+                      name={key}
+                      color="primary"
+                      checked={options?.placeholders[key]}
+                      onChange={togglePlaceholderOption}
                     />
                   }
                 />

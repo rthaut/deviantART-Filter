@@ -132,6 +132,18 @@
   "Options_EnabledPages_PageLabel_Notifications": {
     "message": "Notifications Page"
   },
+  "Options_PlaceholderFunctionality_Header": {
+    "message": "Placeholder Appearance/Behavior"
+  },
+  "Options_PlaceholderFunctionality_HelpText": {
+    "message": "Use these to control the behavior and appearance of the placeholder thumbnails that are shown for filtered deviations."
+  },
+  "Options_PlaceholderFunctionality_OptionLabel_PreventClick": {
+    "message": "Prevent clicking on thumbnails for filtered deviations"
+  },
+  "Options_PlaceholderFunctionality_OptionLabel_ShowFilterText": {
+    "message": "Show the filter type/value on filtered deviations"
+  },
   "Options_ShowUpdatedPage_Header": {
     "message": "Show Release Notes for Updates"
   },

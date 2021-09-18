@@ -38,8 +38,12 @@ body#deviantART-v7 {
 [da-filter-keyword],
 [da-filter-user] {
     position: relative !important;
-    pointer-events: none !important;
     visibility: visible !important;
+}
+
+body:not(.clickable-placeholders) [da-filter-keyword],
+body:not(.clickable-placeholders) [da-filter-user] {
+    pointer-events: none !important;
 }
 
 [data-hook="deviation_link"][da-filter-keyword],
@@ -126,6 +130,18 @@ body#deviantART-v7 {
 [da-filter-user][data-username]:not([data-username=""])::before {
     /* use the username from metadata instead if it is available, as it will always have correct casing */
     content: "__MSG_Placeholder_User__: " attr(data-username);
+}
+
+body.hide-placeholder-text [da-filter-category]::before,
+body.hide-placeholder-text [da-filter-keyword]::before,
+body.hide-placeholder-text [da-filter-keyword][da-filter-keyword-attribute]::before,
+body.hide-placeholder-text [da-filter-user]::before,
+body.hide-placeholder-text [da-filter-user][data-username]:not([data-username=""])::before {
+    /*
+    when the placeholder text is hidden, the content property is still needed (but it should be empty),
+    as the `before` pseudo-element, which has the background that blocks out the thumbnail, won't render without it
+    */
+    content: "" !important;
 }
 
 
