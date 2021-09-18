@@ -1,6 +1,10 @@
 # DeviantArt Filter
 
+[![Chrome Web Store][chrome-image-version]][chrome-url] [![Microsoft Edge Add-on][edge-image-version]][edge-url] [![Mozilla Add-on][firefox-image-version]][firefox-url]
+
 > This browser extension allows you to filter/block/hide deviations by user and/or keyword on DeviantArt
+
+* * *
 
 ## Overview
 
@@ -21,18 +25,11 @@ Have you ever want to block/filter deviations (a.k.a. submissions) while browsin
 
 ## Installation
 
-| Web Browser | Information | Download Link |
-| ----------- | ----------- | ------------- |
-| Google Chrome | [![Chrome Web Store][chrome-image-version]][chrome-url] [![Chrome Web Store][chrome-image-download]][chrome-url] | [Download from the Chrome Web Store][chrome-url] |
-| Mozilla Firefox | [![Mozilla Add-on][firefox-image-version]][firefox-url] [![Mozilla Add-on][firefox-image-download]][firefox-url] | [Download from Mozilla Add-ons][firefox-url] |
-
-[chrome-url]: https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp
-[chrome-image-download]: https://img.shields.io/chrome-web-store/d/odlmamilbohnpnoomjclomghphbajikp.svg
-[chrome-image-version]: https://img.shields.io/chrome-web-store/v/odlmamilbohnpnoomjclomghphbajikp.svg
-
-[firefox-url]: https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/
-[firefox-image-download]: https://img.shields.io/amo/d/deviantart-filter.svg
-[firefox-image-version]: https://img.shields.io/amo/v/deviantart-filter.svg
+| Web Browser | Information & Downloads |
+| ----------- | ----------------------- |
+| Google Chrome | [![Chrome Web Store][chrome-image-version]][chrome-url] [![Chrome Web Store][chrome-image-users]][chrome-url] |
+| Microsoft Edge | [![Microsoft Edge Add-on][edge-image-version]][edge-url] |
+| Mozilla Firefox | [![Mozilla Add-on][firefox-image-version]][firefox-url] [![Mozilla Add-on][firefox-image-users]][firefox-url] |
 
 * * *
 
@@ -46,25 +43,54 @@ This extension is setup to be fully localized/translated into multiple languages
 
 ### Building the Extension
 
+**This extension uses the [WebExtension Toolbox](https://github.com/webextension-toolbox/webextension-toolbox#usage) for development and build processes.**
+
 To build the extension from source code, you will need to use [Node Package Manager (npm)](https://www.npmjs.com/), which handles all of the dependencies needed for this project and is used to execute the various scripts for development/building/packaging/etc.
 
 ```sh
 npm install
 ```
 
-To build a production version of the extension, use the `npm run dev <browser>` command, which will compile the source code from the `/app` directory to the `/dist` directory and create a ZIP archive in the `/packages` directory.
+Then you can run the development process (where the extension is auto-reloaded when changes are made) for your browser of choice:
 
 ```sh
-npm run build firefox # OR npm run build chrome
+npm run dev <chrome/edge/firefox>
+```
+
+Or you can generate a production build for your browser of choice:
+
+```sh
+npm run build <chrome/edge/firefox>
 ```
 
 ### Development Process
 
-To make development easier, you can start up a temporary development profile on [Mozilla Firefox](https://getfirefox.com) with the extension already loaded. Firefox will also automatically detect changes and reload the extension for you (read more about this on the [`web-ext` documentation pages](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Getting_started_with_web-ext)). Use the following commands to re-build the extension and re-load it in Firefox automatically as you make changes:
+To make development easier, you can start up a temporary development profile on [Mozilla Firefox](https://getfirefox.com) or [Google Chrome](google.com/chrome) with the extension already loaded. The browser will also automatically detect changes and reload the extension for you (read more about this on the [`web-ext` documentation pages](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Getting_started_with_web-ext)). Use the following commands **in parallel** to re-build the extension and re-load it in Firefox/Chrome automatically as you make changes:
+
+Firefox:
 
 ```sh
 npm run dev firefox
-npm run firefox:start
+npm run start:firefox
 ```
 
-Note you will need 2 terminal instances, one for each of the above commands, as they both remain running until you cancel them (use <kbd>CTRL</kbd> + <kbd>c</kbd> to cancel each process in your terminal(s)).
+Chrome:
+
+```sh
+npm run dev chrome
+npm run start:chrome
+```
+
+**Note that you will need 2 terminal instances**, one for each of the above commands, as they both remain running until you cancel them (use <kbd>CTRL</kbd> + <kbd>c</kbd> to cancel each process in your terminal(s)).
+
+
+[chrome-url]: https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp
+[chrome-image-version]: https://img.shields.io/chrome-web-store/v/odlmamilbohnpnoomjclomghphbajikp?logo=googlechrome&style=for-the-badge
+[chrome-image-users]: https://img.shields.io/chrome-web-store/d/odlmamilbohnpnoomjclomghphbajikp?logo=googlechrome&style=for-the-badge
+
+[edge-url]: https://microsoftedge.microsoft.com/addons/detail/deviantart-filter/ockmdbdjebeliigddaglegnnkmcnkkbm
+[edge-image-version]: https://img.shields.io/badge/microsoft%20edge%20add--on-v6.2.0-blue?logo=microsoftedge&style=for-the-badge
+
+[firefox-url]: https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/
+[firefox-image-version]: https://img.shields.io/amo/v/deviantart-filter?color=blue&logo=firefox&style=for-the-badge
+[firefox-image-users]: https://img.shields.io/amo/users/deviantart-filter?color=blue&logo=firefox&style=for-the-badge
