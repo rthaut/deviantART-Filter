@@ -1,10 +1,13 @@
 import { AddFilter } from "./filters";
 import { SHOW_FILTER_DEVIATION_MODAL } from "../constants/messages";
+import { TAG_URL_REGEX } from "../constants/url";
 
 export const MENUS = [
   {
     id: "filter-tag",
-    title: "Create Keyword Filter for this Tag",
+    title: browser.i18n.getMessage(
+      "CreateKeywordFilterFromTag_ContextMenuLabel"
+    ),
     contexts: ["link"],
     targetUrlPatterns: ["*://*.deviantart.com/tag/*"],
   },
@@ -14,7 +17,10 @@ export const MENUS = [
       "CreateFiltersFromDeviation_ContextMenuLabel"
     ),
     contexts: ["link"],
-    targetUrlPatterns: ["*://*.deviantart.com/*/art/*"],
+    targetUrlPatterns: [
+      "*://*.deviantart.com/*/art/*",
+      "*://*.deviantart.com/*/journal/*",
+    ],
   },
 ];
 
@@ -30,11 +36,12 @@ export const InitMenus = async () => {
     console.error("Failed to setup context menus", ex);
   }
 
-  try {
-    browser.contextMenus.onShown.addListener(OnMenuShown);
-  } catch (ex) {
-    // chrome doesn't support the onShown event, but we don't use it for major functionality, so just ignore it
-    void ex;
+  if (typeof browser.contextMenus.onShown !== "undefined") {
+    try {
+      browser.contextMenus.onShown.addListener(OnMenuShown);
+    } catch (ex) {
+      void ex;
+    }
   }
 };
 
@@ -46,9 +53,9 @@ export const InitMenus = async () => {
 export const OnMenuClicked = (info, tab) => {
   switch (info.menuItemId) {
     case "filter-tag":
-      if (/\/tag\/([^\/]+)/i.test(info.linkUrl)) {
+      if (TAG_URL_REGEX.test(info.linkUrl)) {
         // eslint-disable-next-line no-case-declarations
-        const keyword = /\/tag\/([^\/]+)/i.exec(info.linkUrl)[1];
+        const keyword = TAG_URL_REGEX.exec(info.linkUrl)[1];
         AddFilter("keywords", { keyword, wildcard: false });
       }
       break;
@@ -74,11 +81,14 @@ export const OnMenuClicked = (info, tab) => {
  */
 // TODO: match linkUrl RegExps used here to items in MENUS array? or derive the RegExp from the targetUrlPatterns?
 export const OnMenuShown = (info, tab) => {
-  if (/\/tag\/([^\/]+)/i.test(info.linkUrl)) {
+  if (TAG_URL_REGEX.test(info.linkUrl)) {
     // filter-tag menu
-    const keyword = /\/tag\/([^\/]+)/i.exec(info.linkUrl)[1];
+    const keyword = TAG_URL_REGEX.exec(info.linkUrl)[1];
     UpdateMenuItem("filter-tag", {
-      title: `Create Keyword Filter for "${keyword}"`,
+      title: browser.i18n.getMessage(
+        "CreateKeywordFilterForTag_ContextMenuLabel",
+        keyword
+      ),
     });
   }
 };

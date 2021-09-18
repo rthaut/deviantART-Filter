@@ -345,5 +345,16 @@
   },
   "CreateFiltersFromDeviation_Error_Instructions_HasError": {
     "message": "Please refresh the page and try again. If the problem persists, please report it with the following information:"
+  },
+  "CreateKeywordFilterFromTag_ContextMenuLabel": {
+    "message": "Create Keyword Filter for this Tag"
+  },
+  "CreateKeywordFilterForTag_ContextMenuLabel": {
+    "message": "Create Keyword Filter for \"$TAG$\"",
+    "placeholders": {
+      "tag": {
+        "content": "$1"
+      }
+    }
   }
 }
