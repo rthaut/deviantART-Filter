@@ -22,6 +22,8 @@ aux_links:
   #   - "https://github.com/rthaut/deviantART-Filter"
   "Get for Google Chrome":
     - "https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp"
+  "Get for Microsoft Edge":
+    - "https://microsoftedge.microsoft.com/addons/detail/deviantart-filter/ockmdbdjebeliigddaglegnnkmcnkkbm"
   "Get for Mozilla Firefox":
     - "https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/"
 heading_anchors: true

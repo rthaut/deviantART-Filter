@@ -26,4 +26,5 @@ Have you ever want to block/filter deviations (a.k.a. submissions) while browsin
 | Web Browser | Download Link |
 |:----------- |:------------- |
 | Google Chrome | [⬇ Download from the Chrome Web Store](https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp) |
+| Microsoft Edge | [⬇ Download from Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/deviantart-filter/ockmdbdjebeliigddaglegnnkmcnkkbm) |
 | Mozilla Firefox | [⬇ Download from Mozilla Add-ons](https://addons.mozilla.org/en-US/firefox/addon/deviantart-filter/) |
