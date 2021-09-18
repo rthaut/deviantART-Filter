@@ -25,10 +25,12 @@ export const PAGES = {
 };
 
 export const TAG_URL_REGEX = /\/tag\/([^\/]+)/i;
+export const USER_URL_REGEX = /\/([^\/]+)\/(?:art|journal)/i;
 
 export default {
   WILDCARD,
   REGEX,
   PAGES,
   TAG_URL_REGEX,
+  USER_URL_REGEX,
 };
