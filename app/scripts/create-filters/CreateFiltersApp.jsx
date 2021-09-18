@@ -35,7 +35,6 @@ import MetadataFiltersResults from "./components/MetadataFiltersResults";
 
 const initialFilters = {
   users: [],
-  categories: [],
   keywords: [],
 };
 

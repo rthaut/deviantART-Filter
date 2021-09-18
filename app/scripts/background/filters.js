@@ -1,6 +1,6 @@
 import { differenceBy, find, findIndex, mapKeys, uniqBy } from "lodash-es";
 
-export const SUPPORTED_FILTERS = ["users", "keywords", "categories"];
+export const SUPPORTED_FILTERS = ["users", "keywords"];
 
 export const MIGRATED_FILTERS = {
   // tags were changed to keywords in v6, so we need to change the storage key and the property names
@@ -29,13 +29,7 @@ export const FILTER_METHODS = {
     uniq: (array) => uniqBy(array, "keyword"),
     find: (array, value) => find(array, ["keyword", value.keyword]),
     findIndex: (array, value) => findIndex(array, ["keyword", value.keyword]),
-  },
-  categories: {
-    diff: (array, values) => differenceBy(array, values, "name"),
-    uniq: (array) => uniqBy(array, "name"),
-    find: (array, value) => find(array, ["name", value.name]),
-    findIndex: (array, value) => findIndex(array, ["name", value.name]),
-  },
+  }
 };
 
 export const GetAllFilters = async () => {

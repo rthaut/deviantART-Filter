@@ -32,20 +32,19 @@ You can quickly create filters for any deviation you see while browsing from a c
 
 1. While browsing DeviantArt, right click on any thumbnail image or link to a deviation.
 2. Click the "Create Filters from this Deviation" option.
-3. Use the [form in the modal dialog]({{ '/screenshots#create-filter-modal' | absolute_url }}) that is displayed to create a user filter, a category filter, and/or keyword filters.
+3. Use the [form in the modal dialog]({{ '/screenshots#create-filter-modal' | absolute_url }}) that is displayed to create a user filter and/or keyword filters.
 
 ### Creating Filters Through the Management Page
 
 For more advanced control of your filters, you should use the management page.
 
-1. After opening the [Management Page]({{ '/screenshots#dashboard' | absolute_url }}), navigate to any of the Manage [Users]({{ '/screenshots#manage-users' | absolute_url }})/[Keywords]({{ '/screenshots#manage-keywords' | absolute_url }})/[Categories]({{ '/screenshots#manage-categories' | absolute_url }}) views.
+1. After opening the [Management Page]({{ '/screenshots#dashboard' | absolute_url }}), navigate to any of the Manage [Users]({{ '/screenshots#manage-users' | absolute_url }})/[Keywords]({{ '/screenshots#manage-keywords' | absolute_url }}) views.
 2. Use the table that is displayed to view all of your existing filters.
     - You can sort the table by clicking the heading of any column.
     - You can page through your filters using the pagination controls below the table.
 3. To create a new filter, use the **plus icon (+)** above the table to the right of the search bar.
     - For users, enter their username.
     - For keywords, enter a single keyword (*no spaces*), then choose if the keyword should use wildcard matching by checking the wildcard checkbox.
-    - For categories, select the category path from the menu (you can type in the field to filter results).
 4. To change an existing filter, like the **pencil icon (✎)** next to the filter you want to change.
     - Click the **check mark icon (✔)** to the left of the filter you are changing to **save** your change(s).
     - Click the **cross icon (❌)** next to the left of the filter you are changing to **discard** your change(s).

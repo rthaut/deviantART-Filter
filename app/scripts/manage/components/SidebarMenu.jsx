@@ -12,7 +12,6 @@ import {
   Dashboard as DashboardIcon,
   People as PeopleIcon,
   Label as LabelIcon,
-  Category as CategoryIcon,
   Settings as SettingsIcon,
 } from "@material-ui/icons";
 
@@ -71,20 +70,6 @@ const SidebarMenu = () => {
           </ListItemIcon>
           <ListItemText
             primary={browser.i18n.getMessage("SidebarLink_Keywords")}
-          />
-        </ListItem>
-        <ListItem
-          button
-          component={NavLink}
-          exact
-          to="/categories"
-          activeClassName={classes.activeNavLink}
-        >
-          <ListItemIcon>
-            <CategoryIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={browser.i18n.getMessage("SidebarLink_Categories")}
           />
         </ListItem>
       </List>

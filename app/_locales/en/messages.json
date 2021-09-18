@@ -8,7 +8,7 @@
     "description": "The short_name (maximum of 12 characters recommended) is a short version of the app's name"
   },
   "ExtensionDescription": {
-    "message": "Allows configurable filtering/removal of deviations by user, keyword, and/or category on DeviantArt.",
+    "message": "Allows configurable filtering/removal of deviations by user and/or keyword on DeviantArt.",
     "description": "The description of the application"
   },
   "BrowserActionTitle": {
@@ -132,6 +132,18 @@
   "Options_EnabledPages_PageLabel_Notifications": {
     "message": "Notifications Page"
   },
+  "Options_PlaceholderFunctionality_Header": {
+    "message": "Placeholder Appearance/Behavior"
+  },
+  "Options_PlaceholderFunctionality_HelpText": {
+    "message": "Use these to control the behavior and appearance of the placeholder thumbnails that are shown for filtered deviations."
+  },
+  "Options_PlaceholderFunctionality_OptionLabel_PreventClick": {
+    "message": "Prevent clicking on thumbnails for filtered deviations"
+  },
+  "Options_PlaceholderFunctionality_OptionLabel_ShowFilterText": {
+    "message": "Show the filter type/value on filtered deviations"
+  },
   "Options_ShowUpdatedPage_Header": {
     "message": "Show Release Notes for Updates"
   },
@@ -165,17 +177,11 @@
   "SidebarLink_ImportExport": {
     "message": "Import/Export"
   },
-  "SidebarLink_Categories": {
-    "message": "Category Filters"
-  },
   "SidebarLink_Keywords": {
     "message": "Keyword Filters"
   },
   "SidebarLink_Users": {
     "message": "User Filters"
-  },
-  "FilterTitle_Category": {
-    "message": "Category"
   },
   "FilterTitle_Keyword": {
     "message": "Keyword"
@@ -183,26 +189,17 @@
   "FilterTitle_User": {
     "message": "User"
   },
-  "FilterTitle_Categories": {
-    "message": "Categories"
-  },
   "FilterTitle_Keywords": {
     "message": "Keywords"
   },
   "FilterTitle_Users": {
     "message": "Users"
   },
-  "FilteredTitle_Categories": {
-    "message": "Filtered Categories"
-  },
   "FilteredTitle_Keywords": {
     "message": "Filtered Keywords"
   },
   "FilteredTitle_Users": {
     "message": "Filtered Users"
-  },
-  "Filter_Categories_PropTitle_Name": {
-    "message": "Category"
   },
   "Filter_Keywords_PropTitle_Keyword": {
     "message": "Keyword"
@@ -225,24 +222,9 @@
   "UnsupportedFilterError": {
     "message": "Unsupported filter type"
   },
-  "CategoriesMenuLabel": {
-    "message": "Select a category (type to search)",
-    "description": "The label shown on the categories autocomplete menu"
-  },
-  "CategoriesMenuNoOptionsText": {
-    "message": "No matching categories",
-    "description": "The text shown on the categories autocomplete menu when no options match the entered value"
-  },
-  "CategoriesMenuErrorOption": {
-    "message": "Failed to load category data",
-    "description": "The option shown (disabled) when category data cannot be loaded"
-  },
   "DarkModeSwitchLabel": {
     "message": "Dark Mode",
     "description": "The message displayed on the switch for toggling Dark Mode"
-  },
-  "Placeholder_Category": {
-    "message": "Filtered Category"
   },
   "Placeholder_Keyword": {
     "message": "Filtered Keyword"
@@ -306,9 +288,6 @@
   "CreateFiltersFromDeviation_Username_Help": {
     "message": "Toggle the switch to create a new user filter."
   },
-  "CreateFiltersFromDeviation_Category_Help": {
-    "message": "Click on sections of the following category hierarchy to create a new category filter. (You can click on a selected section to unselect it.)"
-  },
   "CreateFiltersFromDeviation_Tags_Help": {
     "message": "Select one or more of the following tags to create new keyword filters."
   },
@@ -353,6 +332,17 @@
     "message": "Create Keyword Filter for \"$TAG$\"",
     "placeholders": {
       "tag": {
+        "content": "$1"
+      }
+    }
+  },
+  "CreateUserFilterFromDeviation_ContextMenuLabel": {
+    "message": "Create Filter for this User"
+  },
+  "CreateUserFilterForUsername_ContextMenuLabel": {
+    "message": "Create User Filter for \"$USERNAME$\"",
+    "placeholders": {
+      "username": {
         "content": "$1"
       }
     }

@@ -2,7 +2,7 @@ import { differenceWith, isEqual } from "lodash-es";
 import { SendMessageToAllTabs } from "./messages";
 import { LOCAL_STORAGE_CHANGED } from "../constants/messages";
 
-export const MONITORED_STORAGE_KEYS = ["categories", "keywords", "users"];
+export const MONITORED_STORAGE_KEYS = ["keywords", "users"];
 
 /**
  * Event handler for all storage changes
