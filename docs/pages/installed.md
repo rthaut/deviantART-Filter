@@ -7,7 +7,7 @@ nav_exclude: true
 
 # DeviantArt Filter Installed
 
-🙏 **Thank you for installing DeviantArt Filter**, the browser extension that allows you to filter/block/hide deviations by user, keyword, and/or category on [DeviantArt](https://www.deviantart.com).
+🙏 **Thank you for installing DeviantArt Filter**, the browser extension that allows you to filter/block/hide deviations by user and/or keyword on [DeviantArt](https://www.deviantart.com).
 
 * * *
 

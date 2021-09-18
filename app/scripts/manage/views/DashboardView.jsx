@@ -18,25 +18,18 @@ const DashboardView = () => {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={6}>
         <DashboardFilterCard
           filterKey="users"
           title={browser.i18n.getMessage("FilterTitle_User")}
           link="/users"
         />
       </Grid>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={6}>
         <DashboardFilterCard
           filterKey="keywords"
           title={browser.i18n.getMessage("FilterTitle_Keyword")}
           link="/keywords"
-        />
-      </Grid>
-      <Grid item xs={12} md={4}>
-        <DashboardFilterCard
-          filterKey="categories"
-          title={browser.i18n.getMessage("FilterTitle_Category")}
-          link="/categories"
         />
       </Grid>
       <Grid item xs={12} md={4} lg={3}>

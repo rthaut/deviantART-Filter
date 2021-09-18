@@ -49,7 +49,6 @@ import {
 } from "@material-ui/icons";
 
 import DashboardView from "./views/DashboardView";
-import CategoriesFilterView from "./views/CategoriesFilterView";
 import KeywordsFilterView from "./views/KeywordsFilterView";
 import UsersFilterView from "./views/UsersFilterView";
 
@@ -213,9 +212,6 @@ const ManagementAppMain = ({ darkMode, setDarkMode }) => {
             </Route>
             <Route path="/keywords">
               <KeywordsFilterView />
-            </Route>
-            <Route path="/categories">
-              <CategoriesFilterView />
             </Route>
             <Route path="/">
               <DashboardView />

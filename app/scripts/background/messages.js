@@ -1,4 +1,3 @@
-import { GetCategories } from "./categories";
 import * as FILTERS from "./filters";
 import * as MESSAGES from "../constants/messages";
 
@@ -34,7 +33,6 @@ export const OnRuntimeMessage = (message, sender) => {
       return browser.storage.local.set({
         users: [],
         keywords: [],
-        categories: [],
       });
 
     case MESSAGES.IMPORT_FILTERS:
@@ -55,9 +53,6 @@ export const OnRuntimeMessage = (message, sender) => {
             )
           )
         );
-
-    case MESSAGES.FETCH_CATEGORIES:
-      return GetCategories();
 
     case MESSAGES.HIDE_FILTER_DEVIATION_MODAL:
       // send the message right back to the original tab
