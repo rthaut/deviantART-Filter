@@ -1,6 +1,6 @@
 import { AddFilter } from "./filters";
 import { SHOW_FILTER_DEVIATION_MODAL } from "../constants/messages";
-import { TAG_URL_REGEX } from "../constants/url";
+import { TAG_URL_REGEX, USER_URL_REGEX } from "../constants/url";
 
 export const MENUS = [
   {
@@ -10,6 +10,17 @@ export const MENUS = [
     ),
     contexts: ["link"],
     targetUrlPatterns: ["*://*.deviantart.com/tag/*"],
+  },
+  {
+    id: "filter-user",
+    title: browser.i18n.getMessage(
+      "CreateUserFilterFromDeviation_ContextMenuLabel"
+    ),
+    contexts: ["link"],
+    targetUrlPatterns: [
+      "*://*.deviantart.com/*/art/*",
+      "*://*.deviantart.com/*/journal/*",
+    ],
   },
   {
     id: "show-filter-modal-deviation",
@@ -60,6 +71,14 @@ export const OnMenuClicked = (info, tab) => {
       }
       break;
 
+    case "filter-user":
+      if (USER_URL_REGEX.test(info.linkUrl)) {
+        // eslint-disable-next-line no-case-declarations
+        const username = USER_URL_REGEX.exec(info.linkUrl)[1];
+        AddFilter("users", { username });
+      }
+      break;
+
     case "show-filter-modal-deviation":
       browser.tabs.sendMessage(tab.id, {
         action: SHOW_FILTER_DEVIATION_MODAL,
@@ -88,6 +107,15 @@ export const OnMenuShown = (info, tab) => {
       title: browser.i18n.getMessage(
         "CreateKeywordFilterForTag_ContextMenuLabel",
         keyword
+      ),
+    });
+  } else if (USER_URL_REGEX.test(info.linkUrl)) {
+    // filter-user menu
+    const username = USER_URL_REGEX.exec(info.linkUrl)[1];
+    UpdateMenuItem("filter-user", {
+      title: browser.i18n.getMessage(
+        "CreateUserFilterForUsername_ContextMenuLabel",
+        username
       ),
     });
   }

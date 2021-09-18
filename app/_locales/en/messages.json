@@ -356,5 +356,16 @@
         "content": "$1"
       }
     }
+  },
+  "CreateUserFilterFromDeviation_ContextMenuLabel": {
+    "message": "Create Filter for this User"
+  },
+  "CreateUserFilterForUsername_ContextMenuLabel": {
+    "message": "Create User Filter for \"$USERNAME$\"",
+    "placeholders": {
+      "username": {
+        "content": "$1"
+      }
+    }
   }
 }
