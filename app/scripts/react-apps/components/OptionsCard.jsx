@@ -2,7 +2,7 @@ import React from "react";
 import { useConfirm } from "material-ui-confirm";
 import { useSnackbar } from "notistack";
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/styles";
 
 import {
   Typography,
@@ -17,7 +17,7 @@ import {
   Switch,
   Select,
   MenuItem,
-} from "@material-ui/core";
+} from "@mui/material";
 
 import useExtensionStorage from "../hooks/useExtensionStorage";
 
@@ -161,7 +161,9 @@ const OptionsCard = () => {
         {options?.placeholders && (
           <FormControl component="fieldset" className={classes.fieldset}>
             <Typography component="legend" className={classes.legend}>
-              {browser.i18n.getMessage("Options_PlaceholderFunctionality_Header")}
+              {browser.i18n.getMessage(
+                "Options_PlaceholderFunctionality_Header"
+              )}
             </Typography>
             <Typography
               component="p"
@@ -169,7 +171,9 @@ const OptionsCard = () => {
               color="textSecondary"
               gutterBottom
             >
-              {browser.i18n.getMessage("Options_PlaceholderFunctionality_HelpText")}
+              {browser.i18n.getMessage(
+                "Options_PlaceholderFunctionality_HelpText"
+              )}
             </Typography>
             <FormGroup>
               {Object.keys(options?.placeholders).map((key) => (

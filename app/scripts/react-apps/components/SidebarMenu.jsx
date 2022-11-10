@@ -1,19 +1,19 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/styles";
 import {
   Divider,
   List,
   ListItem,
   ListItemText,
   ListItemIcon,
-} from "@material-ui/core";
+} from "@mui/material";
 import {
   Dashboard as DashboardIcon,
   People as PeopleIcon,
   Label as LabelIcon,
   Settings as SettingsIcon,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 
 export const useStyles = makeStyles((theme) => ({
   activeNavLink: {

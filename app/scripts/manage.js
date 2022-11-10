@@ -1,5 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import ManagementApp from "./manage/ManagementApp";
+import ManagementApp from "./react-apps/ManagementApp";
 
 ReactDOM.render(<ManagementApp />, document.getElementById("root"));

@@ -8,7 +8,7 @@ import {
   CardContent,
   CardActions,
   Button,
-} from "@material-ui/core";
+} from "@mui/material";
 
 const DashboardFilterCard = ({ filterKey, title, link }) => {
   const [filterCount, setFilterCount] = useState(0);
