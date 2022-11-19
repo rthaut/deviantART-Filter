@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/styles";
 
 import {
   Typography,
@@ -14,7 +14,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-} from "@material-ui/core";
+} from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   fieldset: {

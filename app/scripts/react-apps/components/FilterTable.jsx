@@ -27,7 +27,7 @@ import {
   SaveAlt,
   Search,
   ViewColumn,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 
 import {
   ADD_FILTER,

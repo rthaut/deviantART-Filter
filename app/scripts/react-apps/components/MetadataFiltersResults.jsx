@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/styles";
 
 import {
   List,
@@ -9,9 +9,9 @@ import {
   ListItemAvatar,
   ListItemText,
   Avatar,
-} from "@material-ui/core";
+} from "@mui/material";
 
-import { Clear as ClearIcon, Done as DoneIcon } from "@material-ui/icons";
+import { Clear as ClearIcon, Done as DoneIcon } from "@mui/icons-material";
 
 const useStyles = makeStyles((theme) => ({
   avatarPrimary: {
