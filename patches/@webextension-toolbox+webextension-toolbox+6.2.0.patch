@@ -1,0 +1,83 @@
+diff --git a/node_modules/@webextension-toolbox/webextension-toolbox/dist/common/webpack.js b/node_modules/@webextension-toolbox/webextension-toolbox/dist/common/webpack.js
+index aaa1448..7bffa46 100644
+--- a/node_modules/@webextension-toolbox/webextension-toolbox/dist/common/webpack.js
++++ b/node_modules/@webextension-toolbox/webextension-toolbox/dist/common/webpack.js
+@@ -17,15 +17,17 @@ const glob_1 = require("glob");
+ const getExtensionInfo_1 = __importDefault(require("./utils/getExtensionInfo"));
+ const { getEntries } = webpack_watched_glob_entries_plugin_1.default;
+ /**
+- * Returns last n
+- * vendor version
+- * @param {integer} n
+- * @param {string} vendor
+- * @return {string} version
++ * Returns a Browserslist query string
++ * for the target vendor and version
++ * @param {String} vendor
++ * @param {String} [version]
++ * @return {string}
+  */
+-function getLastNVendorVersion(n, vendor) {
+-    const { released } = browserslist_1.data[vendor] ?? { released: [] };
+-    return released[released.length - n] ?? undefined;
++function getBrowserslistQuery(vendor, version) {
++    if (version && !isNaN(Number(version))) {
++        return `${vendor} ${version}`;
++    }
++    return `browserslist config and ${vendor} > 0 or defaults`;
+ }
+ function getExtensionFileType(vendor) {
+     switch (vendor) {
+@@ -121,9 +123,7 @@ async function webpackConfig({ src = "app", target = "build/[vendor]", packageTa
+                             // Do not transform modules to CJS
+                             modules: false,
+                             // Restrict to vendor
+-                            targets: {
+-                                [vendor]: vendorVersion || getLastNVendorVersion(3, vendor),
+-                            },
++                            targets: getBrowserslistQuery(vendor, vendorVersion),
+                         },
+                     ],
+                 ],
+diff --git a/node_modules/@webextension-toolbox/webextension-toolbox/src/common/webpack.ts b/node_modules/@webextension-toolbox/webextension-toolbox/src/common/webpack.ts
+index f42eb8f..3099dca 100644
+--- a/node_modules/@webextension-toolbox/webextension-toolbox/src/common/webpack.ts
++++ b/node_modules/@webextension-toolbox/webextension-toolbox/src/common/webpack.ts
+@@ -14,15 +14,18 @@ import getExtensionInfo from "./utils/getExtensionInfo";
+ const { getEntries } = GlobEntriesPlugin;
+ 
+ /**
+- * Returns last n
+- * vendor version
+- * @param {integer} n
+- * @param {string} vendor
+- * @return {string} version
++ * Returns a Browserslist query string
++ * for the target vendor and version
++ * @param {String} vendor
++ * @param {String} [version]
++ * @return {string}
+  */
+-function getLastNVendorVersion(n: number, vendor: string): string | undefined {
+-  const { released } = browserslistData[vendor] ?? { released: [] };
+-  return released[released.length - n] ?? undefined;
++function getBrowserslistQuery(vendor: string, version?: string): string {
++  if (version && !isNaN(Number(version))) {
++    return `${vendor} ${version}`;
++  }
++
++  return `browserslist config and ${vendor} > 0 or defaults`;
+ }
+ 
+ function getExtensionFileType(vendor: string): string {
+@@ -164,9 +167,7 @@ export default async function webpackConfig({
+               // Do not transform modules to CJS
+               modules: false,
+               // Restrict to vendor
+-              targets: {
+-                [vendor]: vendorVersion || getLastNVendorVersion(3, vendor),
+-              },
++              targets: getBrowserslistQuery(vendor, vendorVersion),
+             },
+           ],
+         ],
