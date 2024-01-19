@@ -1,5 +1,7 @@
-import { THUMBNAIL_SELECTOR as ECLIPSE_THUMBNAIL_SELECTOR } from "./content/eclipse";
-const SELECTORS = [ECLIPSE_THUMBNAIL_SELECTOR];
+const SELECTORS = [
+  `a[href*="deviantart.com/"][href*="/art/"]`,
+  `a[href*="deviantart.com/"][href*="/journal/"]`
+];
 
 import {
   LOCAL_STORAGE_CHANGED,
@@ -9,7 +11,7 @@ import {
 
 import { PAGES } from "./constants/url";
 
-import { SetMetadataOnThumbnail } from "./content/metadata";
+import { SetMetadataOnNode } from "./content/metadata";
 
 import * as KeywordsFilter from "./content/filters/keywords";
 import * as UsersFilter from "./content/filters/users";
@@ -18,10 +20,10 @@ const FILTERS = [KeywordsFilter, UsersFilter];
 let ENABLED = true;
 
 /**
- * Runs all applicable logic on thumbnails (applying metadata, filtering, etc.)
- * @param {HTMLElement[]} thumbnails the list of thumbnail DOM nodes
+ * Runs all applicable logic on DOM nodes (applying metadata, filtering, etc.)
+ * @param {HTMLElement[]} nodes the collection of DOM nodes
  */
-export const HandleThumbnails = async (thumbnails) => {
+export const HandleNodes = async (nodes) => {
   const data = {};
   for (const F of FILTERS) {
     const storageData = await browser.storage.local.get(F.STORAGE_KEY);
@@ -29,12 +31,12 @@ export const HandleThumbnails = async (thumbnails) => {
   }
 
   // start loading metadata and applying filters that do require metadata first (asynchronously)
-  thumbnails.forEach(async (thumbnail) => {
+  nodes.forEach(async (node) => {
     let metadataApplied = true;
     try {
-      await SetMetadataOnThumbnail(thumbnail);
-    } catch (e) {
-      console.error("Failed to set metadata on thumbnail", e, thumbnail);
+      await SetMetadataOnNode(node);
+    } catch (error) {
+      console.error("Failed to set metadata on node", node, error);
       metadataApplied = false;
     }
 
@@ -43,49 +45,49 @@ export const HandleThumbnails = async (thumbnails) => {
         (F) =>
           F.REQUIRES_METADATA &&
           data[F.STORAGE_KEY] &&
-          data[F.STORAGE_KEY].length
-      ).forEach((F) => F.FilterThumbnail(thumbnail, data[F.STORAGE_KEY]));
+          data[F.STORAGE_KEY].length,
+      ).forEach((F) => F.ApplyFiltersToNode(node, data[F.STORAGE_KEY]));
     }
   });
 
   // apply filters that do NOT require metadata last
-  thumbnails.forEach((thumbnail) => {
+  nodes.forEach((node) => {
     FILTERS.filter(
       (F) =>
         !F.REQUIRES_METADATA &&
         data[F.STORAGE_KEY] &&
-        data[F.STORAGE_KEY].length
-    ).forEach((F) => F.FilterThumbnail(thumbnail, data[F.STORAGE_KEY]));
+        data[F.STORAGE_KEY].length,
+    ).forEach((F) => F.ApplyFiltersToNode(node, data[F.STORAGE_KEY]));
   });
 };
 
 /**
- * Uses a MutationObserver to watch for the insertion of new thumb DOM nodes
+ * Uses a MutationObserver to watch for the insertion of new DOM nodes
  */
-const WatchForNewThumbs = (selector) => {
+const WatchForNewNodes = (selector) => {
   const observer = new MutationObserver(async (mutations) => {
-    // using a Set for thumbnails for native de-duplication
-    let thumbnails = new Set();
+    // using a Set for nodes for native de-duplication
+    let nodes = new Set();
 
     for (const { addedNodes } of mutations) {
       for (const addedNode of addedNodes) {
         if (typeof addedNode.matches === "function") {
           if (addedNode.matches(selector)) {
-            thumbnails.add(addedNode);
+            nodes.add(addedNode);
           }
         }
 
         if (typeof addedNode.querySelectorAll === "function") {
-          const addedNodeThumbnails = addedNode.querySelectorAll(selector);
-          if (addedNodeThumbnails.length) {
-            thumbnails = new Set([...thumbnails, ...addedNodeThumbnails]);
+          const addedNodeChildNodes = addedNode.querySelectorAll(selector);
+          if (addedNodeChildNodes.length) {
+            nodes = new Set([...nodes, ...addedNodeChildNodes]);
           }
         }
       }
     }
 
-    if (thumbnails.size) {
-      await HandleThumbnails(thumbnails);
+    if (nodes.size) {
+      await HandleNodes(nodes);
     }
   });
 
@@ -109,17 +111,11 @@ export const OnLocalStorageChanged = async (key, changes) => {
       const { added, removed, newValue } = changes;
 
       if (added.length) {
-        console.debug("Applying new filters to document", added);
-        console.time(`ApplyFiltersToDocument() [${key}]`);
         F.ApplyFiltersToDocument(added, SELECTORS.join(", "));
-        console.timeEnd(`ApplyFiltersToDocument() [${key}]`);
       }
 
       if (removed.length) {
-        console.debug("Removing old filters from document", removed);
-        console.time(`RemoveFiltersFromDocument() [${key}]`);
         F.RemoveFiltersFromDocument(removed, newValue);
-        console.timeEnd(`RemoveFiltersFromDocument() [${key}]`);
       }
     }
   }
@@ -155,7 +151,7 @@ const InitFilterFrame = () => {
     iframe.setAttribute("role", "dialog");
     iframe.setAttribute(
       "src",
-      browser.runtime.getURL("pages/create-filters.html")
+      browser.runtime.getURL("pages/create-filters.html"),
     );
     Object.assign(iframe.style, {
       display: "none",
@@ -174,7 +170,7 @@ const InitFilterFrame = () => {
   }
 };
 
-const ShowFilterFrame = (url) => {
+const ShowFilterFrame = () => {
   const iframe = document.getElementById("filter-frame");
   if (iframe) {
     document.body.style.overflowY = "hidden";
@@ -201,7 +197,7 @@ const IsPageDisabled = async (url) => {
     const pageURL = new URL(url);
 
     const disabledPages = Object.keys(pages).filter(
-      (page) => pages[page] === false
+      (page) => pages[page] === false,
     );
     for (const page of disabledPages) {
       let matches = true;
@@ -258,10 +254,10 @@ const GetPlaceholderOption = async (optionName, defaultValue) => {
       document.body.classList.add("hide-placeholder-text");
     }
 
-    // setup observers for thumbnails loaded after initial render next
-    WatchForNewThumbs(SELECTORS.join(", "));
+    // setup observers for nodes loaded after initial render next
+    WatchForNewNodes(SELECTORS.join(", "));
 
-    // get all thumbnails on the page and work with them
-    await HandleThumbnails(document.querySelectorAll(SELECTORS.join(", ")));
+    // get all existing nodes on the page and work with them
+    await HandleNodes(document.querySelectorAll(SELECTORS.join(", ")));
   }
 })();

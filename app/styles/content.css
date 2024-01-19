@@ -34,9 +34,10 @@ body#deviantART-v7 {
 }
 
 
-/* === PLACEHOLDERS ===*/
+/* === PLACEHOLDERS === */
 [da-filter-keyword],
 [da-filter-user] {
+    display: inline-block !important;
     position: relative !important;
     visibility: visible !important;
 }
@@ -44,27 +45,6 @@ body#deviantART-v7 {
 body:not(.clickable-placeholders) [da-filter-keyword],
 body:not(.clickable-placeholders) [da-filter-user] {
     pointer-events: none !important;
-}
-
-[data-hook="deviation_link"][da-filter-keyword],
-[data-hook="deviation_link"][da-filter-user] {
-    /* thumbnails on notification pages */
-    display: block !important;
-    position: absolute !important;
-}
-
-[data-hook="deviation_std_thumb"] [data-hook="deviation_link"][da-filter-keyword],
-[data-hook="deviation_std_thumb"] [data-hook="deviation_link"][da-filter-user] {
-    /* thumbnails on browse/search pages, profile/group pages */
-    display: inline-block !important;
-    position: absolute !important;
-}
-
-[role="complementary"] [data-hook="deviation_link"][da-filter-keyword],
-[role="complementary"] [data-hook="deviation_link"][da-filter-user] {
-    /* thumbnails in sidebar on individual deviation pages */
-    display: inline-block !important;
-    position: relative !important;
 }
 
 [da-filter-keyword]::before,
@@ -134,27 +114,23 @@ body:not(.clickable-placeholders) [da-filter-user] {
 
 body.hide-placeholder-text [da-filter-category]::before,
 body.hide-placeholder-text [da-filter-keyword]::before,
-body.hide-placeholder-text [da-filter-keyword][da-filter-keyword-attribute]::before,
-body.hide-placeholder-text [da-filter-user]::before,
-body.hide-placeholder-text [da-filter-user][data-username]:not([data-username=""])::before {
-    /*
-    when the placeholder text is hidden, the content property is still needed (but it should be empty),
-    as the `before` pseudo-element, which has the background that blocks out the thumbnail, won't render without it
-    */
+body.hide-placeholder-text [da-filter-user]::before {
+    /* when the placeholder text is hidden, the content property is still needed (but it should be empty),
+    since the `before` pseudo-element (which has the background that blocks out the thumbnail) won't render without it */
     content: "" !important;
 }
 
 
 /* === METADATA STATUS/INDICATORS === */
-/* TODO: make these optional? */
-/* these need to match the thumbnail selectors used in the content script */
-body.enable-metadata-indicators #output .thumb:not([href*='/status-update/']):not([data-title]),
-body.enable-metadata-indicators [data-hook="deviation_link"]:not([href*='/status-update/']):not([data-title]) {
+/* NOTE: these must match the selectors used in the content script */
+/* TODO: these use `:has()` which only very recenly became supported in Firefox */
+body.enable-metadata-indicators a[href*="deviantart.com/"][href*="/art/"]:not([data-title]):has(img),
+body.enable-metadata-indicators a[href*="deviantart.com/"][href*="/journal/"]:not([data-title]):has(img) {
     outline: #e59b00 solid 1px;
 }
 /*
-body.enable-metadata-indicators #output .thumb:not([href*='/status-update/'])[data-title]:not([data-title=""]),
-body.enable-metadata-indicators [data-hook="deviation_link"]:not([href*='/status-update/'])[data-title]:not([data-title=""]) {
+body.enable-metadata-indicators [href*="/art/"][data-title]:not([data-title=""]):has(img),
+body.enable-metadata-indicators [href*="/journal/"][data-title]:not([data-title=""]):has(img) {
     outline: #00e59b solid 1px;
 }
 */
