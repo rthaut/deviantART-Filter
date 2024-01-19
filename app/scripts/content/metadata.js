@@ -1,50 +1,50 @@
-import { GetDeviationURLForThumbnail } from "./utils";
 import { FETCH_METADATA } from "../constants/messages";
 
 /**
- * Retrieves and sets the metadata on a thumbnail
- * @param {HTMLElement} thumbnail the thumbnail DOM node
+ * Retrieves and sets the metadata on a DOM node
+ * @param {HTMLElement} node the DOM node
  */
-export const SetMetadataOnThumbnail = async (thumbnail) => {
-  const url = GetDeviationURLForThumbnail(thumbnail);
-  if (!url) {
-    throw Error("Failed to Determine URL for Thumbnail");
-  }
+export const SetMetadataOnNode = async (node) => {
+  const url = node.getAttribute("href");
 
-  if (url.toLowerCase().startsWith("http")) {
-    const metadata = await browser.runtime.sendMessage({
-      action: FETCH_METADATA,
-      data: {
-        url,
-      },
-    });
+  if (url) {
+    if (url.toLowerCase().startsWith("http")) {
+      const metadata = await browser.runtime.sendMessage({
+        action: FETCH_METADATA,
+        data: {
+          url,
+        },
+      });
 
-    if (metadata) {
-      SetMetadataAttributesOnThumbnail(thumbnail, metadata);
+      if (metadata) {
+        SetMetadataAttributesOnNode(node, metadata);
+      }
+    } else {
+      console.warn("Deviation URL is not valid for oEmbed API:", url);
     }
   } else {
-    console.warn("Thumbnail URL is not valid for oEmbed API:", url);
+    console.warn("Failed to get Deviation URL for DOM node", node);
   }
 };
 
 /**
- * Sets the metadata attributes on a thumbnail
- * @param {HTMLElement} thumbnail the thumbnail DOM node
+ * Sets the metadata attributes on a DOM node
+ * @param {HTMLElement} node the DOM node
  * @param {object} metadata the metadata
  */
-export const SetMetadataAttributesOnThumbnail = (thumbnail, metadata) => {
+export const SetMetadataAttributesOnNode = (node, metadata) => {
   const { author_name, title, tags } = metadata;
 
   if (author_name) {
-    thumbnail.setAttribute("data-username", author_name);
+    node.setAttribute("data-username", author_name);
   }
 
   if (title) {
-    thumbnail.setAttribute("data-title", title);
+    node.setAttribute("data-title", title);
   }
 
   if (tags) {
-    thumbnail.setAttribute(
+    node.setAttribute(
       "data-tags",
       tags
         .split(",")

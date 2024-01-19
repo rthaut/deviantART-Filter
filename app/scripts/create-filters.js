@@ -1,5 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import CreateFiltersApp from "./create-filters/CreateFiltersApp";
+import CreateFiltersApp from "./react-apps/CreateFiltersApp";
 
 ReactDOM.render(<CreateFiltersApp />, document.getElementById("root"));

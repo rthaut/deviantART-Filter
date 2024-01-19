@@ -1,6 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { useLocalStorage } from "react-use";
 import {
   HashRouter as Router,
   Switch as RouterSwitch,
@@ -12,22 +11,11 @@ import { SnackbarProvider } from "notistack";
 
 import clsx from "clsx";
 
-import {
-  createTheme,
-  makeStyles,
-  ThemeProvider,
-} from "@material-ui/core/styles";
-import {
-  amber,
-  blue,
-  deepOrange,
-  grey,
-  green,
-  red,
-} from "@material-ui/core/colors";
+import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
+import { makeStyles } from "@mui/styles";
+import { amber, blue, green, red } from "@mui/material/colors";
 
 import {
-  useMediaQuery,
   AppBar,
   CssBaseline,
   IconButton,
@@ -41,18 +29,21 @@ import {
   Box,
   Link,
   Button,
-} from "@material-ui/core";
+} from "@mui/material";
 
 import {
   ChevronLeft as ChevronLeftIcon,
   Menu as MenuIcon,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 
 import DashboardView from "./views/DashboardView";
 import KeywordsFilterView from "./views/KeywordsFilterView";
 import UsersFilterView from "./views/UsersFilterView";
 
 import SidebarMenu from "./components/SidebarMenu";
+
+import useDarkMode from "./hooks/useDarkMode";
+import useTheme from "./hooks/useTheme";
 
 const drawerWidth = 240;
 
@@ -168,6 +159,7 @@ const ManagementAppMain = ({ darkMode, setDarkMode }) => {
               classes.menuButton,
               open && classes.menuButtonHidden
             )}
+            size="large"
           >
             <MenuIcon />
           </IconButton>
@@ -196,7 +188,7 @@ const ManagementAppMain = ({ darkMode, setDarkMode }) => {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton onClick={handleDrawerClose} size="large">
             <ChevronLeftIcon />
           </IconButton>
         </div>
@@ -273,20 +265,8 @@ const useSnackbarStyles = makeStyles(() => ({
 const ManagementApp = () => {
   const snackbarClasses = useSnackbarStyles();
 
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-  const [darkMode, setDarkMode] = useLocalStorage("dark-mode", prefersDarkMode);
-
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          primary: deepOrange,
-          secondary: grey,
-          type: darkMode ? "dark" : "light",
-        },
-      }),
-    [darkMode]
-  );
+  const [darkMode, setDarkMode] = useDarkMode();
+  const theme = useTheme();
 
   const notistackRef = React.createRef();
   const notistackDismiss = (key) => () => {
@@ -294,39 +274,44 @@ const ManagementApp = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <SnackbarProvider
-        ref={notistackRef}
-        maxSnack={3}
-        classes={snackbarClasses}
-        action={(key) => (
-          <Button onClick={notistackDismiss(key)} color="inherit">
-            Dismiss
-          </Button>
-        )}
-      >
-        <ConfirmProvider
-          defaultOptions={{
-            confirmationText: "Yes",
-            cancellationText: "No",
-            confirmationButtonProps: {
-              color: "primary",
-              variant: "contained",
-            },
-            cancellationButtonProps: {
-              autoFocus: true,
-              color: "primary",
-              variant: "outlined",
-            },
-          }}
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <SnackbarProvider
+          ref={notistackRef}
+          maxSnack={3}
+          classes={snackbarClasses}
+          action={(key) => (
+            <Button onClick={notistackDismiss(key)} color="inherit">
+              Dismiss
+            </Button>
+          )}
         >
-          <Router>
-            <CssBaseline />
-            <ManagementAppMain darkMode={darkMode} setDarkMode={setDarkMode} />
-          </Router>
-        </ConfirmProvider>
-      </SnackbarProvider>
-    </ThemeProvider>
+          <ConfirmProvider
+            defaultOptions={{
+              confirmationText: "Yes",
+              cancellationText: "No",
+              confirmationButtonProps: {
+                color: "primary",
+                variant: "contained",
+              },
+              cancellationButtonProps: {
+                autoFocus: true,
+                color: "primary",
+                variant: "outlined",
+              },
+            }}
+          >
+            <Router>
+              <CssBaseline />
+              <ManagementAppMain
+                darkMode={darkMode}
+                setDarkMode={setDarkMode}
+              />
+            </Router>
+          </ConfirmProvider>
+        </SnackbarProvider>
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 };
 

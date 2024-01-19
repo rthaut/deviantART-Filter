@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Grid } from "@material-ui/core";
+import { Grid } from "@mui/material";
 import { MTableEditField } from "@material-table/core";
 
 import FilterTable from "../components/FilterTable";

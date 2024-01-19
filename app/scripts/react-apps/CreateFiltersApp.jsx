@@ -1,15 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useLocalStorage } from "react-use";
+import React, { useEffect, useState } from "react";
+
+import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
+import { makeStyles } from "@mui/styles";
 
 import {
-  createTheme,
-  makeStyles,
-  ThemeProvider,
-} from "@material-ui/core/styles";
-import { deepOrange, grey } from "@material-ui/core/colors";
-
-import {
-  useMediaQuery,
   Dialog,
   DialogActions,
   DialogContent,
@@ -19,9 +13,9 @@ import {
   Button,
   Grid,
   SvgIcon,
-} from "@material-ui/core";
+} from "@mui/material";
 
-import { Alert, AlertTitle } from "@material-ui/lab";
+import { Alert, AlertTitle } from "@mui/lab";
 
 import {
   FETCH_METADATA,
@@ -32,6 +26,8 @@ import {
 
 import MetadataFiltersForm from "./components/MetadataFiltersForm";
 import MetadataFiltersResults from "./components/MetadataFiltersResults";
+
+import useTheme from "./hooks/useTheme";
 
 const initialFilters = {
   users: [],
@@ -57,23 +53,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CreateFiltersApp = () => {
+const CreateFiltersAppMain = () => {
   const classes = useStyles();
-
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-  const [darkMode] = useLocalStorage("dark-mode", prefersDarkMode);
-
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          primary: deepOrange,
-          secondary: grey,
-          type: darkMode ? "dark" : "light",
-        },
-      }),
-    [darkMode]
-  );
 
   const [error, setError] = useState({
     message: "",
@@ -193,103 +174,108 @@ const CreateFiltersApp = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Dialog open={true} onClose={closeModal} maxWidth="sm">
-        <DialogTitle disableTypography>
-          <div className={classes.dialogHeader}>
-            <LogoIcon
-              color="primary"
-              fontSize="large"
-              className={classes.dialogIcon}
-            />
-            <Typography variant="h5">{title}</Typography>
-          </div>
-          {metadata?.title && !results && (
-            <Typography variant="h6">{metadata.title}</Typography>
-          )}
-        </DialogTitle>
+    <Dialog open={true} onClose={closeModal} maxWidth="sm">
+      <DialogTitle>
+        <div className={classes.dialogHeader}>
+          <LogoIcon
+            color="primary"
+            fontSize="large"
+            className={classes.dialogIcon}
+          />
+          <Typography variant="h5">{title}</Typography>
+        </div>
+        {metadata?.title && !results && (
+          <Typography variant="h6">{metadata.title}</Typography>
+        )}
+      </DialogTitle>
 
-        <DialogContent>
-          {error?.message && (
-            <Alert severity="error">
-              <AlertTitle>
-                <strong>{error.message}</strong>
-              </AlertTitle>
-              {error.error?.message ? (
-                <>
-                  <Typography variant="body1" gutterBottom>
-                    {browser.i18n.getMessage(
-                      "CreateFiltersFromDeviation_Error_Instructions_HasError"
-                    )}
-                  </Typography>
-                  <Typography component="code" variant="inherit">
-                    {error.error.message}
-                  </Typography>
-                </>
-              ) : (
+      <DialogContent>
+        {error?.message && (
+          <Alert severity="error">
+            <AlertTitle>
+              <strong>{error.message}</strong>
+            </AlertTitle>
+            {error.error?.message ? (
+              <>
                 <Typography variant="body1" gutterBottom>
                   {browser.i18n.getMessage(
-                    "CreateFiltersFromDeviation_Error_Instructions"
+                    "CreateFiltersFromDeviation_Error_Instructions_HasError"
                   )}
                 </Typography>
+                <Typography component="code" variant="inherit">
+                  {error.error.message}
+                </Typography>
+              </>
+            ) : (
+              <Typography variant="body1" gutterBottom>
+                {browser.i18n.getMessage(
+                  "CreateFiltersFromDeviation_Error_Instructions"
+                )}
+              </Typography>
+            )}
+          </Alert>
+        )}
+
+        {working ? (
+          <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <CircularProgress />
+          </Grid>
+        ) : results ? (
+          <MetadataFiltersResults results={results} />
+        ) : (
+          <MetadataFiltersForm metadata={metadata} setFilter={setFilter} />
+        )}
+      </DialogContent>
+
+      <DialogActions>
+        {results ? (
+          <>
+            <Button variant="contained" color="secondary" onClick={closeModal}>
+              {browser.i18n.getMessage(
+                "CreateFiltersFromDeviation_Button_Close"
               )}
-            </Alert>
-          )}
-
-          {working ? (
-            <Grid
-              container
-              direction="column"
-              justifyContent="center"
-              alignItems="center"
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button onClick={closeModal}>
+              {browser.i18n.getMessage(
+                "CreateFiltersFromDeviation_Button_Cancel"
+              )}
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={createFilters}
+              disabled={mapCount(filters, "length") < 1}
             >
-              <CircularProgress />
-            </Grid>
-          ) : results ? (
-            <MetadataFiltersResults results={results} />
-          ) : (
-            <MetadataFiltersForm metadata={metadata} setFilter={setFilter} />
-          )}
-        </DialogContent>
+              {browser.i18n.getMessage(
+                `CreateFiltersFromDeviation_Button_CreateWithCount_${
+                  mapCount(filters, "length") == 1 ? "Singular" : "Plural"
+                }`,
+                [mapCount(filters, "length")]
+              )}
+            </Button>
+          </>
+        )}
+      </DialogActions>
+    </Dialog>
+  );
+};
 
-        <DialogActions>
-          {results ? (
-            <>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={closeModal}
-              >
-                {browser.i18n.getMessage(
-                  "CreateFiltersFromDeviation_Button_Close"
-                )}
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button onClick={closeModal}>
-                {browser.i18n.getMessage(
-                  "CreateFiltersFromDeviation_Button_Cancel"
-                )}
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={createFilters}
-                disabled={mapCount(filters, "length") < 1}
-              >
-                {browser.i18n.getMessage(
-                  `CreateFiltersFromDeviation_Button_CreateWithCount_${
-                    mapCount(filters, "length") == 1 ? "Singular" : "Plural"
-                  }`,
-                  [mapCount(filters, "length")]
-                )}
-              </Button>
-            </>
-          )}
-        </DialogActions>
-      </Dialog>
-    </ThemeProvider>
+const CreateFiltersApp = () => {
+  const theme = useTheme();
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <CreateFiltersAppMain />
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 };
 
