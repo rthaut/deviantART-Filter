@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 
 import {
@@ -24,10 +23,9 @@ import {
   HIDE_FILTER_DEVIATION_MODAL,
 } from "../constants/messages";
 
+import AppProviders from "./components/AppProviders";
 import MetadataFiltersForm from "./components/MetadataFiltersForm";
 import MetadataFiltersResults from "./components/MetadataFiltersResults";
-
-import useTheme from "./hooks/useTheme";
 
 const initialFilters = {
   users: [],
@@ -269,13 +267,10 @@ const CreateFiltersAppMain = () => {
 };
 
 const CreateFiltersApp = () => {
-  const theme = useTheme();
   return (
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <CreateFiltersAppMain />
-      </ThemeProvider>
-    </StyledEngineProvider>
+    <AppProviders>
+      <CreateFiltersAppMain />
+    </AppProviders>
   );
 };
 

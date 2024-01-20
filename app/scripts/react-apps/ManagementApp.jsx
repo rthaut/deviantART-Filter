@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import {
   HashRouter as Router,
   Switch as RouterSwitch,
@@ -11,7 +10,6 @@ import { SnackbarProvider } from "notistack";
 
 import clsx from "clsx";
 
-import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import { amber, blue, green, red } from "@mui/material/colors";
 
@@ -40,10 +38,10 @@ import DashboardView from "./views/DashboardView";
 import KeywordsFilterView from "./views/KeywordsFilterView";
 import UsersFilterView from "./views/UsersFilterView";
 
+import AppProviders from "./components/AppProviders";
 import SidebarMenu from "./components/SidebarMenu";
 
-import useDarkMode from "./hooks/useDarkMode";
-import useTheme from "./hooks/useTheme";
+import { useDarkMode } from "./hooks/useDarkMode";
 
 const drawerWidth = 240;
 
@@ -126,8 +124,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ManagementAppMain = ({ darkMode, setDarkMode }) => {
+const ManagementAppMain = () => {
   const classes = useStyles();
+
+  const [darkMode, setDarkMode] = useDarkMode();
 
   const [open, setOpen] = useState(false);
   const handleDrawerOpen = () => {
@@ -238,11 +238,6 @@ const ManagementAppMain = ({ darkMode, setDarkMode }) => {
   );
 };
 
-ManagementAppMain.propTypes = {
-  darkMode: PropTypes.bool.isRequired,
-  setDarkMode: PropTypes.func.isRequired,
-};
-
 const useSnackbarStyles = makeStyles(() => ({
   variantSuccess: {
     backgroundColor: green[600], // green
@@ -265,53 +260,45 @@ const useSnackbarStyles = makeStyles(() => ({
 const ManagementApp = () => {
   const snackbarClasses = useSnackbarStyles();
 
-  const [darkMode, setDarkMode] = useDarkMode();
-  const theme = useTheme();
-
   const notistackRef = React.createRef();
   const notistackDismiss = (key) => () => {
     notistackRef.current.closeSnackbar(key);
   };
 
   return (
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <SnackbarProvider
-          ref={notistackRef}
-          maxSnack={3}
-          classes={snackbarClasses}
-          action={(key) => (
-            <Button onClick={notistackDismiss(key)} color="inherit">
-              Dismiss
-            </Button>
-          )}
+    <AppProviders>
+      <SnackbarProvider
+        ref={notistackRef}
+        maxSnack={3}
+        classes={snackbarClasses}
+        action={(key) => (
+          <Button onClick={notistackDismiss(key)} color="inherit">
+            Dismiss
+          </Button>
+        )}
+      >
+        <ConfirmProvider
+          defaultOptions={{
+            confirmationText: "Yes",
+            cancellationText: "No",
+            confirmationButtonProps: {
+              color: "primary",
+              variant: "contained",
+            },
+            cancellationButtonProps: {
+              autoFocus: true,
+              color: "primary",
+              variant: "outlined",
+            },
+          }}
         >
-          <ConfirmProvider
-            defaultOptions={{
-              confirmationText: "Yes",
-              cancellationText: "No",
-              confirmationButtonProps: {
-                color: "primary",
-                variant: "contained",
-              },
-              cancellationButtonProps: {
-                autoFocus: true,
-                color: "primary",
-                variant: "outlined",
-              },
-            }}
-          >
-            <Router>
-              <CssBaseline />
-              <ManagementAppMain
-                darkMode={darkMode}
-                setDarkMode={setDarkMode}
-              />
-            </Router>
-          </ConfirmProvider>
-        </SnackbarProvider>
-      </ThemeProvider>
-    </StyledEngineProvider>
+          <Router>
+            <CssBaseline />
+            <ManagementAppMain />
+          </Router>
+        </ConfirmProvider>
+      </SnackbarProvider>
+    </AppProviders>
   );
 };
 
