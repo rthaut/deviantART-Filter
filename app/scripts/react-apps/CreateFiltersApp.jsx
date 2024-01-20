@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
 
-import { makeStyles } from "@mui/styles";
-
 import {
+  Box,
+  Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  CircularProgress,
-  Typography,
-  Button,
   Grid,
-  SvgIcon,
+  Typography,
 } from "@mui/material";
 
 import { Alert, AlertTitle } from "@mui/lab";
@@ -24,6 +22,7 @@ import {
 } from "../constants/messages";
 
 import AppProviders from "./components/AppProviders";
+import LogoIcon from "./components/LogoIcon";
 import MetadataFiltersForm from "./components/MetadataFiltersForm";
 import MetadataFiltersResults from "./components/MetadataFiltersResults";
 
@@ -32,28 +31,7 @@ const initialFilters = {
   keywords: [],
 };
 
-function LogoIcon(props) {
-  return (
-    <SvgIcon {...props} viewBox="0 0 38 24">
-      <path d="M 30.382812 23.636719 L 31.0625 24 L 37.953125 24 L 37.953125 16.949219 L 37.257812 16.246094 L 31.0625 12.917969 L 30.371094 11.871094 L 30.371094 0 L 20.90625 0 L 20.90625 6.527344 L 20.21875 7.109375 L 7.617188 0.363281 L 6.9375 0 L 0.046875 0 L 0.046875 7.050781 L 0.738281 7.753906 L 6.9375 11.082031 L 7.628906 12.128906 L 7.628906 24 L 17.09375 24 L 17.09375 17.472656 L 17.785156 16.890625 Z M 30.382812 23.636719 " />
-    </SvgIcon>
-  );
-}
-
-const useStyles = makeStyles((theme) => ({
-  dialogHeader: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  dialogIcon: {
-    marginRight: theme.spacing(1),
-  },
-}));
-
 const CreateFiltersAppMain = () => {
-  const classes = useStyles();
-
   const [error, setError] = useState({
     message: "",
     error: "",
@@ -174,16 +152,16 @@ const CreateFiltersAppMain = () => {
   return (
     <Dialog open={true} onClose={closeModal} maxWidth="sm">
       <DialogTitle>
-        <div className={classes.dialogHeader}>
-          <LogoIcon
-            color="primary"
-            fontSize="large"
-            className={classes.dialogIcon}
-          />
-          <Typography variant="h5">{title}</Typography>
-        </div>
+        <Box sx={{ display: "flex", gap: 1 }}>
+          <LogoIcon color="primary" fontSize="large" />
+          <Typography component="span" variant="h5" gutterBottom>
+            {title}
+          </Typography>
+        </Box>
         {metadata?.title && !results && (
-          <Typography variant="h6">{metadata.title}</Typography>
+          <Typography component="span" variant="h6">
+            &quot;{metadata.title}&quot; by {metadata.author_name}
+          </Typography>
         )}
       </DialogTitle>
 

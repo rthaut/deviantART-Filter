@@ -1,8 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { makeStyles } from "@mui/styles";
-
 import {
   List,
   ListItem,
@@ -13,23 +11,23 @@ import {
 
 import { Clear as ClearIcon, Done as DoneIcon } from "@mui/icons-material";
 
-const useStyles = makeStyles((theme) => ({
-  avatarPrimary: {
-    color: "#ffffff",
-    backgroundColor: theme.palette.primary.main,
-  },
-}));
-
 const MetadataFiltersResults = ({ results }) => {
-  const classes = useStyles();
-
   return (
     <List dense disablePadding>
       {Object.keys(results).map((result, index) => (
         <ListItem key={index} dense disableGutters>
           <ListItemAvatar>
             <Avatar
-              className={results[result].new > 0 ? classes.avatarPrimary : ""}
+              sx={(theme) => ({
+                bgcolor:
+                  results[result].new > 0
+                    ? theme.palette.primary.main
+                    : undefined,
+                color:
+                  results[result].new > 0
+                    ? theme.palette.primary.contrastText
+                    : undefined,
+              })}
             >
               {results[result].new > 0 ? <DoneIcon /> : <ClearIcon />}
             </Avatar>
