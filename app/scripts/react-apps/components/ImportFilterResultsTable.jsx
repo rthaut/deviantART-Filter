@@ -11,15 +11,6 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-
-const useStyles = makeStyles((theme) => ({
-  resultsTable: {
-    "& .MuiTableCell-head": {
-      fontWeight: theme.typography.fontWeightBold,
-    },
-  },
-}));
 
 export const Processing = ({ text, color = "inherit", ...props }) => {
   return (
@@ -49,11 +40,9 @@ Processing.propTypes = {
 };
 
 const ImportFilterResultsTable = ({ results }) => {
-  const classes = useStyles();
-
   return (
     <TableContainer>
-      <Table className={classes.resultsTable}>
+      <Table>
         <TableHead>
           <TableRow>
             <TableCell>
@@ -70,7 +59,7 @@ const ImportFilterResultsTable = ({ results }) => {
             </TableCell>
             <TableCell align="right">
               {browser.i18n.getMessage(
-                "ImportResultsColumnHeader_DuplicateCount"
+                "ImportResultsColumnHeader_DuplicateCount",
               )}
             </TableCell>
           </TableRow>
@@ -118,7 +107,7 @@ const ImportFilterResultsTable = ({ results }) => {
                   <TableCell colSpan={4}>
                     <Processing
                       text={browser.i18n.getMessage(
-                        "ImportResultsProcessingMessage"
+                        "ImportResultsProcessingMessage",
                       )}
                     />
                   </TableCell>
