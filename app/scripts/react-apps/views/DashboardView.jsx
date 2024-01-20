@@ -1,21 +1,12 @@
 import React from "react";
 import { Grid, Card, CardContent, Typography } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 
 import DashboardFilterCard from "../components/DashboardFilterCard";
 import FiltersExportButton from "../components/FiltersExportButton";
 import FiltersImporter from "../components/FiltersImporter";
 import OptionsCard from "../components/OptionsCard";
 
-const useStyles = makeStyles((theme) => ({
-  helpText: {
-    marginBottom: theme.spacing(4),
-  },
-}));
-
 const DashboardView = () => {
-  const classes = useStyles();
-
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} md={6}>
@@ -42,13 +33,11 @@ const DashboardView = () => {
               component="p"
               variant="body2"
               color="textSecondary"
-              className={classes.helpText}
+              sx={{ marginBottom: 2 }}
             >
               {browser.i18n.getMessage("ExportHelpText")}
             </Typography>
-            <FiltersExportButton variant="contained" color="secondary">
-              {browser.i18n.getMessage("ExportButtonLabel")}
-            </FiltersExportButton>
+            <FiltersExportButton />
           </CardContent>
         </Card>
       </Grid>
