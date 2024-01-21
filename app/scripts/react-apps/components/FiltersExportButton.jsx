@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@mui/material";
-import { FileDownload as FileDownloadIcon } from "@mui/icons-material";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 import { EXPORT_FILTERS } from "../../constants/messages";
 

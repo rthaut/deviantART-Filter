@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+
 import { NavLink, useLocation } from "react-router-dom";
+
 import {
   Divider,
   List,
@@ -8,11 +10,10 @@ import {
   ListItemText,
   ListItemIcon,
 } from "@mui/material";
-import {
-  Dashboard as DashboardIcon,
-  People as PeopleIcon,
-  Label as LabelIcon,
-} from "@mui/icons-material";
+
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PeopleIcon from "@mui/icons-material/People";
+import LabelIcon from "@mui/icons-material/Label";
 
 const ListItemLink = React.forwardRef(function ListItemLink(
   { href, children, ...props },

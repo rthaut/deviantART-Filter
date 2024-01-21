@@ -9,7 +9,8 @@ import {
   Avatar,
 } from "@mui/material";
 
-import { Clear as ClearIcon, Done as DoneIcon } from "@mui/icons-material";
+import ClearIcon from "@mui/icons-material/Clear";
+import DoneIcon from "@mui/icons-material/Done";
 
 const MetadataFiltersResults = ({ results }) => {
   return (

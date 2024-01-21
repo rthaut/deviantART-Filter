@@ -26,10 +26,8 @@ import {
   Button,
 } from "@mui/material";
 
-import {
-  Menu as MenuIcon,
-  MenuOpen as MenuOpenIcon,
-} from "@mui/icons-material";
+import MenuIcon from "@mui/icons-material/Menu";
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 
 import DashboardView from "./views/DashboardView";
 import KeywordsFilterView from "./views/KeywordsFilterView";
