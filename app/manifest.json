@@ -17,9 +17,7 @@
     "128": "images/icon-128.png"
   },
   "background": {
-    "scripts": [
-      "scripts/background.js"
-    ]
+    "scripts": ["scripts/background.js"]
   },
   "page_action": {
     "default_icon": {
@@ -38,15 +36,9 @@
   "content_scripts": [
     {
       "all_frames": false,
-      "css": [
-        "styles/content.css"
-      ],
-      "js": [
-        "scripts/content.js"
-      ],
-      "matches": [
-        "*://*.deviantart.com/*"
-      ],
+      "css": ["styles/content.css"],
+      "js": ["scripts/content.js"],
+      "matches": ["*://*.deviantart.com/*"],
       "run_at": "document_end"
     }
   ],
@@ -58,9 +50,7 @@
     "storage",
     "tabs"
   ],
-  "web_accessible_resources": [
-    "pages/create-filters.html"
-  ],
+  "web_accessible_resources": ["pages/create-filters.html"],
   "__chrome__minimum_chrome_version": "49.0",
   "__edge__minimum_chrome_version": "79.0",
   "__firefox__applications": {

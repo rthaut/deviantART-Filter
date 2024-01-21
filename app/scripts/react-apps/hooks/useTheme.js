@@ -16,7 +16,7 @@ export const useTheme = () => {
           secondary: grey,
         },
       }),
-    [darkMode]
+    [darkMode],
   );
 };
 

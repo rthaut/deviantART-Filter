@@ -44,7 +44,7 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
         selectedTags.map((tag) => ({
           keyword: tag,
           wildcard: false,
-        }))
+        })),
       );
     } else {
       setFilter("keywords", []);
@@ -85,11 +85,11 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
           >
             <strong>
               {browser.i18n.getMessage(
-                "CreateFiltersFromDeviation_OptionalIndicator"
+                "CreateFiltersFromDeviation_OptionalIndicator",
               )}
             </strong>{" "}
             {browser.i18n.getMessage(
-              "CreateFiltersFromDeviation_Username_Help"
+              "CreateFiltersFromDeviation_Username_Help",
             )}
           </Typography>
           <List dense disablePadding>
@@ -126,7 +126,7 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
           >
             <strong>
               {browser.i18n.getMessage(
-                "CreateFiltersFromDeviation_OptionalIndicator"
+                "CreateFiltersFromDeviation_OptionalIndicator",
               )}
             </strong>{" "}
             {browser.i18n.getMessage("CreateFiltersFromDeviation_Tags_Help")}

@@ -34,10 +34,10 @@ const MetadataFiltersResults = ({ results }) => {
           </ListItemAvatar>
           <ListItemText
             primary={`${results[result].new} ${browser.i18n.getMessage(
-              `FilterTitle_${result}`
+              `FilterTitle_${result}`,
             )}`}
             secondary={`${results[result].duplicate} ${browser.i18n.getMessage(
-              "ImportResultsColumnHeader_DuplicateCount"
+              "ImportResultsColumnHeader_DuplicateCount",
             )}`}
           />
         </ListItem>

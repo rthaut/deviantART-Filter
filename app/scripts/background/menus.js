@@ -6,7 +6,7 @@ export const MENUS = [
   {
     id: "filter-tag",
     title: browser.i18n.getMessage(
-      "CreateKeywordFilterFromTag_ContextMenuLabel"
+      "CreateKeywordFilterFromTag_ContextMenuLabel",
     ),
     contexts: ["link"],
     targetUrlPatterns: ["*://*.deviantart.com/tag/*"],
@@ -14,7 +14,7 @@ export const MENUS = [
   {
     id: "filter-user",
     title: browser.i18n.getMessage(
-      "CreateUserFilterFromDeviation_ContextMenuLabel"
+      "CreateUserFilterFromDeviation_ContextMenuLabel",
     ),
     contexts: ["link"],
     targetUrlPatterns: [
@@ -25,7 +25,7 @@ export const MENUS = [
   {
     id: "show-filter-modal-deviation",
     title: browser.i18n.getMessage(
-      "CreateFiltersFromDeviation_ContextMenuLabel"
+      "CreateFiltersFromDeviation_ContextMenuLabel",
     ),
     contexts: ["link"],
     targetUrlPatterns: [
@@ -96,17 +96,17 @@ export const OnMenuClicked = (info, tab) => {
 /**
  * Event handler for when a menu is shown (Firefox only)
  * @param {object} info menu info
- * @param {object} tab tab info
+ * @param {object} _tab tab info
  */
 // TODO: match linkUrl RegExps used here to items in MENUS array? or derive the RegExp from the targetUrlPatterns?
-export const OnMenuShown = (info, tab) => {
+export const OnMenuShown = (info, _tab) => {
   if (TAG_URL_REGEX.test(info.linkUrl)) {
     // filter-tag menu
     const keyword = TAG_URL_REGEX.exec(info.linkUrl)[1];
     UpdateMenuItem("filter-tag", {
       title: browser.i18n.getMessage(
         "CreateKeywordFilterForTag_ContextMenuLabel",
-        keyword
+        keyword,
       ),
     });
   } else if (USER_URL_REGEX.test(info.linkUrl)) {
@@ -115,7 +115,7 @@ export const OnMenuShown = (info, tab) => {
     UpdateMenuItem("filter-user", {
       title: browser.i18n.getMessage(
         "CreateUserFilterForUsername_ContextMenuLabel",
-        username
+        username,
       ),
     });
   }

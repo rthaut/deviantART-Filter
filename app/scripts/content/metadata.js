@@ -49,7 +49,7 @@ export const SetMetadataAttributesOnNode = (node, metadata) => {
       tags
         .split(",")
         .map((tag) => tag.trim())
-        .join(" ")
+        .join(" "),
     );
   }
 };

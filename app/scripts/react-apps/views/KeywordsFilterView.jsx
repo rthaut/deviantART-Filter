@@ -27,7 +27,7 @@ const KeywordsFilterView = () => {
       pattern: {
         regex: /^[a-zA-Z0-9]+\S*$/,
         hint: browser.i18n.getMessage(
-          "Filter_Keywords_PropPatternHint_Keyword"
+          "Filter_Keywords_PropPatternHint_Keyword",
         ),
       },
       setError: setKeywordError,

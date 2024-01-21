@@ -1,6 +1,6 @@
 const SELECTORS = [
   `a[href*="deviantart.com/"][href*="/art/"]`,
-  `a[href*="deviantart.com/"][href*="/journal/"]`
+  `a[href*="deviantart.com/"][href*="/journal/"]`,
 ];
 
 import {

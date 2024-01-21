@@ -13,7 +13,7 @@ export const OnRuntimeMessage = (message, sender) => {
       return FILTERS.UpdateFilter(
         message.data.key,
         message.data.value.old,
-        message.data.value.new
+        message.data.value.new,
       );
 
     case MESSAGES.VALIDATE_NEW_FILTER:
@@ -23,7 +23,7 @@ export const OnRuntimeMessage = (message, sender) => {
       return FILTERS.ValidateUpdatedFilter(
         message.data.key,
         message.data.value.old,
-        message.data.value.new
+        message.data.value.new,
       );
 
     case MESSAGES.SAVE_FILTER:
@@ -43,15 +43,17 @@ export const OnRuntimeMessage = (message, sender) => {
 
     case MESSAGES.FETCH_METADATA:
       return fetch(
-        new URL(`https://backend.deviantart.com/oembed?url=${message.data.url}`)
+        new URL(
+          `https://backend.deviantart.com/oembed?url=${message.data.url}`,
+        ),
       )
         .then((response) => response.json())
         .catch(() =>
           Promise.reject(
             new Error(
-              `Invalid API Response for Deviation URL: ${message.data.url}`
-            )
-          )
+              `Invalid API Response for Deviation URL: ${message.data.url}`,
+            ),
+          ),
         );
 
     case MESSAGES.HIDE_FILTER_DEVIATION_MODAL:

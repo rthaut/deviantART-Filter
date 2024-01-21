@@ -29,7 +29,7 @@ export const FILTER_METHODS = {
     uniq: (array) => uniqBy(array, "keyword"),
     find: (array, value) => find(array, ["keyword", value.keyword]),
     findIndex: (array, value) => findIndex(array, ["keyword", value.keyword]),
-  }
+  },
 };
 
 export const GetAllFilters = async () => {
@@ -118,7 +118,7 @@ export const ValidateNewFilter = async (storageKey, newFilter) => {
 export const ValidateUpdatedFilter = async (
   storageKey,
   oldFilter,
-  newFilter
+  newFilter,
 ) => {
   console.time(`ValidateUpdatedFilter() [${storageKey}]`);
 
@@ -173,8 +173,8 @@ export const ImportFilters = async (data) => {
       fileFilters = fileFilters.map((filter) =>
         mapKeys(
           filter,
-          (_value, key) => MIGRATED_FILTERS[dataKey]["props"][key] ?? key
-        )
+          (_value, key) => MIGRATED_FILTERS[dataKey]["props"][key] ?? key,
+        ),
       );
 
       console.debug(`Migrated "${storageKey}" filters`, fileFilters);

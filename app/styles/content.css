@@ -1,132 +1,133 @@
 body.theme-dark,
 body.theme-light,
 body.theme-light.light-green {
-    --da-filter-placeholder-z-index: 4;
-    --da-filter-font-weight: light;
+  --da-filter-placeholder-z-index: 4;
+  --da-filter-font-weight: light;
 }
 body.theme-dark {
-    --da-filter-bg-color: #15191e;
-    --da-filter-logo-color: #5d5d6c;
-    --da-filter-text-color: #5d5d6c;
-    --da-filter-border-color: #22272b;
+  --da-filter-bg-color: #15191e;
+  --da-filter-logo-color: #5d5d6c;
+  --da-filter-text-color: #5d5d6c;
+  --da-filter-border-color: #22272b;
 }
 body.theme-light {
-    --da-filter-bg-color: #f2f2f2;
-    --da-filter-logo-color: #606070;
-    --da-filter-text-color: #606070;
-    --da-filter-border-color: #d0d0d4;
+  --da-filter-bg-color: #f2f2f2;
+  --da-filter-logo-color: #606070;
+  --da-filter-text-color: #606070;
+  --da-filter-border-color: #d0d0d4;
 }
 body.theme-light.light-green {
-    --da-filter-bg-color: #dae5d6;
-    --da-filter-logo-color: #869f8d;
-    --da-filter-text-color: #869f8d;
-    --da-filter-border-color: #92a093;
+  --da-filter-bg-color: #dae5d6;
+  --da-filter-logo-color: #869f8d;
+  --da-filter-text-color: #869f8d;
+  --da-filter-border-color: #92a093;
 }
 
 body#deviantART-v7 {
-    --da-filter-placeholder-z-index: 7;
-    --da-filter-font-weight: bold;
+  --da-filter-placeholder-z-index: 7;
+  --da-filter-font-weight: bold;
 
-    --da-filter-bg-color: #dde6da;
-    --da-filter-logo-color: #b4c0b0;
-    --da-filter-text-color: #b4c0b0;
-    --da-filter-border-color: transparent;
+  --da-filter-bg-color: #dde6da;
+  --da-filter-logo-color: #b4c0b0;
+  --da-filter-text-color: #b4c0b0;
+  --da-filter-border-color: transparent;
 }
-
 
 /* === PLACEHOLDERS === */
 [da-filter-keyword],
 [da-filter-user] {
-    display: inline-block !important;
-    position: relative !important;
-    visibility: visible !important;
+  display: inline-block !important;
+  position: relative !important;
+  visibility: visible !important;
 }
 
 body:not(.clickable-placeholders) [da-filter-keyword],
 body:not(.clickable-placeholders) [da-filter-user] {
-    pointer-events: none !important;
+  pointer-events: none !important;
 }
 
 [da-filter-keyword]::before,
 [da-filter-user]::before {
-    /* the placeholder text and background, placed overtop the thumbnail */
-    z-index: var(--da-filter-placeholder-z-index);
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    background-color: var(--da-filter-bg-color);
-    color: var(--da-filter-text-color);
-    border: 1px solid;
-    border-color: var(--da-filter-border-color);
-    font-weight: var(--da-filter-font-weight);
-    line-height: 1.25em;
-    padding: 1.5em;
-    text-align: center;
-    display: flex;
-    flex-direction: column-reverse;
+  /* the placeholder text and background, placed overtop the thumbnail */
+  z-index: var(--da-filter-placeholder-z-index);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: var(--da-filter-bg-color);
+  color: var(--da-filter-text-color);
+  border: 1px solid;
+  border-color: var(--da-filter-border-color);
+  font-weight: var(--da-filter-font-weight);
+  line-height: 1.25em;
+  padding: 1.5em;
+  text-align: center;
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 [da-filter-keyword]::after,
 [da-filter-user]::after {
-    /* the placeholder image ONLY, uses an SVG mask imitate programmatic color */
-    z-index: var(--da-filter-placeholder-z-index);
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    content: "";
-    background-color: var(--da-filter-logo-color);
-    mask-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDYuNjQgMjc2LjQ1Ij4NCiAgPHBvbHlnb24gcG9pbnRzPSIzNTcuNDMgMjcyLjI1IDM1Ny40MyAyNzIuMjYgMzY1LjQzIDI3Ni40NSA0NDYuNjQgMjc2LjQ1IDQ0Ni42NCAyNzYuNDIgNDQ2LjY0IDE5NS4yNCA0MzguNDYgMTg3LjEzIDM2NS40NCAxNDguODEgMzU3LjMxIDEzNi43NiAzNTcuMzEgMCAyNDUuNzggMCAyNDUuNzggNzUuMTkgMjM3LjY4IDgxLjg5IDg5LjIxIDQuMiA4OS4yMSA0LjE5IDgxLjIxIDAgMCAwIDAgMC4wMyAwIDgxLjIxIDguMTcgODkuMzEgODEuMiAxMjcuNjQgODkuMzMgMTM5LjY5IDg5LjMzIDI3Ni40NSAyMDAuODUgMjc2LjQ1IDIwMC44NSAyMDEuMjYgMjA5LjAxIDE5NC41NyAzNTcuNDMgMjcyLjI1IiBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIxLjAiLz4NCjwvc3ZnPg0K');
-    mask-position: center center;
-    mask-repeat: no-repeat;
-    mask-size: 80% 50%;
-    /* TODO use auto-prefixer for this? */
-    -webkit-mask-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDYuNjQgMjc2LjQ1Ij4NCiAgPHBvbHlnb24gcG9pbnRzPSIzNTcuNDMgMjcyLjI1IDM1Ny40MyAyNzIuMjYgMzY1LjQzIDI3Ni40NSA0NDYuNjQgMjc2LjQ1IDQ0Ni42NCAyNzYuNDIgNDQ2LjY0IDE5NS4yNCA0MzguNDYgMTg3LjEzIDM2NS40NCAxNDguODEgMzU3LjMxIDEzNi43NiAzNTcuMzEgMCAyNDUuNzggMCAyNDUuNzggNzUuMTkgMjM3LjY4IDgxLjg5IDg5LjIxIDQuMiA4OS4yMSA0LjE5IDgxLjIxIDAgMCAwIDAgMC4wMyAwIDgxLjIxIDguMTcgODkuMzEgODEuMiAxMjcuNjQgODkuMzMgMTM5LjY5IDg5LjMzIDI3Ni40NSAyMDAuODUgMjc2LjQ1IDIwMC44NSAyMDEuMjYgMjA5LjAxIDE5NC41NyAzNTcuNDMgMjcyLjI1IiBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIxLjAiLz4NCjwvc3ZnPg0K');
-    -webkit-mask-position: center center;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: 80% 50%;
+  /* the placeholder image ONLY, uses an SVG mask imitate programmatic color */
+  z-index: var(--da-filter-placeholder-z-index);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  content: "";
+  background-color: var(--da-filter-logo-color);
+  mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDYuNjQgMjc2LjQ1Ij4NCiAgPHBvbHlnb24gcG9pbnRzPSIzNTcuNDMgMjcyLjI1IDM1Ny40MyAyNzIuMjYgMzY1LjQzIDI3Ni40NSA0NDYuNjQgMjc2LjQ1IDQ0Ni42NCAyNzYuNDIgNDQ2LjY0IDE5NS4yNCA0MzguNDYgMTg3LjEzIDM2NS40NCAxNDguODEgMzU3LjMxIDEzNi43NiAzNTcuMzEgMCAyNDUuNzggMCAyNDUuNzggNzUuMTkgMjM3LjY4IDgxLjg5IDg5LjIxIDQuMiA4OS4yMSA0LjE5IDgxLjIxIDAgMCAwIDAgMC4wMyAwIDgxLjIxIDguMTcgODkuMzEgODEuMiAxMjcuNjQgODkuMzMgMTM5LjY5IDg5LjMzIDI3Ni40NSAyMDAuODUgMjc2LjQ1IDIwMC44NSAyMDEuMjYgMjA5LjAxIDE5NC41NyAzNTcuNDMgMjcyLjI1IiBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIxLjAiLz4NCjwvc3ZnPg0K");
+  mask-position: center center;
+  mask-repeat: no-repeat;
+  mask-size: 80% 50%;
+  /* TODO use auto-prefixer for this? */
+  -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDYuNjQgMjc2LjQ1Ij4NCiAgPHBvbHlnb24gcG9pbnRzPSIzNTcuNDMgMjcyLjI1IDM1Ny40MyAyNzIuMjYgMzY1LjQzIDI3Ni40NSA0NDYuNjQgMjc2LjQ1IDQ0Ni42NCAyNzYuNDIgNDQ2LjY0IDE5NS4yNCA0MzguNDYgMTg3LjEzIDM2NS40NCAxNDguODEgMzU3LjMxIDEzNi43NiAzNTcuMzEgMCAyNDUuNzggMCAyNDUuNzggNzUuMTkgMjM3LjY4IDgxLjg5IDg5LjIxIDQuMiA4OS4yMSA0LjE5IDgxLjIxIDAgMCAwIDAgMC4wMyAwIDgxLjIxIDguMTcgODkuMzEgODEuMiAxMjcuNjQgODkuMzMgMTM5LjY5IDg5LjMzIDI3Ni40NSAyMDAuODUgMjc2LjQ1IDIwMC44NSAyMDEuMjYgMjA5LjAxIDE5NC41NyAzNTcuNDMgMjcyLjI1IiBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIxLjAiLz4NCjwvc3ZnPg0K");
+  -webkit-mask-position: center center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 80% 50%;
 }
 
 [da-filter-keyword]::before {
-    content: "__MSG_Placeholder_Keyword__: " attr(da-filter-keyword);
+  content: "__MSG_Placeholder_Keyword__: " attr(da-filter-keyword);
 }
 
 [da-filter-keyword][da-filter-keyword-attribute]::before {
-    content: "__MSG_Placeholder_KeywordIn__ " attr(da-filter-keyword-attribute) ": " attr(da-filter-keyword);
+  content: "__MSG_Placeholder_KeywordIn__ " attr(da-filter-keyword-attribute)
+    ": " attr(da-filter-keyword);
 }
 
 [da-filter-user]::before {
-    content: "__MSG_Placeholder_User__: " attr(da-filter-user);
+  content: "__MSG_Placeholder_User__: " attr(da-filter-user);
 }
 
 [da-filter-user][data-username]:not([data-username=""])::before {
-    /* use the username from metadata instead if it is available, as it will always have correct casing */
-    content: "__MSG_Placeholder_User__: " attr(data-username);
+  /* use the username from metadata instead if it is available, as it will always have correct casing */
+  content: "__MSG_Placeholder_User__: " attr(data-username);
 }
 
 body.hide-placeholder-text [da-filter-category]::before,
 body.hide-placeholder-text [da-filter-keyword]::before,
 body.hide-placeholder-text [da-filter-user]::before {
-    /* when the placeholder text is hidden, the content property is still needed (but it should be empty),
+  /* when the placeholder text is hidden, the content property is still needed (but it should be empty),
     since the `before` pseudo-element (which has the background that blocks out the thumbnail) won't render without it */
-    content: "" !important;
+  content: "" !important;
 }
-
 
 /* === METADATA STATUS/INDICATORS === */
 /* NOTE: these must match the selectors used in the content script */
 /* TODO: these use `:has()` which only very recenly became supported in Firefox */
-body.enable-metadata-indicators a[href*="deviantart.com/"][href*="/art/"]:not([data-title]):has(img),
-body.enable-metadata-indicators a[href*="deviantart.com/"][href*="/journal/"]:not([data-title]):has(img) {
-    outline: #e59b00 solid 1px;
+body.enable-metadata-indicators
+  a[href*="deviantart.com/"][href*="/art/"]:not([data-title]):has(img),
+body.enable-metadata-indicators
+  a[href*="deviantart.com/"][href*="/journal/"]:not([data-title]):has(img) {
+  outline: #e59b00 solid 1px;
 }
 /*
 body.enable-metadata-indicators [href*="/art/"][data-title]:not([data-title=""]):has(img),

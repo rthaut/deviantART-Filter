@@ -7,7 +7,7 @@ import { OpenOrShowURL, OnTabUpdate } from "./background/tabs";
 
 browser.notifications.onClicked.addListener(OnNotificationClicked);
 browser.pageAction.onClicked.addListener(() =>
-  OpenOrShowURL(browser.runtime.getURL("pages/manage.html"))
+  OpenOrShowURL(browser.runtime.getURL("pages/manage.html")),
 );
 browser.runtime.onInstalled.addListener(OnInstalled);
 browser.runtime.onMessage.addListener(OnRuntimeMessage);

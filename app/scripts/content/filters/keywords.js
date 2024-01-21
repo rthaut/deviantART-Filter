@@ -13,9 +13,7 @@ export const ApplyFiltersToNode = (node, filters) => {
     if (node.matches(`[data-tags${operator}="${filter.keyword}" i]`)) {
       SetFilterAttributesOnNode(node, filter.keyword, "Tags");
       continue;
-    } else if (
-      node.matches(`[data-title${operator}="${filter.keyword}" i]`)
-    ) {
+    } else if (node.matches(`[data-title${operator}="${filter.keyword}" i]`)) {
       SetFilterAttributesOnNode(node, filter.keyword, "Title");
       continue;
     }
@@ -42,7 +40,7 @@ export const ApplyFiltersToDocument = (filters, selector) => {
 export const RemoveFiltersFromDocument = (removedFilters, activeFilters) => {
   for (const filter of removedFilters) {
     const nodes = document.querySelectorAll(
-      `[da-filter-keyword="${filter.keyword}" i]`
+      `[da-filter-keyword="${filter.keyword}" i]`,
     );
     for (const node of nodes) {
       RemoveFilterAttributesOnNode(node);
@@ -57,11 +55,7 @@ export const RemoveFiltersFromDocument = (removedFilters, activeFilters) => {
  * @param {string} keyword the keyword that matched a filter
  * @param {string} [attribute] the attribute that matched a filter
  */
-const SetFilterAttributesOnNode = (
-  node,
-  keyword,
-  attribute = null
-) => {
+const SetFilterAttributesOnNode = (node, keyword, attribute = null) => {
   node.setAttribute("da-filter-keyword", keyword);
 
   if (attribute) {

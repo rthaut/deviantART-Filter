@@ -41,11 +41,11 @@ export const ApplyFiltersToDocument = (filters, selector) => {
  */
 export const RemoveFiltersFromDocument = (removedFilters, _activeFilters) => {
   const usernames = removedFilters.map((filter) =>
-    filter.username.toLowerCase()
+    filter.username.toLowerCase(),
   );
   for (const username of usernames) {
     const nodes = document.querySelectorAll(
-      `[da-filter-user="${username.toLowerCase()}" i]`
+      `[da-filter-user="${username.toLowerCase()}" i]`,
     );
     for (const node of nodes) {
       RemoveFilterAttributesOnNode(node);

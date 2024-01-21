@@ -118,10 +118,10 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
         title.toLowerCase(),
       ]),
       confirmationText: browser.i18n.getMessage(
-        "ConfirmAllFiltersDeleteButton_Accept"
+        "ConfirmAllFiltersDeleteButton_Accept",
       ),
       cancellationText: browser.i18n.getMessage(
-        "ConfirmAllFiltersDeleteButton_Decline"
+        "ConfirmAllFiltersDeleteButton_Decline",
       ),
     })
       .then(() => {
@@ -242,7 +242,7 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
 
             return sendFilterMessage(ADD_FILTER, newFilterData).then(
               resolve,
-              reject
+              reject,
             );
           }),
         onRowDelete: (oldData) =>
@@ -251,7 +251,7 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
 
             return sendFilterMessage(REMOVE_FILTER, oldFilterData).then(
               resolve,
-              reject
+              reject,
             );
           }),
         onRowUpdate: (newData, oldData) =>
@@ -266,7 +266,7 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
 
             const isValid = await validateUpdatedFilter(
               newFilterData,
-              oldFilterData
+              oldFilterData,
             );
             if (!isValid) {
               reject();
@@ -280,7 +280,7 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
 
             return sendFilterMessage(UPDATE_FILTER, value).then(
               resolve,
-              reject
+              reject,
             );
           }),
       }}
@@ -303,7 +303,7 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
                   column.setError?.({
                     error: false,
                     helperText: "",
-                  })
+                  }),
                 );
                 onEditingApproved(mode, newData, oldData);
               }}
@@ -312,7 +312,7 @@ const FilterTable = ({ filterKey, columns, title, ...props }) => {
                   column.setError?.({
                     error: false,
                     helperText: "",
-                  })
+                  }),
                 );
                 onEditingCanceled(mode, rowData);
               }}

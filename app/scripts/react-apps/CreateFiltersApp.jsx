@@ -42,7 +42,7 @@ const CreateFiltersAppMain = () => {
   const [results, setResults] = useState(null);
 
   const [title, setTitle] = useState(
-    browser.i18n.getMessage("CreateFiltersFromDeviation_Title")
+    browser.i18n.getMessage("CreateFiltersFromDeviation_Title"),
   );
   const [working, setWorking] = useState(false);
 
@@ -107,7 +107,7 @@ const CreateFiltersAppMain = () => {
     } catch (error) {
       setError({
         message: browser.i18n.getMessage(
-          "CreateFiltersFromDeviation_Error_FetchingMetadata"
+          "CreateFiltersFromDeviation_Error_FetchingMetadata",
         ),
         error,
       });
@@ -133,13 +133,13 @@ const CreateFiltersAppMain = () => {
           `CreateFiltersFromDeviation_Title_SuccessWithCount_${
             count == 1 ? "Singular" : "Plural"
           }`,
-          [count]
-        )
+          [count],
+        ),
       );
     } catch (error) {
       setError({
         message: browser.i18n.getMessage(
-          "CreateFiltersFromDeviation_Error_CreatingFilters"
+          "CreateFiltersFromDeviation_Error_CreatingFilters",
         ),
         error,
       });
@@ -175,7 +175,7 @@ const CreateFiltersAppMain = () => {
               <>
                 <Typography variant="body1" gutterBottom>
                   {browser.i18n.getMessage(
-                    "CreateFiltersFromDeviation_Error_Instructions_HasError"
+                    "CreateFiltersFromDeviation_Error_Instructions_HasError",
                   )}
                 </Typography>
                 <Typography component="code" variant="inherit">
@@ -185,7 +185,7 @@ const CreateFiltersAppMain = () => {
             ) : (
               <Typography variant="body1" gutterBottom>
                 {browser.i18n.getMessage(
-                  "CreateFiltersFromDeviation_Error_Instructions"
+                  "CreateFiltersFromDeviation_Error_Instructions",
                 )}
               </Typography>
             )}
@@ -213,7 +213,7 @@ const CreateFiltersAppMain = () => {
           <>
             <Button variant="contained" color="secondary" onClick={closeModal}>
               {browser.i18n.getMessage(
-                "CreateFiltersFromDeviation_Button_Close"
+                "CreateFiltersFromDeviation_Button_Close",
               )}
             </Button>
           </>
@@ -221,7 +221,7 @@ const CreateFiltersAppMain = () => {
           <>
             <Button onClick={closeModal}>
               {browser.i18n.getMessage(
-                "CreateFiltersFromDeviation_Button_Cancel"
+                "CreateFiltersFromDeviation_Button_Cancel",
               )}
             </Button>
             <Button
@@ -234,7 +234,7 @@ const CreateFiltersAppMain = () => {
                 `CreateFiltersFromDeviation_Button_CreateWithCount_${
                   mapCount(filters, "length") == 1 ? "Singular" : "Plural"
                 }`,
-                [mapCount(filters, "length")]
+                [mapCount(filters, "length")],
               )}
             </Button>
           </>

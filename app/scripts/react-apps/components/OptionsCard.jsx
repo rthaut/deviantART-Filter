@@ -47,10 +47,10 @@ const OptionsCard = () => {
       title: browser.i18n.getMessage("ConfirmOptionsResetTitle"),
       description: browser.i18n.getMessage("ConfirmOptionsResetPrompt"),
       confirmationText: browser.i18n.getMessage(
-        "ConfirmOptionsResetButton_Accept"
+        "ConfirmOptionsResetButton_Accept",
       ),
       cancellationText: browser.i18n.getMessage(
-        "ConfirmOptionsResetButton_Decline"
+        "ConfirmOptionsResetButton_Decline",
       ),
     })
       .then(() => {
@@ -99,7 +99,7 @@ const OptionsCard = () => {
           vertical: "top",
           horizontal: "center",
         },
-      }
+      },
     );
   };
 
@@ -131,7 +131,7 @@ const OptionsCard = () => {
                 <FormControlLabel
                   key={key}
                   label={browser.i18n.getMessage(
-                    `Options_EnabledPages_PageLabel_${key}`
+                    `Options_EnabledPages_PageLabel_${key}`,
                   )}
                   control={
                     <Switch
@@ -154,7 +154,7 @@ const OptionsCard = () => {
           >
             <Typography component="legend" sx={{ padding: 0 }}>
               {browser.i18n.getMessage(
-                "Options_PlaceholderFunctionality_Header"
+                "Options_PlaceholderFunctionality_Header",
               )}
             </Typography>
             <Typography
@@ -164,7 +164,7 @@ const OptionsCard = () => {
               gutterBottom
             >
               {browser.i18n.getMessage(
-                "Options_PlaceholderFunctionality_HelpText"
+                "Options_PlaceholderFunctionality_HelpText",
               )}
             </Typography>
             <FormGroup>
@@ -172,7 +172,7 @@ const OptionsCard = () => {
                 <FormControlLabel
                   key={key}
                   label={browser.i18n.getMessage(
-                    `Options_PlaceholderFunctionality_OptionLabel_${key}`
+                    `Options_PlaceholderFunctionality_OptionLabel_${key}`,
                   )}
                   control={
                     <Switch
@@ -213,7 +213,7 @@ const OptionsCard = () => {
               {["patch", "minor", "major", "none"].map((key) => (
                 <MenuItem key={key} value={key}>
                   {browser.i18n.getMessage(
-                    `Options_ShowUpdatedPage_OptionLabel_${key}`
+                    `Options_ShowUpdatedPage_OptionLabel_${key}`,
                   )}
                 </MenuItem>
               ))}
