@@ -2,8 +2,6 @@ import React from "react";
 import { useConfirm } from "material-ui-confirm";
 import { useSnackbar } from "notistack";
 
-import { makeStyles } from "@mui/styles";
-
 import {
   Typography,
   Divider,
@@ -34,19 +32,7 @@ const initialOptions = {
   showUpdatedPageOnUpdate: "patch",
 };
 
-const useStyles = makeStyles((theme) => ({
-  fieldset: {
-    width: "100%",
-    margin: theme.spacing(1, 0, 2),
-  },
-  legend: {
-    padding: theme.spacing(0),
-  },
-}));
-
 const OptionsCard = () => {
-  const classes = useStyles();
-
   const confirm = useConfirm();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -125,8 +111,11 @@ const OptionsCard = () => {
         </Typography>
 
         {options?.pages && (
-          <FormControl component="fieldset" className={classes.fieldset}>
-            <Typography component="legend" className={classes.legend}>
+          <FormControl
+            component="fieldset"
+            sx={{ marginTop: 1, marginBottom: 2 }}
+          >
+            <Typography component="legend" sx={{ padding: 0 }}>
               {browser.i18n.getMessage("Options_EnabledPages_Header")}
             </Typography>
             <Typography
@@ -159,8 +148,11 @@ const OptionsCard = () => {
         )}
 
         {options?.placeholders && (
-          <FormControl component="fieldset" className={classes.fieldset}>
-            <Typography component="legend" className={classes.legend}>
+          <FormControl
+            component="fieldset"
+            sx={{ marginTop: 1, marginBottom: 2 }}
+          >
+            <Typography component="legend" sx={{ padding: 0 }}>
               {browser.i18n.getMessage(
                 "Options_PlaceholderFunctionality_Header"
               )}
@@ -199,11 +191,11 @@ const OptionsCard = () => {
         {options?.showUpdatedPageOnUpdate && (
           <FormControl
             component="fieldset"
-            className={classes.fieldset}
+            sx={{ marginTop: 1, marginBottom: 2 }}
             variant="outlined"
             size="small"
           >
-            <Typography component="legend" className={classes.legend}>
+            <Typography component="legend" sx={{ padding: 0 }}>
               {browser.i18n.getMessage("Options_ShowUpdatedPage_Header")}
             </Typography>
             <Typography

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import {
   HashRouter as Router,
   Switch as RouterSwitch,
@@ -9,19 +8,15 @@ import {
 import { ConfirmProvider } from "material-ui-confirm";
 import { SnackbarProvider } from "notistack";
 
-import clsx from "clsx";
-
-import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
-import { makeStyles } from "@mui/styles";
-import { amber, blue, green, red } from "@mui/material/colors";
+import { styled } from "@mui/material/styles";
 
 import {
-  AppBar,
+  AppBar as MuiAppBar,
   CssBaseline,
   IconButton,
   Toolbar,
   Typography,
-  Drawer,
+  Drawer as MuiDrawer,
   Divider,
   Container,
   FormControlLabel,
@@ -32,109 +27,61 @@ import {
 } from "@mui/material";
 
 import {
-  ChevronLeft as ChevronLeftIcon,
   Menu as MenuIcon,
+  MenuOpen as MenuOpenIcon,
 } from "@mui/icons-material";
 
 import DashboardView from "./views/DashboardView";
 import KeywordsFilterView from "./views/KeywordsFilterView";
 import UsersFilterView from "./views/UsersFilterView";
 
+import AppProviders from "./components/AppProviders";
+import LogoIcon from "./components/LogoIcon";
 import SidebarMenu from "./components/SidebarMenu";
 
-import useDarkMode from "./hooks/useDarkMode";
-import useTheme from "./hooks/useTheme";
+import { useDarkMode } from "./hooks/useDarkMode";
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: "none",
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
+const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
+
+const AppBar = styled(MuiAppBar)(({ theme }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(["width", "margin"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+}));
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  "& .MuiDrawer-paper": {
     position: "relative",
+    overflowX: "hidden",
     whiteSpace: "nowrap",
     width: drawerWidth,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-  },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+    boxSizing: "border-box",
+    ...(!open && {
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      width: theme.spacing(7),
     }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    display: "flex",
-    flexDirection: "column",
-    flexGrow: 1,
-    height: "100vh",
-    overflow: "auto",
-  },
-  container: {
-    flexGrow: 1,
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  footer: {
-    padding: theme.spacing(0, 4),
-  },
-  footerDivider: {
-    margin: theme.spacing(2, 0),
   },
 }));
 
-const ManagementAppMain = ({ darkMode, setDarkMode }) => {
-  const classes = useStyles();
+const ManagementAppMain = () => {
+  const [darkMode, setDarkMode] = useDarkMode();
 
   const [open, setOpen] = useState(false);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const toggleDrawer = () => {
+    setOpen(!open);
   };
 
   const [info, setInfo] = useState({});
@@ -144,27 +91,28 @@ const ManagementAppMain = ({ darkMode, setDarkMode }) => {
   }, []);
 
   return (
-    <div className={classes.root}>
-      <AppBar
-        position="absolute"
-        color="primary"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
-      >
-        <Toolbar className={classes.toolbar}>
+    <Box sx={{ display: "flex" }}>
+      <AppBar position="fixed" color="primary" open={open}>
+        <Toolbar>
           <IconButton
             edge="start"
             color="inherit"
-            onClick={handleDrawerOpen}
-            className={clsx(
-              classes.menuButton,
-              open && classes.menuButtonHidden
-            )}
+            onClick={toggleDrawer}
             size="large"
+            sx={{
+              marginRight: "36px",
+            }}
           >
-            <MenuIcon />
+            {open ? <MenuOpenIcon /> : <MenuIcon />}
           </IconButton>
-          {/* TODO: Add the icon/logo here? */}
-          <Typography component="h1" variant="h6" className={classes.title}>
+          <LogoIcon
+            color="white"
+            fontSize="large"
+            sx={{
+              marginRight: "12px",
+            }}
+          />
+          <Typography component="h1" variant="h6">
             {browser.i18n.getMessage("ExtensionName")}
           </Typography>
           <FormControlLabel
@@ -172,32 +120,31 @@ const ManagementAppMain = ({ darkMode, setDarkMode }) => {
               <Switch
                 checked={darkMode}
                 onChange={(event) => setDarkMode(event.target.checked)}
-                color="secondary"
+                color={darkMode ? "primary" : "secondary"}
                 name="darkMode"
               />
             }
             label={browser.i18n.getMessage("DarkModeSwitchLabel")}
+            sx={{
+              marginLeft: "auto",
+            }}
           />
         </Toolbar>
       </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose} size="large">
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
+      <Drawer variant="permanent" open={open}>
+        <Offset />
         <SidebarMenu />
       </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          height: "100vh",
+          overflow: "auto",
+        }}
+      >
+        <Offset />
+        <Container maxWidth="lg" sx={{ marginTop: 4, marginBottom: 4 }}>
           <RouterSwitch>
             <Route path="/users">
               <UsersFilterView />
@@ -211,107 +158,76 @@ const ManagementAppMain = ({ darkMode, setDarkMode }) => {
           </RouterSwitch>
         </Container>
         {info && (
-          <Box className={classes.footer} color="text.secondary">
-            <Divider className={classes.footerDivider} />
-            <Typography paragraph variant="caption" align="right">
-              <Link
-                href={info.homepageUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {info.name || info.shortName} {info.versionName || info.version}
-              </Link>{" "}
-              by{" "}
-              <Link
-                href="https://ryan.thaut.me/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Ryan Thaut
-              </Link>
-              .
-            </Typography>
+          <Box color="text.secondary">
+            <Divider />
+            <Container sx={{ paddingTop: 2 }}>
+              <Typography paragraph variant="caption" align="right">
+                <Link
+                  href={info.homepageUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {info.name || info.shortName}{" "}
+                  {info.versionName || info.version}
+                </Link>{" "}
+                by{" "}
+                <Link
+                  href="https://ryan.thaut.me/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Ryan Thaut
+                </Link>
+                .
+              </Typography>
+            </Container>
           </Box>
         )}
-      </main>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
-ManagementAppMain.propTypes = {
-  darkMode: PropTypes.bool.isRequired,
-  setDarkMode: PropTypes.func.isRequired,
-};
-
-const useSnackbarStyles = makeStyles(() => ({
-  variantSuccess: {
-    backgroundColor: green[600], // green
-    color: green[50],
-  },
-  variantError: {
-    backgroundColor: red[700], // dark red
-    color: red[50],
-  },
-  variantWarning: {
-    backgroundColor: blue["A400"], // nice blue
-    color: blue[50],
-  },
-  variantInfo: {
-    backgroundColor: amber[700], // amber
-    color: amber[50],
-  },
-}));
-
 const ManagementApp = () => {
-  const snackbarClasses = useSnackbarStyles();
-
-  const [darkMode, setDarkMode] = useDarkMode();
-  const theme = useTheme();
-
   const notistackRef = React.createRef();
   const notistackDismiss = (key) => () => {
     notistackRef.current.closeSnackbar(key);
   };
 
   return (
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <SnackbarProvider
-          ref={notistackRef}
-          maxSnack={3}
-          classes={snackbarClasses}
-          action={(key) => (
-            <Button onClick={notistackDismiss(key)} color="inherit">
-              Dismiss
-            </Button>
-          )}
+    <AppProviders>
+      <SnackbarProvider
+        ref={notistackRef}
+        maxSnack={3}
+        action={(key) => (
+          <Button onClick={notistackDismiss(key)} color="inherit">
+            {/* TODO: i18n */}
+            Dismiss
+          </Button>
+        )}
+      >
+        <ConfirmProvider
+          defaultOptions={{
+            confirmationText: "Yes",
+            cancellationText: "No",
+            confirmationButtonProps: {
+              color: "primary",
+              variant: "contained",
+            },
+            cancellationButtonProps: {
+              autoFocus: true,
+              color: "primary",
+              variant: "outlined",
+            },
+          }}
         >
-          <ConfirmProvider
-            defaultOptions={{
-              confirmationText: "Yes",
-              cancellationText: "No",
-              confirmationButtonProps: {
-                color: "primary",
-                variant: "contained",
-              },
-              cancellationButtonProps: {
-                autoFocus: true,
-                color: "primary",
-                variant: "outlined",
-              },
-            }}
-          >
-            <Router>
-              <CssBaseline />
-              <ManagementAppMain
-                darkMode={darkMode}
-                setDarkMode={setDarkMode}
-              />
-            </Router>
-          </ConfirmProvider>
-        </SnackbarProvider>
-      </ThemeProvider>
-    </StyledEngineProvider>
+          <Router>
+            <CssBaseline />
+            <ManagementAppMain />
+          </Router>
+        </ConfirmProvider>
+      </SnackbarProvider>
+    </AppProviders>
   );
 };
 

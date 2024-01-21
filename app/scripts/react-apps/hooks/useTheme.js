@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import useDarkMode from "./useDarkMode";
+import { useDarkMode } from "./useDarkMode";
 
 import { createTheme } from "@mui/material/styles";
 import { deepOrange, grey } from "@mui/material/colors";

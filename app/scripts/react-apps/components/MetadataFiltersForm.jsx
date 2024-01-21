@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
-import { makeStyles } from "@mui/styles";
-
 import {
   Typography,
   Divider,
@@ -14,33 +12,11 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  ListItemButton,
+  Box,
 } from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
-  fieldset: {
-    margin: theme.spacing(0, 0, 2),
-    width: "100%",
-  },
-  legend: {
-    padding: theme.spacing(0),
-  },
-  divider: {
-    margin: theme.spacing(0, 0, 3),
-  },
-  checkboxList: {
-    width: "100%",
-  },
-  checkboxListItem: {
-    padding: theme.spacing(0),
-  },
-  checkboxListIcon: {
-    minWidth: "auto !important",
-  },
-}));
-
 const MetadataFiltersForm = ({ metadata, setFilter }) => {
-  const classes = useStyles();
-
   const [selectedUsername, setSelectedUsername] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -91,10 +67,14 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
   }
 
   return (
-    <form noValidate>
+    <Box
+      as="form"
+      noValidate
+      sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+    >
       {username && (
-        <FormControl component="fieldset" className={classes.fieldset}>
-          <Typography component="legend" className={classes.legend}>
+        <FormControl component="fieldset">
+          <Typography component="legend" sx={{ padding: 0 }}>
             {browser.i18n.getMessage("FilterTitle_User")}
           </Typography>
           <Typography
@@ -112,26 +92,30 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
               "CreateFiltersFromDeviation_Username_Help"
             )}
           </Typography>
-          <FormControlLabel
-            control={
-              <Switch
-                color="primary"
-                checked={selectedUsername === username}
-                onChange={(e) =>
-                  setSelectedUsername(e.target.checked ? username : "")
+          <List dense disablePadding>
+            <ListItem dense>
+              <FormControlLabel
+                control={
+                  <Switch
+                    color="primary"
+                    checked={selectedUsername === username}
+                    onChange={(e) =>
+                      setSelectedUsername(e.target.checked ? username : "")
+                    }
+                  />
                 }
+                label={username}
               />
-            }
-            label={username}
-          />
+            </ListItem>
+          </List>
         </FormControl>
       )}
 
-      {username && tags && <Divider className={classes.divider} />}
+      {username && tags && <Divider />}
 
       {tags && (
-        <FormControl component="fieldset" className={classes.fieldset}>
-          <Typography component="legend" className={classes.legend}>
+        <FormControl component="fieldset">
+          <Typography component="legend">
             {browser.i18n.getMessage("FilterTitle_Keywords")}
           </Typography>
           <Typography
@@ -147,19 +131,16 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
             </strong>{" "}
             {browser.i18n.getMessage("CreateFiltersFromDeviation_Tags_Help")}
           </Typography>
-          <List className={classes.checkboxList} dense disablePadding>
+          <List dense disablePadding>
             {tags.map((tag, index) => (
-              <ListItem
+              <ListItemButton
                 key={index}
-                button
                 disableRipple
                 role={undefined}
                 dense
-                disableGutters
                 onClick={() => toggleTag(tag)}
-                className={classes.checkboxListItem}
               >
-                <ListItemIcon className={classes.checkboxListIcon}>
+                <ListItemIcon>
                   <Checkbox
                     disableRipple
                     edge="start"
@@ -169,12 +150,12 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
                   />
                 </ListItemIcon>
                 <ListItemText primary={tag} />
-              </ListItem>
+              </ListItemButton>
             ))}
           </List>
         </FormControl>
       )}
-    </form>
+    </Box>
   );
 };
 

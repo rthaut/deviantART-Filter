@@ -42,7 +42,6 @@
     "@mui/icons-material": "5.15.5",
     "@mui/lab": "5.0.0-alpha.161",
     "@mui/material": "5.15.5",
-    "@mui/styles": "5.15.5",
     "lodash-es": "4.17.21",
     "material-ui-confirm": "3.0.9",
     "notistack": "2.0.8",

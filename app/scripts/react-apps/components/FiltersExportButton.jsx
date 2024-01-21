@@ -1,10 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Button } from "@mui/material";
+import { FileDownload as FileDownloadIcon } from "@mui/icons-material";
 
 import { EXPORT_FILTERS } from "../../constants/messages";
 
-const FiltersExportButton = ({ children, ...props }) => {
+const FiltersExportButton = () => {
   const exportFilters = async () => {
     const data = await browser.runtime.sendMessage({
       action: EXPORT_FILTERS,
@@ -26,14 +26,16 @@ const FiltersExportButton = ({ children, ...props }) => {
   };
 
   return (
-    <Button {...props} onClick={exportFilters}>
-      {children}
+    <Button
+      onClick={exportFilters}
+      color="primary"
+      variant="contained"
+      startIcon={<FileDownloadIcon />}
+      fullWidth
+    >
+      {browser.i18n.getMessage("ExportButtonLabel")}
     </Button>
   );
-};
-
-FiltersExportButton.propTypes = {
-  children: PropTypes.node,
 };
 
 export default FiltersExportButton;
