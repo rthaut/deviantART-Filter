@@ -1,10 +1,10 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
-import { makeStyles } from "@mui/styles";
+import PropTypes from "prop-types";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   Divider,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   ListItemIcon,
 } from "@mui/material";
@@ -12,76 +12,63 @@ import {
   Dashboard as DashboardIcon,
   People as PeopleIcon,
   Label as LabelIcon,
-  Settings as SettingsIcon,
 } from "@mui/icons-material";
 
-export const useStyles = makeStyles((theme) => ({
-  activeNavLink: {
-    backgroundColor: theme.palette.action.selected,
-  },
-}));
+const ListItemLink = React.forwardRef(function ListItemLink(
+  { href, children, ...props },
+  ref,
+) {
+  const { pathname } = useLocation();
+  return (
+    <ListItemButton
+      ref={ref}
+      component={NavLink}
+      to={href}
+      selected={pathname === href}
+      {...props}
+    >
+      {children}
+    </ListItemButton>
+  );
+});
+
+ListItemLink.propTypes = {
+  href: PropTypes.string.isRequired,
+  children: PropTypes.node,
+};
 
 const SidebarMenu = () => {
-  const classes = useStyles();
-
   return (
     <>
       <List>
-        <ListItem
-          button
-          component={NavLink}
-          exact
-          to="/"
-          activeClassName={classes.activeNavLink}
-        >
+        <ListItemLink href="/">
           <ListItemIcon>
             <DashboardIcon />
           </ListItemIcon>
           <ListItemText
             primary={browser.i18n.getMessage("SidebarLink_Dashboard")}
           />
-        </ListItem>
+        </ListItemLink>
       </List>
       <Divider />
       <List>
-        <ListItem
-          button
-          component={NavLink}
-          exact
-          to="/users"
-          activeClassName={classes.activeNavLink}
-        >
+        <ListItemLink href="/users">
           <ListItemIcon>
             <PeopleIcon />
           </ListItemIcon>
           <ListItemText
             primary={browser.i18n.getMessage("SidebarLink_Users")}
           />
-        </ListItem>
-        <ListItem
-          button
-          component={NavLink}
-          exact
-          to="/keywords"
-          activeClassName={classes.activeNavLink}
-        >
+        </ListItemLink>
+        <ListItemLink href="/keywords">
           <ListItemIcon>
             <LabelIcon />
           </ListItemIcon>
           <ListItemText
             primary={browser.i18n.getMessage("SidebarLink_Keywords")}
           />
-        </ListItem>
+        </ListItemLink>
       </List>
-      {/* <Divider />
-            <List>
-                <ListItem button component={NavLink} exact to="/settings" activeClassName={classes.activeNavLink}>
-                    <ListItemIcon>
-                        <SettingsIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={browser.i18n.getMessage('SidebarLink_Settings')} />
-                </ListItem>
-            </List> */}
     </>
   );
 };
