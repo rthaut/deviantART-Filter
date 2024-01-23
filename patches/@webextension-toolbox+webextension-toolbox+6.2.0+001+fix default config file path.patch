@@ -1,0 +1,44 @@
+diff --git a/node_modules/@webextension-toolbox/webextension-toolbox/dist/command.js b/node_modules/@webextension-toolbox/webextension-toolbox/dist/command.js
+index 260881b..a83e1b4 100644
+--- a/node_modules/@webextension-toolbox/webextension-toolbox/dist/command.js
++++ b/node_modules/@webextension-toolbox/webextension-toolbox/dist/command.js
+@@ -24,7 +24,7 @@ const index_1 = require("./index");
+         .command("dev")
+         .description("Compiles extension in devmode")
+         .argument("<vendor>", "The Vendor to compile")
+-        .option("-c, --config [config]", "specify config file path", "./webextension-toolbox.config.js")
++        .option("-c, --config [config]", "specify config file path", "webextension-toolbox.config.js")
+         .option("-s, --src [src]", "specify source directory", "app")
+         .option("-t, --target [target]", "specify target directory", "dist/[vendor]")
+         .option("-d, --devtool [string | false]", "controls if and how source maps are generated", "cheap-source-map")
+@@ -39,7 +39,7 @@ const index_1 = require("./index");
+         .command("build")
+         .description("Compiles extension for production")
+         .argument("<vendor>", "The Vendor to compile")
+-        .option("-c, --config [config]", "specify config file path", "./webextension-toolbox.config.js")
++        .option("-c, --config [config]", "specify config file path", "webextension-toolbox.config.js")
+         .option("-s, --src [src]", "specify source directory", "app")
+         .option("-t, --target [target]", "specify target directory", "dist/[vendor]")
+         .option("-d, --devtool [string | false]", "controls if and how source maps are generated", false)
+diff --git a/node_modules/@webextension-toolbox/webextension-toolbox/src/command.ts b/node_modules/@webextension-toolbox/webextension-toolbox/src/command.ts
+index 2ea3bec..ce4dcc9 100644
+--- a/node_modules/@webextension-toolbox/webextension-toolbox/src/command.ts
++++ b/node_modules/@webextension-toolbox/webextension-toolbox/src/command.ts
+@@ -30,7 +30,7 @@ import { build, dev } from "./index";
+     .option(
+       "-c, --config [config]",
+       "specify config file path",
+-      "./webextension-toolbox.config.js"
++      "webextension-toolbox.config.js"
+     )
+     .option("-s, --src [src]", "specify source directory", "app")
+     .option(
+@@ -76,7 +76,7 @@ import { build, dev } from "./index";
+     .option(
+       "-c, --config [config]",
+       "specify config file path",
+-      "./webextension-toolbox.config.js"
++      "webextension-toolbox.config.js"
+     )
+     .option("-s, --src [src]", "specify source directory", "app")
+     .option(

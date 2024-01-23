@@ -50,7 +50,8 @@
     "react-dropzone": "14.2.3",
     "react-router-dom": "5.3.4",
     "react-use": "17.4.3",
-    "semver": "7.5.4"
+    "semver": "7.5.4",
+    "webextension-polyfill": "^0.10.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.23.3",
