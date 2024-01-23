@@ -22,7 +22,7 @@ const FiltersImporter = () => {
     isDragActive,
     isDragReject,
   } = useDropzone({
-    accept: "application/json",
+    accept: { "application/json": [".json"] },
   });
 
   const readFileData = (file) =>
