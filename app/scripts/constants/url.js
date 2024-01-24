@@ -1,6 +1,6 @@
 export const WILDCARD = "*://*.deviantart.com/*";
 export const REGEX =
-  /^https ?:\/\/(?:(\S+)\.)?deviantart\.com\/([^\?]*)(?:\?(.*))?/i;
+  /^https?:\/\/(?:(\S+)\.)?deviantart\.com\/([^\?]*)(?:\?(.*))?/i;
 
 /**
  * Configuration for pages where the extension can be disabled.
@@ -24,13 +24,6 @@ export const PAGES = {
   },
 };
 
-export const TAG_URL_REGEX = /\/tag\/([^\/]+)/i;
-export const USER_URL_REGEX = /\/([^\/]+)\/(?:art|journal)/i;
-
-export default {
-  WILDCARD,
-  REGEX,
-  PAGES,
-  TAG_URL_REGEX,
-  USER_URL_REGEX,
-};
+export const TAG_URL_REGEX = /\/tag\/(?<tag>[^\/]+)\/?/i;
+export const SUBMISSION_URL_REGEX =
+  /\/(?<username>[^\/]+)\/(?<type>(?:art|journal|status-update))\/(?<id>[^\/]+)\/?/i;

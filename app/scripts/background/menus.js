@@ -1,6 +1,6 @@
 import { AddFilter } from "../filters";
 import { SHOW_FILTER_DEVIATION_MODAL } from "../constants/messages";
-import { TAG_URL_REGEX, USER_URL_REGEX } from "../constants/url";
+import { TAG_URL_REGEX, SUBMISSION_URL_REGEX } from "../constants/url";
 
 export const MENUS = [
   {
@@ -20,6 +20,7 @@ export const MENUS = [
     targetUrlPatterns: [
       "*://*.deviantart.com/*/art/*",
       "*://*.deviantart.com/*/journal/*",
+      "*://*.deviantart.com/*/status-update/*",
     ],
   },
   {
@@ -31,6 +32,7 @@ export const MENUS = [
     targetUrlPatterns: [
       "*://*.deviantart.com/*/art/*",
       "*://*.deviantart.com/*/journal/*",
+      "*://*.deviantart.com/*/status-update/*",
     ],
   },
 ];
@@ -66,15 +68,15 @@ export const OnMenuClicked = (info, tab) => {
     case "filter-tag":
       if (TAG_URL_REGEX.test(info.linkUrl)) {
         // eslint-disable-next-line no-case-declarations
-        const keyword = TAG_URL_REGEX.exec(info.linkUrl)[1];
+        const { tag: keyword } = TAG_URL_REGEX.exec(info.linkUrl).groups;
         AddFilter("keywords", { keyword, wildcard: false });
       }
       break;
 
     case "filter-user":
-      if (USER_URL_REGEX.test(info.linkUrl)) {
+      if (SUBMISSION_URL_REGEX.test(info.linkUrl)) {
         // eslint-disable-next-line no-case-declarations
-        const username = USER_URL_REGEX.exec(info.linkUrl)[1];
+        const { username } = SUBMISSION_URL_REGEX.exec(info.linkUrl).groups;
         AddFilter("users", { username });
       }
       break;
@@ -102,16 +104,16 @@ export const OnMenuClicked = (info, tab) => {
 export const OnMenuShown = (info, _tab) => {
   if (TAG_URL_REGEX.test(info.linkUrl)) {
     // filter-tag menu
-    const keyword = TAG_URL_REGEX.exec(info.linkUrl)[1];
+    const { tag: keyword } = TAG_URL_REGEX.exec(info.linkUrl).groups;
     UpdateMenuItem("filter-tag", {
       title: browser.i18n.getMessage(
         "CreateKeywordFilterForTag_ContextMenuLabel",
         keyword,
       ),
     });
-  } else if (USER_URL_REGEX.test(info.linkUrl)) {
+  } else if (SUBMISSION_URL_REGEX.test(info.linkUrl)) {
     // filter-user menu
-    const username = USER_URL_REGEX.exec(info.linkUrl)[1];
+    const { username } = SUBMISSION_URL_REGEX.exec(info.linkUrl).groups;
     UpdateMenuItem("filter-user", {
       title: browser.i18n.getMessage(
         "CreateUserFilterForUsername_ContextMenuLabel",

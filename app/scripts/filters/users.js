@@ -1,3 +1,5 @@
+import { SUBMISSION_URL_REGEX } from "../constants/url";
+
 export const STORAGE_KEY = "users";
 
 export const UNIQUE_KEYS = ["username"];
@@ -94,13 +96,13 @@ const GetUsernameForNode = (node) => {
 
   if (!username) {
     const url = node.getAttribute("href");
-
-    const USERNAME_URL_REGEX = /([^\/]+)\/(?:art|journal|status-update)\//;
-    if (USERNAME_URL_REGEX.test(url)) {
-      username = USERNAME_URL_REGEX.exec(url)[1];
+    if (SUBMISSION_URL_REGEX.test(url)) {
+      ({ username } = SUBMISSION_URL_REGEX.exec(url).groups);
 
       // set the username attribute now to avoid parsing the URL again
       node.setAttribute("data-username", username);
+    } else {
+      console.warn("URL does not match regex", url, SUBMISSION_URL_REGEX);
     }
   }
 

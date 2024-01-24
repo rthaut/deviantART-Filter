@@ -1,4 +1,5 @@
 import { FETCH_METADATA } from "../constants/messages";
+import { SUBMISSION_URL_REGEX } from "../constants/url";
 
 /**
  * Retrieves and sets the metadata on a DOM node
@@ -7,23 +8,35 @@ import { FETCH_METADATA } from "../constants/messages";
 export const SetMetadataOnNode = async (node) => {
   const url = node.getAttribute("href");
 
-  if (url) {
-    if (url.toLowerCase().startsWith("http")) {
-      const metadata = await browser.runtime.sendMessage({
-        action: FETCH_METADATA,
-        data: {
-          url,
-        },
-      });
-
-      if (metadata) {
-        SetMetadataAttributesOnNode(node, metadata);
-      }
-    } else {
-      console.warn("Deviation URL is not valid for oEmbed API:", url);
-    }
-  } else {
+  if (!url) {
     console.warn("Failed to get Deviation URL for DOM node", node);
+    return;
+  }
+
+  let metadata;
+
+  if (url.includes("/status-update/")) {
+    // oEmbed API does not support status updates,
+    // but we can parse and set the username from the URL
+    const { username: author_name } = SUBMISSION_URL_REGEX.exec(url).groups;
+    metadata = { author_name };
+    console.info("Manually setting metadata for status update", url, metadata);
+  } else {
+    if (!url.toLowerCase().startsWith("http")) {
+      console.warn("Deviation URL is not valid for oEmbed API", url);
+      return;
+    }
+
+    metadata = await browser.runtime.sendMessage({
+      action: FETCH_METADATA,
+      data: {
+        url,
+      },
+    });
+  }
+
+  if (metadata) {
+    SetMetadataAttributesOnNode(node, metadata);
   }
 };
 
