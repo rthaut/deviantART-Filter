@@ -1,9 +1,36 @@
 export const STORAGE_KEY = "users";
 
+export const UNIQUE_KEYS = ["username"];
+
 //TODO: a VERY small portion DOM nodes don't have a username available until AFTER metadata is loaded (the known case is for Stash items); it doesn't make sense to wait for metadata to load for all DOM nodes, but having a way to re-apply this filter after metadata loads (for DOM nodes that have NOT already been processed) would be useful
 export const REQUIRES_METADATA = false;
 
-const USERNAME_URL_REGEX = /([^\/]+)\/(?:art|journal|status-update)\//;
+/**
+ * @typedef {Object} ValidationResult
+ * @property {boolean} isValid if the filter is valid
+ * @property {string} [message] validation error message
+ */
+
+/**
+ * Validates a user filter and returns an object indicating if it is valid or not (and why)
+ * @param {Object} filter the user filter
+ * @param {string} filter.username the username of the the filter
+ * @returns {ValidationResult} validation result
+ */
+export const validate = ({ username }) => {
+  if (!username || username.trim().length === 0) {
+    return {
+      isValid: false,
+      message: "Username cannot be empty", // TODO: i18n
+    };
+  } else if (!/^[a-zA-Z0-9\-]+$/.test(username)) {
+    return {
+      isValid: false,
+      message: "Username should only contain letters, numbers, and hyphens", // TODO: i18n
+    };
+  }
+  return { isValid: true };
+};
 
 /**
  * Applies filters to a DOM node
@@ -67,6 +94,8 @@ const GetUsernameForNode = (node) => {
 
   if (!username) {
     const url = node.getAttribute("href");
+
+    const USERNAME_URL_REGEX = /([^\/]+)\/(?:art|journal|status-update)\//;
     if (USERNAME_URL_REGEX.test(url)) {
       username = USERNAME_URL_REGEX.exec(url)[1];
 

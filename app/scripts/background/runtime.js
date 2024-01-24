@@ -2,7 +2,7 @@ import semverClean from "semver/functions/clean";
 import semverDiff from "semver/functions/diff";
 import semverLT from "semver/functions/lt";
 
-import { ImportFilters } from "./filters";
+import { ImportFilters } from "../filters";
 
 import { TAG_FILTERS_MIGRATED } from "../constants/notifications";
 

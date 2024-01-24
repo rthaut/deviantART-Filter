@@ -1,8 +1,3 @@
-const SELECTORS = [
-  `a[href*="deviantart.com/"][href*="/art/"]`,
-  `a[href*="deviantart.com/"][href*="/journal/"]`,
-];
-
 import {
   LOCAL_STORAGE_CHANGED,
   SHOW_FILTER_DEVIATION_MODAL,
@@ -13,11 +8,17 @@ import { PAGES } from "./constants/url";
 
 import { SetMetadataOnNode } from "./content/metadata";
 
-import * as KeywordsFilter from "./content/filters/keywords";
-import * as UsersFilter from "./content/filters/users";
-const FILTERS = [KeywordsFilter, UsersFilter];
+import * as KeywordsFilter from "./filters/keywords";
+import * as UsersFilter from "./filters/users";
 
 let ENABLED = true;
+
+const FILTERS = [KeywordsFilter, UsersFilter];
+
+const SELECTORS = [
+  `a[href*="deviantart.com/"][href*="/art/"]`,
+  `a[href*="deviantart.com/"][href*="/journal/"]`,
+];
 
 /**
  * Runs all applicable logic on DOM nodes (applying metadata, filtering, etc.)

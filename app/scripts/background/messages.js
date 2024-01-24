@@ -1,4 +1,4 @@
-import * as FILTERS from "./filters";
+import * as FILTERS from "../filters";
 import * as MESSAGES from "../constants/messages";
 
 export const OnRuntimeMessage = (message, sender) => {
@@ -27,7 +27,7 @@ export const OnRuntimeMessage = (message, sender) => {
       );
 
     case MESSAGES.SAVE_FILTER:
-      return FILTERS.SaveFilter(message.data.key, message.data.value);
+      return FILTERS.SaveFilters(message.data.key, message.data.value);
 
     case MESSAGES.RESET_FILTERS:
       return browser.storage.local.set({
@@ -36,7 +36,7 @@ export const OnRuntimeMessage = (message, sender) => {
       });
 
     case MESSAGES.IMPORT_FILTERS:
-      return FILTERS.ImportFilters(message.data);
+      return FILTERS.BulkImportFilters(message.data);
 
     case MESSAGES.EXPORT_FILTERS:
       return FILTERS.GetAllFilters();

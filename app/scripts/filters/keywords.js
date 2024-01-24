@@ -1,6 +1,35 @@
 export const STORAGE_KEY = "keywords";
 
+export const UNIQUE_KEYS = ["keyword"];
+
 export const REQUIRES_METADATA = true;
+
+/**
+ * @typedef {Object} ValidationResult
+ * @property {boolean} isValid if the filter is valid
+ * @property {string} [message] validation error message
+ */
+
+/**
+ * Validates a keyword filter and returns an object indicating if it is valid or not (and why)
+ * @param {Object} filter the keyword filter
+ * @param {string} filter.keyword the keyword of the the filter
+ * @returns {ValidationResult} validation result
+ */
+export const validate = ({ keyword }) => {
+  if (!keyword || keyword.trim().length === 0) {
+    return {
+      isValid: false,
+      message: "Keyword cannot be empty", // TODO: i18n
+    };
+  } else if (!/^[a-zA-Z0-9\_]+$/.test(keyword)) {
+    return {
+      isValid: false,
+      message: "Keyword should only contain letters, numbers, and underscores", // TODO: i18n
+    };
+  }
+  return { isValid: true };
+};
 
 /**
  * Applies filters to a DOM node

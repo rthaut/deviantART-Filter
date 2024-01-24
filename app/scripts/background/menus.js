@@ -1,4 +1,4 @@
-import { AddFilter } from "./filters";
+import { AddFilter } from "../filters";
 import { SHOW_FILTER_DEVIATION_MODAL } from "../constants/messages";
 import { TAG_URL_REGEX, USER_URL_REGEX } from "../constants/url";
 
