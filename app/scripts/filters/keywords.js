@@ -17,15 +17,19 @@ export const REQUIRES_METADATA = true;
  * @returns {ValidationResult} validation result
  */
 export const validate = ({ keyword }) => {
-  if (!keyword || keyword.trim().length === 0) {
+  if (!keyword || String(keyword).trim().length === 0) {
     return {
       isValid: false,
-      message: "Keyword cannot be empty", // TODO: i18n
+      message: browser.i18n.getMessage("RequiredFieldEmptyError", [
+        browser.i18n.getMessage("Filter_Keywords_PropTitle_Keyword"),
+      ]),
     };
   } else if (!/^[a-zA-Z0-9\_]+$/.test(keyword)) {
     return {
       isValid: false,
-      message: "Keyword should only contain letters, numbers, and underscores", // TODO: i18n
+      message: browser.i18n.getMessage(
+        "Filter_Keywords_PropInvalidPatternError_Keyword",
+      ),
     };
   }
   return { isValid: true };

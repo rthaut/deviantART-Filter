@@ -47,7 +47,10 @@ const DashboardFilterCard = ({ filterKey, title, link }) => {
     <Card>
       <CardContent>
         <Typography component="h2" variant="h6" gutterBottom>
-          {browser.i18n.getMessage("FilterNameWithCount", [filterCount, title])}
+          {browser.i18n.getMessage(
+            `FilterNameWithCount_${filterCount == 1 ? "Singular" : "Plural"}`,
+            [filterCount, title],
+          )}
         </Typography>
       </CardContent>
       <Divider variant="middle" />

@@ -20,15 +20,19 @@ export const REQUIRES_METADATA = false;
  * @returns {ValidationResult} validation result
  */
 export const validate = ({ username }) => {
-  if (!username || username.trim().length === 0) {
+  if (!username || String(username).trim().length === 0) {
     return {
       isValid: false,
-      message: "Username cannot be empty", // TODO: i18n
+      message: browser.i18n.getMessage("RequiredFieldEmptyError", [
+        browser.i18n.getMessage("Filter_Users_PropTitle_Username"),
+      ]),
     };
-  } else if (!/^[a-zA-Z0-9\-]+$/.test(username)) {
+  } else if (!/^[a-zA-Z][a-zA-Z0-9\-]+$/.test(username)) {
     return {
       isValid: false,
-      message: "Username should only contain letters, numbers, and hyphens", // TODO: i18n
+      message: browser.i18n.getMessage(
+        "Filter_Users_PropInvalidPatternError_Username",
+      ),
     };
   }
   return { isValid: true };

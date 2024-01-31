@@ -62,6 +62,11 @@ const ImportFilterResultsTable = ({ results }) => {
                 "ImportResultsColumnHeader_DuplicateCount",
               )}
             </TableCell>
+            <TableCell align="right">
+              {browser.i18n.getMessage(
+                "ImportResultsColumnHeader_InvalidCount",
+              )}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -98,13 +103,16 @@ const ImportFilterResultsTable = ({ results }) => {
                         <TableCell align="right">
                           {result.results[key].duplicate}
                         </TableCell>
+                        <TableCell align="right">
+                          {result.results[key].invalid}
+                        </TableCell>
                       </>
                     )}
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={4}>
+                  <TableCell colSpan={5}>
                     <Processing
                       text={browser.i18n.getMessage(
                         "ImportResultsProcessingMessage",

@@ -58,12 +58,20 @@ const FiltersImporter = () => {
     // process each file in sequence with a promise reducer
     imports.reduce(
       (promise, currentImport) =>
-        promise.then(async () => {
-          const data = await readFileData(currentImport.file);
-          const result = await importFileData(data);
-          currentImport.results = result;
-          upsertImports((a, b) => a.file.path === b.file.path, currentImport);
-        }),
+        promise
+          .then(async () => {
+            const data = await readFileData(currentImport.file);
+            const result = await importFileData(data);
+            currentImport.results = result;
+            upsertImports((a, b) => a.file.path === b.file.path, currentImport);
+          })
+          .catch((error) =>
+            console.error(
+              "An error occurred while processing import file",
+              error,
+              currentImport,
+            ),
+          ),
       Promise.resolve(),
     );
   };

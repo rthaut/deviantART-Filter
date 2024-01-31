@@ -15,16 +15,38 @@
     "message": "DeviantArt Filter",
     "description": "The title of the browser action button"
   },
-  "FilterNameWithCount": {
-    "message": "$COUNT$ $NAME$ Filter(s)",
-    "description": "A formatted string to display the name of a filter with the count",
-    "example": "13 Keyword Filter(s)",
+  "FilterNameWithCount_Singular": {
+    "message": "$COUNT$ $NAME$ Filter",
+    "description": "A formatted string to display the name of a filter with the count of filters (singular)",
+    "example": "1 Keyword Filter",
     "placeholders": {
       "count": {
         "content": "$1"
       },
       "name": {
         "content": "$2"
+      }
+    }
+  },
+  "FilterNameWithCount_Plural": {
+    "message": "$COUNT$ $NAME$ Filters",
+    "description": "A formatted string to display the name of a filter with the count of filters (plural)",
+    "example": "13 Keyword Filters",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "name": {
+        "content": "$2"
+      }
+    }
+  },
+  "FilterNameLoading": {
+    "message": "Loading $NAME$ Filters",
+    "description": "A formatted string to display when loading filters",
+    "placeholders": {
+      "name": {
+        "content": "$1"
       }
     }
   },
@@ -58,6 +80,9 @@
   },
   "ImportResultsColumnHeader_DuplicateCount": {
     "message": "Duplicates"
+  },
+  "ImportResultsColumnHeader_InvalidCount": {
+    "message": "Invalid"
   },
   "ImportResultsProcessingMessage": {
     "message": "Processing File..."
@@ -186,35 +211,47 @@
   "FilterTitle_Keyword": {
     "message": "Keyword"
   },
-  "FilterTitle_User": {
-    "message": "User"
-  },
   "FilterTitle_Keywords": {
     "message": "Keywords"
-  },
-  "FilterTitle_Users": {
-    "message": "Users"
   },
   "FilteredTitle_Keywords": {
     "message": "Filtered Keywords"
   },
-  "FilteredTitle_Users": {
-    "message": "Filtered Users"
-  },
   "Filter_Keywords_PropTitle_Keyword": {
     "message": "Keyword"
   },
-  "Filter_Keywords_PropPatternHint_Keyword": {
-    "message": "Letters and numbers only -- NO hashtag symbol"
+  "Filter_Keywords_PropFieldHint_Keyword": {
+    "message": "Letters, numbers, and underscores only"
+  },
+  "Filter_Keywords_PropInvalidPatternError_Keyword": {
+    "message": "Keywords should only contain letters, numbers, and underscores"
   },
   "Filter_Keywords_PropTitle_Wildcard": {
     "message": "Is Wildcard"
   },
+  "Filter_Keywords_Property_Wildcard_True": {
+    "message": "Yes"
+  },
+  "Filter_Keywords_Property_Wildcard_False": {
+    "message": "No"
+  },
+  "FilterTitle_User": {
+    "message": "User"
+  },
+  "FilterTitle_Users": {
+    "message": "Users"
+  },
+  "FilteredTitle_Users": {
+    "message": "Filtered Users"
+  },
   "Filter_Users_PropTitle_Username": {
     "message": "Username"
   },
-  "Filter_Users_PropPatternHint_Username": {
-    "message": "No spaces allowed"
+  "Filter_Users_PropFieldHint_Username": {
+    "message": "Letters, numbers, and hyphens only"
+  },
+  "Filter_Users_PropInvalidPatternError_Username": {
+    "message": "Username must start with a letter and only contain letters, numbers, and hyphens"
   },
   "DuplicateFilterWarning": {
     "message": "Filter already exists"
@@ -244,18 +281,41 @@
       }
     }
   },
-  "InvalidFieldLabel": {
-    "message": "Value is invalid",
-    "description": "A string that is displayed when a field's value is invalid"
-  },
-  "InvalidFieldLabelWithHint": {
-    "message": "Value is invalid ($HINT$)",
-    "description": "A formatted string (with hint text) that is displayed when a field's value is invalid",
+  "RequiredFieldEmptyError": {
+    "message": "$FIELD$ cannot be empty",
+    "description": "A formatted error string indicating a required field is empty",
     "placeholders": {
-      "hint": {
+      "field": {
         "content": "$1"
       }
     }
+  },
+  "InvalidFieldLabel": {
+    "message": "$FIELD$ is invalid",
+    "description": "A formatted string that is displayed when a field's value is invalid",
+    "placeholders": {
+      "field": {
+        "content": "$1"
+      }
+    }
+  },
+  "InvalidFieldLabelWithHint": {
+    "message": "$FIELD$ is invalid: $HINT$",
+    "description": "A formatted string (with hint text) that is displayed when a field's value is invalid",
+    "placeholders": {
+      "field": {
+        "content": "$1"
+      },
+      "hint": {
+        "content": "$2"
+      }
+    }
+  },
+  "FilterCreatedSuccessfully": {
+    "message": "Filter created successfully"
+  },
+  "FilterUpdatedSuccessfully": {
+    "message": "Filter updated successfully"
   },
   "TagFiltersMigratedNotificationMessage": {
     "message": "Your old tag filters have been converted to new keyword filters automatically.\n\nClick this notification to view your keyword filters."

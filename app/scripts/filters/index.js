@@ -32,11 +32,15 @@ export const MIGRATED_FILTERS = {
 };
 
 const compareByAnyProps = curry((props, a, b) =>
-  props.some((prop) => a[prop].toLowerCase() === b[prop].toLowerCase()),
+  props.some(
+    (prop) => String(a[prop]).toLowerCase() === String(b[prop]).toLowerCase(),
+  ),
 );
 
 const compareByAllProps = curry((props, a, b) =>
-  props.every((prop) => a[prop].toLowerCase() === b[prop].toLowerCase()),
+  props.every(
+    (prop) => String(a[prop]).toLowerCase() === String(b[prop]).toLowerCase(),
+  ),
 );
 
 /**
@@ -200,15 +204,29 @@ export const ValidateUpdatedFilter = async (
 export const ImportFilters = async (filterType, filters) => {
   const existingFilters = await GetFilters(filterType);
   const newFilters = FILTER_METHODS[filterType].diff(filters, existingFilters);
+
+  const validFilters = newFilters.filter((newFilter) => {
+    const { isValid, message } = FILTER_METHODS[filterType].validate(newFilter);
+    if (!isValid) {
+      console.warn(
+        "Filter is invalid, will not be imported:",
+        message,
+        newFilter,
+      );
+    }
+    return isValid;
+  });
+
   await SaveFilters(
     filterType,
-    Array.from([...existingFilters, ...newFilters]),
+    Array.from([...existingFilters, ...validFilters]),
   );
 
   const results = {
     total: filters.length,
-    new: newFilters.length,
+    new: validFilters.length,
     duplicate: filters.length - newFilters.length,
+    invalid: newFilters.length - validFilters.length,
   };
 
   return results;
@@ -225,6 +243,9 @@ export const BulkImportFilters = async (data) => {
     let fileFilters = Array.from(data[dataKey] ?? []);
 
     if (Object.keys(MIGRATED_FILTERS).includes(filterType)) {
+      console.warn(
+        `Migrating ${filterType} filters to ${MIGRATED_FILTERS[dataKey].key}`,
+      );
       // use the new storage key instead of the one in the file
       filterType = MIGRATED_FILTERS[dataKey].key;
       // replace mapped property names with their new property name (no changes to unmapped properties)
