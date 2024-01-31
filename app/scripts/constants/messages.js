@@ -1,11 +1,11 @@
 export const LOCAL_STORAGE_CHANGED = "LOCAL_STORAGE_CHANGED";
-export const ADD_FILTER = "ADD_FILTER";
+export const CREATE_FILTER = "CREATE_FILTER";
 export const REMOVE_FILTER = "REMOVE_FILTER";
 export const UPDATE_FILTER = "UPDATE_FILTER";
 export const VALIDATE_NEW_FILTER = "VALIDATE_NEW_FILTER";
 export const VALIDATE_UPDATED_FILTER = "VALIDATE_UPDATED_FILTER";
-export const SAVE_FILTER = "SAVE_FILTER";
-export const RESET_FILTERS = "RESET_FILTERS";
+export const SAVE_FILTER = "SAVE_FILTER"; // TODO: better naming, this replaces all current filter values with new ones
+export const RESET_ALL_FILTERS = "RESET_ALL_FILTERS";
 export const IMPORT_FILTERS = "IMPORT_FILTERS";
 export const EXPORT_FILTERS = "EXPORT_FILTERS";
 export const FETCH_METADATA = "FETCH_METADATA";

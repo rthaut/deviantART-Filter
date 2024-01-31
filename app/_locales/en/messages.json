@@ -125,6 +125,28 @@
   "ConfirmAllFiltersDeleteButton_Decline": {
     "message": "No"
   },
+  "ConfirmFilterDeletePrompt": {
+    "message": "Are you sure you want to delete the \"$VALUE$\" $NAME$ filter?",
+    "description": "The message displayed on the modal when asking for confirmation to delete a single filter",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      },
+      "name": {
+        "content": "$2"
+      }
+    }
+  },
+  "ConfirmFilterDeleteTitle": {
+    "message": "Confirm Filter Deletion",
+    "description": "The title displayed on the modal when asking for confirmation to delete a single filter"
+  },
+  "ConfirmFilterDeleteButton_Accept": {
+    "message": "Yes"
+  },
+  "ConfirmFilterDeleteButton_Decline": {
+    "message": "No"
+  },
   "ConfirmOptionsResetPrompt": {
     "message": "Are you sure you want to reset all options to their default values?",
     "description": "The message displayed on the modal when asking for confirmation to reset options to defaults"
@@ -187,10 +209,10 @@
   "Options_ShowUpdatedPage_OptionLabel_None": {
     "message": "Never show for any updates"
   },
-  "OptionsResetButtonLabel": {
+  "Options_ButtonLabel_Reset": {
     "message": "Reset to Defaults"
   },
-  "OptionsChangePagesRequireReload": {
+  "Options_Change_PagesRequireReload": {
     "message": "Open pages must be refreshed/reloaded for changes to take effect."
   },
   "SidebarLink_Dashboard": {
@@ -217,6 +239,9 @@
   "FilteredTitle_Keywords": {
     "message": "Filtered Keywords"
   },
+  "Filter_Keywords_UpsertHelpHTML": {
+    "message": "<ul><li>Keyword filters apply to tags and titles.</li><li>Keyword filters are <strong>not</strong> case sensitive.</li><li><em>Wildcard</em> filters match the keyword and any words containing that keyword.</li></ul>"
+  },
   "Filter_Keywords_PropTitle_Keyword": {
     "message": "Keyword"
   },
@@ -235,6 +260,24 @@
   "Filter_Keywords_Property_Wildcard_False": {
     "message": "No"
   },
+  "Filter_Keywords_PropHint_Wildcard_True": {
+    "message": "Will match \"$KEYWORD$\" as well as any words containing \"$KEYWORD$\"",
+    "description": "A formatted string that is displayed when hovering over the wildcard property of a wildcard filter to indicate how it works",
+    "placeholders": {
+      "keyword": {
+        "content": "$1"
+      }
+    }
+  },
+  "Filter_Keywords_PropHint_Wildcard_False": {
+    "message": "Will only match the full word \"$KEYWORD$\"",
+    "description": "A formatted string that is displayed when hovering over the wildcard property of a non-wildcard filter to indicate how it works",
+    "placeholders": {
+      "keyword": {
+        "content": "$1"
+      }
+    }
+  },
   "FilterTitle_User": {
     "message": "User"
   },
@@ -243,6 +286,9 @@
   },
   "FilteredTitle_Users": {
     "message": "Filtered Users"
+  },
+  "Filter_Users_UpsertHelpHTML": {
+    "message": "<ul><li>User filters are <strong>not</strong> case sensitive.</li></ul>"
   },
   "Filter_Users_PropTitle_Username": {
     "message": "Username"
@@ -311,11 +357,131 @@
       }
     }
   },
+  "FilterUpsertDialog_Title_Create": {
+    "message": "Create New $NAME$ Filter",
+    "description": "A formatted string to display as the title of the filter creation dialog",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
+  "FilterUpsertDialog_Title_Update": {
+    "message": "Update $NAME$ Filter",
+    "description": "A formatted string to display as the title of the filter update dialog",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
+  "FilterUpsertDialog_ButtonLabel_Cancel": {
+    "message": "Cancel"
+  },
+  "FilterUpsertDialog_ButtonLabel_Submit": {
+    "message": "Save"
+  },
   "FilterCreatedSuccessfully": {
     "message": "Filter created successfully"
   },
   "FilterUpdatedSuccessfully": {
     "message": "Filter updated successfully"
+  },
+  "FilterDataGrid_EmptyStateHTML": {
+    "message": "You haven't created any filters yet. View the <a href=\"$USAGE_GUIDE_URL$\" target=\"_blank\" rel=\"noopener noreferrer\">Usage Guide</a> if you need help.",
+    "description": "A formatted string to display on the filter data grids when no valid filters exist. Should include a hyperlink with the $USAGE_GUIDE_URL$ placeholder for the below URL.",
+    "placeholders": {
+      "usage_guide_url": {
+        "content": "https://rthaut.github.io/deviantART-Filter/usage#creating-and-removing-filters"
+      }
+    }
+  },
+  "FilterDataGrid_ColumnHeader_Actions": {
+    "message": "Actions"
+  },
+  "FilterDataGrid_ActionTooltip_Save": {
+    "message": "Save"
+  },
+  "FilterDataGrid_ActionTooltip_Cancel": {
+    "message": "Cancel"
+  },
+  "FilterDataGrid_ActionTooltip_Edit": {
+    "message": "Edit"
+  },
+  "FilterDataGrid_ActionTooltip_Delete": {
+    "message": "Delete"
+  },
+  "FilterDataGrid_ButtonLabel_CreateNew": {
+    "message": "Create new $NAME$ filter",
+    "description": "A formatted string to display on the button to create a new filter",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
+  "FilterDataGrid_MenuLabel_DeleteAll": {
+    "message": "Delete all $NAME$ filters",
+    "description": "A formatted string to display on the menu item to delete all filters",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
+  "FilterDataGrid_MenuLabel_ExportAll": {
+    "message": "Export all $NAME$ filters",
+    "description": "A formatted string to display on the menu item to export all filters",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
+  "InvalidFilterData_Warning_Title": {
+    "message": "Invalid Filters Detected"
+  },
+  "InvalidFilterData_Warning_Description_Line1": {
+    "message": "The following filters are invalid, which likely prevents them from working as intended (or even at all). Because they are invalid, these filters <strong>cannot</strong> be displayed in, or managed by, the table below."
+  },
+  "InvalidFilterData_Warning_Description_Line2": {
+    "message": "It is <em>strongly</em> recommended they be removed."
+  },
+  "InvalidFilterData_Warning_CheckboxLabel_Ignore": {
+    "message": "Ignore this warning"
+  },
+  "InvalidFilterData_ButtonLabel_PurgeFilters": {
+    "message": "Remove invalid filters"
+  },
+  "InvalidFilterData_Table_ColumnHeader_RawFilterValue": {
+    "message": "Raw Filter Value"
+  },
+  "InvalidFilterData_Table_ColumnHeader_Reason": {
+    "message": "Reason Description"
+  },
+  "InvalidFilterData_Table_ReasonText_Missing_ID_Prop": {
+    "message": "Missing or empty $PROP$",
+    "description": "The formatted string to display in the invalid filters table for filters that do not have the ID property",
+    "placeholders": {
+      "prop": {
+        "content": "$1"
+      }
+    }
+  },
+  "InvalidFilterData_Table_ReasonText_Duplicate_ID_Prop": {
+    "message": "Duplicate $PROP$",
+    "description": "The formatted string to display in the invalid filters table for filters that have a duplicated ID property",
+    "placeholders": {
+      "prop": {
+        "content": "$1"
+      }
+    }
+  },
+  "PurgeInvalidFilters_Dialog_Title": {
+    "message": "Confirm Invalid Filter Removal"
+  },
+  "PurgeInvalidFilters_Dialog_Description": {
+    "message": "Are you sure you want to remove all of these invalid filters?<br>While recommended, this action <strong>cannot</strong> be undone."
   },
   "TagFiltersMigratedNotificationMessage": {
     "message": "Your old tag filters have been converted to new keyword filters automatically.\n\nClick this notification to view your keyword filters."
@@ -406,5 +572,17 @@
         "content": "$1"
       }
     }
+  },
+  "Credits_CreatedBy": {
+    "message": "created by"
+  },
+  "Snackbar_ButtonLabel_Dismiss": {
+    "message": "Dismiss"
+  },
+  "ConfirmDialog_DefaultButtonLabel_Cancel": {
+    "message": "No"
+  },
+  "ConfirmDialog_DefaultButtonLabel_Confirm": {
+    "message": "Yes"
   }
 }

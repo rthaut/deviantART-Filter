@@ -3,7 +3,7 @@ import * as MESSAGES from "../constants/messages";
 
 export const OnRuntimeMessage = (message, sender) => {
   switch (message.action) {
-    case MESSAGES.ADD_FILTER:
+    case MESSAGES.CREATE_FILTER:
       return FILTERS.AddFilter(message.data.key, message.data.value);
 
     case MESSAGES.REMOVE_FILTER:
@@ -29,7 +29,7 @@ export const OnRuntimeMessage = (message, sender) => {
     case MESSAGES.SAVE_FILTER:
       return FILTERS.SaveFilters(message.data.key, message.data.value);
 
-    case MESSAGES.RESET_FILTERS:
+    case MESSAGES.RESET_ALL_FILTERS:
       return browser.storage.local.set({
         users: [],
         keywords: [],

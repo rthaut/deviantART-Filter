@@ -206,17 +206,22 @@ const ManagementApp = () => {
       >
         <ConfirmProvider
           defaultOptions={{
-            confirmationText: "Yes",
-            cancellationText: "No",
+            buttonOrder: ["confirm", "cancel"],
             confirmationButtonProps: {
               color: "primary",
-              variant: "contained",
+              variant: "outlined",
             },
             cancellationButtonProps: {
               autoFocus: true,
               color: "primary",
-              variant: "outlined",
+              variant: "contained",
             },
+            cancellationText: browser.i18n.getMessage(
+              "ConfirmDialog_DefaultButtonLabel_Cancel",
+            ),
+            confirmationText: browser.i18n.getMessage(
+              "ConfirmDialog_DefaultButtonLabel_Confirm",
+            ),
           }}
         >
           <Router>

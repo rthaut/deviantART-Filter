@@ -9,6 +9,7 @@
         "polyfill",
         "subdomain",
         "subdomains",
+        "upsert",
         "userscript",
         "webextension",
         "webextensions"

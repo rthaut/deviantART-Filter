@@ -1,44 +1,61 @@
-/* eslint-disable react/display-name */
-/* eslint-disable react/prop-types */
-import React, { useState } from "react";
-import { Grid } from "@mui/material";
-import { MTableEditField } from "@material-table/core";
+import React from "react";
+import PropTypes from "prop-types";
 
-import FilterTable from "../components/FilterTable";
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
+import Grid from "@mui/material/Grid";
+import Input from "@mui/material/Input";
+import InputLabel from "@mui/material/InputLabel";
+
+import { STORAGE_KEY as filterKey } from "../../filters/users";
+
+import FilterDataGrid from "../components/filters/FilterDataGrid";
+
+const columns = [
+  {
+    field: "username",
+    headerName: browser.i18n.getMessage("Filter_Users_PropTitle_Username"),
+    type: "string",
+    flex: 1,
+  },
+];
+
+const FilterDialogFormContent = ({ filter }) => (
+  <>
+    <FormControl variant="standard" margin="dense" fullWidth required>
+      <InputLabel htmlFor="username">
+        {browser.i18n.getMessage("Filter_Users_PropTitle_Username")}
+      </InputLabel>
+      <Input
+        autoFocus
+        id="username"
+        name="username"
+        type="text"
+        defaultValue={filter?.["username"]}
+      />
+      <FormHelperText>
+        {browser.i18n.getMessage("Filter_Users_PropFieldHint_Username")}
+      </FormHelperText>
+    </FormControl>
+  </>
+);
+
+FilterDialogFormContent.propTypes = {
+  filter: PropTypes.shape({
+    username: PropTypes.string.isRequired,
+  }),
+};
 
 const UsersFilterView = () => {
-  const [usernameError, setUsernameError] = useState({
-    error: false,
-    helperText: "",
-  });
-
-  const columns = [
-    {
-      title: browser.i18n.getMessage("Filter_Users_PropTitle_Username"),
-      field: "username",
-      editComponent: (props) => (
-        <MTableEditField
-          {...props}
-          error={usernameError.error}
-          helperText={usernameError.helperText ?? ""}
-        />
-      ),
-      required: true,
-      pattern: {
-        regex: /^[\w-]+$/,
-        hint: browser.i18n.getMessage("Filter_Users_PropPatternHint_Username"),
-      },
-      setError: setUsernameError,
-    },
-  ];
-
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
-        <FilterTable
+        <FilterDataGrid
           columns={columns}
-          filterKey="users"
+          filterKey={filterKey}
+          rowIdPropName="username"
           title={browser.i18n.getMessage("FilterTitle_User")}
+          filterDialogFormFields={FilterDialogFormContent}
         />
       </Grid>
     </Grid>

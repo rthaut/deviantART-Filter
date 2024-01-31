@@ -38,10 +38,10 @@
   "dependencies": {
     "@emotion/react": "11.11.3",
     "@emotion/styled": "11.11.0",
-    "@material-table/core": "6.2",
     "@mui/icons-material": "5.15.5",
     "@mui/lab": "5.0.0-alpha.161",
     "@mui/material": "5.15.5",
+    "@mui/x-data-grid": "^6.19.2",
     "lodash-es": "4.17.21",
     "material-ui-confirm": "3.0.9",
     "notistack": "2.0.8",

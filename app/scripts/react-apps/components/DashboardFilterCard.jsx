@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 import {
@@ -25,11 +25,14 @@ const DashboardFilterCard = ({ filterKey, title, link }) => {
     getFilterCount();
   }, [setFilterCount, filterKey]);
 
-  const onStorageChanged = (changes, areaName) => {
-    if (areaName === "local" && Object.keys(changes).includes(filterKey)) {
-      setFilterCount(changes[filterKey].newValue.length);
-    }
-  };
+  const onStorageChanged = useCallback(
+    (changes, areaName) => {
+      if (areaName === "local" && Object.keys(changes).includes(filterKey)) {
+        setFilterCount(changes[filterKey].newValue.length);
+      }
+    },
+    [filterKey],
+  );
 
   useEffect(() => {
     if (!browser.storage.onChanged.hasListener(onStorageChanged)) {
