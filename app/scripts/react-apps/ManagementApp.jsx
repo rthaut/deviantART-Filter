@@ -167,8 +167,8 @@ const ManagementAppMain = () => {
                 >
                   {info.name || info.shortName}{" "}
                   {info.versionName || info.version}
-                </Link>{" "}
-                by{" "}
+                </Link>
+                {" " + browser.i18n.getMessage("Credits_CreatedBy") + " "}
                 <Link
                   href="https://ryan.thaut.me/"
                   target="_blank"
