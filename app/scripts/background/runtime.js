@@ -80,7 +80,7 @@ const MigrateTagFiltersToKeywordFilters = async () => {
 
     browser.notifications.create(TAG_FILTERS_MIGRATED, {
       type: "basic",
-      iconUrl: browser.extension.getURL("images/icon-64.png"),
+      iconUrl: browser.runtime.getURL("images/icon-64.png"),
       title: browser.i18n.getMessage("ExtensionName"),
       message: browser.i18n.getMessage("TagFiltersMigratedNotificationMessage"),
     });
