@@ -73,10 +73,9 @@ const MigrateTagFiltersToKeywordFilters = async () => {
   const data = await browser.storage.local.get("tags");
   if (data?.tags) {
     console.warn("Migrating tag filters to keyword filters");
-    await ImportFilters(data);
 
-    // TODO: is it appropriate to delete tag filters from previous versions?
-    // await browser.storage.local.remove('tags');
+    await ImportFilters(data);
+    await browser.storage.local.remove("tags");
 
     browser.notifications.create(TAG_FILTERS_MIGRATED, {
       type: "basic",
