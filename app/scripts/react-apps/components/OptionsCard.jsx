@@ -24,7 +24,7 @@ import { PAGES } from "../../constants/url";
 const initialOptions = {
   pages: Object.keys(PAGES)
     .map((page) => [page, true])
-    .reduce((acc, val) => ((acc[val[0]] = val[1]), acc), {}),
+    .reduce((acc, [page, enabled]) => ((acc[page] = enabled), acc), {}),
   placeholders: {
     preventClick: true,
     showFilterText: true,
