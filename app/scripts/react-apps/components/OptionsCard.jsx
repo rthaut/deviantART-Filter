@@ -91,7 +91,7 @@ const OptionsCard = () => {
 
   const showReloadRequired = () => {
     enqueueSnackbar(
-      browser.i18n.getMessage("OptionsChangePagesRequireReload"),
+      browser.i18n.getMessage("Options_Change_PagesRequireReload"),
       {
         variant: "default",
         preventDuplicate: true,
@@ -224,7 +224,7 @@ const OptionsCard = () => {
       <Divider variant="middle" />
       <CardActions>
         <Button color="primary" onClick={resetOptions}>
-          {browser.i18n.getMessage("OptionsResetButtonLabel")}
+          {browser.i18n.getMessage("Options_ButtonLabel_Reset")}
         </Button>
       </CardActions>
     </Card>
