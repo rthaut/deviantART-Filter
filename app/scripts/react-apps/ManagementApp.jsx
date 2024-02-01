@@ -199,8 +199,7 @@ const ManagementApp = () => {
         maxSnack={3}
         action={(key) => (
           <Button onClick={notistackDismiss(key)} color="inherit">
-            {/* TODO: i18n */}
-            Dismiss
+            {browser.i18n.getMessage("Snackbar_ButtonLabel_Dismiss")}
           </Button>
         )}
       >
