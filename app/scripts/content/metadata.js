@@ -6,8 +6,16 @@ import { SUBMISSION_URL_REGEX } from "../constants/url";
  * @param {HTMLElement} node the DOM node
  */
 export const SetMetadataOnNode = async (node) => {
-  const url = node.getAttribute("href");
+  const metadataAttributes = ["data-username", "data-title", "data-tags"];
+  const hasMetadata = node
+    .getAttributeNames()
+    .some((a) => metadataAttributes.includes(a));
 
+  if (hasMetadata) {
+    return;
+  }
+
+  const url = node.getAttribute("href");
   if (!url) {
     console.warn("Failed to get Deviation URL for DOM node", node);
     return;
