@@ -1,21 +1,36 @@
-import React, { createContext, useContext, useEffect, useMemo } from "react";
+import * as React from "react";
 import PropTypes from "prop-types";
 
 import { useLocalStorage } from "react-use";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-export const DarkModeContext = createContext();
+const LOCAL_STORAGE_KEY = "dark-mode";
+
+export const DarkModeContext = React.createContext();
 
 export const DarkModeProvider = ({ children }) => {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-  const [darkMode, setDarkMode] = useLocalStorage("dark-mode", prefersDarkMode);
 
-  useEffect(() => {
+  const [darkMode, setDarkMode] = useLocalStorage(
+    LOCAL_STORAGE_KEY,
+    prefersDarkMode,
+  );
+
+  React.useEffect(() => {
     setDarkMode((value) => value || prefersDarkMode);
   }, [prefersDarkMode]);
 
-  const value = useMemo(() => [darkMode, setDarkMode], [darkMode]);
+  React.useEffect(() => {
+    window.addEventListener("storage", () => {
+      const rawValue = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (rawValue !== null) {
+        setDarkMode(JSON.parse(rawValue));
+      }
+    });
+  }, []);
+
+  const value = React.useMemo(() => [darkMode, setDarkMode], [darkMode]);
 
   return (
     <DarkModeContext.Provider value={value}>
@@ -28,6 +43,4 @@ DarkModeProvider.propTypes = {
   children: PropTypes.element,
 };
 
-export const useDarkMode = () => {
-  return useContext(DarkModeContext);
-};
+export const useDarkMode = () => React.useContext(DarkModeContext);

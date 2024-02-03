@@ -3,17 +3,14 @@ import {
   SHOW_FILTER_DEVIATION_MODAL,
   HIDE_FILTER_DEVIATION_MODAL,
 } from "./constants/messages";
-
+import { DEFAULT_OPTIONS, OPTIONS_STORAGE_KEY } from "./constants/options";
 import { PAGES } from "./constants/url";
 
 import { SetMetadataOnNode } from "./content/metadata";
 
+import { ENABLED_FILTERS_STORAGE_KEY, GetEnabledFilters } from "./filters";
 import * as KeywordsFilter from "./filters/keywords";
 import * as UsersFilter from "./filters/users";
-
-let ENABLED = true;
-
-const FILTERS = [KeywordsFilter, UsersFilter];
 
 const SELECTORS = [
   `a[href*="deviantart.com/"][href*="/art/"]`,
@@ -21,36 +18,43 @@ const SELECTORS = [
   `a[href*="deviantart.com/"][href*="/status-update/"]`,
 ];
 
+const FILTERS = [KeywordsFilter, UsersFilter];
+
+let pageIsEnabled = true;
+let metadataEnabled = true;
+
 /**
  * Runs all applicable logic on DOM nodes (applying metadata, filtering, etc.)
  * @param {HTMLElement[]} nodes the collection of DOM nodes
  */
 export const HandleNodes = async (nodes) => {
   const data = {};
-  for (const F of FILTERS) {
+  for (const F of FILTERS.filter((F) => F.IS_ENABLED)) {
     const storageData = await browser.storage.local.get(F.STORAGE_KEY);
     data[F.STORAGE_KEY] = storageData[F.STORAGE_KEY] ?? [];
   }
 
-  // start loading metadata and applying filters that do require metadata first (asynchronously)
-  nodes.forEach(async (node) => {
-    let metadataApplied = true;
-    try {
-      await SetMetadataOnNode(node);
-    } catch (error) {
-      console.error("Failed to set metadata on node", node, error);
-      metadataApplied = false;
-    }
+  if (metadataEnabled) {
+    // start loading metadata and applying filters that do require metadata first (asynchronously)
+    nodes.forEach(async (node) => {
+      let metadataApplied = true;
+      try {
+        await SetMetadataOnNode(node);
+      } catch (error) {
+        console.error("Failed to set metadata on node", node, error);
+        metadataApplied = false;
+      }
 
-    if (metadataApplied) {
-      FILTERS.filter(
-        (F) =>
-          F.REQUIRES_METADATA &&
-          data[F.STORAGE_KEY] &&
-          data[F.STORAGE_KEY].length,
-      ).forEach((F) => F.ApplyFiltersToNode(node, data[F.STORAGE_KEY]));
-    }
-  });
+      if (metadataApplied) {
+        FILTERS.filter(
+          (F) =>
+            F.REQUIRES_METADATA &&
+            data[F.STORAGE_KEY] &&
+            data[F.STORAGE_KEY].length,
+        ).forEach((F) => F.ApplyFiltersToNode(node, data[F.STORAGE_KEY]));
+      }
+    });
+  }
 
   // apply filters that do NOT require metadata last
   nodes.forEach((node) => {
@@ -104,12 +108,36 @@ const WatchForNewNodes = (selector) => {
  * @param {string} changes the local storage changes
  */
 export const OnLocalStorageChanged = async (key, changes) => {
-  if (!ENABLED) {
+  if (!pageIsEnabled) {
+    return;
+  }
+
+  if (key === OPTIONS_STORAGE_KEY) {
+    const { newValue: options } = changes;
+    ApplyAttributesForOptions(options);
+    return;
+  }
+
+  if (key === ENABLED_FILTERS_STORAGE_KEY) {
+    const { newValue: enabledFilters } = changes;
+    for (const F of FILTERS) {
+      const wasEnabled = F.IS_ENABLED;
+      const isEnabled = enabledFilters.includes(F.STORAGE_KEY);
+
+      // update the global (for this instance/page) filter object first b/c `HandleNodes()` depends on it
+      F.IS_ENABLED = isEnabled;
+
+      if (wasEnabled && !isEnabled) {
+        F.DisableFilter();
+      } else if (!wasEnabled && isEnabled) {
+        HandleNodes(document.querySelectorAll(SELECTORS.join(", ")));
+      }
+    }
     return;
   }
 
   for (const F of FILTERS) {
-    if (key === F.STORAGE_KEY) {
+    if (key === F.STORAGE_KEY && F.IS_ENABLED) {
       const { added, removed, newValue } = changes;
 
       if (added.length) {
@@ -221,14 +249,58 @@ const IsPageDisabled = async (url) => {
 };
 
 /**
- * Gets the value of an option specific to placeholder functionality from storage
- * @param {string} optionName the placeholder option name
- * @param {*} defaultValue the default value (if the option is not set in storage)
- * @returns {*} the value of the placeholder option from storage (or the supplied default value)
+ * Gets all options from extension storage
+ * @returns {object} the options as a structured object
  */
-const GetPlaceholderOption = async (optionName, defaultValue) => {
-  const data = await browser.storage.local.get("options");
-  return data?.options?.placeholders?.[optionName] ?? defaultValue;
+const GetOptions = async () => {
+  const { options } = await browser.storage.local.get({
+    [OPTIONS_STORAGE_KEY]: DEFAULT_OPTIONS,
+  });
+  return options;
+};
+
+const ApplyAttributesForOptions = (options) => {
+  document.body.setAttribute(
+    "da-filter-untagged",
+    options.filterUntaggedSubmissionTypes.join(" "),
+  );
+
+  const metadataAttributes = [];
+  if (options.metadata?.missingMetadataIndicators) {
+    metadataAttributes.push("indicate-missing");
+  }
+  if (options.metadata?.loadedMetadataIndicators) {
+    metadataAttributes.push("indicate-loaded");
+  }
+
+  document.body.setAttribute(
+    "da-filter-metadata",
+    metadataAttributes.join(" "),
+  );
+
+  const placeholderAttributes = [];
+  if (options.placeholders?.disabled) {
+    // TODO: expose an option for completely "disabling" placeholders if it is ever feasible
+    // for now, though, disabling placeholders is difficult (impossible, even?) for at least 2 reasons:
+    // 1) we need to target the parent-most unique DOM node containing the filtered deviation's link
+    //    this is non-trivial due to inconsistent DOM structures for thumbnails across the site,
+    //    although there may be some `:has()` wizardry to do it via CSS selectors in modern browsers
+    // 2) we would then have to re-arrange the layout(s) due to DeviantArt using explicit grids
+    //    again this is non-trivial due to inconsistent DOM structures across the site
+    placeholderAttributes.push("disabled");
+  } else {
+    if (options.placeholders?.preventClick) {
+      placeholderAttributes.push("prevent-click");
+    }
+    if (options.placeholders?.showFilterText) {
+      placeholderAttributes.push("show-filter-text");
+    }
+  }
+
+  document.body.setAttribute(
+    "da-filter-placeholders",
+    placeholderAttributes.join(" "),
+  );
 };
 
 /**
@@ -238,23 +310,24 @@ const GetPlaceholderOption = async (optionName, defaultValue) => {
   // create the filter frame first so it responds to messages
   InitFilterFrame();
 
-  ENABLED = !(await IsPageDisabled(window.location));
+  pageIsEnabled = !(await IsPageDisabled(window.location));
+
+  const enabledFilters = await GetEnabledFilters();
+  for (const F of FILTERS) {
+    F.IS_ENABLED = enabledFilters.includes(F.STORAGE_KEY);
+  }
 
   // setup message handlers as soon as we are ready to receive them
   if (!browser.runtime.onMessage.hasListener(OnRuntimeMessage)) {
     browser.runtime.onMessage.addListener(OnRuntimeMessage);
   }
 
-  if (ENABLED) {
-    document.body.classList.add("enable-metadata-indicators");
+  if (pageIsEnabled) {
+    const options = await GetOptions();
 
-    if (!(await GetPlaceholderOption("preventClick", true))) {
-      document.body.classList.add("clickable-placeholders");
-    }
+    metadataEnabled = options.metadata.enabled !== false;
 
-    if (!(await GetPlaceholderOption("showFilterText", true))) {
-      document.body.classList.add("hide-placeholder-text");
-    }
+    ApplyAttributesForOptions(options);
 
     // setup observers for nodes loaded after initial render next
     WatchForNewNodes(SELECTORS.join(", "));

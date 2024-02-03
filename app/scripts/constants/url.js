@@ -22,6 +22,9 @@ export const PAGES = {
   Notifications: {
     pathname: ["^/notifications"],
   },
+  DeviantsYouWatch: {
+    pathname: ["^/watch"],
+  },
 };
 
 export const TAG_URL_REGEX = /\/tag\/(?<tag>[^\/]+)\/?/i;

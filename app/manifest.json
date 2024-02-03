@@ -31,7 +31,8 @@
       "96": "images/icon-96.png",
       "128": "images/icon-128.png"
     },
-    "default_title": "__MSG_BrowserActionTitle__"
+    "default_title": "__MSG_BrowserActionTitle__",
+    "default_popup": "pages/popup.html"
   },
   "content_scripts": [
     {

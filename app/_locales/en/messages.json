@@ -15,6 +15,18 @@
     "message": "DeviantArt Filter",
     "description": "The title of the browser action button"
   },
+  "BrowserAction_Popup_ButtonLabel_OpenManagementWindow": {
+    "message": "Manage DeviantArt Filter"
+  },
+  "SubmissionType_PluralLabel_Deviations": {
+    "message": "Deviations"
+  },
+  "SubmissionType_PluralLabel_Journals": {
+    "message": "Journal Entries"
+  },
+  "SubmissionType_PluralLabel_Updates": {
+    "message": "Status Updates"
+  },
   "FilterNameWithCount_Singular": {
     "message": "$COUNT$ $NAME$ Filter",
     "description": "A formatted string to display the name of a filter with the count of filters (singular)",
@@ -161,8 +173,25 @@
   "ConfirmOptionsResetButton_Decline": {
     "message": "No"
   },
+  "ConfirmOptionsDisableMetadataPrompt": {
+    "message": "Are you sure you want to disable submission metadata retrieval and injection? Doing so will prevent all keyword filters from working.",
+    "description": "The message displayed on the modal when asking for confirmation to disable metadata retrieval and injection"
+  },
+  "ConfirmOptionsDisableMetadataTitle": {
+    "message": "Confirm Disable Metadata",
+    "description": "The title displayed on the modal when asking for confirmation to disable metadata retrieval and injection"
+  },
+  "ConfirmOptionsDisableMetadataButton_Accept": {
+    "message": "Yes"
+  },
+  "ConfirmOptionsDisableMetadataButton_Decline": {
+    "message": "No"
+  },
   "OptionsTitle": {
     "message": "Options"
+  },
+  "Options_EnabledFilterTypes_Header": {
+    "message": "Enabled Filter Types"
   },
   "Options_EnabledPages_Header": {
     "message": "Enabled Pages"
@@ -179,11 +208,32 @@
   "Options_EnabledPages_PageLabel_Notifications": {
     "message": "Notifications Page"
   },
+  "Options_EnabledPages_PageLabel_DeviantsYouWatch": {
+    "message": "Deviants You Watch Page"
+  },
+  "Options_MetadataFunctionality_Header": {
+    "message": "Submission Metadata"
+  },
+  "Options_MetadataFunctionality_HelpText": {
+    "message": "Control the behavior of metadata retrieval and injection for submissions and the appearance of submissions when metadata is missing and/or loaded."
+  },
+  "Options_MetadataFunctionality_OptionLabel_Enabled": {
+    "message": "Enable metadata retrieval and injection for submissions"
+  },
+  "Options_MetadataFunctionality_OptionHelpText_Enabled": {
+    "message": "<strong>Note</strong>: This must be enabled/on for keyword filters to work"
+  },
+  "Options_MetadataFunctionality_OptionLabel_MissingMetadataIndicators": {
+    "message": "Show an orange outline around thumbnails until the submission's metadata has been loaded (useful for troubleshooting purposes)"
+  },
+  "Options_MetadataFunctionality_OptionLabel_LoadedMetadataIndicators": {
+    "message": "Show a green outline around thumbnails after metadata is loaded"
+  },
   "Options_PlaceholderFunctionality_Header": {
     "message": "Placeholder Appearance/Behavior"
   },
   "Options_PlaceholderFunctionality_HelpText": {
-    "message": "Use these to control the behavior and appearance of the placeholder thumbnails that are shown for filtered deviations."
+    "message": "Control the appearance and behavior of the placeholder thumbnails that are shown for filtered deviations."
   },
   "Options_PlaceholderFunctionality_OptionLabel_PreventClick": {
     "message": "Prevent clicking on thumbnails for filtered deviations"
@@ -195,7 +245,7 @@
     "message": "Show Release Notes for Updates"
   },
   "Options_ShowUpdatedPage_HelpText": {
-    "message": "Use this to control if/when release notes are shown after the extension is updated."
+    "message": "Control if/when release notes are shown after the extension is updated."
   },
   "Options_ShowUpdatedPage_OptionLabel_Major": {
     "message": "Show for major updates only"
@@ -209,6 +259,32 @@
   "Options_ShowUpdatedPage_OptionLabel_None": {
     "message": "Never show for any updates"
   },
+  "Options_FilterUntaggedSubmissions_Header": {
+    "message": "Filter Untagged Submissions"
+  },
+  "Options_FilterUntaggedSubmissions_HelpText": {
+    "message": "Control which types of submissions (if any) are automatically filtered when they do not have any tags"
+  },
+  "Options_FilterUntaggedSubmissions_SelectedList_None": {
+    "message": "Do NOT automatically filter untagged submissions"
+  },
+  "Options_FilterUntaggedSubmissions_SelectedList_SingleOption": {
+    "message": "Only $1"
+  },
+  "Options_FilterUntaggedSubmissions_SelectedList_DualOptions": {
+    "message": "$1 and $2"
+  },
+  "Options_FilterUntaggedSubmissions_SelectedList_MultipleOptions": {
+    "message": "$MOST$, and $LAST$",
+    "placeholders": {
+      "most": {
+        "content": "$1"
+      },
+      "last": {
+        "content": "$2"
+      }
+    }
+  },
   "Options_ButtonLabel_Reset": {
     "message": "Reset to Defaults"
   },
@@ -221,14 +297,47 @@
   "SidebarLink_Settings": {
     "message": "Settings"
   },
-  "SidebarLink_ImportExport": {
-    "message": "Import/Export"
+  "SidebarLink_Options": {
+    "message": "Options"
   },
   "SidebarLink_Keywords": {
     "message": "Keyword Filters"
   },
   "SidebarLink_Users": {
     "message": "User Filters"
+  },
+  "FilterType_Enable_ButtonLabel": {
+    "message": "Enable"
+  },
+  "FilterType_Enabled_SwitchLabel": {
+    "message": "Enabled"
+  },
+  "Warning_FilterName_Disabled": {
+    "message": "Warning: $NAME$ filters are currently disabled!",
+    "description": "A formatted string that is displayed as a warning message when a type of filter is disabled",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
+  "Notification_FilterCreatedForDisabledFilterType": {
+    "message": "The filter was created, but $NAME$ filters are currently disabled",
+    "description": "A formatted string that is displayed in a browser notification when a new filter is created for a type of filter that is currently disabled",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
+  "Notification_FilterNotCreated_WithMessage": {
+    "message": "The filter was not created: $MESSAGE$",
+    "description": "A formatted string that is displayed in a browser notification when a filter is not created (with the reason/message indicating why)",
+    "placeholders": {
+      "message": {
+        "content": "$1"
+      }
+    }
   },
   "FilterTitle_Keyword": {
     "message": "Keyword"
@@ -317,6 +426,15 @@
   },
   "Placeholder_User": {
     "message": "Filtered User"
+  },
+  "Placeholder_UntaggedDeviation": {
+    "message": "Untagged Deviation"
+  },
+  "Placeholder_UntaggedJournal": {
+    "message": "Untagged Journal"
+  },
+  "Placeholder_UntaggedUpdate": {
+    "message": "Untagged Status Update"
   },
   "RequiredFieldLabel": {
     "message": "$FIELD$ is required",

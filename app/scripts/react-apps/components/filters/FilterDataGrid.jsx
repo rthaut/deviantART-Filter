@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 
 import { useConfirm } from "material-ui-confirm";
 
+import Alert from "@mui/material/Alert";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
@@ -24,7 +26,7 @@ import FilterDataGridNoRowsOverlay, {
 
 import InvalidFilterDataWarning from "./InvalidFilterDataWarning";
 
-import useFilterData from "../../hooks/useFilterData";
+import { useFilterData } from "../../hooks/useFilterData";
 
 import { REMOVE_FILTER, SAVE_FILTER } from "../../../constants/messages";
 
@@ -41,8 +43,6 @@ const DISABLE_FOCUS_STYLES = {
 export default function FilterDataGrid({
   title,
   columns,
-  filterKey,
-  rowIdPropName,
   filterDialogFormFields,
 }) {
   const confirm = useConfirm();
@@ -51,14 +51,15 @@ export default function FilterDataGrid({
   const [filterToEdit, setFilterToEdit] = useState(null);
 
   const {
+    filterKey,
+    idPropName: rowIdPropName,
+    enabled,
+    setEnabled,
     loading,
     validFilters: rows,
     invalidFilters: invalidRows,
     purgeInvalidFilters,
-  } = useFilterData({
-    filterKey,
-    idPropName: rowIdPropName,
-  });
+  } = useFilterData();
 
   const sendFilterMessage = async (action, value) => {
     const response = await browser.runtime.sendMessage({
@@ -214,6 +215,26 @@ export default function FilterDataGrid({
           }}
         />
         <CardContent>
+          {!enabled && (
+            <Alert
+              severity="warning"
+              variant="standard"
+              sx={{
+                mb: 4,
+              }}
+              action={
+                <Button
+                  color="inherit"
+                  size="small"
+                  onClick={() => setEnabled(true)}
+                >
+                  {browser.i18n.getMessage("FilterType_Enable_ButtonLabel")}
+                </Button>
+              }
+            >
+              {browser.i18n.getMessage("Warning_FilterName_Disabled", [title])}
+            </Alert>
+          )}
           <DataGrid
             autoHeight
             columns={[...columns, actionsColumn]}
@@ -268,7 +289,5 @@ FilterDataGrid.propTypes = {
   columns: PropTypes.arrayOf(
     PropTypes.shape({ field: PropTypes.string.isRequired }),
   ),
-  filterKey: PropTypes.string.isRequired,
-  rowIdPropName: PropTypes.string.isRequired,
   filterDialogFormFields: PropTypes.func.isRequired,
 };

@@ -6,8 +6,16 @@ import { SUBMISSION_URL_REGEX } from "../constants/url";
  * @param {HTMLElement} node the DOM node
  */
 export const SetMetadataOnNode = async (node) => {
-  const url = node.getAttribute("href");
+  const metadataAttributes = ["data-title", "data-tags"];
+  const hasMetadata = node
+    .getAttributeNames()
+    .some((a) => metadataAttributes.includes(a));
 
+  if (hasMetadata) {
+    return;
+  }
+
+  const url = node.getAttribute("href");
   if (!url) {
     console.warn("Failed to get Deviation URL for DOM node", node);
     return;
@@ -49,6 +57,10 @@ export const SetMetadataAttributesOnNode = (node, metadata) => {
   const { author_name, title, tags } = metadata;
 
   if (author_name) {
+    // TODO: put the author_name metadata value into a different (or additional) attribute?
+    // currently it overwrites the lowercase username that is parsed from the URL
+    // via the `GetUsernameForNode()` function when applying user filters
+    // (typically prior to the metadata retrieval/injection finishing)
     node.setAttribute("data-username", author_name);
   }
 
@@ -64,5 +76,8 @@ export const SetMetadataAttributesOnNode = (node, metadata) => {
         .map((tag) => tag.trim())
         .join(" "),
     );
+  } else {
+    // explicitly set data-tags attribute to empty string for untagged submission filtering
+    node.setAttribute("data-tags", "");
   }
 };

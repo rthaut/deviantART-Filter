@@ -12,9 +12,8 @@ import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
 import Tooltip from "@mui/material/Tooltip";
 
-import { STORAGE_KEY as filterKey } from "../../filters/keywords";
-
 import FilterDataGrid from "../components/filters/FilterDataGrid";
+import KeywordFiltersDataProvider from "../contexts/keywordsFiltersDataProvider";
 
 const FilterDialogFormContent = ({ filter }) => (
   <>
@@ -110,13 +109,13 @@ const KeywordsFilterView = () => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
-        <FilterDataGrid
-          columns={columns}
-          filterKey={filterKey}
-          rowIdPropName="keyword"
-          title={browser.i18n.getMessage("FilterTitle_Keyword")}
-          filterDialogFormFields={FilterDialogFormContent}
-        />
+        <KeywordFiltersDataProvider>
+          <FilterDataGrid
+            columns={columns}
+            title={browser.i18n.getMessage("FilterTitle_Keyword")}
+            filterDialogFormFields={FilterDialogFormContent}
+          />
+        </KeywordFiltersDataProvider>
       </Grid>
     </Grid>
   );

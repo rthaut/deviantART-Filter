@@ -1,16 +1,58 @@
-import { useCallback, useEffect, useState } from "react";
+import * as React from "react";
 import PropTypes from "prop-types";
 
-// TODO: move this into a provider+context, and then wrap the 2 router "Views" with the provider?
-// that way we don't have to drill as many props from the FilterDataGrid into the sub-components...
-// (the Provider could then take in the 2 params currently supplied to the hook)
+import useExtensionStorage from "./useExtensionStorage";
 
-const useFilterData = ({ filterKey, idPropName }) => {
-  const [loading, setLoading] = useState(true);
-  const [validFilters, setValidFilters] = useState([]);
-  const [invalidFilters, setInvalidFilters] = useState([]);
+import { ENABLED_FILTERS_STORAGE_KEY, SUPPORTED_FILTERS } from "../../filters";
 
-  const isFilterValid = useCallback(
+export const FilterDataContext = React.createContext();
+
+export const FilterDataProvider = ({ filterKey, idPropName, children }) => {
+  const [loading, setLoading] = React.useState(true);
+  const [validFilters, setValidFilters] = React.useState([]);
+  const [invalidFilters, setInvalidFilters] = React.useState([]);
+
+  const [enabledFilterTypes, setEnabledFilterTypes] = useExtensionStorage({
+    type: "local",
+    key: ENABLED_FILTERS_STORAGE_KEY,
+    initialValue: SUPPORTED_FILTERS,
+  });
+
+  const enabled = enabledFilterTypes.includes(filterKey);
+
+  const setEnabled = (enabled) =>
+    setEnabledFilterTypes((enabledFilterTypes) => {
+      const enabledFilterTypesSet = new Set([...enabledFilterTypes]);
+
+      if (enabled) {
+        enabledFilterTypesSet.add(filterKey);
+      } else {
+        enabledFilterTypesSet.delete(filterKey);
+      }
+
+      return Array.from(enabledFilterTypesSet);
+    });
+
+  const toggleEnabled = () =>
+    setEnabledFilterTypes((enabledFilterTypes) => {
+      const enabledFilterTypesSet = new Set([...enabledFilterTypes]);
+
+      if (enabledFilterTypesSet.has(filterKey)) {
+        enabledFilterTypesSet.delete(filterKey);
+      } else {
+        enabledFilterTypesSet.add(filterKey);
+      }
+
+      return Array.from(enabledFilterTypesSet);
+    });
+
+  const purgeInvalidFilters = React.useCallback(() => {
+    browser.storage.local.set({
+      [filterKey]: validFilters,
+    });
+  }, [filterKey, validFilters]);
+
+  const isFilterValid = React.useCallback(
     (filter) =>
       typeof filter === "object" &&
       Object.keys(filter).includes(idPropName) &&
@@ -20,7 +62,7 @@ const useFilterData = ({ filterKey, idPropName }) => {
     [idPropName],
   );
 
-  const separateFiltersByValidity = useCallback(
+  const separateFiltersByValidity = React.useCallback(
     (rawFilterData = []) => {
       const valid = [];
       const invalid = [];
@@ -49,30 +91,7 @@ const useFilterData = ({ filterKey, idPropName }) => {
     setInvalidFilters(invalid);
   };
 
-  const onStorageChanged = useCallback(
-    (changes, areaName) => {
-      if (areaName === "local" && Object.keys(changes).includes(filterKey)) {
-        setLoading(true);
-        setRowStatesFromStorage(changes[filterKey]?.newValue);
-        setLoading(false);
-      }
-    },
-    [filterKey],
-  );
-
-  useEffect(() => {
-    if (!browser.storage.onChanged.hasListener(onStorageChanged)) {
-      browser.storage.onChanged.addListener(onStorageChanged);
-    }
-
-    return () => {
-      if (browser.storage.onChanged.hasListener(onStorageChanged)) {
-        browser.storage.onChanged.removeListener(onStorageChanged);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
+  React.useEffect(() => {
     setLoading(true);
     browser.storage.local
       .get(filterKey)
@@ -84,23 +103,49 @@ const useFilterData = ({ filterKey, idPropName }) => {
       });
   }, [filterKey]);
 
-  const purgeInvalidFilters = useCallback(() => {
-    browser.storage.local.set({
-      [filterKey]: validFilters,
-    });
-  }, [filterKey, validFilters]);
+  React.useEffect(() => {
+    const onStorageChanged = (changes, areaName) => {
+      if (areaName === "local" && Object.keys(changes).includes(filterKey)) {
+        setLoading(true);
+        setRowStatesFromStorage(changes[filterKey]?.newValue);
+        setLoading(false);
+      }
+    };
 
-  return {
+    if (!browser.storage.onChanged.hasListener(onStorageChanged)) {
+      browser.storage.onChanged.addListener(onStorageChanged);
+    }
+
+    return () => {
+      if (browser.storage.onChanged.hasListener(onStorageChanged)) {
+        browser.storage.onChanged.removeListener(onStorageChanged);
+      }
+    };
+  }, [filterKey]);
+
+  const value = {
+    filterKey,
+    idPropName,
+    enabled,
+    setEnabled,
+    toggleEnabled,
     loading,
     validFilters,
     invalidFilters,
     purgeInvalidFilters,
   };
+
+  return (
+    <FilterDataContext.Provider value={value}>
+      {children}
+    </FilterDataContext.Provider>
+  );
 };
 
-useFilterData.propTypes = {
+FilterDataProvider.propTypes = {
   filterKey: PropTypes.string.isRequired,
   idPropName: PropTypes.string.isRequired,
+  children: PropTypes.element,
 };
 
-export default useFilterData;
+export const useFilterData = () => React.useContext(FilterDataContext);

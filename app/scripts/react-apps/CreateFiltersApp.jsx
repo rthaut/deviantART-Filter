@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  Typography,
-} from "@mui/material";
-
-import { Alert, AlertTitle } from "@mui/lab";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
 import {
   FETCH_METADATA,
@@ -20,6 +18,8 @@ import {
   SHOW_FILTER_DEVIATION_MODAL,
   HIDE_FILTER_DEVIATION_MODAL,
 } from "../constants/messages";
+
+import { GetEnabledFilters } from "../filters";
 
 import AppProviders from "./components/AppProviders";
 import LogoIcon from "./components/LogoIcon";
@@ -37,6 +37,10 @@ const CreateFiltersAppMain = () => {
     error: "",
   });
 
+  const [enabledFilterTypes, setEnabledFilterTypes] = useState(
+    Object.keys(initialFilters),
+  );
+
   const [metadata, setMetadata] = useState(null);
   const [filters, setFilters] = useState(initialFilters);
   const [results, setResults] = useState(null);
@@ -49,6 +53,7 @@ const CreateFiltersAppMain = () => {
   const onRuntimeMessage = (message) => {
     switch (message.action) {
       case SHOW_FILTER_DEVIATION_MODAL:
+        loadEnabledFilterTypes();
         loadMetadata(message.data.link);
         break;
     }
@@ -73,7 +78,23 @@ const CreateFiltersAppMain = () => {
     });
   };
 
+  const loadEnabledFilterTypes = async () => {
+    try {
+      const enabledFilters = await GetEnabledFilters();
+      setEnabledFilterTypes(enabledFilters);
+    } catch (error) {
+      console.warn(
+        "Failed to determine which filter type are enabled/disabled",
+        error,
+      );
+    }
+  };
+
   const reset = () => {
+    setError({
+      message: "",
+      error: "",
+    });
     setFilters(initialFilters);
     setResults(null);
     setTitle(browser.i18n.getMessage("CreateFiltersFromDeviation_Title"));
@@ -87,7 +108,7 @@ const CreateFiltersAppMain = () => {
     await browser.runtime.sendMessage({
       action: HIDE_FILTER_DEVIATION_MODAL,
     });
-    setMetadata(null);
+    reset();
   };
 
   const mapCount = (obj, property) =>
@@ -204,14 +225,18 @@ const CreateFiltersAppMain = () => {
         ) : results ? (
           <MetadataFiltersResults results={results} />
         ) : (
-          <MetadataFiltersForm metadata={metadata} setFilter={setFilter} />
+          <MetadataFiltersForm
+            enabledFilterTypes={enabledFilterTypes}
+            metadata={metadata}
+            setFilter={setFilter}
+          />
         )}
       </DialogContent>
 
       <DialogActions>
         {results ? (
           <>
-            <Button variant="contained" color="secondary" onClick={closeModal}>
+            <Button variant="contained" color="primary" onClick={closeModal}>
               {browser.i18n.getMessage(
                 "CreateFiltersFromDeviation_Button_Close",
               )}

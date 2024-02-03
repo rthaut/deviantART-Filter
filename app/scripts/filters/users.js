@@ -1,7 +1,7 @@
 import { SUBMISSION_URL_REGEX } from "../constants/url";
 
 export const STORAGE_KEY = "users";
-
+export const ID_PROP_NAME = "username";
 export const UNIQUE_KEYS = ["username"];
 
 //TODO: a VERY small portion DOM nodes don't have a username available until AFTER metadata is loaded (the known case is for Stash items); it doesn't make sense to wait for metadata to load for all DOM nodes, but having a way to re-apply this filter after metadata loads (for DOM nodes that have NOT already been processed) would be useful
@@ -44,7 +44,9 @@ export const validate = ({ username }) => {
  * @param {object[]} filters the list of filters to apply
  */
 export const ApplyFiltersToNode = (node, filters) => {
-  const usernames = filters.map((filter) => filter.username.toLowerCase());
+  const usernames = filters
+    .map((filter) => filter.username?.toLowerCase())
+    .filter(Boolean);
 
   const username = GetUsernameForNode(node);
 
@@ -83,6 +85,17 @@ export const RemoveFiltersFromDocument = (removedFilters, _activeFilters) => {
     for (const node of nodes) {
       RemoveFilterAttributesOnNode(node);
     }
+  }
+};
+
+/**
+ * Removes filter attributes from all DOM nodes on the page
+ * Used primarily for when user filters are disabled
+ */
+export const DisableFilter = () => {
+  const nodes = document.querySelectorAll(`[da-filter-user]`);
+  for (const node of nodes) {
+    RemoveFilterAttributesOnNode(node);
   }
 };
 

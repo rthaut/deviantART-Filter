@@ -39,7 +39,7 @@ export default function InvalidFilterDataWarning({
   );
 
   // NOTE: can't just bind Accordion `defaultExpanded={!ignore}` as it must be fully controlled,
-  // and we don't want to collapse the accordion as soon as the user checks the ignore checkbox
+  // and we don't want to un-ignore the warning just because the user expanded the warning
   const [expanded, setExpanded] = useState(!ignore);
 
   const onPurgeClick = () => {
@@ -144,7 +144,12 @@ export default function InvalidFilterDataWarning({
           control={
             <Checkbox
               checked={ignore}
-              onChange={(event) => setIgnore(event.target.checked)}
+              onChange={(event) => {
+                setIgnore(event.target.checked);
+                if (event.target.checked) {
+                  setExpanded(false);
+                }
+              }}
             />
           }
           label={browser.i18n.getMessage(

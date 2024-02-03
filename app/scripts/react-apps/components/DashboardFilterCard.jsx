@@ -1,60 +1,95 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
+
 import { NavLink } from "react-router-dom";
-import {
-  Typography,
-  Divider,
-  Card,
-  CardContent,
-  CardActions,
-  Button,
-} from "@mui/material";
+import { useLocalStorage } from "react-use";
 
-const DashboardFilterCard = ({ filterKey, title, link }) => {
-  const [filterCount, setFilterCount] = useState(0);
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Divider from "@mui/material/Divider";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Stack from "@mui/material/Stack";
+import Switch from "@mui/material/Switch";
 
-  useEffect(() => {
-    const getFilterCount = async () => {
-      try {
-        const data = await browser.storage.local.get(filterKey);
-        setFilterCount(Array.from(data[filterKey] ?? [])?.length);
-      } catch (ex) {
-        // console.error(ex);
-      }
-    };
-    getFilterCount();
-  }, [setFilterCount, filterKey]);
+import { useFilterData } from "../hooks/useFilterData";
 
-  const onStorageChanged = useCallback(
-    (changes, areaName) => {
-      if (areaName === "local" && Object.keys(changes).includes(filterKey)) {
-        setFilterCount(changes[filterKey].newValue.length);
-      }
-    },
-    [filterKey],
+const DashboardFilterCard = ({ title, link }) => {
+  const {
+    filterKey,
+    enabled,
+    setEnabled,
+    loading,
+    validFilters,
+    invalidFilters,
+  } = useFilterData();
+
+  const [ignoreInvalidFiltersWarning] = useLocalStorage(
+    `ignore-invalid-${filterKey}-filters`,
+    false,
   );
 
-  useEffect(() => {
-    if (!browser.storage.onChanged.hasListener(onStorageChanged)) {
-      browser.storage.onChanged.addListener(onStorageChanged);
-    }
-
-    return () => {
-      if (browser.storage.onChanged.hasListener(onStorageChanged)) {
-        browser.storage.onChanged.removeListener(onStorageChanged);
-      }
-    };
-  }, []);
-
   return (
-    <Card>
-      <CardContent>
-        <Typography component="h2" variant="h6" gutterBottom>
-          {browser.i18n.getMessage(
-            `FilterNameWithCount_${filterCount == 1 ? "Singular" : "Plural"}`,
-            [filterCount, title],
+    <Card sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <CardHeader
+        sx={{
+          paddingBlockEnd: 0,
+        }}
+        action={
+          loading ? null : (
+            <FormControlLabel
+              control={
+                <Switch
+                  color="primary"
+                  checked={enabled}
+                  onChange={(event, checked) => setEnabled(checked)}
+                />
+              }
+              label={browser.i18n.getMessage("FilterType_Enabled_SwitchLabel")}
+              slotProps={{
+                typography: {
+                  sx: (theme) => ({
+                    color: enabled
+                      ? theme.palette.text.primary
+                      : theme.palette.text.disabled,
+                  }),
+                },
+              }}
+            />
+          )
+        }
+        title={
+          loading
+            ? browser.i18n.getMessage("FilterNameLoading", [title])
+            : browser.i18n.getMessage(
+                `FilterNameWithCount_${validFilters.length == 1 ? "Singular" : "Plural"}`,
+                [validFilters.length, title],
+              )
+        }
+        titleTypographyProps={{
+          component: "h2",
+          variant: "h6",
+        }}
+      />
+      <CardContent sx={{ flexGrow: 1 }}>
+        <Stack direction="column" spacing={1}>
+          {!enabled && (
+            <Alert severity="warning">
+              {browser.i18n.getMessage("Warning_FilterName_Disabled", [title])}
+            </Alert>
           )}
-        </Typography>
+          {!ignoreInvalidFiltersWarning && invalidFilters.length > 0 && (
+            <Alert severity="error">
+              <AlertTitle sx={{ mb: 0 }}>
+                {browser.i18n.getMessage("InvalidFilterData_Warning_Title")}
+              </AlertTitle>
+            </Alert>
+          )}
+        </Stack>
       </CardContent>
       <Divider variant="middle" />
       <CardActions>
@@ -67,7 +102,6 @@ const DashboardFilterCard = ({ filterKey, title, link }) => {
 };
 
 DashboardFilterCard.propTypes = {
-  filterKey: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,
 };
