@@ -16,6 +16,8 @@ import {
   validate as validateKeywordFilter,
 } from "./keywords";
 
+export const ENABLED_FILTERS_STORAGE_KEY = "enabled-filters";
+
 export const SUPPORTED_FILTERS = [
   userFiltersStorageKey,
   keywordsFiltersStorageKey,

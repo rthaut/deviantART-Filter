@@ -15,6 +15,9 @@
     "message": "DeviantArt Filter",
     "description": "The title of the browser action button"
   },
+  "BrowserAction_Popup_ButtonLabel_OpenManagementWindow": {
+    "message": "Manage DeviantArt Filter"
+  },
   "FilterNameWithCount_Singular": {
     "message": "$COUNT$ $NAME$ Filter",
     "description": "A formatted string to display the name of a filter with the count of filters (singular)",
@@ -164,6 +167,9 @@
   "OptionsTitle": {
     "message": "Options"
   },
+  "Options_EnabledFilterTypes_Header": {
+    "message": "Enabled Filter Types"
+  },
   "Options_EnabledPages_Header": {
     "message": "Enabled Pages"
   },
@@ -229,6 +235,21 @@
   },
   "SidebarLink_Users": {
     "message": "User Filters"
+  },
+  "FilterType_Enable_ButtonLabel": {
+    "message": "Enable"
+  },
+  "FilterType_Enabled_SwitchLabel": {
+    "message": "Enabled"
+  },
+  "Warning_FilterName_Disabled": {
+    "message": "Warning: $NAME$ filters are currently disabled!",
+    "description": "A formatted string that is displayed as a warning message when a type of filter is disabled",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
   },
   "FilterTitle_Keyword": {
     "message": "Keyword"

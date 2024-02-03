@@ -8,10 +8,9 @@ import { PAGES } from "./constants/url";
 
 import { SetMetadataOnNode } from "./content/metadata";
 
+import { ENABLED_FILTERS_STORAGE_KEY } from "./filters";
 import * as KeywordsFilter from "./filters/keywords";
 import * as UsersFilter from "./filters/users";
-
-let ENABLED = true;
 
 const FILTERS = [KeywordsFilter, UsersFilter];
 
@@ -21,13 +20,15 @@ const SELECTORS = [
   `a[href*="deviantart.com/"][href*="/status-update/"]`,
 ];
 
+let pageIsEnabled = true;
+
 /**
  * Runs all applicable logic on DOM nodes (applying metadata, filtering, etc.)
  * @param {HTMLElement[]} nodes the collection of DOM nodes
  */
 export const HandleNodes = async (nodes) => {
   const data = {};
-  for (const F of FILTERS) {
+  for (const F of FILTERS.filter((F) => F.IS_ENABLED)) {
     const storageData = await browser.storage.local.get(F.STORAGE_KEY);
     data[F.STORAGE_KEY] = storageData[F.STORAGE_KEY] ?? [];
   }
@@ -104,12 +105,26 @@ const WatchForNewNodes = (selector) => {
  * @param {string} changes the local storage changes
  */
 export const OnLocalStorageChanged = async (key, changes) => {
-  if (!ENABLED) {
+  if (!pageIsEnabled) {
+    return;
+  }
+
+  if (key === ENABLED_FILTERS_STORAGE_KEY) {
+    const { newValue: enabledFilters } = changes;
+    for (const F of FILTERS) {
+      F.IS_ENABLED = enabledFilters.includes(F.STORAGE_KEY);
+
+      if (!F.IS_ENABLED) {
+        F.DisableFilter();
+      } else {
+        HandleNodes(document.querySelectorAll(SELECTORS.join(", ")));
+      }
+    }
     return;
   }
 
   for (const F of FILTERS) {
-    if (key === F.STORAGE_KEY) {
+    if (key === F.STORAGE_KEY && F.IS_ENABLED) {
       const { added, removed, newValue } = changes;
 
       if (added.length) {
@@ -238,14 +253,22 @@ const GetPlaceholderOption = async (optionName, defaultValue) => {
   // create the filter frame first so it responds to messages
   InitFilterFrame();
 
-  ENABLED = !(await IsPageDisabled(window.location));
+  pageIsEnabled = !(await IsPageDisabled(window.location));
+
+  const enabledFilters = await browser.storage.local
+    .get(ENABLED_FILTERS_STORAGE_KEY)
+    .then((data) => data[ENABLED_FILTERS_STORAGE_KEY]);
+
+  for (const F of FILTERS) {
+    F.IS_ENABLED = enabledFilters.includes(F.STORAGE_KEY);
+  }
 
   // setup message handlers as soon as we are ready to receive them
   if (!browser.runtime.onMessage.hasListener(OnRuntimeMessage)) {
     browser.runtime.onMessage.addListener(OnRuntimeMessage);
   }
 
-  if (ENABLED) {
+  if (pageIsEnabled) {
     document.body.classList.add("enable-metadata-indicators");
 
     if (!(await GetPlaceholderOption("preventClick", true))) {

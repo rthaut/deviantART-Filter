@@ -1,22 +1,46 @@
-import { useState, useEffect } from "react";
+import * as React from "react";
 import PropTypes from "prop-types";
 
+/**
+ * A custom hook to get/set a value in extension storage
+ * @param {Object} options the hook options
+ * @param {string} options.type the type/area of extension storage
+ * @param {string} options.key the key/name of value in extension storage
+ * @param {any} options.initialValue the initial value
+ * @returns {[any,Function]} a hook to get and set the value in extension storage
+ */
 const useExtensionStorage = ({ type, key, initialValue = undefined }) => {
-  const [value, setValue] = useState(null);
+  const [value, setValue] = React.useState(initialValue);
 
-  const onChangedHandler = (changes, areaName) => {
-    if (areaName === type && Object.keys(changes).includes(key)) {
-      setValue(changes[key]?.newValue);
-    }
-  };
+  const setAndPersistValue = React.useCallback(
+    (newValueOrUpdater) =>
+      setValue((prevValue) => {
+        const newValue =
+          typeof newValueOrUpdater === "function"
+            ? newValueOrUpdater(prevValue)
+            : newValueOrUpdater;
 
-  const saveValue = (newValue) =>
-    browser.storage[type]?.set({ [key]: newValue });
+        browser.storage[type]?.set({
+          [key]: newValue,
+        });
 
-  useEffect(() => {
-    browser.storage[type]?.get(key).then((data) => {
-      setValue(data[key] ?? initialValue);
+        return newValue;
+      }),
+    [key],
+  );
+
+  React.useEffect(() => {
+    browser.storage[type]?.get({ [key]: initialValue }).then((data) => {
+      setValue(data[key]);
     });
+  }, [type, key]);
+
+  React.useEffect(() => {
+    const onChangedHandler = (changes, areaName) => {
+      if (areaName === type && Object.keys(changes).includes(key)) {
+        setValue(changes[key].newValue ?? initialValue);
+      }
+    };
 
     if (!browser.storage.onChanged.hasListener(onChangedHandler)) {
       browser.storage.onChanged.addListener(onChangedHandler);
@@ -27,9 +51,9 @@ const useExtensionStorage = ({ type, key, initialValue = undefined }) => {
         browser.storage.onChanged.removeListener(onChangedHandler);
       }
     };
-  }, []);
+  }, [type, key]);
 
-  return [value, saveValue];
+  return [value, setAndPersistValue];
 };
 
 useExtensionStorage.propTypes = {

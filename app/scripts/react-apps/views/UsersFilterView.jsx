@@ -7,18 +7,8 @@ import Grid from "@mui/material/Grid";
 import Input from "@mui/material/Input";
 import InputLabel from "@mui/material/InputLabel";
 
-import { STORAGE_KEY as filterKey } from "../../filters/users";
-
 import FilterDataGrid from "../components/filters/FilterDataGrid";
-
-const columns = [
-  {
-    field: "username",
-    headerName: browser.i18n.getMessage("Filter_Users_PropTitle_Username"),
-    type: "string",
-    flex: 1,
-  },
-];
+import UserFiltersDataProvider from "../contexts/userFiltersDataProvider";
 
 const FilterDialogFormContent = ({ filter }) => (
   <>
@@ -46,17 +36,26 @@ FilterDialogFormContent.propTypes = {
   }),
 };
 
+const columns = [
+  {
+    field: "username",
+    headerName: browser.i18n.getMessage("Filter_Users_PropTitle_Username"),
+    type: "string",
+    flex: 1,
+  },
+];
+
 const UsersFilterView = () => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
-        <FilterDataGrid
-          columns={columns}
-          filterKey={filterKey}
-          rowIdPropName="username"
-          title={browser.i18n.getMessage("FilterTitle_User")}
-          filterDialogFormFields={FilterDialogFormContent}
-        />
+        <UserFiltersDataProvider>
+          <FilterDataGrid
+            columns={columns}
+            title={browser.i18n.getMessage("FilterTitle_User")}
+            filterDialogFormFields={FilterDialogFormContent}
+          />
+        </UserFiltersDataProvider>
       </Grid>
     </Grid>
   );

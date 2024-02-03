@@ -1,6 +1,8 @@
 import * as FILTERS from "../filters";
 import * as MESSAGES from "../constants/messages";
 
+import { OpenOrShowURL } from "../background/tabs";
+
 export const OnRuntimeMessage = (message, sender) => {
   switch (message.action) {
     case MESSAGES.CREATE_FILTER:
@@ -61,6 +63,9 @@ export const OnRuntimeMessage = (message, sender) => {
       return browser.tabs.sendMessage(sender.tab.id, {
         action: message.action,
       });
+
+    case MESSAGES.SHOW_MANAGEMENT_PAGE:
+      return OpenOrShowURL(browser.runtime.getURL("pages/manage.html"));
   }
 };
 

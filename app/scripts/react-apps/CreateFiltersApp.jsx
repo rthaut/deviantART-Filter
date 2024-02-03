@@ -166,6 +166,7 @@ const CreateFiltersAppMain = () => {
       </DialogTitle>
 
       <DialogContent>
+        {/* TODO: show a warning if any filters are disabled so that the user knows they may not see the created filter(s) take effect */}
         {error?.message && (
           <Alert severity="error">
             <AlertTitle>

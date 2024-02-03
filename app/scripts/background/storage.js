@@ -1,8 +1,13 @@
 import { differenceWith, isEqual } from "lodash-es";
+
+import { ENABLED_FILTERS_STORAGE_KEY, SUPPORTED_FILTERS } from "../filters";
 import { SendMessageToAllTabs } from "./messages";
 import { LOCAL_STORAGE_CHANGED } from "../constants/messages";
 
-export const MONITORED_STORAGE_KEYS = ["keywords", "users"];
+export const MONITORED_STORAGE_KEYS = [
+  ENABLED_FILTERS_STORAGE_KEY,
+  ...SUPPORTED_FILTERS,
+];
 
 /**
  * Event handler for all storage changes
@@ -22,20 +27,16 @@ export const OnStorageChanged = (changes, areaName) => {
  * @param {object} changes the storage changes
  */
 export const OnLocalStorageChanged = (changes) => {
-  console.time("OnLocalStorageChanged()");
   for (const key of Object.keys(changes)) {
     if (MONITORED_STORAGE_KEYS.includes(key)) {
-      console.time(`OnLocalStorageChanged() :: ${key}`);
       const { oldValue, newValue } = changes[key];
 
       const added = differenceWith(newValue ?? [], oldValue ?? [], isEqual);
       const removed = differenceWith(oldValue ?? [], newValue ?? [], isEqual);
 
       SendStorageChangesToTabs(key, { added, removed, oldValue, newValue });
-      console.timeEnd(`OnLocalStorageChanged() :: ${key}`);
     }
   }
-  console.timeEnd("OnLocalStorageChanged()");
 };
 
 const SendStorageChangesToTabs = (key, changes) => {

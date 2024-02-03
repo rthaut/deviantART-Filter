@@ -70,6 +70,7 @@ export const OnMenuClicked = (info, tab) => {
         // eslint-disable-next-line no-case-declarations
         const { tag: keyword } = TAG_URL_REGEX.exec(info.linkUrl).groups;
         AddFilter("keywords", { keyword, wildcard: false });
+        // TODO: alert the user if keyword filters are disabled, otherwise it will seem like this failed
       }
       break;
 
@@ -78,6 +79,7 @@ export const OnMenuClicked = (info, tab) => {
         // eslint-disable-next-line no-case-declarations
         const { username } = SUBMISSION_URL_REGEX.exec(info.linkUrl).groups;
         AddFilter("users", { username });
+        // TODO: alert the user if user filters are disabled, otherwise it will seem like this failed
       }
       break;
 

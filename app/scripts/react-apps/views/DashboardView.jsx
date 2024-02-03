@@ -6,22 +6,27 @@ import FiltersExportButton from "../components/FiltersExportButton";
 import FiltersImporter from "../components/FiltersImporter";
 import OptionsCard from "../components/OptionsCard";
 
+import UserFiltersDataProvider from "../contexts/userFiltersDataProvider";
+import KeywordFiltersDataProvider from "../contexts/keywordsFiltersDataProvider";
+
 const DashboardView = () => {
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} alignItems="stretch">
       <Grid item xs={12} md={6}>
-        <DashboardFilterCard
-          filterKey="users"
-          title={browser.i18n.getMessage("FilterTitle_User")}
-          link="/users"
-        />
+        <UserFiltersDataProvider>
+          <DashboardFilterCard
+            title={browser.i18n.getMessage("FilterTitle_User")}
+            link="/users"
+          />
+        </UserFiltersDataProvider>
       </Grid>
       <Grid item xs={12} md={6}>
-        <DashboardFilterCard
-          filterKey="keywords"
-          title={browser.i18n.getMessage("FilterTitle_Keyword")}
-          link="/keywords"
-        />
+        <KeywordFiltersDataProvider>
+          <DashboardFilterCard
+            title={browser.i18n.getMessage("FilterTitle_Keyword")}
+            link="/keywords"
+          />
+        </KeywordFiltersDataProvider>
       </Grid>
       <Grid item xs={12} md={4} lg={3}>
         <Card>

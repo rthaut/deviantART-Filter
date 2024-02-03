@@ -1,5 +1,5 @@
 export const STORAGE_KEY = "keywords";
-
+export const ID_PROP_NAME = "keyword";
 export const UNIQUE_KEYS = ["keyword"];
 
 export const REQUIRES_METADATA = true;
@@ -79,6 +79,17 @@ export const RemoveFiltersFromDocument = (removedFilters, activeFilters) => {
       RemoveFilterAttributesOnNode(node);
       ApplyFiltersToNode(node, activeFilters);
     }
+  }
+};
+
+/**
+ * Removes filter attributes from all DOM nodes on the page
+ * Used primarily for when keyword filters are disabled
+ */
+export const DisableFilter = () => {
+  const nodes = document.querySelectorAll(`[da-filter-keyword]`);
+  for (const node of nodes) {
+    RemoveFilterAttributesOnNode(node);
   }
 };
 
