@@ -14,6 +14,7 @@ import {
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import LabelIcon from "@mui/icons-material/Label";
+import OptionsIcon from "@mui/icons-material/Tune";
 
 const ListItemLink = React.forwardRef(function ListItemLink(
   { href, children, ...props },
@@ -67,6 +68,17 @@ const SidebarMenu = () => {
           </ListItemIcon>
           <ListItemText
             primary={browser.i18n.getMessage("SidebarLink_Keywords")}
+          />
+        </ListItemLink>
+      </List>
+      <Divider />
+      <List>
+        <ListItemLink href="/options">
+          <ListItemIcon>
+            <OptionsIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={browser.i18n.getMessage("SidebarLink_Options")}
           />
         </ListItemLink>
       </List>

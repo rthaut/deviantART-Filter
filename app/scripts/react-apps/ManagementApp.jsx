@@ -30,6 +30,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 
 import DashboardView from "./views/DashboardView";
+import OptionsView from "./views/OptionsView";
 import KeywordsFilterView from "./views/KeywordsFilterView";
 import UsersFilterView from "./views/UsersFilterView";
 
@@ -149,6 +150,9 @@ const ManagementAppMain = () => {
             </Route>
             <Route path="/keywords">
               <KeywordsFilterView />
+            </Route>
+            <Route path="/options">
+              <OptionsView />
             </Route>
             <Route path="/">
               <DashboardView />

@@ -4,7 +4,6 @@ import { Grid, Card, CardContent, Typography } from "@mui/material";
 import DashboardFilterCard from "../components/DashboardFilterCard";
 import FiltersExportButton from "../components/FiltersExportButton";
 import FiltersImporter from "../components/FiltersImporter";
-import OptionsCard from "../components/OptionsCard";
 
 import UserFiltersDataProvider from "../contexts/userFiltersDataProvider";
 import KeywordFiltersDataProvider from "../contexts/keywordsFiltersDataProvider";
@@ -55,9 +54,6 @@ const DashboardView = () => {
             <FiltersImporter />
           </CardContent>
         </Card>
-      </Grid>
-      <Grid item xs={12} md={8} lg={6}>
-        <OptionsCard />
       </Grid>
     </Grid>
   );

@@ -15,22 +15,12 @@ import {
   Switch,
   Select,
   MenuItem,
+  Grid,
 } from "@mui/material";
 
 import useExtensionStorage from "../hooks/useExtensionStorage";
 
-import { PAGES } from "../../constants/url";
-
-const initialOptions = {
-  pages: Object.keys(PAGES)
-    .map((page) => [page, true])
-    .reduce((acc, [page, enabled]) => ((acc[page] = enabled), acc), {}),
-  placeholders: {
-    preventClick: true,
-    showFilterText: true,
-  },
-  showUpdatedPageOnUpdate: "patch",
-};
+import { DEFAULT_OPTIONS } from "../../constants/options";
 
 const OptionsCard = () => {
   const confirm = useConfirm();
@@ -39,10 +29,10 @@ const OptionsCard = () => {
   const [options, setOptions] = useExtensionStorage({
     type: "local",
     key: "options",
-    initialValue: initialOptions,
+    initialValue: DEFAULT_OPTIONS,
   });
 
-  const resetOptions = (event) => {
+  const resetOptions = (_event) => {
     confirm({
       title: browser.i18n.getMessage("ConfirmOptionsResetTitle"),
       description: browser.i18n.getMessage("ConfirmOptionsResetPrompt"),
@@ -54,7 +44,7 @@ const OptionsCard = () => {
       ),
     })
       .then(() => {
-        setOptions(initialOptions);
+        setOptions(DEFAULT_OPTIONS);
         showReloadRequired();
       })
       .catch(() => {});
@@ -110,116 +100,124 @@ const OptionsCard = () => {
           {browser.i18n.getMessage("OptionsTitle")}
         </Typography>
 
-        {options?.pages && (
-          <FormControl
-            component="fieldset"
-            sx={{ marginTop: 1, marginBottom: 2 }}
-          >
-            <Typography component="legend" sx={{ padding: 0 }}>
-              {browser.i18n.getMessage("Options_EnabledPages_Header")}
-            </Typography>
-            <Typography
-              component="p"
-              variant="body2"
-              color="textSecondary"
-              gutterBottom
-            >
-              {browser.i18n.getMessage("Options_EnabledPages_HelpText")}
-            </Typography>
-            <FormGroup>
-              {Object.keys(options?.pages).map((key) => (
-                <FormControlLabel
-                  key={key}
-                  label={browser.i18n.getMessage(
-                    `Options_EnabledPages_PageLabel_${key}`,
-                  )}
-                  control={
-                    <Switch
-                      name={key}
-                      color="primary"
-                      checked={options?.pages[key]}
-                      onChange={togglePageEnabled}
+        <Grid container spacing={3}>
+          {options?.pages && (
+            <Grid item xs={12} md={6}>
+              <FormControl
+                component="fieldset"
+                sx={{ marginTop: 1, marginBottom: 2 }}
+              >
+                <Typography component="legend" sx={{ padding: 0 }}>
+                  {browser.i18n.getMessage("Options_EnabledPages_Header")}
+                </Typography>
+                <Typography
+                  component="p"
+                  variant="body2"
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  {browser.i18n.getMessage("Options_EnabledPages_HelpText")}
+                </Typography>
+                <FormGroup>
+                  {Object.keys(options?.pages).map((key) => (
+                    <FormControlLabel
+                      key={key}
+                      label={browser.i18n.getMessage(
+                        `Options_EnabledPages_PageLabel_${key}`,
+                      )}
+                      control={
+                        <Switch
+                          name={key}
+                          color="primary"
+                          checked={options?.pages[key]}
+                          onChange={togglePageEnabled}
+                        />
+                      }
                     />
-                  }
-                />
-              ))}
-            </FormGroup>
-          </FormControl>
-        )}
+                  ))}
+                </FormGroup>
+              </FormControl>
+            </Grid>
+          )}
 
-        {options?.placeholders && (
-          <FormControl
-            component="fieldset"
-            sx={{ marginTop: 1, marginBottom: 2 }}
-          >
-            <Typography component="legend" sx={{ padding: 0 }}>
-              {browser.i18n.getMessage(
-                "Options_PlaceholderFunctionality_Header",
-              )}
-            </Typography>
-            <Typography
-              component="p"
-              variant="body2"
-              color="textSecondary"
-              gutterBottom
-            >
-              {browser.i18n.getMessage(
-                "Options_PlaceholderFunctionality_HelpText",
-              )}
-            </Typography>
-            <FormGroup>
-              {Object.keys(options?.placeholders).map((key) => (
-                <FormControlLabel
-                  key={key}
-                  label={browser.i18n.getMessage(
-                    `Options_PlaceholderFunctionality_OptionLabel_${key}`,
-                  )}
-                  control={
-                    <Switch
-                      name={key}
-                      color="primary"
-                      checked={options?.placeholders[key]}
-                      onChange={togglePlaceholderOption}
-                    />
-                  }
-                />
-              ))}
-            </FormGroup>
-          </FormControl>
-        )}
-
-        {options?.showUpdatedPageOnUpdate && (
-          <FormControl
-            component="fieldset"
-            sx={{ marginTop: 1, marginBottom: 2 }}
-            variant="outlined"
-            size="small"
-          >
-            <Typography component="legend" sx={{ padding: 0 }}>
-              {browser.i18n.getMessage("Options_ShowUpdatedPage_Header")}
-            </Typography>
-            <Typography
-              component="p"
-              variant="body2"
-              color="textSecondary"
-              gutterBottom
-            >
-              {browser.i18n.getMessage("Options_ShowUpdatedPage_HelpText")}
-            </Typography>
-            <Select
-              value={options?.showUpdatedPageOnUpdate}
-              onChange={handleUpdatePageChange}
-            >
-              {["patch", "minor", "major", "none"].map((key) => (
-                <MenuItem key={key} value={key}>
+          {options?.placeholders && (
+            <Grid item xs={12} md={6}>
+              <FormControl
+                component="fieldset"
+                sx={{ marginTop: 1, marginBottom: 2 }}
+              >
+                <Typography component="legend" sx={{ padding: 0 }}>
                   {browser.i18n.getMessage(
-                    `Options_ShowUpdatedPage_OptionLabel_${key}`,
+                    "Options_PlaceholderFunctionality_Header",
                   )}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        )}
+                </Typography>
+                <Typography
+                  component="p"
+                  variant="body2"
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  {browser.i18n.getMessage(
+                    "Options_PlaceholderFunctionality_HelpText",
+                  )}
+                </Typography>
+                <FormGroup>
+                  {Object.keys(options?.placeholders).map((key) => (
+                    <FormControlLabel
+                      key={key}
+                      label={browser.i18n.getMessage(
+                        `Options_PlaceholderFunctionality_OptionLabel_${key}`,
+                      )}
+                      control={
+                        <Switch
+                          name={key}
+                          color="primary"
+                          checked={options?.placeholders[key]}
+                          onChange={togglePlaceholderOption}
+                        />
+                      }
+                    />
+                  ))}
+                </FormGroup>
+              </FormControl>
+            </Grid>
+          )}
+
+          {options?.showUpdatedPageOnUpdate && (
+            <Grid item xs={12} md={6}>
+              <FormControl
+                component="fieldset"
+                sx={{ marginTop: 1, marginBottom: 2 }}
+                variant="outlined"
+                size="small"
+              >
+                <Typography component="legend" sx={{ padding: 0 }}>
+                  {browser.i18n.getMessage("Options_ShowUpdatedPage_Header")}
+                </Typography>
+                <Typography
+                  component="p"
+                  variant="body2"
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  {browser.i18n.getMessage("Options_ShowUpdatedPage_HelpText")}
+                </Typography>
+                <Select
+                  value={options?.showUpdatedPageOnUpdate}
+                  onChange={handleUpdatePageChange}
+                >
+                  {["patch", "minor", "major", "none"].map((key) => (
+                    <MenuItem key={key} value={key}>
+                      {browser.i18n.getMessage(
+                        `Options_ShowUpdatedPage_OptionLabel_${key}`,
+                      )}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          )}
+        </Grid>
       </CardContent>
       <Divider variant="middle" />
       <CardActions>

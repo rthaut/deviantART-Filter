@@ -227,8 +227,8 @@
   "SidebarLink_Settings": {
     "message": "Settings"
   },
-  "SidebarLink_ImportExport": {
-    "message": "Import/Export"
+  "SidebarLink_Options": {
+    "message": "Options"
   },
   "SidebarLink_Keywords": {
     "message": "Keyword Filters"
