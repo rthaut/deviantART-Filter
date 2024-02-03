@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import * as React from "react";
 
 import { useDarkMode } from "./useDarkMode";
 
@@ -7,7 +7,7 @@ import { deepOrange, grey } from "@mui/material/colors";
 
 export const useTheme = () => {
   const [darkMode] = useDarkMode();
-  return useMemo(
+  return React.useMemo(
     () =>
       createTheme({
         palette: {
