@@ -52,13 +52,7 @@ const PopupApp = () => {
 
   return (
     <AppProviders>
-      <Box
-        component="main"
-        sx={{
-          maxWidth: "320px",
-          width: "100%",
-        }}
-      >
+      <Box component="main" sx={{ width: "320px" }}>
         <Toolbar sx={{ display: "flex" }}>
           <LogoIcon
             color="primary"
