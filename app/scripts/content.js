@@ -112,11 +112,15 @@ export const OnLocalStorageChanged = async (key, changes) => {
   if (key === ENABLED_FILTERS_STORAGE_KEY) {
     const { newValue: enabledFilters } = changes;
     for (const F of FILTERS) {
-      F.IS_ENABLED = enabledFilters.includes(F.STORAGE_KEY);
+      const wasEnabled = F.IS_ENABLED;
+      const isEnabled = enabledFilters.includes(F.STORAGE_KEY);
 
-      if (!F.IS_ENABLED) {
+      // update the global (for this instance/page) filter object first b/c `HandleNodes()` depends on it
+      F.IS_ENABLED = isEnabled;
+
+      if (wasEnabled && !isEnabled) {
         F.DisableFilter();
-      } else {
+      } else if (!wasEnabled && isEnabled) {
         HandleNodes(document.querySelectorAll(SELECTORS.join(", ")));
       }
     }
