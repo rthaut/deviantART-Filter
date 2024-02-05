@@ -79,6 +79,19 @@ export const FILTER_METHODS = {
 };
 
 /**
+ * Returns an array of all currently enabled filter types/keys
+ * NOTE: initializes all supported filter types as enabled (if the user has never toggled them yet)
+ * @returns {Promise<string[]>} array of all enabled filter types/keys
+ */
+export const GetEnabledFilters = async () => {
+  const enabledFilters = await browser.storage.local
+    .get({ [ENABLED_FILTERS_STORAGE_KEY]: SUPPORTED_FILTERS })
+    .then((data) => data[ENABLED_FILTERS_STORAGE_KEY]);
+
+  return enabledFilters;
+};
+
+/**
  * Returns all filters from extension storage
  */
 export const GetAllFilters = async () => {

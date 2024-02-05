@@ -8,17 +8,17 @@ import { PAGES } from "./constants/url";
 
 import { SetMetadataOnNode } from "./content/metadata";
 
-import { ENABLED_FILTERS_STORAGE_KEY } from "./filters";
+import { ENABLED_FILTERS_STORAGE_KEY, GetEnabledFilters } from "./filters";
 import * as KeywordsFilter from "./filters/keywords";
 import * as UsersFilter from "./filters/users";
-
-const FILTERS = [KeywordsFilter, UsersFilter];
 
 const SELECTORS = [
   `a[href*="deviantart.com/"][href*="/art/"]`,
   `a[href*="deviantart.com/"][href*="/journal/"]`,
   `a[href*="deviantart.com/"][href*="/status-update/"]`,
 ];
+
+const FILTERS = [KeywordsFilter, UsersFilter];
 
 let pageIsEnabled = true;
 
@@ -255,10 +255,7 @@ const GetPlaceholderOption = async (optionName, defaultValue) => {
 
   pageIsEnabled = !(await IsPageDisabled(window.location));
 
-  const enabledFilters = await browser.storage.local
-    .get(ENABLED_FILTERS_STORAGE_KEY)
-    .then((data) => data[ENABLED_FILTERS_STORAGE_KEY]);
-
+  const enabledFilters = await GetEnabledFilters();
   for (const F of FILTERS) {
     F.IS_ENABLED = enabledFilters.includes(F.STORAGE_KEY);
   }
