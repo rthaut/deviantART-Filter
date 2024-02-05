@@ -251,6 +251,24 @@
       }
     }
   },
+  "Notification_FilterCreatedForDisabledFilterType": {
+    "message": "The filter was created, but $NAME$ filters are currently disabled",
+    "description": "A formatted string that is displayed in a browser notification when a new filter is created for a type of filter that is currently disabled",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
+  "Notification_FilterNotCreated_WithMessage": {
+    "message": "The filter was not created: $MESSAGE$",
+    "description": "A formatted string that is displayed in a browser notification when a filter is not created (with the reason/message indicating why)",
+    "placeholders": {
+      "message": {
+        "content": "$1"
+      }
+    }
+  },
   "FilterTitle_Keyword": {
     "message": "Keyword"
   },

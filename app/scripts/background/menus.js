@@ -1,6 +1,7 @@
-import { AddFilter } from "../filters";
+import { ValidateAndCreateFilter } from "../filters";
+
 import { SHOW_FILTER_DEVIATION_MODAL } from "../constants/messages";
-import { TAG_URL_REGEX, SUBMISSION_URL_REGEX } from "../constants/url";
+import { SUBMISSION_URL_REGEX, TAG_URL_REGEX } from "../constants/url";
 
 export const MENUS = [
   {
@@ -69,8 +70,8 @@ export const OnMenuClicked = (info, tab) => {
       if (TAG_URL_REGEX.test(info.linkUrl)) {
         // eslint-disable-next-line no-case-declarations
         const { tag: keyword } = TAG_URL_REGEX.exec(info.linkUrl).groups;
-        AddFilter("keywords", { keyword, wildcard: false });
-        // TODO: alert the user if keyword filters are disabled, otherwise it will seem like this failed
+        // TODO: use a new runtime message to apply the filter to the DOM (before validating+storing it)?
+        ValidateAndCreateFilter("keywords", { keyword, wildcard: false });
       }
       break;
 
@@ -78,8 +79,8 @@ export const OnMenuClicked = (info, tab) => {
       if (SUBMISSION_URL_REGEX.test(info.linkUrl)) {
         // eslint-disable-next-line no-case-declarations
         const { username } = SUBMISSION_URL_REGEX.exec(info.linkUrl).groups;
-        AddFilter("users", { username });
-        // TODO: alert the user if user filters are disabled, otherwise it will seem like this failed
+        // TODO: use a new runtime message to apply the filter to the DOM (before validating+storing it)?
+        ValidateAndCreateFilter("users", { username });
       }
       break;
 

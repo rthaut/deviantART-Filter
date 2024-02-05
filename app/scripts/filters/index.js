@@ -6,6 +6,11 @@ import {
 } from "lodash-es";
 
 import {
+  FILTER_NOT_CREATED,
+  FILTER_TYPE_DISABLED,
+} from "../constants/notifications";
+
+import {
   STORAGE_KEY as userFiltersStorageKey,
   UNIQUE_KEYS as userFiltersUniqueKeys,
   validate as validateUserFilter,
@@ -285,4 +290,61 @@ export const BulkImportFilters = async (data) => {
   }
 
   return results;
+};
+
+/**
+ * Validates and creates a new filter.
+ * Optionally shows browser notifications on validation failure and/or when the specified filter type is currently disabled.
+ * @param {string} filterType the type of filter
+ * @param {any} filter the new filter
+ * @param {boolean} [showNotifications=true] (Default `true`) if browser notifications should be shown
+ * @returns {boolean} `true` if filter was created successfully
+ */
+export const ValidateAndCreateFilter = async (
+  filterType,
+  filter,
+  showNotifications = true,
+) => {
+  const { isValid, message } = await ValidateNewFilter(filterType, filter);
+
+  if (!isValid) {
+    if (showNotifications) {
+      await browser.notifications.create(
+        `${filterType}-${FILTER_NOT_CREATED}`,
+        {
+          type: "basic",
+          iconUrl: browser.runtime.getURL("images/icon-64.png"),
+          title: browser.i18n.getMessage("ExtensionName"),
+          message: browser.i18n.getMessage(
+            "Notification_FilterNotCreated_WithMessage",
+            [message],
+          ),
+        },
+      );
+    }
+    return false;
+  }
+
+  await AddFilter(filterType, filter);
+
+  const enabledFilters = await GetEnabledFilters();
+
+  if (!enabledFilters.includes(filterType)) {
+    if (showNotifications) {
+      await browser.notifications.create(
+        `${filterType}-${FILTER_TYPE_DISABLED}`,
+        {
+          type: "basic",
+          iconUrl: browser.runtime.getURL("images/icon-64.png"),
+          title: browser.i18n.getMessage("ExtensionName"),
+          message: browser.i18n.getMessage(
+            "Notification_FilterCreatedForDisabledFilterType",
+            [filterType],
+          ),
+        },
+      );
+    }
+  }
+
+  return true;
 };
