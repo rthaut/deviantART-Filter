@@ -198,7 +198,7 @@
     "message": "Placeholder Appearance/Behavior"
   },
   "Options_PlaceholderFunctionality_HelpText": {
-    "message": "Use these to control the behavior and appearance of the placeholder thumbnails that are shown for filtered deviations."
+    "message": "Control the appearance and behavior of the placeholder thumbnails that are shown for filtered deviations."
   },
   "Options_PlaceholderFunctionality_OptionLabel_PreventClick": {
     "message": "Prevent clicking on thumbnails for filtered deviations"
@@ -210,7 +210,7 @@
     "message": "Show Release Notes for Updates"
   },
   "Options_ShowUpdatedPage_HelpText": {
-    "message": "Use this to control if/when release notes are shown after the extension is updated."
+    "message": "Control if/when release notes are shown after the extension is updated."
   },
   "Options_ShowUpdatedPage_OptionLabel_Major": {
     "message": "Show for major updates only"
