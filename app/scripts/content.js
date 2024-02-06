@@ -3,7 +3,7 @@ import {
   SHOW_FILTER_DEVIATION_MODAL,
   HIDE_FILTER_DEVIATION_MODAL,
 } from "./constants/messages";
-
+import { DEFAULT_OPTIONS } from "./constants/options";
 import { PAGES } from "./constants/url";
 
 import { SetMetadataOnNode } from "./content/metadata";
@@ -240,14 +240,14 @@ const IsPageDisabled = async (url) => {
 };
 
 /**
- * Gets the value of an option specific to placeholder functionality from storage
- * @param {string} optionName the placeholder option name
- * @param {*} defaultValue the default value (if the option is not set in storage)
- * @returns {*} the value of the placeholder option from storage (or the supplied default value)
+ * Gets all options from extension storage
+ * @returns {object} the options as a structured object
  */
-const GetPlaceholderOption = async (optionName, defaultValue) => {
-  const data = await browser.storage.local.get("options");
-  return data?.options?.placeholders?.[optionName] ?? defaultValue;
+const GetOptions = async () => {
+  const { options } = await browser.storage.local.get({
+    options: DEFAULT_OPTIONS,
+  });
+  return options;
 };
 
 /**
@@ -270,13 +270,23 @@ const GetPlaceholderOption = async (optionName, defaultValue) => {
   }
 
   if (pageIsEnabled) {
+    const options = await GetOptions();
+
+    // TODO: make configurable
+    // TODO: convert to data attribute
     document.body.classList.add("enable-metadata-indicators");
 
-    if (!(await GetPlaceholderOption("preventClick", true))) {
+    document.body.setAttribute(
+      "filter-untagged",
+      options.filterUntaggedSubmissionTypes.join(" "),
+    );
+
+    // TODO: convert these next 2 items into a single data attribute
+    if (options.placeholders?.preventClick !== true) {
       document.body.classList.add("clickable-placeholders");
     }
 
-    if (!(await GetPlaceholderOption("showFilterText", true))) {
+    if (options.placeholders?.showFilterText !== true) {
       document.body.classList.add("hide-placeholder-text");
     }
 

@@ -9,4 +9,12 @@ export const DEFAULT_OPTIONS = {
     showFilterText: true,
   },
   showUpdatedPageOnUpdate: "patch",
+  filterUntaggedSubmissionTypes: [],
+};
+
+// TODO: move to another file?
+export const SUBMISSION_TYPES = {
+  deviations: browser.i18n.getMessage("SubmissionType_PluralLabel_Deviations"),
+  journals: browser.i18n.getMessage("SubmissionType_PluralLabel_Journals"),
+  updates: browser.i18n.getMessage("SubmissionType_PluralLabel_Updates"),
 };

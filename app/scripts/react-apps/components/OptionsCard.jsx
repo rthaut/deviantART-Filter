@@ -16,11 +16,13 @@ import {
   Select,
   MenuItem,
   Grid,
+  Checkbox,
+  ListItemText,
 } from "@mui/material";
 
 import useExtensionStorage from "../hooks/useExtensionStorage";
 
-import { DEFAULT_OPTIONS } from "../../constants/options";
+import { DEFAULT_OPTIONS, SUBMISSION_TYPES } from "../../constants/options";
 
 const OptionsCard = () => {
   const confirm = useConfirm();
@@ -31,6 +33,20 @@ const OptionsCard = () => {
     key: "options",
     initialValue: DEFAULT_OPTIONS,
   });
+
+  const showReloadRequired = () => {
+    enqueueSnackbar(
+      browser.i18n.getMessage("Options_Change_PagesRequireReload"),
+      {
+        variant: "default",
+        preventDuplicate: true,
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "center",
+        },
+      },
+    );
+  };
 
   const resetOptions = (_event) => {
     confirm({
@@ -79,20 +95,58 @@ const OptionsCard = () => {
     });
   };
 
-  const showReloadRequired = () => {
-    enqueueSnackbar(
-      browser.i18n.getMessage("Options_Change_PagesRequireReload"),
-      {
-        variant: "default",
-        preventDuplicate: true,
-        anchorOrigin: {
-          vertical: "top",
-          horizontal: "center",
-        },
-      },
-    );
+  const handleUntaggedSubmissionTypesChange = (event) => {
+    const value =
+      typeof event.target.value === "string"
+        ? event.target.value.split(",")
+        : event.target.value;
+
+    value.sort((a, b) => a.localeCompare(b));
+
+    setOptions({
+      ...options,
+      filterUntaggedSubmissionTypes: value,
+    });
+
+    showReloadRequired();
   };
 
+  const renderUntaggedSubmissionTypes = (selected) => {
+    if (!selected || selected.length === 0) {
+      return (
+        <em>
+          {browser.i18n.getMessage(
+            "Options_FilterUntaggedSubmissions_SelectedList_None",
+          )}
+        </em>
+      );
+    }
+
+    const selectedLabels = selected.map(
+      (key) =>
+        SUBMISSION_TYPES[key] ??
+        browser.i18n.getMessage(`SubmissionType_PluralLabel_${key}`) ??
+        key,
+    );
+
+    switch (selectedLabels.length) {
+      case 1:
+        return browser.i18n.getMessage(
+          "Options_FilterUntaggedSubmissions_SelectedList_SingleOption",
+          selectedLabels,
+        );
+      case 2:
+        return browser.i18n.getMessage(
+          "Options_FilterUntaggedSubmissions_SelectedList_DualOptions",
+          selectedLabels,
+        );
+      default:
+        return browser.i18n.getMessage(
+          "Options_FilterUntaggedSubmissions_SelectedList_MultipleOptions",
+          [selectedLabels.slice(0, -1).join(", "), selectedLabels.slice(-1)],
+        );
+    }
+  };
   return (
     <Card>
       <CardContent>
@@ -217,6 +271,48 @@ const OptionsCard = () => {
               </FormControl>
             </Grid>
           )}
+
+          <Grid item xs={12} md={6}>
+            <FormControl
+              sx={{ marginTop: 1, marginBottom: 2 }}
+              variant="outlined"
+              size="small"
+            >
+              <Typography component="legend" sx={{ padding: 0 }}>
+                {browser.i18n.getMessage(
+                  "Options_FilterUntaggedSubmissions_Header",
+                )}
+              </Typography>
+              <Typography
+                component="p"
+                variant="body2"
+                color="textSecondary"
+                gutterBottom
+              >
+                {browser.i18n.getMessage(
+                  "Options_FilterUntaggedSubmissions_HelpText",
+                )}
+              </Typography>
+              <Select
+                multiple
+                displayEmpty
+                value={options.filterUntaggedSubmissionTypes ?? []}
+                onChange={handleUntaggedSubmissionTypesChange}
+                renderValue={renderUntaggedSubmissionTypes}
+              >
+                {Object.entries(SUBMISSION_TYPES).map(([key, label]) => (
+                  <MenuItem key={key} value={key} dense disableGutters>
+                    <Checkbox
+                      checked={(
+                        options.filterUntaggedSubmissionTypes ?? []
+                      ).includes(key)}
+                    />
+                    <ListItemText primary={label} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
         </Grid>
       </CardContent>
       <Divider variant="middle" />

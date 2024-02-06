@@ -18,6 +18,15 @@
   "BrowserAction_Popup_ButtonLabel_OpenManagementWindow": {
     "message": "Manage DeviantArt Filter"
   },
+  "SubmissionType_PluralLabel_Deviations": {
+    "message": "Deviations"
+  },
+  "SubmissionType_PluralLabel_Journals": {
+    "message": "Journal Entries"
+  },
+  "SubmissionType_PluralLabel_Updates": {
+    "message": "Status Updates"
+  },
   "FilterNameWithCount_Singular": {
     "message": "$COUNT$ $NAME$ Filter",
     "description": "A formatted string to display the name of a filter with the count of filters (singular)",
@@ -215,6 +224,32 @@
   "Options_ShowUpdatedPage_OptionLabel_None": {
     "message": "Never show for any updates"
   },
+  "Options_FilterUntaggedSubmissions_Header": {
+    "message": "Filter Untagged Submissions"
+  },
+  "Options_FilterUntaggedSubmissions_HelpText": {
+    "message": "Control which types of submissions (if any) are automatically filtered when they do not have any tags"
+  },
+  "Options_FilterUntaggedSubmissions_SelectedList_None": {
+    "message": "Do NOT automatically filter untagged submissions"
+  },
+  "Options_FilterUntaggedSubmissions_SelectedList_SingleOption": {
+    "message": "Only $1"
+  },
+  "Options_FilterUntaggedSubmissions_SelectedList_DualOptions": {
+    "message": "$1 and $2"
+  },
+  "Options_FilterUntaggedSubmissions_SelectedList_MultipleOptions": {
+    "message": "$MOST$, and $LAST$",
+    "placeholders": {
+      "most": {
+        "content": "$1"
+      },
+      "last": {
+        "content": "$2"
+      }
+    }
+  },
   "Options_ButtonLabel_Reset": {
     "message": "Reset to Defaults"
   },
@@ -356,6 +391,15 @@
   },
   "Placeholder_User": {
     "message": "Filtered User"
+  },
+  "Placeholder_UntaggedDeviation": {
+    "message": "Untagged Deviation"
+  },
+  "Placeholder_UntaggedJournal": {
+    "message": "Untagged Journal"
+  },
+  "Placeholder_UntaggedUpdate": {
+    "message": "Untagged Status Update"
   },
   "RequiredFieldLabel": {
     "message": "$FIELD$ is required",

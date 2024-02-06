@@ -34,6 +34,9 @@ body#deviantART-v7 {
 }
 
 /* === PLACEHOLDERS === */
+body[filter-untagged~="deviations"] [href*="/art/"][data-username]:not([data-tags]),
+body[filter-untagged~="journals"] [href*="/journal/"][data-username]:not([data-tags]),
+body[filter-untagged~="updates"] [href*="/status-update/"][data-username]:not([data-tags]),
 [da-filter-keyword],
 [da-filter-user] {
   display: inline-block !important;
@@ -41,11 +44,17 @@ body#deviantART-v7 {
   visibility: visible !important;
 }
 
+body:not(.clickable-placeholders)[filter-untagged~="deviations"] [href*="/art/"][data-username]:not([data-tags]),
+body:not(.clickable-placeholders)[filter-untagged~="journals"] [href*="/journal/"][data-username]:not([data-tags]),
+body:not(.clickable-placeholders)[filter-untagged~="updates"] [href*="/status-update/"][data-username]:not([data-tags]),
 body:not(.clickable-placeholders) [da-filter-keyword],
 body:not(.clickable-placeholders) [da-filter-user] {
   pointer-events: none !important;
 }
 
+body[filter-untagged~="deviations"] [href*="/art/"][data-username]:not([data-tags])::before,
+body[filter-untagged~="journals"] [href*="/journal/"][data-username]:not([data-tags])::before,
+body[filter-untagged~="updates"] [href*="/status-update/"][data-username]:not([data-tags])::before,
 [da-filter-keyword]::before,
 [da-filter-user]::before {
   /* the placeholder text and background, placed overtop the thumbnail */
@@ -70,6 +79,9 @@ body:not(.clickable-placeholders) [da-filter-user] {
   flex-direction: column-reverse;
 }
 
+body[filter-untagged~="deviations"] [href*="/art/"][data-username]:not([data-tags])::after,
+body[filter-untagged~="journals"] [href*="/journal/"][data-username]:not([data-tags])::after,
+body[filter-untagged~="updates"] [href*="/status-update/"][data-username]:not([data-tags])::after,
 [da-filter-keyword]::after,
 [da-filter-user]::after {
   /* the placeholder image ONLY, uses an SVG mask imitate programmatic color */
@@ -94,6 +106,18 @@ body:not(.clickable-placeholders) [da-filter-user] {
   -webkit-mask-size: 80% 50%;
 }
 
+body[filter-untagged~="deviations"] [href*="/art/"][data-username]:not([data-tags])::before {
+  content: "__MSG_Placeholder_UntaggedDeviation__";
+}
+
+body[filter-untagged~="journals"] [href*="/journal/"][data-username]:not([data-tags])::before {
+  content: "__MSG_Placeholder_UntaggedJournal__";
+}
+
+body[filter-untagged~="updates"] [href*="/status-update/"][data-username]:not([data-tags])::before {
+  content: "__MSG_Placeholder_UntaggedStatusUpdate__";
+}
+
 [da-filter-keyword]::before {
   content: "__MSG_Placeholder_Keyword__: " attr(da-filter-keyword);
 }
@@ -112,6 +136,9 @@ body:not(.clickable-placeholders) [da-filter-user] {
   content: "__MSG_Placeholder_User__: " attr(data-username);
 }
 
+body.hide-placeholder-text[filter-untagged~="deviations"] [href*="/art/"][data-username]:not([data-tags])::before,
+body.hide-placeholder-text[filter-untagged~="journals"] [href*="/journal/"][data-username]:not([data-tags])::before,
+body.hide-placeholder-text[filter-untagged~="updates"] [href*="/status-update/"][data-username]:not([data-tags])::before,
 body.hide-placeholder-text [da-filter-category]::before,
 body.hide-placeholder-text [da-filter-keyword]::before,
 body.hide-placeholder-text [da-filter-user]::before {
