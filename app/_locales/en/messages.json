@@ -194,6 +194,9 @@
   "Options_EnabledPages_PageLabel_Notifications": {
     "message": "Notifications Page"
   },
+  "Options_EnabledPages_PageLabel_DeviantsYouWatch": {
+    "message": "Deviants You Watch Page"
+  },
   "Options_PlaceholderFunctionality_Header": {
     "message": "Placeholder Appearance/Behavior"
   },
