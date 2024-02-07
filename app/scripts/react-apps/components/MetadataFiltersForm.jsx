@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
-import {
-  Typography,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  Switch,
-  Checkbox,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListItemButton,
-  Box,
-} from "@mui/material";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Checkbox from "@mui/material/Checkbox";
+import Divider from "@mui/material/Divider";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
 
-const MetadataFiltersForm = ({ metadata, setFilter }) => {
+const MetadataFiltersForm = ({ enabledFilterTypes, metadata, setFilter }) => {
   const [selectedUsername, setSelectedUsername] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -92,6 +91,19 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
               "CreateFiltersFromDeviation_Username_Help",
             )}
           </Typography>
+          {!enabledFilterTypes.includes("users") && (
+            <Alert
+              severity="warning"
+              variant="standard"
+              sx={{
+                marginBlock: 1,
+              }}
+            >
+              {browser.i18n.getMessage("Warning_FilterName_Disabled", [
+                browser.i18n.getMessage("FilterTitle_User"),
+              ])}
+            </Alert>
+          )}
           <List dense disablePadding>
             <ListItem dense>
               <FormControlLabel
@@ -115,7 +127,7 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
 
       {tags && (
         <FormControl component="fieldset">
-          <Typography component="legend">
+          <Typography component="legend" sx={{ padding: 0 }}>
             {browser.i18n.getMessage("FilterTitle_Keywords")}
           </Typography>
           <Typography
@@ -131,15 +143,22 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
             </strong>{" "}
             {browser.i18n.getMessage("CreateFiltersFromDeviation_Tags_Help")}
           </Typography>
+          {!enabledFilterTypes.includes("keywords") && (
+            <Alert
+              severity="warning"
+              variant="standard"
+              sx={{
+                marginBlock: 1,
+              }}
+            >
+              {browser.i18n.getMessage("Warning_FilterName_Disabled", [
+                browser.i18n.getMessage("FilterTitle_Keyword"),
+              ])}
+            </Alert>
+          )}
           <List dense disablePadding>
             {tags.map((tag, index) => (
-              <ListItemButton
-                key={index}
-                disableRipple
-                role={undefined}
-                dense
-                onClick={() => toggleTag(tag)}
-              >
+              <ListItemButton key={index} onClick={() => toggleTag(tag)}>
                 <ListItemIcon>
                   <Checkbox
                     disableRipple
@@ -160,6 +179,7 @@ const MetadataFiltersForm = ({ metadata, setFilter }) => {
 };
 
 MetadataFiltersForm.propTypes = {
+  enabledFilterTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
   metadata: PropTypes.object,
   setFilter: PropTypes.func.isRequired,
 };
