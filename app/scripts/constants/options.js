@@ -5,6 +5,7 @@ export const DEFAULT_OPTIONS = {
     .map((page) => [page, true])
     .reduce((acc, [page, enabled]) => ((acc[page] = enabled), acc), {}),
   placeholders: {
+    // disabled: false, // TODO: see comments in content.js regarding completely "disabling" placeholders
     preventClick: true,
     showFilterText: true,
   },

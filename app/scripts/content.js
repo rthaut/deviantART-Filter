@@ -272,23 +272,39 @@ const GetOptions = async () => {
   if (pageIsEnabled) {
     const options = await GetOptions();
 
-    // TODO: make configurable
+    // TODO: make configurable (ideally with individual control over "missing" and "loaded" states)
     // TODO: convert to data attribute
     document.body.classList.add("enable-metadata-indicators");
 
     document.body.setAttribute(
-      "filter-untagged",
+      "da-filter-untagged",
       options.filterUntaggedSubmissionTypes.join(" "),
     );
 
-    // TODO: convert these next 2 items into a single data attribute
-    if (options.placeholders?.preventClick !== true) {
-      document.body.classList.add("clickable-placeholders");
+    const placeholderAttributes = [];
+
+    if (options.placeholders?.disabled) {
+      // TODO: expose an option for completely "disabling" placeholders if it is ever feasible
+      // for now, though, disabling placeholders is difficult (impossible, even?) for at least 2 reasons:
+      // 1) we need to target the parent-most unique DOM node containing the filtered deviation's link
+      //    this is non-trivial due to inconsistent DOM structures for thumbnails across the site,
+      //    although there may be some `:has()` wizardry to do it via CSS selectors in modern browsers
+      // 2) we would then have to re-arrange the layout(s) due to DeviantArt using explicit grids
+      //    again this is non-trivial due to inconsistent DOM structures across the site
+      placeholderAttributes.push("disabled");
+    } else {
+      if (options.placeholders?.preventClick) {
+        placeholderAttributes.push("prevent-click");
+      }
+      if (options.placeholders?.showFilterText) {
+        placeholderAttributes.push("show-filter-text");
+      }
     }
 
-    if (options.placeholders?.showFilterText !== true) {
-      document.body.classList.add("hide-placeholder-text");
-    }
+    document.body.setAttribute(
+      "da-filter-placeholders",
+      placeholderAttributes.join(" "),
+    );
 
     // setup observers for nodes loaded after initial render next
     WatchForNewNodes(SELECTORS.join(", "));
