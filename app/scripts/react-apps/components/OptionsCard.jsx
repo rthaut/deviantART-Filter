@@ -64,26 +64,65 @@ const OptionsCard = () => {
       .catch(() => {});
   };
 
-  const togglePageEnabled = (event) => {
+  const setGroupedBooleanOption = (
+    group,
+    name,
+    value,
+    reloadedRequired = true,
+  ) => {
     setOptions({
       ...options,
-      pages: {
-        ...options.pages,
-        [event.target.name]: event.target.checked,
+      [group]: {
+        ...options?.[group],
+        [name]: value,
       },
     });
-    showReloadRequired();
+    if (reloadedRequired) {
+      showReloadRequired();
+    }
   };
 
-  const togglePlaceholderOption = (event) => {
-    setOptions({
-      ...options,
-      placeholders: {
-        ...options.placeholders,
-        [event.target.name]: event.target.checked,
-      },
-    });
-    showReloadRequired();
+  const toggleGroupedBooleanOption =
+    (group, reloadedRequired = true) =>
+    (event) => {
+      setOptions({
+        ...options,
+        [group]: {
+          ...options?.[group],
+          [event.target.name]: event.target.checked,
+        },
+      });
+      if (reloadedRequired) {
+        showReloadRequired();
+      }
+    };
+
+  const togglePageEnabled = toggleGroupedBooleanOption("pages");
+  const toggleMetadataOption = toggleGroupedBooleanOption("metadata");
+  const togglePlaceholderOption = toggleGroupedBooleanOption("placeholders");
+
+  const handleMetadataToggled = async (event) => {
+    const disabling = event.target.checked === false;
+    if (disabling) {
+      confirm({
+        title: browser.i18n.getMessage("ConfirmOptionsDisableMetadataTitle"),
+        description: browser.i18n.getMessage(
+          "ConfirmOptionsDisableMetadataPrompt",
+        ),
+        confirmationText: browser.i18n.getMessage(
+          "ConfirmOptionsDisableMetadataButton_Accept",
+        ),
+        cancellationText: browser.i18n.getMessage(
+          "ConfirmOptionsDisableMetadataButton_Decline",
+        ),
+      })
+        .then(() => {
+          setGroupedBooleanOption("metadata", "enabled", false);
+        })
+        .catch(() => {});
+    } else {
+      setGroupedBooleanOption("metadata", "enabled", true);
+    }
   };
 
   const handleUpdatePageChange = (event) => {
@@ -304,6 +343,98 @@ const OptionsCard = () => {
                   </MenuItem>
                 ))}
               </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <FormControl
+              component="fieldset"
+              sx={{ marginTop: 1, marginBottom: 2 }}
+            >
+              <Typography component="legend" sx={{ padding: 0 }}>
+                {browser.i18n.getMessage(
+                  "Options_MetadataFunctionality_Header",
+                )}
+              </Typography>
+              <Typography
+                component="p"
+                variant="body2"
+                color="textSecondary"
+                gutterBottom
+              >
+                {browser.i18n.getMessage(
+                  "Options_MetadataFunctionality_HelpText",
+                )}
+              </Typography>
+              <FormGroup>
+                <FormControlLabel
+                  label={
+                    <>
+                      {browser.i18n.getMessage(
+                        `Options_MetadataFunctionality_OptionLabel_Enabled`,
+                      )}
+                      <br />
+                      <Typography
+                        component="span"
+                        color="warning.dark"
+                        dangerouslySetInnerHTML={{
+                          __html: browser.i18n.getMessage(
+                            "Options_MetadataFunctionality_OptionHelpText_Enabled",
+                          ),
+                        }}
+                      />
+                    </>
+                  }
+                  control={
+                    <Switch
+                      name="enabled"
+                      color="primary"
+                      checked={options.metadata.enabled}
+                      onChange={handleMetadataToggled}
+                    />
+                  }
+                />
+              </FormGroup>
+              <Divider variant="fullWidth" sx={{ marginY: 1 }} />
+              <FormGroup>
+                {Object.keys(DEFAULT_OPTIONS.metadata)
+                  .filter((key) => key !== "enabled")
+                  .map((key) => (
+                    <FormControlLabel
+                      key={key}
+                      label={
+                        <>
+                          {browser.i18n.getMessage(
+                            `Options_MetadataFunctionality_OptionLabel_${key}`,
+                          )}
+                          {key === "enabled" && (
+                            <>
+                              <br />
+                              <Typography
+                                component="span"
+                                color="warning.dark"
+                                dangerouslySetInnerHTML={{
+                                  __html: browser.i18n.getMessage(
+                                    "Options_MetadataFunctionality_OptionHelpText_Enabled",
+                                  ),
+                                }}
+                              />
+                            </>
+                          )}
+                        </>
+                      }
+                      control={
+                        <Switch
+                          name={key}
+                          color="primary"
+                          checked={options?.metadata[key]}
+                          // TODO: if the key is `enabled` we want to require confirmation when disabling
+                          onChange={toggleMetadataOption}
+                        />
+                      }
+                    />
+                  ))}
+              </FormGroup>
             </FormControl>
           </Grid>
         </Grid>

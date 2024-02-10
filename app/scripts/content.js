@@ -21,6 +21,7 @@ const SELECTORS = [
 const FILTERS = [KeywordsFilter, UsersFilter];
 
 let pageIsEnabled = true;
+let metadataEnabled = true;
 
 /**
  * Runs all applicable logic on DOM nodes (applying metadata, filtering, etc.)
@@ -33,25 +34,27 @@ export const HandleNodes = async (nodes) => {
     data[F.STORAGE_KEY] = storageData[F.STORAGE_KEY] ?? [];
   }
 
-  // start loading metadata and applying filters that do require metadata first (asynchronously)
-  nodes.forEach(async (node) => {
-    let metadataApplied = true;
-    try {
-      await SetMetadataOnNode(node);
-    } catch (error) {
-      console.error("Failed to set metadata on node", node, error);
-      metadataApplied = false;
-    }
+  if (metadataEnabled) {
+    // start loading metadata and applying filters that do require metadata first (asynchronously)
+    nodes.forEach(async (node) => {
+      let metadataApplied = true;
+      try {
+        await SetMetadataOnNode(node);
+      } catch (error) {
+        console.error("Failed to set metadata on node", node, error);
+        metadataApplied = false;
+      }
 
-    if (metadataApplied) {
-      FILTERS.filter(
-        (F) =>
-          F.REQUIRES_METADATA &&
-          data[F.STORAGE_KEY] &&
-          data[F.STORAGE_KEY].length,
-      ).forEach((F) => F.ApplyFiltersToNode(node, data[F.STORAGE_KEY]));
-    }
-  });
+      if (metadataApplied) {
+        FILTERS.filter(
+          (F) =>
+            F.REQUIRES_METADATA &&
+            data[F.STORAGE_KEY] &&
+            data[F.STORAGE_KEY].length,
+        ).forEach((F) => F.ApplyFiltersToNode(node, data[F.STORAGE_KEY]));
+      }
+    });
+  }
 
   // apply filters that do NOT require metadata last
   nodes.forEach((node) => {
@@ -108,6 +111,8 @@ export const OnLocalStorageChanged = async (key, changes) => {
   if (!pageIsEnabled) {
     return;
   }
+
+  // TODO: it would be great if some/most/all option changes could be handled here as well, rather than forcing the page to be reloaded
 
   if (key === ENABLED_FILTERS_STORAGE_KEY) {
     const { newValue: enabledFilters } = changes;
@@ -272,9 +277,20 @@ const GetOptions = async () => {
   if (pageIsEnabled) {
     const options = await GetOptions();
 
-    // TODO: make configurable (ideally with individual control over "missing" and "loaded" states)
-    // TODO: convert to data attribute
-    document.body.classList.add("enable-metadata-indicators");
+    metadataEnabled = options.metadata.enabled !== false;
+
+    const metadataAttributes = [];
+    if (options.metadata?.missingMetadataIndicators) {
+      metadataAttributes.push("indicate-missing");
+    }
+    if (options.metadata?.loadedMetadataIndicators) {
+      metadataAttributes.push("indicate-loaded");
+    }
+
+    document.body.setAttribute(
+      "da-filter-metadata",
+      metadataAttributes.join(" "),
+    );
 
     document.body.setAttribute(
       "da-filter-untagged",

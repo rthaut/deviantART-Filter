@@ -154,19 +154,20 @@ body[da-filter-placeholders~="disabled"] [da-filter-user] {
 }
 
 /* === METADATA STATUS/INDICATORS === */
-/* TODO: these use `:has()` which only very recenly became supported in Firefox */
-body.enable-metadata-indicators
+/* TODO: these use `:has()` which only very recently became supported in Firefox */
+/* TODO: literature entries do NOT have images/thumbnails, so these selectors don't work for them... */
+body[da-filter-metadata~="indicate-missing"]
   [href*="/art/"]:not([data-title]):has(img),
-body.enable-metadata-indicators
+body[da-filter-metadata~="indicate-missing"]
   [href*="/journal/"]:not([data-title]):has(img),
-body.enable-metadata-indicators
+body[da-filter-metadata~="indicate-missing"]
   [href*="/status-update/"]:not([data-title]):has(img) {
   outline: #e59b00 solid 1px;
 }
-/*
-body.enable-metadata-indicators [href*="/art/"][data-title]:has(img),
-body.enable-metadata-indicators [href*="/journal/"][data-title]:has(img),
-body.enable-metadata-indicators [href*="/status-update/"][data-title]:has(img) {
-    outline: #00e59b solid 1px;
+
+body[da-filter-metadata~="indicate-loaded"] [href*="/art/"][data-title]:has(img),
+body[da-filter-metadata~="indicate-loaded"] [href*="/journal/"][data-title]:has(img),
+body[da-filter-metadata~="indicate-loaded"] [href*="/status-update/"][data-title]:has(img) {
+  outline: #00e59b solid 1px;
 }
-*/
+

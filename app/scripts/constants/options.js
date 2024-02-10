@@ -11,6 +11,11 @@ export const DEFAULT_OPTIONS = {
   },
   showUpdatedPageOnUpdate: "patch",
   filterUntaggedSubmissionTypes: [],
+  metadata: {
+    enabled: true,
+    missingMetadataIndicators: true,
+    loadedMetadataIndicators: false,
+  },
 };
 
 // TODO: move to another file?

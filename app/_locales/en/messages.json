@@ -173,6 +173,20 @@
   "ConfirmOptionsResetButton_Decline": {
     "message": "No"
   },
+  "ConfirmOptionsDisableMetadataPrompt": {
+    "message": "Are you sure you want to disable submission metadata retrieval and injection? Doing so will prevent all keyword filters from working.",
+    "description": "The message displayed on the modal when asking for confirmation to disable metadata retrieval and injection"
+  },
+  "ConfirmOptionsDisableMetadataTitle": {
+    "message": "Confirm Disable Metadata",
+    "description": "The title displayed on the modal when asking for confirmation to disable metadata retrieval and injection"
+  },
+  "ConfirmOptionsDisableMetadataButton_Accept": {
+    "message": "Yes"
+  },
+  "ConfirmOptionsDisableMetadataButton_Decline": {
+    "message": "No"
+  },
   "OptionsTitle": {
     "message": "Options"
   },
@@ -196,6 +210,24 @@
   },
   "Options_EnabledPages_PageLabel_DeviantsYouWatch": {
     "message": "Deviants You Watch Page"
+  },
+  "Options_MetadataFunctionality_Header": {
+    "message": "Submission Metadata"
+  },
+  "Options_MetadataFunctionality_HelpText": {
+    "message": "Control the behavior of metadata retrieval and injection for submissions and the appearance of submissions when metadata is missing and/or loaded."
+  },
+  "Options_MetadataFunctionality_OptionLabel_Enabled": {
+    "message": "Enable metadata retrieval and injection for submissions"
+  },
+  "Options_MetadataFunctionality_OptionHelpText_Enabled": {
+    "message": "<strong>Note</strong>: This must be enabled/on for keyword filters to work"
+  },
+  "Options_MetadataFunctionality_OptionLabel_MissingMetadataIndicators": {
+    "message": "Show an orange outline around thumbnails until the submission's metadata has been loaded (useful for troubleshooting purposes)"
+  },
+  "Options_MetadataFunctionality_OptionLabel_LoadedMetadataIndicators": {
+    "message": "Show a green outline around thumbnails after metadata is loaded"
   },
   "Options_PlaceholderFunctionality_Header": {
     "message": "Placeholder Appearance/Behavior"
