@@ -20,7 +20,11 @@ import Typography from "@mui/material/Typography";
 
 import useExtensionStorage from "../hooks/useExtensionStorage";
 
-import { DEFAULT_OPTIONS, SUBMISSION_TYPES } from "../../constants/options";
+import {
+  DEFAULT_OPTIONS,
+  OPTIONS_STORAGE_KEY,
+  SUBMISSION_TYPES,
+} from "../../constants/options";
 
 const OptionsCard = () => {
   const confirm = useConfirm();
@@ -28,7 +32,7 @@ const OptionsCard = () => {
 
   const [options, setOptions] = useExtensionStorage({
     type: "local",
-    key: "options",
+    key: OPTIONS_STORAGE_KEY,
     initialValue: DEFAULT_OPTIONS,
   });
 
@@ -64,12 +68,7 @@ const OptionsCard = () => {
       .catch(() => {});
   };
 
-  const setGroupedBooleanOption = (
-    group,
-    name,
-    value,
-    reloadedRequired = true,
-  ) => {
+  const setGroupedBoolean = (group, name, value, reloadedRequired = true) => {
     setOptions({
       ...options,
       [group]: {
@@ -82,7 +81,7 @@ const OptionsCard = () => {
     }
   };
 
-  const toggleGroupedBooleanOption =
+  const toggleGroupedBoolean =
     (group, reloadedRequired = true) =>
     (event) => {
       setOptions({
@@ -97,9 +96,9 @@ const OptionsCard = () => {
       }
     };
 
-  const togglePageEnabled = toggleGroupedBooleanOption("pages");
-  const toggleMetadataOption = toggleGroupedBooleanOption("metadata");
-  const togglePlaceholderOption = toggleGroupedBooleanOption("placeholders");
+  const togglePageEnabled = toggleGroupedBoolean("pages");
+  const toggleMetadataOption = toggleGroupedBoolean("metadata", false);
+  const togglePlaceholderOption = toggleGroupedBoolean("placeholders", false);
 
   const handleMetadataToggled = async (event) => {
     const disabling = event.target.checked === false;
@@ -117,11 +116,11 @@ const OptionsCard = () => {
         ),
       })
         .then(() => {
-          setGroupedBooleanOption("metadata", "enabled", false);
+          setGroupedBoolean("metadata", "enabled", false);
         })
         .catch(() => {});
     } else {
-      setGroupedBooleanOption("metadata", "enabled", true);
+      setGroupedBoolean("metadata", "enabled", true);
     }
   };
 

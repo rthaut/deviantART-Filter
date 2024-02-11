@@ -4,6 +4,7 @@ import semverLT from "semver/functions/lt";
 
 import { ImportFilters } from "../filters";
 
+import { DEFAULT_OPTIONS, OPTIONS_STORAGE_KEY } from "../constants/options";
 import { TAG_FILTERS_MIGRATED } from "../constants/notifications";
 
 export const OnInstalled = ({ previousVersion, reason, temporary }) => {
@@ -53,7 +54,9 @@ const OnUpdated = async (previousVersion) => {
 };
 
 const GetReleaseTypesFromOptions = async () => {
-  const { options } = await browser.storage.local.get("options");
+  const { options } = await browser.storage.local.get({
+    [OPTIONS_STORAGE_KEY]: DEFAULT_OPTIONS,
+  });
   const releaseType = options?.showUpdatedPageOnUpdate ?? "patch";
   const releaseTypes = [];
 

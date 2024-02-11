@@ -3,9 +3,11 @@ import { differenceWith, isEqual } from "lodash-es";
 import { ENABLED_FILTERS_STORAGE_KEY, SUPPORTED_FILTERS } from "../filters";
 import { SendMessageToAllTabs } from "./messages";
 import { LOCAL_STORAGE_CHANGED } from "../constants/messages";
+import { OPTIONS_STORAGE_KEY } from "../constants/options";
 
 export const MONITORED_STORAGE_KEYS = [
   ENABLED_FILTERS_STORAGE_KEY,
+  OPTIONS_STORAGE_KEY,
   ...SUPPORTED_FILTERS,
 ];
 

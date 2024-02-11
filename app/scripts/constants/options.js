@@ -1,5 +1,7 @@
 import { PAGES } from "./url";
 
+export const OPTIONS_STORAGE_KEY = "options";
+
 export const DEFAULT_OPTIONS = {
   pages: Object.keys(PAGES)
     .map((page) => [page, true])
