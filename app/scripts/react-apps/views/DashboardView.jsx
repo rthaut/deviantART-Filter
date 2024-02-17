@@ -8,9 +8,6 @@ import FiltersImporter from "../components/FiltersImporter";
 import UserFiltersDataProvider from "../contexts/userFiltersDataProvider";
 import KeywordFiltersDataProvider from "../contexts/keywordsFiltersDataProvider";
 
-import UserFiltersDataProvider from "../contexts/userFiltersDataProvider";
-import KeywordFiltersDataProvider from "../contexts/keywordsFiltersDataProvider";
-
 const DashboardView = () => {
   return (
     <Grid container spacing={3} alignItems="stretch">
