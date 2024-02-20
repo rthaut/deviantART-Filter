@@ -26,8 +26,8 @@ export const SetMetadataOnNode = async (node) => {
   if (url.includes("/status-update/")) {
     // oEmbed API does not support status updates,
     // but we can parse and set the username from the URL
-    const { username: author_name } = SUBMISSION_URL_REGEX.exec(url).groups;
-    metadata = { author_name };
+    const { username } = SUBMISSION_URL_REGEX.exec(url).groups;
+    metadata = { username, type: "update" };
     console.info("Manually setting metadata for status update", url, metadata);
   } else {
     if (!url.toLowerCase().startsWith("http")) {
@@ -54,14 +54,22 @@ export const SetMetadataOnNode = async (node) => {
  * @param {object} metadata the metadata
  */
 export const SetMetadataAttributesOnNode = (node, metadata) => {
-  const { author_name, title, tags } = metadata;
+  const { author_name, category, html, title, tags, type, username } = metadata;
+
+  if (!node.hasAttribute("data-username")) {
+    node.setAttribute("data-username", username ?? author_name.toLowerCase());
+  }
 
   if (author_name) {
-    // TODO: put the author_name metadata value into a different (or additional) attribute?
-    // currently it overwrites the lowercase username that is parsed from the URL
-    // via the `GetUsernameForNode()` function when applying user filters
-    // (typically prior to the metadata retrieval/injection finishing)
-    node.setAttribute("data-username", author_name);
+    node.setAttribute("data-author-name", author_name);
+  }
+
+  if (category) {
+    node.setAttribute("data-category", category);
+  }
+
+  if (html) {
+    node.setAttribute("data-html", html);
   }
 
   if (title) {
@@ -79,5 +87,9 @@ export const SetMetadataAttributesOnNode = (node, metadata) => {
   } else {
     // explicitly set data-tags attribute to empty string for untagged submission filtering
     node.setAttribute("data-tags", "");
+  }
+
+  if (type) {
+    node.setAttribute("data-type", type);
   }
 };

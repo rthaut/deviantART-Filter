@@ -34,29 +34,25 @@ body#deviantART-v7 {
 }
 
 /* === PLACEHOLDERS === */
-body[da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""],
-body[da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""],
-body[da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""],
-[da-filter-keyword],
-[da-filter-user] {
+body[da-filter-untagged~="deviations"] [da-filter-node~="link-wrapper"]:has([href*="/art/"][data-tags=""]),
+body[da-filter-untagged~="journals"] [da-filter-node~="link-wrapper"]:has([href*="/journal/"][data-tags=""]),
+body[da-filter-untagged~="updates"] [da-filter-node~="link-wrapper"]:has([href*="/status-update/"][data-tags=""]) {
   display: inline-block !important;
   position: relative !important;
   visibility: visible !important;
 }
 
-body[da-filter-placeholders~="prevent-click"][da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""],
-body[da-filter-placeholders~="prevent-click"][da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""],
-body[da-filter-placeholders~="prevent-click"][da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""],
-body[da-filter-placeholders~="prevent-click"] [da-filter-keyword],
-body[da-filter-placeholders~="prevent-click"] [da-filter-user] {
+/* TODO: clickable placeholders won't work with the new `[da-filter-node~="link-wrapper"]` convention */
+/* anchor tags are now inside of the element with the placeholder content; we would have to force the anchor tags into a new stacking context so they are "above" the placeholder content, but not show any of the content or styles of those anchor tags... */
+body[da-filter-placeholders~="prevent-click"][da-filter-untagged~="deviations"] [da-filter-node~="link-wrapper"]:has([href*="/art/"][data-tags=""]),
+body[da-filter-placeholders~="prevent-click"][da-filter-untagged~="journals"] [da-filter-node~="link-wrapper"]:has([href*="/journal/"][data-tags=""]),
+body[da-filter-placeholders~="prevent-click"][da-filter-untagged~="updates"] [da-filter-node~="link-wrapper"]:has([href*="/status-update/"][data-tags=""]) {
   pointer-events: none !important;
 }
 
-body[da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""]::before,
-body[da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""]::before,
-body[da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""]::before,
-[da-filter-keyword]::before,
-[da-filter-user]::before {
+body[da-filter-untagged~="deviations"] [da-filter-node~="link-wrapper"]:has([href*="/art/"][data-tags=""])::before,
+body[da-filter-untagged~="journals"] [da-filter-node~="link-wrapper"]:has([href*="/journal/"][data-tags=""])::before,
+body[da-filter-untagged~="updates"] [da-filter-node~="link-wrapper"]:has([href*="/status-update/"][data-tags=""])::before {
   /* the placeholder text and background, placed overtop the thumbnail */
   z-index: var(--da-filter-placeholder-z-index);
   position: absolute;
@@ -80,11 +76,9 @@ body[da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""]::bef
   content: "";
 }
 
-body[da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""]::after,
-body[da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""]::after,
-body[da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""]::after,
-[da-filter-keyword]::after,
-[da-filter-user]::after {
+body[da-filter-untagged~="deviations"] [da-filter-node~="link-wrapper"]:has([href*="/art/"][data-tags=""])::after,
+body[da-filter-untagged~="journals"] [da-filter-node~="link-wrapper"]:has([href*="/journal/"][data-tags=""])::after,
+body[da-filter-untagged~="updates"] [da-filter-node~="link-wrapper"]:has([href*="/status-update/"][data-tags=""])::after {
   /* the placeholder image ONLY, uses an SVG mask imitate programmatic color */
   z-index: var(--da-filter-placeholder-z-index);
   position: absolute;
@@ -114,60 +108,39 @@ TODO: for small thumbnails (like those in the sidebar) the placeholder text is t
       based on the size of the container (which would be the node with the `da-filter-*` attribute)
 */
 
-body[da-filter-placeholders~="show-filter-text"][da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""]::before {
+body[da-filter-placeholders~="show-filter-text"][da-filter-untagged~="deviations"] [da-filter-node~="link-wrapper"]:has([href*="/art/"][data-tags=""])::before {
   content: "__MSG_Placeholder_UntaggedDeviation__";
 }
 
-body[da-filter-placeholders~="show-filter-text"][da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""]::before {
+body[da-filter-placeholders~="show-filter-text"][da-filter-untagged~="journals"] [da-filter-node~="link-wrapper"]:has([href*="/journal/"][data-tags=""])::before {
   content: "__MSG_Placeholder_UntaggedJournal__";
 }
 
-body[da-filter-placeholders~="show-filter-text"][da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""]::before {
+body[da-filter-placeholders~="show-filter-text"][da-filter-untagged~="updates"] [da-filter-node~="link-wrapper"]:has([href*="/status-update/"][data-tags=""])::before {
   content: "__MSG_Placeholder_UntaggedStatusUpdate__";
 }
 
-body[da-filter-placeholders~="show-filter-text"] [da-filter-keyword]::before {
-  content: "__MSG_Placeholder_Keyword__: " attr(da-filter-keyword);
-}
-
-body[da-filter-placeholders~="show-filter-text"] [da-filter-keyword][da-filter-keyword-attribute]::before {
-  content: "__MSG_Placeholder_KeywordIn__ " attr(da-filter-keyword-attribute)
-    ": " attr(da-filter-keyword);
-}
-
-body[da-filter-placeholders~="show-filter-text"] [da-filter-user]::before {
-  content: "__MSG_Placeholder_User__: " attr(da-filter-user);
-}
-
-body[da-filter-placeholders~="show-filter-text"] [da-filter-user][data-username]:not([data-username=""])::before {
-  /* use the username from metadata instead if it is available, as it will always have correct casing */
-  content: "__MSG_Placeholder_User__: " attr(data-username);
-}
-
-body[da-filter-placeholders~="disabled"][da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""],
-body[da-filter-placeholders~="disabled"][da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""],
-body[da-filter-placeholders~="disabled"][da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""],
-body[da-filter-placeholders~="disabled"] [da-filter-keyword],
-body[da-filter-placeholders~="disabled"] [da-filter-user] {
+body[da-filter-placeholders~="disabled"][da-filter-untagged~="deviations"] [da-filter-node~="link-wrapper"]:has([href*="/art/"][data-tags=""]),
+body[da-filter-placeholders~="disabled"][da-filter-untagged~="journals"] [da-filter-node~="link-wrapper"]:has([href*="/journal/"][data-tags=""]),
+body[da-filter-placeholders~="disabled"][da-filter-untagged~="updates"] [da-filter-node~="link-wrapper"]:has([href*="/status-update/"][data-tags=""]) {
   /* TODO: see comments in content.js regarding completely "disabling" placeholders */
   display: none !important;
 }
 
 /* === METADATA STATUS/INDICATORS === */
-/* TODO: these use `:has()` which only very recently became supported in Firefox */
 /* TODO: literature entries do NOT have images/thumbnails, so these selectors don't work for them... */
 body[da-filter-metadata~="indicate-missing"]
-  [href*="/art/"]:not([data-title]):has(img),
+  [da-filter-node~="link-wrapper"]:has([href*="/art/"]:not([data-title]):has(img)),
 body[da-filter-metadata~="indicate-missing"]
-  [href*="/journal/"]:not([data-title]):has(img),
+  [da-filter-node~="link-wrapper"]:has([href*="/journal/"]:not([data-title]):has(img)),
 body[da-filter-metadata~="indicate-missing"]
-  [href*="/status-update/"]:not([data-title]):has(img) {
+  [da-filter-node~="link-wrapper"]:has([href*="/status-update/"]:not([data-title]):has(img)) {
   outline: #e59b00 solid 1px;
 }
 
-body[da-filter-metadata~="indicate-loaded"] [href*="/art/"][data-title]:has(img),
-body[da-filter-metadata~="indicate-loaded"] [href*="/journal/"][data-title]:has(img),
-body[da-filter-metadata~="indicate-loaded"] [href*="/status-update/"][data-title]:has(img) {
+body[da-filter-metadata~="indicate-loaded"] [da-filter-node~="link-wrapper"]:has([href*="/art/"][data-title]:has(img)),
+body[da-filter-metadata~="indicate-loaded"] [da-filter-node~="link-wrapper"]:has([href*="/journal/"][data-title]:has(img)),
+body[da-filter-metadata~="indicate-loaded"] [da-filter-node~="link-wrapper"]:has([href*="/status-update/"][data-title]:has(img)) {
   outline: #00e59b solid 1px;
 }
 

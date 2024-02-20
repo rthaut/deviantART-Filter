@@ -2,6 +2,8 @@ export const STORAGE_KEY = "keywords";
 export const ID_PROP_NAME = "keyword";
 export const UNIQUE_KEYS = ["keyword"];
 
+export const DATA_ATTRIBUTES = ["Tags", "Title", "HTML"];
+
 export const REQUIRES_METADATA = true;
 
 /**
@@ -35,83 +37,61 @@ export const validate = ({ keyword }) => {
   return { isValid: true };
 };
 
-/**
- * Applies filters to a DOM node
- * @param {HTMLElement} node the DOM node
- * @param {object[]} filters the list of filters to apply
- */
-export const ApplyFiltersToNode = (node, filters) => {
-  for (const filter of filters) {
-    const operator = filter.wildcard ? "*" : "~";
-    if (node.matches(`[data-tags${operator}="${filter.keyword}" i]`)) {
-      SetFilterAttributesOnNode(node, filter.keyword, "Tags");
-      continue;
-    } else if (node.matches(`[data-title${operator}="${filter.keyword}" i]`)) {
-      SetFilterAttributesOnNode(node, filter.keyword, "Title");
-      continue;
-    }
-  }
+export const getSelectorsForSharedFilterStyles = (filters) => {
+  const selectors = [];
+
+  filters.forEach(({ keyword, wildcard }) => {
+    DATA_ATTRIBUTES.forEach((attribute) => {
+      selectors.push(
+        `[data-${attribute.toLowerCase()}${wildcard ? "*" : "~"}="${keyword}" i]`,
+      );
+    });
+  });
+
+  return selectors;
+};
+
+export const getSelectorsAndStylesForPlaceholderText = (filters) => {
+  const values = [];
+
+  filters.forEach(({ keyword, wildcard }) => {
+    DATA_ATTRIBUTES.forEach((attribute) => {
+      values.push([
+        `[data-${attribute.toLowerCase()}${wildcard ? "*" : "~"}="${keyword}" i]`,
+        [
+          // TODO: update the localized message to just have placeholders for the attribute and keyword now
+          `content: "${browser.i18n.getMessage("Placeholder_KeywordIn")} ${attribute}: ${keyword}" !important`,
+        ],
+      ]);
+    });
+  });
+
+  return values;
 };
 
 /**
- * Applies filters to the page
+ * Removes styles from the given stylesheet for the removed filters
  * Used primarily for handling added filters when local storage changes
- * @param {object[]} filters list of filters to apply
- * @param {string} selector CSS selector for DOM nodes
- */
-export const ApplyFiltersToDocument = (filters, selector) => {
-  const nodes = document.querySelectorAll(selector);
-  nodes.forEach((node) => ApplyFiltersToNode(node, filters));
-};
-
-/**
- * Removes filters from the page and applies remaining active filters to each unfiltered DOM node
- * Used primarily for handling added filters when local storage changes
+ * @param {CSSStyleSheet} styleSheet stylesheet
  * @param {object[]} removedFilters list of filters to remove
- * @param {object[]} activeFilters list of filters that are still active
  */
-export const RemoveFiltersFromDocument = (removedFilters, activeFilters) => {
-  for (const filter of removedFilters) {
-    const nodes = document.querySelectorAll(
-      `[da-filter-keyword="${filter.keyword}" i]`,
-    );
-    for (const node of nodes) {
-      RemoveFilterAttributesOnNode(node);
-      ApplyFiltersToNode(node, activeFilters);
+export const remove = (styleSheet, removedFilters) => {
+  const indexesToRemove = [];
+
+  removedFilters.forEach(({ keyword, wildcard }) => {
+    for (let i = 0; i < styleSheet.cssRules.length; i++) {
+      DATA_ATTRIBUTES.forEach((attribute) => {
+        if (
+          styleSheet.cssRules[i].cssText.includes(
+            `[data-${attribute.toLowerCase()}${wildcard ? "*" : "~"}="${keyword}" i]`,
+          )
+        ) {
+          indexesToRemove.push(i);
+        }
+      });
     }
-  }
-};
+  });
 
-/**
- * Removes filter attributes from all DOM nodes on the page
- * Used primarily for when keyword filters are disabled
- */
-export const DisableFilter = () => {
-  const nodes = document.querySelectorAll(`[da-filter-keyword]`);
-  for (const node of nodes) {
-    RemoveFilterAttributesOnNode(node);
-  }
-};
-
-/**
- * Sets attributes on a DOM node for filtering (by keyword)
- * @param {HTMLElement} node the DOM node
- * @param {string} keyword the keyword that matched a filter
- * @param {string} [attribute] the attribute that matched a filter
- */
-const SetFilterAttributesOnNode = (node, keyword, attribute = null) => {
-  node.setAttribute("da-filter-keyword", keyword);
-
-  if (attribute) {
-    node.setAttribute("da-filter-keyword-attribute", attribute);
-  }
-};
-
-/**
- * Removes attributes on a DOM node for filtering (by keyword)
- * @param {HTMLElement} node the  DOM node
- */
-const RemoveFilterAttributesOnNode = (node) => {
-  node.removeAttribute("da-filter-keyword");
-  node.removeAttribute("da-filter-keyword-attribute");
+  indexesToRemove.reverse();
+  indexesToRemove.forEach((index) => styleSheet.deleteRule(index));
 };

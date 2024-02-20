@@ -4,7 +4,9 @@ export const STORAGE_KEY = "users";
 export const ID_PROP_NAME = "username";
 export const UNIQUE_KEYS = ["username"];
 
-//TODO: a VERY small portion DOM nodes don't have a username available until AFTER metadata is loaded (the known case is for Stash items); it doesn't make sense to wait for metadata to load for all DOM nodes, but having a way to re-apply this filter after metadata loads (for DOM nodes that have NOT already been processed) would be useful
+export const DATA_ATTRIBUTES = ["username"];
+
+// TODO: a VERY small portion DOM nodes don't have a username available until AFTER metadata is loaded (the known case is for Stash items); it doesn't make sense to wait for metadata to load for all DOM nodes, but having a way to re-apply this filter after metadata loads (for DOM nodes that have NOT already been processed) would be useful
 export const REQUIRES_METADATA = false;
 
 /**
@@ -38,65 +40,61 @@ export const validate = ({ username }) => {
   return { isValid: true };
 };
 
-/**
- * Applies filters to a DOM node
- * @param {HTMLElement} node the DOM node
- * @param {object[]} filters the list of filters to apply
- */
-export const ApplyFiltersToNode = (node, filters) => {
-  const usernames = filters
-    .map((filter) => filter.username?.toLowerCase())
-    .filter(Boolean);
+export const getSelectorsForSharedFilterStyles = (filters) => {
+  const selectors = [];
 
-  const username = GetUsernameForNode(node);
+  filters.forEach(({ username }) => {
+    DATA_ATTRIBUTES.forEach((attribute) => {
+      selectors.push(`[data-${attribute.toLowerCase()}="${username}" i]`);
+    });
+  });
 
-  if (!username) {
-    console.warn("Failed to Identify Username for Deviation", node);
-  } else if (usernames.includes(username.toLowerCase())) {
-    SetFilterAttributesOnNode(node, username);
-  }
+  return selectors;
+};
+
+export const getSelectorsAndStylesForPlaceholderText = (filters) => {
+  const values = [];
+
+  filters.forEach(({ username }) => {
+    DATA_ATTRIBUTES.forEach((attribute) => {
+      values.push([
+        `[data-${attribute.toLowerCase()}="${username}" i]`,
+        [
+          // TODO: update the localized message to just have a placeholder for the username now
+          `content: "${browser.i18n.getMessage("Placeholder_User")}: ${username}" !important`,
+        ],
+      ]);
+    });
+  });
+
+  return values;
 };
 
 /**
- * Applies filters to the page
+ * Removes styles from the given stylesheet for the removed filters
  * Used primarily for handling added filters when local storage changes
- * @param {object[]} filters list of filters to apply
- * @param {string} selector CSS selector for DOM nodes
- */
-export const ApplyFiltersToDocument = (filters, selector) => {
-  const nodes = document.querySelectorAll(selector);
-  nodes.forEach((node) => ApplyFiltersToNode(node, filters));
-};
-
-/**
- * Removes filters from the page and applies remaining active filters to each unfiltered DOM node
- * Used primarily for handling added filters when local storage changes
+ * @param {CSSStyleSheet} styleSheet stylesheet
  * @param {object[]} removedFilters list of filters to remove
- * @param {object[]} activeFilters list of filters that are still active
  */
-export const RemoveFiltersFromDocument = (removedFilters, _activeFilters) => {
-  const usernames = removedFilters.map((filter) =>
-    filter.username.toLowerCase(),
-  );
-  for (const username of usernames) {
-    const nodes = document.querySelectorAll(
-      `[da-filter-user="${username.toLowerCase()}" i]`,
-    );
-    for (const node of nodes) {
-      RemoveFilterAttributesOnNode(node);
-    }
-  }
-};
+export const remove = (styleSheet, removedFilters) => {
+  const indexesToRemove = [];
 
-/**
- * Removes filter attributes from all DOM nodes on the page
- * Used primarily for when user filters are disabled
- */
-export const DisableFilter = () => {
-  const nodes = document.querySelectorAll(`[da-filter-user]`);
-  for (const node of nodes) {
-    RemoveFilterAttributesOnNode(node);
-  }
+  removedFilters.forEach(({ username }) => {
+    for (let i = 0; i < styleSheet.cssRules.length; i++) {
+      DATA_ATTRIBUTES.forEach((attribute) => {
+        if (
+          styleSheet.cssRules[i].cssText.includes(
+            `[data-${attribute.toLowerCase()}="${username}" i]`,
+          )
+        ) {
+          indexesToRemove.push(i);
+        }
+      });
+    }
+  });
+
+  indexesToRemove.reverse();
+  indexesToRemove.forEach((index) => styleSheet.deleteRule(index));
 };
 
 /**
@@ -104,7 +102,7 @@ export const DisableFilter = () => {
  * @param {HTMLElement} node the DOM node
  * @returns {string} the username
  */
-const GetUsernameForNode = (node) => {
+export const GetUsernameForNode = (node) => {
   // first look for the data-username attribute on the DOM node,
   // then look for the first child element with the data-username attribute
   let username =
@@ -124,21 +122,4 @@ const GetUsernameForNode = (node) => {
   }
 
   return username;
-};
-
-/**
- * Sets attributes on a DOM node for filtering (by username)
- * @param {HTMLElement} node the DOM node
- * @param {string} username the username that matched a filter
- */
-const SetFilterAttributesOnNode = (node, username) => {
-  node.setAttribute("da-filter-user", username);
-};
-
-/**
- * Removes attributes on a DOM node for filtering (by username)
- * @param {HTMLElement} node the DOM node
- */
-const RemoveFilterAttributesOnNode = (node) => {
-  node.removeAttribute("da-filter-user");
 };
