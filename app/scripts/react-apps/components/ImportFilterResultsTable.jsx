@@ -1,16 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Grid,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
+
+import CircularProgress from "@mui/material/CircularProgress";
+import Grid from "@mui/material/Grid";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
 
 export const Processing = ({ text, color = "inherit", ...props }) => {
   return (
@@ -72,7 +71,7 @@ const ImportFilterResultsTable = ({ results }) => {
         <TableBody>
           {results.map((result, index) => (
             <React.Fragment key={index}>
-              <TableRow key={index}>
+              <TableRow>
                 <TableCell
                   variant="head"
                   rowSpan={
@@ -83,28 +82,30 @@ const ImportFilterResultsTable = ({ results }) => {
                 </TableCell>
               </TableRow>
               {result.results ? (
-                Object.keys(result.results).map((key, index) => (
+                Object.keys(result.results).map((filterType, index) => (
                   <TableRow key={index}>
-                    <TableCell variant="head">{key}</TableCell>
-                    {result.results[key].error ? (
+                    <TableCell variant="head">
+                      {browser.i18n.getMessage(`FilterTitle_${filterType}`)}
+                    </TableCell>
+                    {result.results[filterType].error ? (
                       <TableCell align="center" colSpan={3}>
                         <Typography color="error">
-                          {result.results[key].error}
+                          {result.results[filterType].error}
                         </Typography>
                       </TableCell>
                     ) : (
                       <>
                         <TableCell align="right">
-                          {result.results[key].total}
+                          {result.results[filterType].total}
                         </TableCell>
                         <TableCell align="right">
-                          {result.results[key].new}
+                          {result.results[filterType].new}
                         </TableCell>
                         <TableCell align="right">
-                          {result.results[key].duplicate}
+                          {result.results[filterType].duplicate}
                         </TableCell>
                         <TableCell align="right">
-                          {result.results[key].invalid}
+                          {result.results[filterType].invalid}
                         </TableCell>
                       </>
                     )}
