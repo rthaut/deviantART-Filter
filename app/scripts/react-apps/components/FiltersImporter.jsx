@@ -84,6 +84,7 @@ const FiltersImporter = () => {
     <>
       <Box
         sx={{
+          cursor: "pointer",
           flex: 1,
           display: "flex",
           flexDirection: "column",
