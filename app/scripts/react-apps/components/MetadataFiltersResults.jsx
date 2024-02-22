@@ -1,49 +1,45 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import {
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Avatar,
-} from "@mui/material";
-
-import ClearIcon from "@mui/icons-material/Clear";
-import DoneIcon from "@mui/icons-material/Done";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 
 const MetadataFiltersResults = ({ results }) => {
   return (
-    <List dense disablePadding>
-      {Object.keys(results).map((result, index) => (
-        <ListItem key={index} dense disableGutters>
-          <ListItemAvatar>
-            <Avatar
-              sx={(theme) => ({
-                bgcolor:
-                  results[result].new > 0
-                    ? theme.palette.primary.main
-                    : undefined,
-                color:
-                  results[result].new > 0
-                    ? theme.palette.primary.contrastText
-                    : undefined,
-              })}
-            >
-              {results[result].new > 0 ? <DoneIcon /> : <ClearIcon />}
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            primary={`${results[result].new} ${browser.i18n.getMessage(
-              `FilterTitle_${result}`,
-            )}`}
-            secondary={`${results[result].duplicate} ${browser.i18n.getMessage(
-              "ImportResultsColumnHeader_DuplicateCount",
-            )}`}
-          />
-        </ListItem>
-      ))}
-    </List>
+    <TableContainer>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>
+              {browser.i18n.getMessage("ImportResultsColumnHeader_FilterType")}
+            </TableCell>
+            <TableCell align="center">
+              {browser.i18n.getMessage("ImportResultsColumnHeader_NewCount")}
+            </TableCell>
+            <TableCell align="center">
+              {browser.i18n.getMessage(
+                "ImportResultsColumnHeader_DuplicateCount",
+              )}
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {Object.entries(results).map(([filterType, result]) => (
+            <TableRow key={filterType}>
+              <TableCell variant="head">
+                {browser.i18n.getMessage(`FilterTitle_${filterType}`)}
+              </TableCell>
+              <TableCell align="center">{result.new}</TableCell>
+              <TableCell align="center">{result.duplicate}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
