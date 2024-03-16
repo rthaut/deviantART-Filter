@@ -26,23 +26,23 @@ import { SHOW_MANAGEMENT_PAGE } from "../constants/messages";
 import { ENABLED_FILTERS_STORAGE_KEY, SUPPORTED_FILTERS } from "../filters";
 
 const PopupApp = () => {
-  const [enabledFilterTypes, setEnabledFilterTypes] = useExtensionStorage({
+  const [enabledFilters, setEnabledFilters] = useExtensionStorage({
     type: "local",
     key: ENABLED_FILTERS_STORAGE_KEY,
     initialValue: SUPPORTED_FILTERS,
   });
 
-  const handleToggleFilterType = (value, enabled) =>
-    setEnabledFilterTypes((enabledFilterTypes) => {
-      const enabledFilterTypesSet = new Set([...enabledFilterTypes]);
+  const handleToggleFilter = (value, enabled) =>
+    setEnabledFilters((enabledFilters) => {
+      const enabledFiltersSet = new Set([...enabledFilters]);
 
       if (enabled) {
-        enabledFilterTypesSet.add(value);
+        enabledFiltersSet.add(value);
       } else {
-        enabledFilterTypesSet.delete(value);
+        enabledFiltersSet.delete(value);
       }
 
-      return Array.from(enabledFilterTypesSet);
+      return Array.from(enabledFiltersSet);
     });
 
   const openManagementScreen = (_event) =>
@@ -70,7 +70,7 @@ const PopupApp = () => {
             sx={{ width: "100%" }}
             subheader={
               <ListSubheader>
-                {browser.i18n.getMessage("Options_EnabledFilterTypes_Header")}
+                {browser.i18n.getMessage("Options_EnabledFilterKeys_Header")}
               </ListSubheader>
             }
           >
@@ -79,14 +79,14 @@ const PopupApp = () => {
                 <PeopleIcon />
               </ListItemIcon>
               <FormControlLabel
-                label={browser.i18n.getMessage("FilterTitle_Users")}
+                label={browser.i18n.getMessage("FilterTitle_Users_Plural")}
                 labelPlacement="start"
                 control={
                   <Switch
                     edge="end"
-                    checked={enabledFilterTypes.includes("users")}
+                    checked={enabledFilters.includes("users")}
                     onChange={(event, checked) =>
-                      handleToggleFilterType("users", checked)
+                      handleToggleFilter("users", checked)
                     }
                   />
                 }
@@ -102,14 +102,14 @@ const PopupApp = () => {
                 <LabelIcon />
               </ListItemIcon>
               <FormControlLabel
-                label={browser.i18n.getMessage("FilterTitle_Keywords")}
+                label={browser.i18n.getMessage("FilterTitle_Keywords_Plural")}
                 labelPlacement="start"
                 control={
                   <Switch
                     edge="end"
-                    checked={enabledFilterTypes.includes("keywords")}
+                    checked={enabledFilters.includes("keywords")}
                     onChange={(event, checked) =>
-                      handleToggleFilterType("keywords", checked)
+                      handleToggleFilter("keywords", checked)
                     }
                   />
                 }

@@ -4,6 +4,7 @@ import { SUBMISSION_URL_REGEX } from "../constants/url";
 /**
  * Retrieves and sets the metadata on a DOM node
  * @param {HTMLElement} node the DOM node
+ * @returns {Promise<boolean>} `true` if the metadata was set, `false` otherwise
  */
 export const SetMetadataOnNode = async (node) => {
   const metadataAttributes = ["data-title", "data-tags"];
@@ -12,13 +13,13 @@ export const SetMetadataOnNode = async (node) => {
     .some((a) => metadataAttributes.includes(a));
 
   if (hasMetadata) {
-    return;
+    return true;
   }
 
   const url = node.getAttribute("href");
   if (!url) {
     console.warn("Failed to get Deviation URL for DOM node", node);
-    return;
+    return false;
   }
 
   let metadata;
@@ -32,20 +33,28 @@ export const SetMetadataOnNode = async (node) => {
   } else {
     if (!url.toLowerCase().startsWith("http")) {
       console.warn("Deviation URL is not valid for oEmbed API", url);
-      return;
+      return false;
     }
 
-    metadata = await browser.runtime.sendMessage({
-      action: FETCH_METADATA,
-      data: {
-        url,
-      },
-    });
+    try {
+      metadata = await browser.runtime.sendMessage({
+        action: FETCH_METADATA,
+        data: {
+          url,
+        },
+      });
+    } catch (error) {
+      console.error("Failed to get metadata for Deviation URL", url, error);
+      return false;
+    }
   }
 
-  if (metadata) {
-    SetMetadataAttributesOnNode(node, metadata);
+  if (!metadata) {
+    return false;
   }
+
+  SetMetadataAttributesOnNode(node, metadata);
+  return true;
 };
 
 /**
@@ -54,7 +63,7 @@ export const SetMetadataOnNode = async (node) => {
  * @param {object} metadata the metadata
  */
 export const SetMetadataAttributesOnNode = (node, metadata) => {
-  const { author_name, title, tags } = metadata;
+  const { author_name, category, tags, title, type } = metadata;
 
   if (author_name) {
     // TODO: put the author_name metadata value into a different (or additional) attribute?
@@ -64,8 +73,8 @@ export const SetMetadataAttributesOnNode = (node, metadata) => {
     node.setAttribute("data-username", author_name);
   }
 
-  if (title) {
-    node.setAttribute("data-title", title);
+  if (category) {
+    node.setAttribute("data-category", category);
   }
 
   if (tags) {
@@ -79,5 +88,13 @@ export const SetMetadataAttributesOnNode = (node, metadata) => {
   } else {
     // explicitly set data-tags attribute to empty string for untagged submission filtering
     node.setAttribute("data-tags", "");
+  }
+
+  if (title) {
+    node.setAttribute("data-title", title);
+  }
+
+  if (type) {
+    node.setAttribute("data-type", type);
   }
 };

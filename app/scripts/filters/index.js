@@ -7,7 +7,7 @@ import {
 
 import {
   FILTER_NOT_CREATED,
-  FILTER_TYPE_DISABLED,
+  FILTER_KEY_DISABLED,
 } from "../constants/notifications";
 
 import {
@@ -51,7 +51,7 @@ const compareByAllProps = curry((props, a, b) =>
 );
 
 /**
- * Common methods used for each supported filter where logic is (or can be) unique per filter type
+ * Common methods used for each supported filter where logic is (or can be) unique per filter
  */
 export const FILTER_METHODS = {
   users: {
@@ -84,9 +84,9 @@ export const FILTER_METHODS = {
 };
 
 /**
- * Returns an array of all currently enabled filter types/keys
- * NOTE: initializes all supported filter types as enabled (if the user has never toggled them yet)
- * @returns {Promise<string[]>} array of all enabled filter types/keys
+ * Returns an array of all currently enabled filter keys
+ * NOTE: initializes all supported filter keys as enabled (if the user has never toggled them yet)
+ * @returns {Promise<string[]>} array of all enabled filter keys
  */
 export const GetEnabledFilters = async () => {
   const enabledFilters = await browser.storage.local
@@ -106,77 +106,85 @@ export const GetAllFilters = async () => {
 };
 
 /**
- * Returns all filters for the given type
- * @param {string} filterType the type of filter
+ * Returns all filters for the given key
+ * @param {string} filterKey the key of the filter
  */
-export const GetFilters = async (filterType) => {
+export const GetFilters = async (filterKey) => {
   const allFilters = await GetAllFilters();
-  const filters = Array.from(allFilters[filterType] ?? []);
+  const filters = Array.from(allFilters[filterKey] ?? []);
 
   return filters;
 };
 
 /**
  * Saves the given filters to extension storage
- * @param {string} filterType the type of filter
+ * @param {string} filterKey the key of the filter
  * @param {any[]} filters the filters to save
  */
-export const SaveFilters = async (filterType, filters) => {
+export const SaveFilters = async (filterKey, filters) => {
   await browser.storage.local.set({
-    [filterType]: FILTER_METHODS[filterType].uniq(filters),
+    [filterKey]: FILTER_METHODS[filterKey].uniq(filters),
   });
 };
 
 /**
  * Adds a filter to extension storage
- * @param {string} filterType the type of filter
+ * @param {string} filterKey the key of the filter
  * @param {any} newFilter the filter to add
  */
-export const AddFilter = async (filterType, newFilter) => {
-  const filters = await GetFilters(filterType);
+export const AddFilter = async (filterKey, newFilter) => {
+  const filters = await GetFilters(filterKey);
   filters.push(newFilter);
 
-  await SaveFilters(filterType, filters);
+  await SaveFilters(filterKey, filters);
 };
 
 /**
- * Removes a filter from extension storage
- * @param {string} filterType the type of filter
- * @param {any} oldFilter the filter to remove
+ * Removes an array of filters from extension storage
+ * @param {string} filterKey the key of the filter
+ * @param {any} filtersToRemove the array of filters to remove
  */
-export const RemoveFilter = async (filterType, oldFilter) => {
-  let filters = await GetFilters(filterType);
-  filters = FILTER_METHODS[filterType].diff(filters, [oldFilter]);
+export const RemoveFilters = async (filterKey, filtersToRemove) => {
+  let filters = await GetFilters(filterKey);
+  filters = FILTER_METHODS[filterKey].diff(filters, filtersToRemove);
 
-  await SaveFilters(filterType, filters);
+  await SaveFilters(filterKey, filters);
 };
+
+/**
+ * Removes a single filter from extension storage
+ * @param {string} filterKey the key of the filter
+ * @param {any} filterToRemove the filter to remove
+ */
+export const RemoveFilter = (filterKey, filterToRemove) =>
+  RemoveFilters(filterKey, [filterToRemove]);
 
 /**
  * Updates a filter in extension storage
- * @param {string} filterType the type of filter
+ * @param {string} filterKey the key of the filter
  * @param {any} prevFilter the previous version of the filter
  * @param {any} updatedFilter the updated version of the filter
  */
-export const UpdateFilter = async (filterType, prevFilter, updatedFilter) => {
-  const filters = await GetFilters(filterType);
+export const UpdateFilter = async (filterKey, prevFilter, updatedFilter) => {
+  const filters = await GetFilters(filterKey);
 
-  const index = FILTER_METHODS[filterType].findIndex(filters, prevFilter);
+  const index = FILTER_METHODS[filterKey].findIndex(filters, prevFilter);
   filters[index] = updatedFilter;
 
-  await SaveFilters(filterType, filters);
+  await SaveFilters(filterKey, filters);
 };
 
 /**
  * Validates a new filter and ensures it is unique
- * @param {string} filterType the type of filter
+ * @param {string} filterKey the key of the filter
  * @param {any} newFilter the new filter
  */
-export const ValidateNewFilter = async (filterType, newFilter) => {
-  let { isValid, message } = FILTER_METHODS[filterType].validate(newFilter);
+export const ValidateNewFilter = async (filterKey, newFilter) => {
+  let { isValid, message } = FILTER_METHODS[filterKey].validate(newFilter);
 
   if (isValid) {
-    const filters = await GetFilters(filterType);
-    const index = FILTER_METHODS[filterType].findIndex(filters, newFilter);
+    const filters = await GetFilters(filterKey);
+    const index = FILTER_METHODS[filterKey].findIndex(filters, newFilter);
     if (index > -1) {
       isValid = false;
       message = browser.i18n.getMessage("DuplicateFilterWarning");
@@ -188,25 +196,22 @@ export const ValidateNewFilter = async (filterType, newFilter) => {
 
 /**
  * Validates an updated filter and ensures it is unique
- * @param {string} filterType the type of filter
+ * @param {string} filterKey the key of the filter
  * @param {any} prevFilter the previous version of the filter
  * @param {any} updatedFilter the updated version of the filter
  */
 export const ValidateUpdatedFilter = async (
-  filterType,
+  filterKey,
   prevFilter,
   updatedFilter,
 ) => {
-  let { isValid, message } = FILTER_METHODS[filterType].validate(updatedFilter);
+  let { isValid, message } = FILTER_METHODS[filterKey].validate(updatedFilter);
 
   if (isValid) {
-    const filters = await GetFilters(filterType);
-    filters.splice(
-      FILTER_METHODS[filterType].findIndex(filters, prevFilter),
-      1,
-    );
+    const filters = await GetFilters(filterKey);
+    filters.splice(FILTER_METHODS[filterKey].findIndex(filters, prevFilter), 1);
 
-    const index = FILTER_METHODS[filterType].findIndex(filters, updatedFilter);
+    const index = FILTER_METHODS[filterKey].findIndex(filters, updatedFilter);
     if (index > -1) {
       isValid = false;
       message = browser.i18n.getMessage("DuplicateFilterWarning");
@@ -218,15 +223,15 @@ export const ValidateUpdatedFilter = async (
 
 /**
  * Imports the given filters into extension storage
- * @param {string} filterType the type of filter
+ * @param {string} filterKey the key of the filter
  * @param {any[]} filters the filters to import
  */
-export const ImportFilters = async (filterType, filters) => {
-  const existingFilters = await GetFilters(filterType);
-  const newFilters = FILTER_METHODS[filterType].diff(filters, existingFilters);
+export const ImportFilters = async (filterKey, filters) => {
+  const existingFilters = await GetFilters(filterKey);
+  const newFilters = FILTER_METHODS[filterKey].diff(filters, existingFilters);
 
   const validFilters = newFilters.filter((newFilter) => {
-    const { isValid, message } = FILTER_METHODS[filterType].validate(newFilter);
+    const { isValid, message } = FILTER_METHODS[filterKey].validate(newFilter);
     if (!isValid) {
       console.warn(
         "Filter is invalid, will not be imported:",
@@ -238,7 +243,7 @@ export const ImportFilters = async (filterType, filters) => {
   });
 
   await SaveFilters(
-    filterType,
+    filterKey,
     Array.from([...existingFilters, ...validFilters]),
   );
 
@@ -259,15 +264,15 @@ export const ImportFilters = async (filterType, filters) => {
 export const BulkImportFilters = async (data) => {
   const results = {};
   for (const dataKey of Object.keys(data)) {
-    let filterType = dataKey;
+    let filterKey = dataKey;
     let fileFilters = Array.from(data[dataKey] ?? []);
 
-    if (Object.keys(MIGRATED_FILTERS).includes(filterType)) {
+    if (Object.keys(MIGRATED_FILTERS).includes(filterKey)) {
       console.warn(
-        `Migrating ${filterType} filters to ${MIGRATED_FILTERS[dataKey].key}`,
+        `Migrating ${filterKey} filters to ${MIGRATED_FILTERS[dataKey].key}`,
       );
       // use the new storage key instead of the one in the file
-      filterType = MIGRATED_FILTERS[dataKey].key;
+      filterKey = MIGRATED_FILTERS[dataKey].key;
       // replace mapped property names with their new property name (no changes to unmapped properties)
       fileFilters = fileFilters.map((filter) =>
         mapKeys(
@@ -277,13 +282,13 @@ export const BulkImportFilters = async (data) => {
       );
     }
 
-    if (SUPPORTED_FILTERS.includes(filterType)) {
+    if (SUPPORTED_FILTERS.includes(filterKey)) {
       fileFilters.forEach((value) => {
         delete value.created;
       });
-      results[filterType] = await ImportFilters(filterType, fileFilters);
+      results[filterKey] = await ImportFilters(filterKey, fileFilters);
     } else {
-      results[filterType] = {
+      results[filterKey] = {
         error: browser.i18n.getMessage("UnsupportedFilterError"),
       };
     }
@@ -294,52 +299,49 @@ export const BulkImportFilters = async (data) => {
 
 /**
  * Validates and creates a new filter.
- * Optionally shows browser notifications on validation failure and/or when the specified filter type is currently disabled.
- * @param {string} filterType the type of filter
+ * Optionally shows browser notifications on validation failure and/or when the specified filter key is currently disabled.
+ * @param {string} filterKey the key of the filter
  * @param {any} filter the new filter
  * @param {boolean} [showNotifications=true] (Default `true`) if browser notifications should be shown
  * @returns {boolean} `true` if filter was created successfully
  */
 export const ValidateAndCreateFilter = async (
-  filterType,
+  filterKey,
   filter,
   showNotifications = true,
 ) => {
-  const { isValid, message } = await ValidateNewFilter(filterType, filter);
+  const { isValid, message } = await ValidateNewFilter(filterKey, filter);
 
   if (!isValid) {
     if (showNotifications) {
-      await browser.notifications.create(
-        `${filterType}-${FILTER_NOT_CREATED}`,
-        {
-          type: "basic",
-          iconUrl: browser.runtime.getURL("images/icon-64.png"),
-          title: browser.i18n.getMessage("ExtensionName"),
-          message: browser.i18n.getMessage(
-            "Notification_FilterNotCreated_WithMessage",
-            [message],
-          ),
-        },
-      );
+      await browser.notifications.create(`${filterKey}-${FILTER_NOT_CREATED}`, {
+        type: "basic",
+        iconUrl: browser.runtime.getURL("images/icon-64.png"),
+        title: browser.i18n.getMessage("ExtensionName"),
+        message: browser.i18n.getMessage(
+          "Notification_FilterNotCreated_WithMessage",
+          [message],
+        ),
+      });
     }
     return false;
   }
 
-  await AddFilter(filterType, filter);
+  await AddFilter(filterKey, filter);
 
   const enabledFilters = await GetEnabledFilters();
 
-  if (!enabledFilters.includes(filterType)) {
+  if (!enabledFilters.includes(filterKey)) {
     if (showNotifications) {
       await browser.notifications.create(
-        `${filterType}-${FILTER_TYPE_DISABLED}`,
+        `${filterKey}-${FILTER_KEY_DISABLED}`,
         {
           type: "basic",
           iconUrl: browser.runtime.getURL("images/icon-64.png"),
           title: browser.i18n.getMessage("ExtensionName"),
           message: browser.i18n.getMessage(
-            "Notification_FilterCreatedForDisabledFilterType",
-            [filterType],
+            "Notification_FilterCreatedForDisabledFilterKey",
+            [filterKey],
           ),
         },
       );

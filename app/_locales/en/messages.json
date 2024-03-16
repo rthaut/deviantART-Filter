@@ -53,6 +53,32 @@
       }
     }
   },
+  "FilterNameWithCount_Allowed": {
+    "message": "$COUNT$ allowed $NAME$ filter(s)",
+    "description": "A formatted string to display the name of a filter with the count of allowed filters",
+    "example": "2 Allowed Keyword Filter(s)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "name": {
+        "content": "$2"
+      }
+    }
+  },
+  "FilterNameWithCount_Blocked": {
+    "message": "$COUNT$ blocked $NAME$ filter(s)",
+    "description": "A formatted string to display the name of a filter with the count of blocked filters",
+    "example": "2 Blocked Keyword Filter(s)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "name": {
+        "content": "$2"
+      }
+    }
+  },
   "FilterNameLoading": {
     "message": "Loading $NAME$ Filters",
     "description": "A formatted string to display when loading filters",
@@ -81,8 +107,8 @@
   "ImportResultsColumnHeader_FileName": {
     "message": "File Name"
   },
-  "ImportResultsColumnHeader_FilterType": {
-    "message": "Filter Type"
+  "ImportResultsColumnHeader_FilterKey": {
+    "message": "Filter"
   },
   "ImportResultsColumnHeader_TotalCount": {
     "message": "Total"
@@ -113,11 +139,11 @@
   },
   "DeleteAllFiltersButtonTooltip": {
     "message": "Delete All",
-    "description": "The tooltip displayed on the button/icon to delete all filters for a specific filter type"
+    "description": "The tooltip displayed on the button/icon to delete all filters for a specific filter key"
   },
   "ConfirmAllFiltersDeletePrompt": {
     "message": "Are you sure you want to delete all $COUNT$ of your $NAME$ filters?",
-    "description": "The message displayed on the modal when asking for confirmation to delete all filters for a specific filter type",
+    "description": "The message displayed on the modal when asking for confirmation to delete all filters for a specific filter key",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -129,13 +155,29 @@
   },
   "ConfirmAllFiltersDeleteTitle": {
     "message": "Confirm Filter Deletion",
-    "description": "The title displayed on the modal when asking for confirmation to delete all filters for a specific filter type"
+    "description": "The title displayed on the modal when asking for confirmation to delete all filters for a specific filter key"
   },
   "ConfirmAllFiltersDeleteButton_Accept": {
     "message": "Yes"
   },
   "ConfirmAllFiltersDeleteButton_Decline": {
     "message": "No"
+  },
+  "ConfirmMultipleFiltersDeletePrompt": {
+    "message": "Are you sure you want to delete the $COUNT$ selected $NAME$ filter(s)?",
+    "description": "The message displayed on the modal when asking for confirmation to delete multiple filters",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "name": {
+        "content": "$2"
+      }
+    }
+  },
+  "ConfirmMultipleFiltersDeleteTitle": {
+    "message": "Confirm Filter Deletion",
+    "description": "The title displayed on the modal when asking for confirmation to delete multiple filters"
   },
   "ConfirmFilterDeletePrompt": {
     "message": "Are you sure you want to delete the \"$VALUE$\" $NAME$ filter?",
@@ -190,8 +232,8 @@
   "OptionsTitle": {
     "message": "Options"
   },
-  "Options_EnabledFilterTypes_Header": {
-    "message": "Enabled Filter Types"
+  "Options_EnabledFilterKeys_Header": {
+    "message": "Enabled Filters"
   },
   "Options_EnabledPages_Header": {
     "message": "Enabled Pages"
@@ -239,7 +281,7 @@
     "message": "Prevent clicking on thumbnails for filtered deviations"
   },
   "Options_PlaceholderFunctionality_OptionLabel_ShowFilterText": {
-    "message": "Show the filter type/value on filtered deviations"
+    "message": "Show the reason(s) for filtering a deviation on the placeholder"
   },
   "Options_ShowUpdatedPage_Header": {
     "message": "Show Release Notes for Updates"
@@ -306,10 +348,10 @@
   "SidebarLink_Users": {
     "message": "User Filters"
   },
-  "FilterType_Enable_ButtonLabel": {
+  "FilterKey_Enable_ButtonLabel": {
     "message": "Enable"
   },
-  "FilterType_Enabled_SwitchLabel": {
+  "FilterKey_Enabled_SwitchLabel": {
     "message": "Enabled"
   },
   "Warning_FilterName_Disabled": {
@@ -321,9 +363,9 @@
       }
     }
   },
-  "Notification_FilterCreatedForDisabledFilterType": {
+  "Notification_FilterCreatedForDisabledFilterKey": {
     "message": "The filter was created, but $NAME$ filters are currently disabled",
-    "description": "A formatted string that is displayed in a browser notification when a new filter is created for a type of filter that is currently disabled",
+    "description": "A formatted string that is displayed in a browser notification when a new filter is created for disabled filter",
     "placeholders": {
       "name": {
         "content": "$1"
@@ -339,11 +381,23 @@
       }
     }
   },
-  "FilterTitle_Keyword": {
+  "FilterTitle_Keywords_Singular": {
     "message": "Keyword"
   },
-  "FilterTitle_Keywords": {
+  "FilterTitle_Keywords_Plural": {
     "message": "Keywords"
+  },
+  "FilterTitle_Allowed_Keywords_Singular": {
+    "message": "Allowed Keyword"
+  },
+  "FilterTitle_Allowed_Keywords_Plural": {
+    "message": "Allowed Keywords"
+  },
+  "FilterTitle_Blocked_Keywords_Singular": {
+    "message": "Blocked Keyword"
+  },
+  "FilterTitle_Blocked_Keywords_Plural": {
+    "message": "Blocked Keywords"
   },
   "FilteredTitle_Keywords": {
     "message": "Filtered Keywords"
@@ -387,11 +441,23 @@
       }
     }
   },
-  "FilterTitle_User": {
+  "FilterTitle_Users_Singular": {
     "message": "User"
   },
-  "FilterTitle_Users": {
+  "FilterTitle_Users_Plural": {
     "message": "Users"
+  },
+  "FilterTitle_Allowed_Users_Singular": {
+    "message": "Allowed User"
+  },
+  "FilterTitle_Allowed_Users_Plural": {
+    "message": "Allowed Users"
+  },
+  "FilterTitle_Blocked_Users_Singular": {
+    "message": "Blocked User"
+  },
+  "FilterTitle_Blocked_Users_Plural": {
+    "message": "Blocked Users"
   },
   "FilteredTitle_Users": {
     "message": "Filtered Users"
@@ -406,13 +472,13 @@
     "message": "Letters, numbers, and hyphens only"
   },
   "Filter_Users_PropInvalidPatternError_Username": {
-    "message": "Username must start with a letter and only contain letters, numbers, and hyphens"
+    "message": "Username must start contain only letters, numbers, and hyphens"
   },
   "DuplicateFilterWarning": {
     "message": "Filter already exists"
   },
   "UnsupportedFilterError": {
-    "message": "Unsupported filter type"
+    "message": "Unsupported filter"
   },
   "DarkModeSwitchLabel": {
     "message": "Dark Mode",
@@ -435,6 +501,14 @@
   },
   "Placeholder_UntaggedStatusUpdate": {
     "message": "Untagged Status Update"
+  },
+  "Placeholder_NotAllowedUser": {
+    "message": "User is not \\\"allowed\\\"",
+    "description": "Note: double-escaping special characters so they don't break the CSS"
+  },
+  "Placeholder_NotAllowedKeywords": {
+    "message": "No \\\"allowed\\\" keywords",
+    "description": "Note: double-escaping special characters so they don't break the CSS"
   },
   "RequiredFieldLabel": {
     "message": "$FIELD$ is required",
@@ -506,9 +580,12 @@
     "message": "Filter updated successfully"
   },
   "FilterDataGrid_EmptyStateHTML": {
-    "message": "You haven't created any filters yet. View the <a href=\"$USAGE_GUIDE_URL$\" target=\"_blank\" rel=\"noopener noreferrer\">Usage Guide</a> if you need help.",
+    "message": "You haven't created any $TITLE$ filters yet. View the <a href=\"$USAGE_GUIDE_URL$\" target=\"_blank\" rel=\"noopener noreferrer\">Usage Guide</a> if you need help.",
     "description": "A formatted string to display on the filter data grids when no valid filters exist. Should include a hyperlink with the $USAGE_GUIDE_URL$ placeholder for the below URL.",
     "placeholders": {
+      "title": {
+        "content": "$1"
+      },
       "usage_guide_url": {
         "content": "https://rthaut.github.io/deviantART-Filter/usage#creating-and-removing-filters"
       }
@@ -539,7 +616,7 @@
     }
   },
   "FilterDataGrid_MenuLabel_DeleteAll": {
-    "message": "Delete all $NAME$ filters",
+    "message": "Delete ALL $NAME$ filters",
     "description": "A formatted string to display on the menu item to delete all filters",
     "placeholders": {
       "name": {
@@ -548,7 +625,7 @@
     }
   },
   "FilterDataGrid_MenuLabel_ExportAll": {
-    "message": "Export all $NAME$ filters",
+    "message": "Export ALL $NAME$ filters",
     "description": "A formatted string to display on the menu item to export all filters",
     "placeholders": {
       "name": {
@@ -691,6 +768,28 @@
       }
     }
   },
+  "CreateAllowedKeywordFilterFromTag_ContextMenuLabel": {
+    "message": "Always show submissions with this keyword"
+  },
+  "CreateAllowedKeywordFilterForTag_ContextMenuLabel": {
+    "message": "Always show submissions with keyword \"$TAG$\"",
+    "placeholders": {
+      "tag": {
+        "content": "$1"
+      }
+    }
+  },
+  "CreateAllowedUserFilterFromDeviation_ContextMenuLabel": {
+    "message": "Always show submissions from this user"
+  },
+  "CreateAllowedUserFilterForUsername_ContextMenuLabel": {
+    "message": "Always show submissions from \"$USERNAME$\"",
+    "placeholders": {
+      "username": {
+        "content": "$1"
+      }
+    }
+  },
   "Credits_CreatedBy": {
     "message": "created by"
   },
@@ -702,5 +801,35 @@
   },
   "ConfirmDialog_DefaultButtonLabel_Confirm": {
     "message": "Yes"
+  },
+  "FilterOption_OnlyShowAllowed_Users": {
+    "message": "Only show submissions from \"allowed\" users"
+  },
+  "FilterOption_OnlyShowAllowed_Keywords": {
+    "message": "Only show submissions with \"allowed\" keywords"
+  },
+  "FilterOption_HelpText_OnlyShowAllowed_Users": {
+    "message": "Submissions with \"allowed\" keywords will still be shown regardless of this setting."
+  },
+  "FilterOption_HelpText_OnlyShowAllowed_Keywords": {
+    "message": "Submissions from \"allowed\" users will still be shown regardless of this setting.<br/>Note that this will NOT automatically hide untagged submissions; you can use the \"Show Untagged Submissions\" option in combination with this option to achieve that."
+  },
+  "SelectedFilters_ButtonLabel_Delete": {
+    "message": "Delete"
+  },
+  "SelectedFilters_ButtonLabel_Export": {
+    "message": "Export"
+  },
+  "SelectedFilters_ButtonLabel_ClearSelection": {
+    "message": "Clear Selection"
+  },
+  "KeywordFiltersAlert_MetadataMissing_Title": {
+    "message": "Metadata retrieval and injection is not enabled"
+  },
+  "KeywordFiltersAlert_MetadataMissing_Body": {
+    "message": "Keyword filters do not work without metadata; you can still manage your keyword filters here, but they will not be applied to any submissions until metadata is enabled."
+  },
+  "KeywordFiltersAlert_MetadataMissing_EnableButtonLabel": {
+    "message": "Enable metadata"
   }
 }

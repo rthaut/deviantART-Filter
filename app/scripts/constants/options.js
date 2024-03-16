@@ -3,6 +3,13 @@ import { PAGES } from "./url";
 export const OPTIONS_STORAGE_KEY = "options";
 
 export const DEFAULT_OPTIONS = {
+  filterUntaggedSubmissionTypes: [],
+  metadata: {
+    enabled: true,
+    missingMetadataIndicators: true,
+    loadedMetadataIndicators: false,
+  },
+  onlyShowAllowed: [],
   pages: Object.keys(PAGES)
     .map((page) => [page, true])
     .reduce((acc, [page, enabled]) => ((acc[page] = enabled), acc), {}),
@@ -12,12 +19,6 @@ export const DEFAULT_OPTIONS = {
     showFilterText: true,
   },
   showUpdatedPageOnUpdate: "patch",
-  filterUntaggedSubmissionTypes: [],
-  metadata: {
-    enabled: true,
-    missingMetadataIndicators: true,
-    loadedMetadataIndicators: false,
-  },
 };
 
 // TODO: move to another file?

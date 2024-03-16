@@ -3,26 +3,33 @@ import { ValidateAndCreateFilter } from "../filters";
 import { SHOW_FILTER_DEVIATION_MODAL } from "../constants/messages";
 import { SUBMISSION_URL_REGEX, TAG_URL_REGEX } from "../constants/url";
 
+const DEVIATION_TARGET_URL_PATTERNS = [
+  "*://*.deviantart.com/*/art/*",
+  "*://*.deviantart.com/*/journal/*",
+  "*://*.deviantart.com/*/status-update/*",
+];
+
+const TAG_TARGET_URL_PATTERNS = [
+  "*://*.deviantart.com/tag/*",
+  "*://*.deviantart.com/?topic=*",
+];
+
 export const MENUS = [
   {
-    id: "filter-tag",
+    id: "block-tag",
     title: browser.i18n.getMessage(
       "CreateKeywordFilterFromTag_ContextMenuLabel",
     ),
     contexts: ["link"],
-    targetUrlPatterns: ["*://*.deviantart.com/tag/*"],
+    targetUrlPatterns: TAG_TARGET_URL_PATTERNS,
   },
   {
-    id: "filter-user",
+    id: "block-user",
     title: browser.i18n.getMessage(
       "CreateUserFilterFromDeviation_ContextMenuLabel",
     ),
     contexts: ["link"],
-    targetUrlPatterns: [
-      "*://*.deviantart.com/*/art/*",
-      "*://*.deviantart.com/*/journal/*",
-      "*://*.deviantart.com/*/status-update/*",
-    ],
+    targetUrlPatterns: DEVIATION_TARGET_URL_PATTERNS,
   },
   {
     id: "show-filter-modal-deviation",
@@ -30,11 +37,31 @@ export const MENUS = [
       "CreateFiltersFromDeviation_ContextMenuLabel",
     ),
     contexts: ["link"],
+    targetUrlPatterns: DEVIATION_TARGET_URL_PATTERNS,
+  },
+  {
+    type: "separator",
+    contexts: ["link"],
     targetUrlPatterns: [
-      "*://*.deviantart.com/*/art/*",
-      "*://*.deviantart.com/*/journal/*",
-      "*://*.deviantart.com/*/status-update/*",
+      ...DEVIATION_TARGET_URL_PATTERNS,
+      ...TAG_TARGET_URL_PATTERNS,
     ],
+  },
+  {
+    id: "allow-tag",
+    title: browser.i18n.getMessage(
+      "CreateAllowedKeywordFilterFromTag_ContextMenuLabel",
+    ),
+    contexts: ["link"],
+    targetUrlPatterns: TAG_TARGET_URL_PATTERNS,
+  },
+  {
+    id: "allow-user",
+    title: browser.i18n.getMessage(
+      "CreateAllowedUserFilterFromDeviation_ContextMenuLabel",
+    ),
+    contexts: ["link"],
+    targetUrlPatterns: DEVIATION_TARGET_URL_PATTERNS,
   },
 ];
 
@@ -66,21 +93,47 @@ export const InitMenus = async () => {
  */
 export const OnMenuClicked = (info, tab) => {
   switch (info.menuItemId) {
-    case "filter-tag":
+    case "allow-tag":
       if (TAG_URL_REGEX.test(info.linkUrl)) {
         // eslint-disable-next-line no-case-declarations
         const { tag: keyword } = TAG_URL_REGEX.exec(info.linkUrl).groups;
         // TODO: use a new runtime message to apply the filter to the DOM (before validating+storing it)?
-        ValidateAndCreateFilter("keywords", { keyword, wildcard: false });
+        ValidateAndCreateFilter("keywords", {
+          keyword: keyword.replace(/[^a-zA-Z0-9\_]/g, ""),
+          wildcard: false,
+          type: "allowed",
+        });
       }
       break;
 
-    case "filter-user":
+    case "allow-user":
       if (SUBMISSION_URL_REGEX.test(info.linkUrl)) {
         // eslint-disable-next-line no-case-declarations
         const { username } = SUBMISSION_URL_REGEX.exec(info.linkUrl).groups;
         // TODO: use a new runtime message to apply the filter to the DOM (before validating+storing it)?
-        ValidateAndCreateFilter("users", { username });
+        ValidateAndCreateFilter("users", { username, type: "allowed" });
+      }
+      break;
+
+    case "block-tag":
+      if (TAG_URL_REGEX.test(info.linkUrl)) {
+        // eslint-disable-next-line no-case-declarations
+        const { tag: keyword } = TAG_URL_REGEX.exec(info.linkUrl).groups;
+        // TODO: use a new runtime message to apply the filter to the DOM (before validating+storing it)?
+        ValidateAndCreateFilter("keywords", {
+          keyword: keyword.replace(/[^a-zA-Z0-9\_]/g, ""),
+          wildcard: false,
+          type: "blocked",
+        });
+      }
+      break;
+
+    case "block-user":
+      if (SUBMISSION_URL_REGEX.test(info.linkUrl)) {
+        // eslint-disable-next-line no-case-declarations
+        const { username } = SUBMISSION_URL_REGEX.exec(info.linkUrl).groups;
+        // TODO: use a new runtime message to apply the filter to the DOM (before validating+storing it)?
+        ValidateAndCreateFilter("users", { username, type: "blocked" });
       }
       break;
 
@@ -106,20 +159,32 @@ export const OnMenuClicked = (info, tab) => {
 // TODO: match linkUrl RegExps used here to items in MENUS array? or derive the RegExp from the targetUrlPatterns?
 export const OnMenuShown = (info, _tab) => {
   if (TAG_URL_REGEX.test(info.linkUrl)) {
-    // filter-tag menu
+    // block-tag menu
     const { tag: keyword } = TAG_URL_REGEX.exec(info.linkUrl).groups;
-    UpdateMenuItem("filter-tag", {
+    UpdateMenuItem("block-tag", {
       title: browser.i18n.getMessage(
         "CreateKeywordFilterForTag_ContextMenuLabel",
         keyword,
       ),
     });
+    UpdateMenuItem("allow-tag", {
+      title: browser.i18n.getMessage(
+        "CreateAllowedKeywordFilterForTag_ContextMenuLabel",
+        keyword,
+      ),
+    });
   } else if (SUBMISSION_URL_REGEX.test(info.linkUrl)) {
-    // filter-user menu
+    // block-user menu
     const { username } = SUBMISSION_URL_REGEX.exec(info.linkUrl).groups;
-    UpdateMenuItem("filter-user", {
+    UpdateMenuItem("block-user", {
       title: browser.i18n.getMessage(
         "CreateUserFilterForUsername_ContextMenuLabel",
+        username,
+      ),
+    });
+    UpdateMenuItem("allow-user", {
+      title: browser.i18n.getMessage(
+        "CreateAllowedUserFilterForUsername_ContextMenuLabel",
         username,
       ),
     });

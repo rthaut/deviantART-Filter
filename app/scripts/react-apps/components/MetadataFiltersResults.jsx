@@ -15,7 +15,7 @@ const MetadataFiltersResults = ({ results }) => {
         <TableHead>
           <TableRow>
             <TableCell>
-              {browser.i18n.getMessage("ImportResultsColumnHeader_FilterType")}
+              {browser.i18n.getMessage("ImportResultsColumnHeader_FilterKey")}
             </TableCell>
             <TableCell align="center">
               {browser.i18n.getMessage("ImportResultsColumnHeader_NewCount")}
@@ -28,10 +28,10 @@ const MetadataFiltersResults = ({ results }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.entries(results).map(([filterType, result]) => (
-            <TableRow key={filterType}>
+          {Object.entries(results).map(([filterKey, result]) => (
+            <TableRow key={filterKey}>
               <TableCell variant="head">
-                {browser.i18n.getMessage(`FilterTitle_${filterType}`)}
+                {browser.i18n.getMessage(`FilterTitle_${filterKey}_Plural`)}
               </TableCell>
               <TableCell align="center">{result.new}</TableCell>
               <TableCell align="center">{result.duplicate}</TableCell>

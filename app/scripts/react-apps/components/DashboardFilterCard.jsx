@@ -13,8 +13,15 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
+
+import BlockIcon from "@mui/icons-material/Block";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import { useFilterData } from "../hooks/useFilterData";
 
@@ -33,6 +40,11 @@ const DashboardFilterCard = ({ title, link }) => {
     false,
   );
 
+  const allowedFilterCount = validFilters.filter(
+    (filter) => (filter.type ?? "").toLowerCase() === "allowed",
+  ).length;
+  const blockedFilterCount = validFilters.length - allowedFilterCount;
+
   return (
     <Card sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <CardHeader
@@ -49,7 +61,7 @@ const DashboardFilterCard = ({ title, link }) => {
                   onChange={(event, checked) => setEnabled(checked)}
                 />
               }
-              label={browser.i18n.getMessage("FilterType_Enabled_SwitchLabel")}
+              label={browser.i18n.getMessage("FilterKey_Enabled_SwitchLabel")}
               slotProps={{
                 typography: {
                   sx: (theme) => ({
@@ -89,6 +101,32 @@ const DashboardFilterCard = ({ title, link }) => {
               </AlertTitle>
             </Alert>
           )}
+          <List dense>
+            <ListItem disableGutters>
+              <ListItemIcon sx={(theme) => ({ minWidth: theme.spacing(4) })}>
+                <BlockIcon color="error" />
+              </ListItemIcon>
+              <ListItemText
+                primary={browser.i18n.getMessage(
+                  "FilterNameWithCount_Blocked",
+                  [blockedFilterCount, title?.toLocaleLowerCase()],
+                )}
+                primaryTypographyProps={{ variant: "subtitle1" }}
+              />
+            </ListItem>
+            <ListItem disableGutters>
+              <ListItemIcon sx={(theme) => ({ minWidth: theme.spacing(4) })}>
+                <CheckCircleIcon color="success" />
+              </ListItemIcon>
+              <ListItemText
+                primary={browser.i18n.getMessage(
+                  "FilterNameWithCount_Allowed",
+                  [allowedFilterCount, title?.toLocaleLowerCase()],
+                )}
+                primaryTypographyProps={{ variant: "subtitle1" }}
+              />
+            </ListItem>
+          </List>
         </Stack>
       </CardContent>
       <Divider variant="middle" />

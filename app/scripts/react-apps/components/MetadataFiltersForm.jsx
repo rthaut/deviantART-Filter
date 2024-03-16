@@ -15,7 +15,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 
-const MetadataFiltersForm = ({ enabledFilterTypes, metadata, setFilter }) => {
+const MetadataFiltersForm = ({ enabledFilters, metadata, setFilter }) => {
   const [selectedUsername, setSelectedUsername] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -74,7 +74,7 @@ const MetadataFiltersForm = ({ enabledFilterTypes, metadata, setFilter }) => {
       {username && (
         <FormControl component="fieldset">
           <Typography component="legend" sx={{ padding: 0 }}>
-            {browser.i18n.getMessage("FilterTitle_User")}
+            {browser.i18n.getMessage("FilterTitle_Users_Singular")}
           </Typography>
           <Typography
             component="p"
@@ -91,7 +91,7 @@ const MetadataFiltersForm = ({ enabledFilterTypes, metadata, setFilter }) => {
               "CreateFiltersFromDeviation_Username_Help",
             )}
           </Typography>
-          {!enabledFilterTypes.includes("users") && (
+          {!enabledFilters.includes("users") && (
             <Alert
               severity="warning"
               variant="standard"
@@ -100,7 +100,7 @@ const MetadataFiltersForm = ({ enabledFilterTypes, metadata, setFilter }) => {
               }}
             >
               {browser.i18n.getMessage("Warning_FilterName_Disabled", [
-                browser.i18n.getMessage("FilterTitle_User"),
+                browser.i18n.getMessage("FilterTitle_Users_Singular"),
               ])}
             </Alert>
           )}
@@ -128,7 +128,7 @@ const MetadataFiltersForm = ({ enabledFilterTypes, metadata, setFilter }) => {
       {tags && (
         <FormControl component="fieldset">
           <Typography component="legend" sx={{ padding: 0 }}>
-            {browser.i18n.getMessage("FilterTitle_Keywords")}
+            {browser.i18n.getMessage("FilterTitle_Keywords_Plural")}
           </Typography>
           <Typography
             component="p"
@@ -143,7 +143,7 @@ const MetadataFiltersForm = ({ enabledFilterTypes, metadata, setFilter }) => {
             </strong>{" "}
             {browser.i18n.getMessage("CreateFiltersFromDeviation_Tags_Help")}
           </Typography>
-          {!enabledFilterTypes.includes("keywords") && (
+          {!enabledFilters.includes("keywords") && (
             <Alert
               severity="warning"
               variant="standard"
@@ -152,7 +152,7 @@ const MetadataFiltersForm = ({ enabledFilterTypes, metadata, setFilter }) => {
               }}
             >
               {browser.i18n.getMessage("Warning_FilterName_Disabled", [
-                browser.i18n.getMessage("FilterTitle_Keyword"),
+                browser.i18n.getMessage("FilterTitle_Keywords_Singular"),
               ])}
             </Alert>
           )}
@@ -179,7 +179,7 @@ const MetadataFiltersForm = ({ enabledFilterTypes, metadata, setFilter }) => {
 };
 
 MetadataFiltersForm.propTypes = {
-  enabledFilterTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  enabledFilters: PropTypes.arrayOf(PropTypes.string).isRequired,
   metadata: PropTypes.object,
   setFilter: PropTypes.func.isRequired,
 };

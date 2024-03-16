@@ -11,7 +11,11 @@ import AddIcon from "@mui/icons-material/Add";
 
 export const OVERLAY_HEIGHT = "208px";
 
-export default function FilterDataGridNoRowsOverlay({ title, createFilter }) {
+export default function FilterDataGridNoRowsOverlay({
+  buttonTitle,
+  helpTextTitle,
+  createFilter,
+}) {
   return (
     <Stack
       direction="column"
@@ -22,7 +26,9 @@ export default function FilterDataGridNoRowsOverlay({ title, createFilter }) {
     >
       <Typography
         dangerouslySetInnerHTML={{
-          __html: browser.i18n.getMessage("FilterDataGrid_EmptyStateHTML"),
+          __html: browser.i18n.getMessage("FilterDataGrid_EmptyStateHTML", [
+            helpTextTitle.toLocaleLowerCase(),
+          ]),
         }}
         sx={(theme) => ({
           // manually matching the MuiLink component's style for <a> tags in the HTML of the localized message
@@ -43,7 +49,7 @@ export default function FilterDataGridNoRowsOverlay({ title, createFilter }) {
         onClick={() => createFilter()}
       >
         {browser.i18n.getMessage("FilterDataGrid_ButtonLabel_CreateNew", [
-          title.toLowerCase(),
+          buttonTitle.toLowerCase(),
         ])}
       </Button>
     </Stack>
@@ -51,6 +57,7 @@ export default function FilterDataGridNoRowsOverlay({ title, createFilter }) {
 }
 
 FilterDataGridNoRowsOverlay.propTypes = {
-  title: PropTypes.string.isRequired,
+  buttonTitle: PropTypes.string.isRequired,
+  helpTextTitle: PropTypes.string.isRequired,
   createFilter: PropTypes.func.isRequired,
 };

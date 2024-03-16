@@ -1,6 +1,6 @@
 import React from "react";
+
 import { useConfirm } from "material-ui-confirm";
-import { useSnackbar } from "notistack";
 
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -18,89 +18,26 @@ import Select from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 
-import useExtensionStorage from "../hooks/useExtensionStorage";
+import useOptions from "../hooks/useOptions";
 
-import {
-  DEFAULT_OPTIONS,
-  OPTIONS_STORAGE_KEY,
-  SUBMISSION_TYPES,
-} from "../../constants/options";
+import { DEFAULT_OPTIONS, SUBMISSION_TYPES } from "../../constants/options";
 
 const OptionsCard = () => {
   const confirm = useConfirm();
-  const { enqueueSnackbar } = useSnackbar();
 
-  const [options, setOptions] = useExtensionStorage({
-    type: "local",
-    key: OPTIONS_STORAGE_KEY,
-    initialValue: DEFAULT_OPTIONS,
-  });
-
-  const showReloadRequired = () => {
-    enqueueSnackbar(
-      browser.i18n.getMessage("Options_Change_PagesRequireReload"),
-      {
-        variant: "default",
-        preventDuplicate: true,
-        anchorOrigin: {
-          vertical: "top",
-          horizontal: "center",
-        },
-      },
-    );
-  };
-
-  const resetOptions = (_event) => {
-    confirm({
-      title: browser.i18n.getMessage("ConfirmOptionsResetTitle"),
-      description: browser.i18n.getMessage("ConfirmOptionsResetPrompt"),
-      confirmationText: browser.i18n.getMessage(
-        "ConfirmOptionsResetButton_Accept",
-      ),
-      cancellationText: browser.i18n.getMessage(
-        "ConfirmOptionsResetButton_Decline",
-      ),
-    })
-      .then(() => {
-        setOptions(DEFAULT_OPTIONS);
-        showReloadRequired();
-      })
-      .catch(() => {});
-  };
-
-  const setGroupedBoolean = (group, name, value, reloadedRequired = true) => {
-    setOptions({
-      ...options,
-      [group]: {
-        ...options?.[group],
-        [name]: value,
-      },
-    });
-    if (reloadedRequired) {
-      showReloadRequired();
-    }
-  };
-
-  const toggleGroupedBoolean =
-    (group, reloadedRequired = true) =>
-    (event) => {
-      setOptions({
-        ...options,
-        [group]: {
-          ...options?.[group],
-          [event.target.name]: event.target.checked,
-        },
-      });
-      if (reloadedRequired) {
-        showReloadRequired();
-      }
-    };
+  const {
+    options,
+    setOptions,
+    resetOptions,
+    setGroupedBoolean,
+    toggleGroupedBoolean,
+  } = useOptions();
 
   const togglePageEnabled = toggleGroupedBoolean("pages");
   const toggleMetadataOption = toggleGroupedBoolean("metadata", false);
   const togglePlaceholderOption = toggleGroupedBoolean("placeholders", false);
 
-  const handleMetadataToggled = async (event) => {
+  const handleToggleMetadataEnabled = async (event) => {
     const disabling = event.target.checked === false;
     if (disabling) {
       confirm({
@@ -143,8 +80,6 @@ const OptionsCard = () => {
       ...options,
       filterUntaggedSubmissionTypes: value,
     });
-
-    showReloadRequired();
   };
 
   const renderUntaggedSubmissionTypes = (selected) => {
@@ -389,7 +324,7 @@ const OptionsCard = () => {
                       name="enabled"
                       color="primary"
                       checked={options.metadata.enabled}
-                      onChange={handleMetadataToggled}
+                      onChange={handleToggleMetadataEnabled}
                     />
                   }
                 />
@@ -401,33 +336,14 @@ const OptionsCard = () => {
                   .map((key) => (
                     <FormControlLabel
                       key={key}
-                      label={
-                        <>
-                          {browser.i18n.getMessage(
-                            `Options_MetadataFunctionality_OptionLabel_${key}`,
-                          )}
-                          {key === "enabled" && (
-                            <>
-                              <br />
-                              <Typography
-                                component="span"
-                                color="warning.dark"
-                                dangerouslySetInnerHTML={{
-                                  __html: browser.i18n.getMessage(
-                                    "Options_MetadataFunctionality_OptionHelpText_Enabled",
-                                  ),
-                                }}
-                              />
-                            </>
-                          )}
-                        </>
-                      }
+                      label={browser.i18n.getMessage(
+                        `Options_MetadataFunctionality_OptionLabel_${key}`,
+                      )}
                       control={
                         <Switch
                           name={key}
                           color="primary"
                           checked={options?.metadata[key]}
-                          // TODO: if the key is `enabled` we want to require confirmation when disabling
                           onChange={toggleMetadataOption}
                         />
                       }

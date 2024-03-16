@@ -14,7 +14,7 @@ const DashboardView = () => {
       <Grid item xs={12} md={6}>
         <UserFiltersDataProvider>
           <DashboardFilterCard
-            title={browser.i18n.getMessage("FilterTitle_User")}
+            title={browser.i18n.getMessage("FilterTitle_Users_Singular")}
             link="/users"
           />
         </UserFiltersDataProvider>
@@ -22,7 +22,7 @@ const DashboardView = () => {
       <Grid item xs={12} md={6}>
         <KeywordFiltersDataProvider>
           <DashboardFilterCard
-            title={browser.i18n.getMessage("FilterTitle_Keyword")}
+            title={browser.i18n.getMessage("FilterTitle_Keywords_Singular")}
             link="/keywords"
           />
         </KeywordFiltersDataProvider>

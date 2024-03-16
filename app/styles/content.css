@@ -1,29 +1,34 @@
 body.theme-dark,
 body.theme-light,
-body.theme-light.light-green {
+body.theme-light.light-green
+{
   --da-filter-placeholder-z-index: 4;
   --da-filter-font-weight: light;
 }
-body.theme-dark {
+body.theme-dark
+{
   --da-filter-bg-color: #15191e;
   --da-filter-logo-color: #5d5d6c;
   --da-filter-text-color: #5d5d6c;
   --da-filter-border-color: #22272b;
 }
-body.theme-light {
+body.theme-light
+{
   --da-filter-bg-color: #f2f2f2;
   --da-filter-logo-color: #606070;
   --da-filter-text-color: #606070;
   --da-filter-border-color: #d0d0d4;
 }
-body.theme-light.light-green {
+body.theme-light.light-green
+{
   --da-filter-bg-color: #dae5d6;
   --da-filter-logo-color: #869f8d;
   --da-filter-text-color: #869f8d;
   --da-filter-border-color: #92a093;
 }
 
-body#deviantART-v7 {
+body#deviantART-v7
+{
   --da-filter-placeholder-z-index: 7;
   --da-filter-font-weight: bold;
 
@@ -33,31 +38,66 @@ body#deviantART-v7 {
   --da-filter-border-color: transparent;
 }
 
+/* TODO: use `postcss` (and probably `autoprefixer` and `postcss-preset-env`) to write these selectors with nesting; probably best to add it to the webpack config, rather than a new build command, so that webextension-toolbox handles it */
+/*
+  - https://github.com/postcss/postcss?tab=readme-ov-file#webpack
+  - https://preset-env.cssdb.org/
+  - https://github.com/postcss/postcss-loader
+*/
+
 /* === PLACEHOLDERS === */
-body[da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""],
-body[da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""],
-body[da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""],
-[da-filter-keyword],
-[da-filter-user] {
+/* NOTE: the `[da-filter-only-allowed~="keywords"]` selectors ALSO require tags to be present on the target element, since filtering untagged submissions is handled by a separate setting (and thus requires separate/corresponding selectors anyways) */
+
+/* #region - base styles for filtered deviation links */
+body[da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/art/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])[data-tags]:not([data-tags=""]),
+body[da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/journal/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])[data-tags]:not([data-tags=""]),
+body[da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/status-update/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])[data-tags]:not([data-tags=""]),
+body[da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/art/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords]),
+body[da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/journal/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords]),
+body[da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/status-update/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords]),
+body[da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""]:not([da-filter-allowed-user]),
+body[da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""]:not([da-filter-allowed-user]),
+body[da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""]:not([da-filter-allowed-user]),
+[da-filter-keyword]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords]),
+[da-filter-user]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])
+{
   display: inline-block !important;
-  position: relative !important;
+  isolation: unset !important;
+  position: absolute !important;
   visibility: visible !important;
 }
+/* #endregion */
 
-body[da-filter-placeholders~="prevent-click"][da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""],
-body[da-filter-placeholders~="prevent-click"][da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""],
-body[da-filter-placeholders~="prevent-click"][da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""],
-body[da-filter-placeholders~="prevent-click"] [da-filter-keyword],
-body[da-filter-placeholders~="prevent-click"] [da-filter-user] {
+/* #region - prevent clicking on filtered deviation links (per user setting) */
+body[da-filter-placeholders~="prevent-click"][da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/art/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])[data-tags]:not([data-tags=""]),
+body[da-filter-placeholders~="prevent-click"][da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/journal/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])[data-tags]:not([data-tags=""]),
+body[da-filter-placeholders~="prevent-click"][da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/status-update/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])[data-tags]:not([data-tags=""]),
+body[da-filter-placeholders~="prevent-click"][da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/art/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords]),
+body[da-filter-placeholders~="prevent-click"][da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/journal/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords]),
+body[da-filter-placeholders~="prevent-click"][da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/status-update/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords]),
+body[da-filter-placeholders~="prevent-click"][da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""]:not([da-filter-allowed-user]),
+body[da-filter-placeholders~="prevent-click"][da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""]:not([da-filter-allowed-user]),
+body[da-filter-placeholders~="prevent-click"][da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""]:not([da-filter-allowed-user]),
+body[da-filter-placeholders~="prevent-click"] [da-filter-keyword]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords]),
+body[da-filter-placeholders~="prevent-click"] [da-filter-user]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])
+{
   pointer-events: none !important;
 }
+/* #endregion */
 
-body[da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""]::before,
-body[da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""]::before,
-body[da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""]::before,
-[da-filter-keyword]::before,
-[da-filter-user]::before {
-  /* the placeholder text and background, placed overtop the thumbnail */
+/* #region - placeholder text and background, placed overtop the thumbnail */
+body[da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/art/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])[data-tags]:not([data-tags=""])::before,
+body[da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/journal/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])[data-tags]:not([data-tags=""])::before,
+body[da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/status-update/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])[data-tags]:not([data-tags=""])::before,
+body[da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/art/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])::before,
+body[da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/journal/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])::before,
+body[da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/status-update/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])::before,
+body[da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""]:not([da-filter-allowed-user])::before,
+body[da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""]:not([da-filter-allowed-user])::before,
+body[da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""]:not([da-filter-allowed-user])::before,
+[da-filter-keyword]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])::before,
+[da-filter-user]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])::before
+{
   z-index: var(--da-filter-placeholder-z-index);
   position: absolute;
   top: 0;
@@ -77,15 +117,23 @@ body[da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""]::bef
   text-align: center;
   display: flex;
   flex-direction: column-reverse;
-  content: "";
+  content: var(--da-filter-placeholder-content, "");
 }
+/* #endregion */
 
-body[da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""]::after,
-body[da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""]::after,
-body[da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""]::after,
-[da-filter-keyword]::after,
-[da-filter-user]::after {
-  /* the placeholder image ONLY, uses an SVG mask imitate programmatic color */
+/* #region - placeholder image ONLY, uses an SVG mask imitate programmatic color */
+body[da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/art/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])[data-tags]:not([data-tags=""])::after,
+body[da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/journal/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])[data-tags]:not([data-tags=""])::after,
+body[da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/status-update/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])[data-tags]:not([data-tags=""])::after,
+body[da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/art/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])::after,
+body[da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/journal/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])::after,
+body[da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/status-update/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])::after,
+body[da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""]:not([da-filter-allowed-user])::after,
+body[da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""]:not([da-filter-allowed-user])::after,
+body[da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""]:not([da-filter-allowed-user])::after,
+[da-filter-keyword]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])::after,
+[da-filter-user]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])::after
+{
   z-index: var(--da-filter-placeholder-z-index);
   position: absolute;
   top: 0;
@@ -106,6 +154,25 @@ body[da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""]::aft
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: 80% 50%;
 }
+/* #endregion */
+
+/* #region - completely disable placeholders for filtered deviations */
+body[da-filter-placeholders~="disabled"][da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/art/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])[data-tags]:not([data-tags=""]),
+body[da-filter-placeholders~="disabled"][da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/journal/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])[data-tags]:not([data-tags=""]),
+body[da-filter-placeholders~="disabled"][da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/status-update/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])[data-tags]:not([data-tags=""]),
+body[da-filter-placeholders~="disabled"][da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/art/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords]),
+body[da-filter-placeholders~="disabled"][da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/journal/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords]),
+body[da-filter-placeholders~="disabled"][da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/status-update/"]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords]),
+body[da-filter-placeholders~="disabled"][da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords]),
+body[da-filter-placeholders~="disabled"][da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords]),
+body[da-filter-placeholders~="disabled"][da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords]),
+body[da-filter-placeholders~="disabled"] [da-filter-keyword]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords]),
+body[da-filter-placeholders~="disabled"] [da-filter-user]:not([da-filter-allowed-user]):not([da-filter-allowed-keywords])
+{
+  /* TODO: see comments in content.js regarding completely "disabling" placeholders */
+  display: none !important;
+}
+/* #endregion */
 
 /*
 TODO: for small thumbnails (like those in the sidebar) the placeholder text is too long
@@ -114,46 +181,59 @@ TODO: for small thumbnails (like those in the sidebar) the placeholder text is t
       based on the size of the container (which would be the node with the `da-filter-*` attribute)
 */
 
-body[da-filter-placeholders~="show-filter-text"][da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""]::before {
-  content: "__MSG_Placeholder_UntaggedDeviation__";
+body[da-filter-placeholders~="show-filter-text"][da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/art/"]:not([da-filter-allowed-keyword])[data-tags]:not([data-tags=""]),
+body[da-filter-placeholders~="show-filter-text"][da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/journal/"]:not([da-filter-allowed-keyword])[data-tags]:not([data-tags=""]),
+body[da-filter-placeholders~="show-filter-text"][da-filter-enabled~="keywords"][da-filter-only-allowed~="keywords"] [href*="/status-update/"]:not([da-filter-allowed-keyword])[data-tags]:not([data-tags=""])
+{
+  --da-filter-placeholder-content: "__MSG_Placeholder_NotAllowedKeywords__";
 }
 
-body[da-filter-placeholders~="show-filter-text"][da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""]::before {
-  content: "__MSG_Placeholder_UntaggedJournal__";
+body[da-filter-placeholders~="show-filter-text"][da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/art/"]:not([da-filter-allowed-user]),
+body[da-filter-placeholders~="show-filter-text"][da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/journal/"]:not([da-filter-allowed-user]),
+body[da-filter-placeholders~="show-filter-text"][da-filter-enabled~="users"][da-filter-only-allowed~="users"] [href*="/status-update/"]:not([da-filter-allowed-user])
+{
+  --da-filter-placeholder-content: "__MSG_Placeholder_NotAllowedUser__";
 }
 
-body[da-filter-placeholders~="show-filter-text"][da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""]::before {
-  content: "__MSG_Placeholder_UntaggedStatusUpdate__";
+body[da-filter-placeholders~="show-filter-text"][da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""]
+{
+  --da-filter-placeholder-content: "__MSG_Placeholder_UntaggedDeviation__";
 }
 
-body[da-filter-placeholders~="show-filter-text"] [da-filter-keyword]::before {
-  content: "__MSG_Placeholder_Keyword__: " attr(da-filter-keyword);
+body[da-filter-placeholders~="show-filter-text"][da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""]
+{
+  --da-filter-placeholder-content: "__MSG_Placeholder_UntaggedJournal__";
 }
 
-body[da-filter-placeholders~="show-filter-text"] [da-filter-keyword][da-filter-keyword-attribute]::before {
-  content: "__MSG_Placeholder_KeywordIn__ " attr(da-filter-keyword-attribute)
+body[da-filter-placeholders~="show-filter-text"][da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""]
+{
+  --da-filter-placeholder-content: "__MSG_Placeholder_UntaggedStatusUpdate__";
+}
+
+body[da-filter-placeholders~="show-filter-text"] [da-filter-keyword]
+{
+  --da-filter-placeholder-content: "__MSG_Placeholder_Keyword__: " attr(da-filter-keyword);
+}
+
+body[da-filter-placeholders~="show-filter-text"] [da-filter-keyword][da-filter-keyword-attribute]
+{
+  --da-filter-placeholder-content: "__MSG_Placeholder_KeywordIn__ " attr(da-filter-keyword-attribute)
     ": " attr(da-filter-keyword);
 }
 
-body[da-filter-placeholders~="show-filter-text"] [da-filter-user]::before {
-  content: "__MSG_Placeholder_User__: " attr(da-filter-user);
+body[da-filter-placeholders~="show-filter-text"] [da-filter-user]
+{
+  --da-filter-placeholder-content: "__MSG_Placeholder_User__: " attr(da-filter-user);
 }
 
-body[da-filter-placeholders~="show-filter-text"] [da-filter-user][data-username]:not([data-username=""])::before {
+body[da-filter-placeholders~="show-filter-text"] [da-filter-user][data-username]:not([data-username=""])
+{
   /* use the username from metadata instead if it is available, as it will always have correct casing */
-  content: "__MSG_Placeholder_User__: " attr(data-username);
-}
-
-body[da-filter-placeholders~="disabled"][da-filter-untagged~="deviations"] [href*="/art/"][data-tags=""],
-body[da-filter-placeholders~="disabled"][da-filter-untagged~="journals"] [href*="/journal/"][data-tags=""],
-body[da-filter-placeholders~="disabled"][da-filter-untagged~="updates"] [href*="/status-update/"][data-tags=""],
-body[da-filter-placeholders~="disabled"] [da-filter-keyword],
-body[da-filter-placeholders~="disabled"] [da-filter-user] {
-  /* TODO: see comments in content.js regarding completely "disabling" placeholders */
-  display: none !important;
+  --da-filter-placeholder-content: "__MSG_Placeholder_User__: " attr(data-username);
 }
 
 /* === METADATA STATUS/INDICATORS === */
+
 /* TODO: these use `:has()` which only very recently became supported in Firefox */
 /* TODO: literature entries do NOT have images/thumbnails, so these selectors don't work for them... */
 body[da-filter-metadata~="indicate-missing"]
@@ -161,13 +241,15 @@ body[da-filter-metadata~="indicate-missing"]
 body[da-filter-metadata~="indicate-missing"]
   [href*="/journal/"]:not([data-title]):has(img),
 body[da-filter-metadata~="indicate-missing"]
-  [href*="/status-update/"]:not([data-title]):has(img) {
+  [href*="/status-update/"]:not([data-title]):has(img)
+  {
   outline: #e59b00 solid 1px;
 }
 
 body[da-filter-metadata~="indicate-loaded"] [href*="/art/"][data-title]:has(img),
 body[da-filter-metadata~="indicate-loaded"] [href*="/journal/"][data-title]:has(img),
-body[da-filter-metadata~="indicate-loaded"] [href*="/status-update/"][data-title]:has(img) {
+body[da-filter-metadata~="indicate-loaded"] [href*="/status-update/"][data-title]:has(img)
+{
   outline: #00e59b solid 1px;
 }
 

@@ -12,39 +12,48 @@ export const FilterDataProvider = ({ filterKey, idPropName, children }) => {
   const [validFilters, setValidFilters] = React.useState([]);
   const [invalidFilters, setInvalidFilters] = React.useState([]);
 
-  const [enabledFilterTypes, setEnabledFilterTypes] = useExtensionStorage({
+  const [enabledFilters, setEnabledFilters] = useExtensionStorage({
     type: "local",
     key: ENABLED_FILTERS_STORAGE_KEY,
     initialValue: SUPPORTED_FILTERS,
   });
 
-  const enabled = enabledFilterTypes.includes(filterKey);
+  const enabled = React.useMemo(
+    () => enabledFilters.includes(filterKey),
+    [filterKey, enabledFilters],
+  );
 
-  const setEnabled = (enabled) =>
-    setEnabledFilterTypes((enabledFilterTypes) => {
-      const enabledFilterTypesSet = new Set([...enabledFilterTypes]);
+  const setEnabled = React.useCallback(
+    (enabled) =>
+      setEnabledFilters((enabledFilters) => {
+        const enabledFiltersSet = new Set([...enabledFilters]);
 
-      if (enabled) {
-        enabledFilterTypesSet.add(filterKey);
-      } else {
-        enabledFilterTypesSet.delete(filterKey);
-      }
+        if (enabled) {
+          enabledFiltersSet.add(filterKey);
+        } else {
+          enabledFiltersSet.delete(filterKey);
+        }
 
-      return Array.from(enabledFilterTypesSet);
-    });
+        return Array.from(enabledFiltersSet);
+      }),
+    [filterKey, setEnabledFilters],
+  );
 
-  const toggleEnabled = () =>
-    setEnabledFilterTypes((enabledFilterTypes) => {
-      const enabledFilterTypesSet = new Set([...enabledFilterTypes]);
+  const toggleEnabled = React.useCallback(
+    () =>
+      setEnabledFilters((enabledFilters) => {
+        const enabledFiltersSet = new Set([...enabledFilters]);
 
-      if (enabledFilterTypesSet.has(filterKey)) {
-        enabledFilterTypesSet.delete(filterKey);
-      } else {
-        enabledFilterTypesSet.add(filterKey);
-      }
+        if (enabledFiltersSet.has(filterKey)) {
+          enabledFiltersSet.delete(filterKey);
+        } else {
+          enabledFiltersSet.add(filterKey);
+        }
 
-      return Array.from(enabledFilterTypesSet);
-    });
+        return Array.from(enabledFiltersSet);
+      }),
+    [filterKey, setEnabledFilters],
+  );
 
   const purgeInvalidFilters = React.useCallback(() => {
     browser.storage.local.set({
@@ -91,6 +100,46 @@ export const FilterDataProvider = ({ filterKey, idPropName, children }) => {
     setInvalidFilters(invalid);
   };
 
+  const sendFilterMessage = React.useCallback(
+    async (action, value) => {
+      const response = await browser.runtime.sendMessage({
+        action,
+        data: {
+          key: filterKey,
+          value,
+        },
+      });
+      return response;
+    },
+    [filterKey],
+  );
+
+  const exportFiltersToFile = React.useCallback(
+    (filtersToExport) => {
+      const dataObj = new Blob(
+        [JSON.stringify({ [filterKey]: filtersToExport })],
+        {
+          type: "application/json",
+        },
+      );
+      const dataObjURL = URL.createObjectURL(dataObj);
+
+      const date = new Date();
+      const filename =
+        browser.i18n.getMessage("ExtensionName").replace(" ", "_") +
+        "_" +
+        browser.i18n.getMessage(`FilterTitle_${filterKey}_Plural`);
+
+      const link = document.createElement("a");
+      link.href = dataObjURL;
+      link.download = `${filename}-${date.getFullYear()}-${
+        date.getMonth() + 1
+      }-${date.getDate()}.json`;
+      link.dispatchEvent(new MouseEvent("click"));
+    },
+    [filterKey],
+  );
+
   React.useEffect(() => {
     setLoading(true);
     browser.storage.local
@@ -133,6 +182,8 @@ export const FilterDataProvider = ({ filterKey, idPropName, children }) => {
     validFilters,
     invalidFilters,
     purgeInvalidFilters,
+    sendFilterMessage,
+    exportFiltersToFile,
   };
 
   return (

@@ -43,6 +43,11 @@ const columns = [
     type: "string",
     flex: 1,
   },
+  {
+    field: "type",
+    type: "string",
+    valueGetter: ({ value }) => value ?? "blocked",
+  },
 ];
 
 const UsersFilterView = () => {
@@ -52,7 +57,7 @@ const UsersFilterView = () => {
         <UserFiltersDataProvider>
           <FilterDataGrid
             columns={columns}
-            title={browser.i18n.getMessage("FilterTitle_User")}
+            title={browser.i18n.getMessage("FilterTitle_Users_Singular")}
             filterDialogFormFields={FilterDialogFormContent}
           />
         </UserFiltersDataProvider>

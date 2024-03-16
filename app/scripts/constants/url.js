@@ -27,6 +27,6 @@ export const PAGES = {
   },
 };
 
-export const TAG_URL_REGEX = /\/tag\/(?<tag>[^\/]+)\/?/i;
+export const TAG_URL_REGEX = /(?:\/tag\/|\?topic\=)(?<tag>[^\/]+)\/?/i;
 export const SUBMISSION_URL_REGEX =
   /\/(?<username>[^\/]+)\/(?<type>(?:art|journal|status-update))\/(?<id>[^\/]+)\/?/i;

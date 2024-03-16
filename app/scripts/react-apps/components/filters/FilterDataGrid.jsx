@@ -3,17 +3,33 @@ import PropTypes from "prop-types";
 
 import { useConfirm } from "material-ui-confirm";
 
+import { styled } from "@mui/material/styles";
+
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
+import Divider from "@mui/material/Divider";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormHelperText from "@mui/material/FormHelperText";
+import Switch from "@mui/material/Switch";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
 import Tooltip from "@mui/material/Tooltip";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
-import { DataGrid, GridActionsCellItem, gridClasses } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridLogicOperator,
+  gridClasses,
+  useGridApiRef,
+} from "@mui/x-data-grid";
 
 import FilterUpsertDialog from "./FilterUpsertDialog";
 
@@ -26,6 +42,7 @@ import FilterDataGridNoRowsOverlay, {
 
 import InvalidFilterDataWarning from "./InvalidFilterDataWarning";
 
+import useOptions from "../../hooks/useOptions";
 import { useFilterData } from "../../hooks/useFilterData";
 
 import { REMOVE_FILTER, SAVE_FILTER } from "../../../constants/messages";
@@ -40,11 +57,20 @@ const DISABLE_FOCUS_STYLES = {
     },
 };
 
+const FilterDataGridCardContent = styled(CardContent)(({ theme }) => ({
+  "&:last-child": {
+    paddingTop: 0,
+    paddingBottom: theme.spacing(1),
+  },
+}));
+
 export default function FilterDataGrid({
   title,
   columns,
   filterDialogFormFields,
 }) {
+  const apiRef = useGridApiRef();
+
   const confirm = useConfirm();
 
   const [showFilterUpsertDialog, setShowFilterUpsertDialog] = useState(false);
@@ -56,45 +82,63 @@ export default function FilterDataGrid({
     enabled,
     setEnabled,
     loading,
-    validFilters: rows,
-    invalidFilters: invalidRows,
+    validFilters,
+    invalidFilters,
     purgeInvalidFilters,
+    sendFilterMessage,
+    exportFiltersToFile,
   } = useFilterData();
 
-  const sendFilterMessage = async (action, value) => {
-    const response = await browser.runtime.sendMessage({
-      action,
-      data: {
-        key: filterKey,
-        value,
-      },
+  const { options, setOptions } = useOptions();
+  const onlyShowAllowed = (options.onlyShowAllowed ?? []).includes(filterKey);
+  const toggleOnlyShowAllowed = () => {
+    setOptions({
+      ...options,
+      onlyShowAllowed: onlyShowAllowed
+        ? options.onlyShowAllowed.filter((f) => f !== filterKey)
+        : Array.from(new Set([...options.onlyShowAllowed, filterKey])),
     });
-    return response;
+  };
+
+  const [visibleFilterType, setVisibleFilterType] = useState("blocked");
+
+  const [filterModel, setFilterModel] = useState({
+    items: [
+      {
+        id: "type",
+        field: "type",
+        operator: "equals",
+        value: "blocked",
+      },
+    ],
+    logicOperator: GridLogicOperator.And,
+  });
+
+  const handleVisibleFilterTypeTabChange = (event, newValue) => {
+    setVisibleFilterType(newValue);
+    apiRef.current.setFilterModel({
+      items: [
+        {
+          id: "type",
+          field: "type",
+          operator: "equals",
+          value: newValue,
+        },
+      ],
+      logicOperator: GridLogicOperator.And,
+    });
+    apiRef.current.setRowSelectionModel([]);
   };
 
   const onExportClick = () => {
-    const dataObj = new Blob([JSON.stringify({ [filterKey]: rows })], {
-      type: "application/json",
-    });
-    const dataObjURL = URL.createObjectURL(dataObj);
-
-    const date = new Date();
-    const filename =
-      browser.i18n.getMessage("ExtensionName").replace(" ", "_") + "_" + title;
-
-    const link = document.createElement("a");
-    link.href = dataObjURL;
-    link.download = `${filename}-${date.getFullYear()}-${
-      date.getMonth() + 1
-    }-${date.getDate()}.json`;
-    link.dispatchEvent(new MouseEvent("click"));
+    exportFiltersToFile(validFilters);
   };
 
   const onResetClick = () => {
     confirm({
       title: browser.i18n.getMessage("ConfirmAllFiltersDeleteTitle"),
       description: browser.i18n.getMessage("ConfirmAllFiltersDeletePrompt", [
-        rows.length,
+        validFilters.length,
         title.toLowerCase(),
       ]),
       confirmationText: browser.i18n.getMessage(
@@ -182,18 +226,18 @@ export default function FilterDataGrid({
 
   return (
     <>
-      {invalidRows.length > 0 && (
+      {invalidFilters.length > 0 && (
         <InvalidFilterDataWarning
           filterKey={filterKey}
           idPropName={rowIdPropName}
-          invalidFilters={invalidRows}
+          invalidFilters={invalidFilters}
           purgeInvalidFilters={purgeInvalidFilters}
         />
       )}
       <Card>
         <CardHeader
           action={
-            rows.length > 0 && (
+            validFilters.length > 0 && (
               <FilterDataGridMainMenu
                 title={title}
                 onExportClick={onExportClick}
@@ -205,8 +249,8 @@ export default function FilterDataGrid({
             loading
               ? browser.i18n.getMessage("FilterNameLoading", [title])
               : browser.i18n.getMessage(
-                  `FilterNameWithCount_${rows.length === 1 ? "Singular" : "Plural"}`,
-                  [rows.length, title],
+                  `FilterNameWithCount_${validFilters.length === 1 ? "Singular" : "Plural"}`,
+                  [validFilters.length, title],
                 )
           }
           titleTypographyProps={{
@@ -214,7 +258,7 @@ export default function FilterDataGrid({
             variant: "h6",
           }}
         />
-        <CardContent>
+        <FilterDataGridCardContent>
           {!enabled && (
             <Alert
               severity="warning"
@@ -228,42 +272,110 @@ export default function FilterDataGrid({
                   size="small"
                   onClick={() => setEnabled(true)}
                 >
-                  {browser.i18n.getMessage("FilterType_Enable_ButtonLabel")}
+                  {browser.i18n.getMessage("FilterKey_Enable_ButtonLabel")}
                 </Button>
               }
             >
               {browser.i18n.getMessage("Warning_FilterName_Disabled", [title])}
             </Alert>
           )}
-          <DataGrid
-            autoHeight
-            columns={[...columns, actionsColumn]}
-            disableRowSelectionOnClick
-            getRowId={(row) => row[rowIdPropName]}
-            ignoreDiacritics
-            initialState={{
-              pagination: {
-                paginationModel: { pageSize: 25, page: 0 },
-              },
-            }}
-            loading={loading}
-            rows={rows}
-            slots={{
-              columnMenu: FilterDataGridColumnMenu,
-              noRowsOverlay: FilterDataGridNoRowsOverlay,
-              toolbar: rows.length > 0 ? FilterDataGridToolbar : undefined,
-            }}
-            slotProps={{
-              noRowsOverlay: { title, createFilter },
-              toolbar: { title, createFilter },
-            }}
-            sx={{
-              border: 0,
-              "--DataGrid-overlayHeight": OVERLAY_HEIGHT,
-              ...DISABLE_FOCUS_STYLES,
-            }}
-          />
-        </CardContent>
+          <FormControl disabled={loading || !enabled}>
+            <FormControlLabel
+              control={
+                <Switch
+                  color="primary"
+                  checked={onlyShowAllowed}
+                  onChange={toggleOnlyShowAllowed}
+                />
+              }
+              label={browser.i18n.getMessage(
+                `FilterOption_OnlyShowAllowed_${filterKey}`,
+              )}
+            />
+            <FormHelperText
+              dangerouslySetInnerHTML={{
+                __html: browser.i18n.getMessage(
+                  `FilterOption_HelpText_OnlyShowAllowed_${filterKey}`,
+                ),
+              }}
+              sx={(theme) => ({
+                marginInline: 0,
+                marginBlockEnd: theme.spacing(1),
+              })}
+            />
+          </FormControl>
+          <Divider sx={{ mb: 2 }} />
+          <Box sx={{ width: "100%" }}>
+            <Box
+              sx={{ borderBottom: 1, borderColor: "divider", marginBottom: 1 }}
+            >
+              <Tabs
+                value={visibleFilterType}
+                onChange={handleVisibleFilterTypeTabChange}
+              >
+                <Tab
+                  label={browser.i18n.getMessage(
+                    `FilterTitle_Blocked_${filterKey}_Plural`,
+                  )}
+                  value="blocked"
+                />
+                <Tab
+                  label={browser.i18n.getMessage(
+                    `FilterTitle_Allowed_${filterKey}_Plural`,
+                  )}
+                  value="allowed"
+                />
+              </Tabs>
+            </Box>
+            <DataGrid
+              apiRef={apiRef}
+              autoHeight
+              checkboxSelection
+              columns={[...columns, actionsColumn]}
+              columnVisibilityModel={{
+                type: false,
+              }}
+              disableColumnFilter
+              filterModel={filterModel}
+              onFilterModelChange={setFilterModel}
+              getRowId={(row) => row[rowIdPropName]}
+              ignoreDiacritics
+              initialState={{
+                pagination: {
+                  paginationModel: { pageSize: 25, page: 0 },
+                },
+              }}
+              loading={loading}
+              rows={validFilters}
+              slots={{
+                columnMenu: FilterDataGridColumnMenu,
+                noRowsOverlay: FilterDataGridNoRowsOverlay,
+                toolbar:
+                  validFilters.length > 0 ? FilterDataGridToolbar : undefined,
+              }}
+              slotProps={{
+                noRowsOverlay: {
+                  buttonTitle: browser.i18n.getMessage(
+                    `FilterTitle_${visibleFilterType}_${filterKey}_Singular`,
+                  ),
+                  helpTextTitle: title,
+                  createFilter,
+                },
+                toolbar: {
+                  title: browser.i18n.getMessage(
+                    `FilterTitle_${visibleFilterType}_${filterKey}_Singular`,
+                  ),
+                  createFilter,
+                },
+              }}
+              sx={{
+                border: 0,
+                "--DataGrid-overlayHeight": OVERLAY_HEIGHT,
+                ...DISABLE_FOCUS_STYLES,
+              }}
+            />
+          </Box>
+        </FilterDataGridCardContent>
       </Card>
 
       <FilterUpsertDialog
@@ -272,10 +384,15 @@ export default function FilterDataGrid({
           setShowFilterUpsertDialog(false);
         }}
         filterKey={filterKey}
-        title={browser.i18n.getMessage("FilterTitle_Keyword")}
+        title={browser.i18n.getMessage(
+          `FilterTitle_${visibleFilterType}_${filterKey}_Singular`,
+        )}
         oldFilter={filterToEdit}
         onTransitionExited={() => {
           setFilterToEdit(null);
+        }}
+        hiddenFilterProps={{
+          type: visibleFilterType,
         }}
       >
         {filterDialogFormFields({ filter: filterToEdit })}

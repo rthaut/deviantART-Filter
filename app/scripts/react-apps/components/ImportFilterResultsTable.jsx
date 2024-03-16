@@ -48,7 +48,7 @@ const ImportFilterResultsTable = ({ results }) => {
               {browser.i18n.getMessage("ImportResultsColumnHeader_FileName")}
             </TableCell>
             <TableCell>
-              {browser.i18n.getMessage("ImportResultsColumnHeader_FilterType")}
+              {browser.i18n.getMessage("ImportResultsColumnHeader_FilterKey")}
             </TableCell>
             <TableCell align="right">
               {browser.i18n.getMessage("ImportResultsColumnHeader_TotalCount")}
@@ -82,30 +82,32 @@ const ImportFilterResultsTable = ({ results }) => {
                 </TableCell>
               </TableRow>
               {result.results ? (
-                Object.keys(result.results).map((filterType, index) => (
+                Object.keys(result.results).map((filterKey, index) => (
                   <TableRow key={index}>
                     <TableCell variant="head">
-                      {browser.i18n.getMessage(`FilterTitle_${filterType}`)}
+                      {browser.i18n.getMessage(
+                        `FilterTitle_${filterKey}_Plural`,
+                      )}
                     </TableCell>
-                    {result.results[filterType].error ? (
+                    {result.results[filterKey].error ? (
                       <TableCell align="center" colSpan={3}>
                         <Typography color="error">
-                          {result.results[filterType].error}
+                          {result.results[filterKey].error}
                         </Typography>
                       </TableCell>
                     ) : (
                       <>
                         <TableCell align="right">
-                          {result.results[filterType].total}
+                          {result.results[filterKey].total}
                         </TableCell>
                         <TableCell align="right">
-                          {result.results[filterType].new}
+                          {result.results[filterKey].new}
                         </TableCell>
                         <TableCell align="right">
-                          {result.results[filterType].duplicate}
+                          {result.results[filterKey].duplicate}
                         </TableCell>
                         <TableCell align="right">
-                          {result.results[filterType].invalid}
+                          {result.results[filterKey].invalid}
                         </TableCell>
                       </>
                     )}

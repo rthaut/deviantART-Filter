@@ -24,6 +24,7 @@ export default function FilterUpsertDialog({
   title,
   oldFilter,
   filterKey,
+  hiddenFilterProps,
   children,
   ...props
 }) {
@@ -51,9 +52,10 @@ export default function FilterUpsertDialog({
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    const newFilter = Object.fromEntries(
-      new FormData(event.currentTarget).entries(),
-    );
+    const newFilter = {
+      ...Object.fromEntries(new FormData(event.currentTarget).entries()),
+      ...hiddenFilterProps,
+    };
 
     let success = false;
     try {
@@ -100,7 +102,10 @@ export default function FilterUpsertDialog({
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={(event, reason) => {
+        if (reason === "backdropClick") return;
+        handleClose();
+      }}
       fullWidth
       maxWidth="sm"
       PaperProps={{
@@ -146,5 +151,6 @@ FilterUpsertDialog.propTypes = {
   title: PropTypes.string.isRequired,
   oldFilter: PropTypes.object,
   filterKey: PropTypes.string.isRequired,
+  hiddenFilterProps: PropTypes.object,
   children: PropTypes.node.isRequired,
 };

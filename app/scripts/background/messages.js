@@ -11,6 +11,9 @@ export const OnRuntimeMessage = (message, sender) => {
     case MESSAGES.REMOVE_FILTER:
       return FILTERS.RemoveFilter(message.data.key, message.data.value);
 
+    case MESSAGES.REMOVE_FILTERS:
+      return FILTERS.RemoveFilters(message.data.key, message.data.value);
+
     case MESSAGES.UPDATE_FILTER:
       return FILTERS.UpdateFilter(
         message.data.key,

@@ -37,7 +37,7 @@ const CreateFiltersAppMain = () => {
     error: "",
   });
 
-  const [enabledFilterTypes, setEnabledFilterTypes] = useState(
+  const [enabledFilters, setEnabledFilters] = useState(
     Object.keys(initialFilters),
   );
 
@@ -53,7 +53,7 @@ const CreateFiltersAppMain = () => {
   const onRuntimeMessage = (message) => {
     switch (message.action) {
       case SHOW_FILTER_DEVIATION_MODAL:
-        loadEnabledFilterTypes();
+        loadEnabledFilters();
         loadMetadata(message.data.link);
         break;
     }
@@ -78,13 +78,13 @@ const CreateFiltersAppMain = () => {
     });
   };
 
-  const loadEnabledFilterTypes = async () => {
+  const loadEnabledFilters = async () => {
     try {
       const enabledFilters = await GetEnabledFilters();
-      setEnabledFilterTypes(enabledFilters);
+      setEnabledFilters(enabledFilters);
     } catch (error) {
       console.warn(
-        "Failed to determine which filter type are enabled/disabled",
+        "Failed to determine which filters are enabled/disabled",
         error,
       );
     }
@@ -226,7 +226,7 @@ const CreateFiltersAppMain = () => {
           <MetadataFiltersResults results={results} />
         ) : (
           <MetadataFiltersForm
-            enabledFilterTypes={enabledFilterTypes}
+            enabledFilters={enabledFilters}
             metadata={metadata}
             setFilter={setFilter}
           />

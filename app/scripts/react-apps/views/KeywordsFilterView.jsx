@@ -1,6 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -14,6 +17,8 @@ import Tooltip from "@mui/material/Tooltip";
 
 import FilterDataGrid from "../components/filters/FilterDataGrid";
 import KeywordFiltersDataProvider from "../contexts/keywordsFiltersDataProvider";
+
+import useOptions from "../hooks/useOptions";
 
 const FilterDialogFormContent = ({ filter }) => (
   <>
@@ -83,6 +88,8 @@ const columns = [
     type: "boolean",
     flex: 0,
     width: 180,
+    sortable: false, // TODO: should this column be sortable? it could help users find unintended/problematic wildcard filters by raising them to the top of the list...
+    disableColumnMenu: true, // TODO: since this column is not filterable, the menu should be disabled entirely -- assuming we stick with not allowing this column to be sorted either
     valueGetter: ({ value }) => Boolean(value), // NOTE: ensures value isn't null for filtering
     renderCell: ({ row, value }) => (
       <Tooltip
@@ -103,16 +110,59 @@ const columns = [
       </Tooltip>
     ),
   },
+  {
+    field: "type",
+    type: "string",
+    valueGetter: ({ value }) => value ?? "blocked",
+  },
 ];
 
 const KeywordsFilterView = () => {
+  const { options, setGroupedBoolean } = useOptions();
+
   return (
     <Grid container spacing={3}>
+      {options?.metadata?.enabled === false && (
+        <Grid item xs={12}>
+          <Alert
+            icon={false}
+            severity="warning"
+            variant="outlined"
+            sx={{
+              "& .MuiAlert-action": {
+                flexShrink: 0,
+              },
+            }}
+            action={
+              <Button
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setGroupedBoolean("metadata", "enabled", true);
+                }}
+              >
+                {browser.i18n.getMessage(
+                  "KeywordFiltersAlert_MetadataMissing_EnableButtonLabel",
+                )}
+              </Button>
+            }
+          >
+            <AlertTitle>
+              {browser.i18n.getMessage(
+                "KeywordFiltersAlert_MetadataMissing_Title",
+              )}
+            </AlertTitle>
+            {browser.i18n.getMessage(
+              "KeywordFiltersAlert_MetadataMissing_Body",
+            )}
+          </Alert>
+        </Grid>
+      )}
       <Grid item xs={12}>
         <KeywordFiltersDataProvider>
           <FilterDataGrid
             columns={columns}
-            title={browser.i18n.getMessage("FilterTitle_Keyword")}
+            title={browser.i18n.getMessage("FilterTitle_Keywords_Singular")}
             filterDialogFormFields={FilterDialogFormContent}
           />
         </KeywordFiltersDataProvider>

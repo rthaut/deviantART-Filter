@@ -2,7 +2,7 @@ import { OpenOrShowURL } from "./tabs";
 
 import {
   FILTER_NOT_CREATED,
-  FILTER_TYPE_DISABLED,
+  FILTER_KEY_DISABLED,
   TAG_FILTERS_MIGRATED,
 } from "../constants/notifications";
 
@@ -17,12 +17,12 @@ export const OnNotificationClicked = (notificationId) => {
       break;
 
     case `keywords-${FILTER_NOT_CREATED}`:
-    case `keywords-${FILTER_TYPE_DISABLED}`:
+    case `keywords-${FILTER_KEY_DISABLED}`:
       OpenOrShowURL(browser.runtime.getURL("pages/manage.html#/keywords"));
       break;
 
     case `users-${FILTER_NOT_CREATED}`:
-    case `users-${FILTER_TYPE_DISABLED}`:
+    case `users-${FILTER_KEY_DISABLED}`:
       OpenOrShowURL(browser.runtime.getURL("pages/manage.html#/users"));
       break;
   }
