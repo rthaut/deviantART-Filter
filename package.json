@@ -40,7 +40,7 @@
     "@emotion/styled": "11.11.0",
     "@material-table/core": "6.2",
     "@mui/icons-material": "5.15.5",
-    "@mui/lab": "5.0.0-alpha.161",
+    "@mui/lab": "5.0.0-alpha.177",
     "@mui/material": "5.15.5",
     "lodash-es": "4.17.21",
     "material-ui-confirm": "3.0.9",
