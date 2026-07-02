@@ -1,8 +1,9 @@
+import { browser } from "wxt/browser";
 import { AddFilter } from "./filters";
 import { SHOW_FILTER_DEVIATION_MODAL } from "../constants/messages";
 import { TAG_URL_REGEX, USER_URL_REGEX } from "../constants/url";
 
-export const MENUS = [
+export const GetMenus = () => [
   {
     id: "filter-tag",
     title: browser.i18n.getMessage(
@@ -40,8 +41,10 @@ export const MENUS = [
  */
 export const InitMenus = async () => {
   try {
+    const menus = GetMenus();
+
     await browser.contextMenus.removeAll();
-    await Promise.all(MENUS.map((menu) => browser.contextMenus.create(menu)));
+    await Promise.all(menus.map((menu) => browser.contextMenus.create(menu)));
     browser.contextMenus.onClicked.addListener(OnMenuClicked);
   } catch (ex) {
     console.error("Failed to setup context menus", ex);

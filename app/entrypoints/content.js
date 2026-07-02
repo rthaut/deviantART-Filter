@@ -1,20 +1,26 @@
-const SELECTORS = [
-  `a[href*="deviantart.com/"][href*="/art/"]`,
-  `a[href*="deviantart.com/"][href*="/journal/"]`,
-];
+import { browser } from "wxt/browser";
+import { defineContentScript } from "wxt/utils/define-content-script";
+
+import "../styles/content.css";
 
 import {
   LOCAL_STORAGE_CHANGED,
   SHOW_FILTER_DEVIATION_MODAL,
   HIDE_FILTER_DEVIATION_MODAL,
-} from "./constants/messages";
+} from "scripts/constants/messages";
 
-import { PAGES } from "./constants/url";
+import { PAGES } from "scripts/constants/url";
 
-import { SetMetadataOnNode } from "./content/metadata";
+import { SetMetadataOnNode } from "scripts/content/metadata";
 
-import * as KeywordsFilter from "./content/filters/keywords";
-import * as UsersFilter from "./content/filters/users";
+import * as KeywordsFilter from "scripts/content/filters/keywords";
+import * as UsersFilter from "scripts/content/filters/users";
+
+const SELECTORS = [
+  `a[href*="deviantart.com/"][href*="/art/"]`,
+  `a[href*="deviantart.com/"][href*="/journal/"]`,
+];
+
 const FILTERS = [KeywordsFilter, UsersFilter];
 
 let ENABLED = true;
@@ -149,10 +155,7 @@ const InitFilterFrame = () => {
     iframe = document.createElement("iframe");
     iframe.setAttribute("id", id);
     iframe.setAttribute("role", "dialog");
-    iframe.setAttribute(
-      "src",
-      browser.runtime.getURL("pages/create-filters.html"),
-    );
+    iframe.setAttribute("src", browser.runtime.getURL("create-filters.html"));
     Object.assign(iframe.style, {
       display: "none",
       zIndex: 9999,
@@ -229,35 +232,37 @@ const GetPlaceholderOption = async (optionName, defaultValue) => {
   return data?.options?.placeholders?.[optionName] ?? defaultValue;
 };
 
-/**
- * Run once the content script is loaded
- */
-(async () => {
-  // create the filter frame first so it responds to messages
-  InitFilterFrame();
+export default defineContentScript({
+  matches: ["*://*.deviantart.com/*"],
+  allFrames: false,
+  runAt: "document_end",
+  async main() {
+    // create the filter frame first so it responds to messages
+    InitFilterFrame();
 
-  ENABLED = !(await IsPageDisabled(window.location));
+    ENABLED = !(await IsPageDisabled(window.location));
 
-  // setup message handlers as soon as we are ready to receive them
-  if (!browser.runtime.onMessage.hasListener(OnRuntimeMessage)) {
-    browser.runtime.onMessage.addListener(OnRuntimeMessage);
-  }
-
-  if (ENABLED) {
-    document.body.classList.add("enable-metadata-indicators");
-
-    if (!(await GetPlaceholderOption("preventClick", true))) {
-      document.body.classList.add("clickable-placeholders");
+    // setup message handlers as soon as we are ready to receive them
+    if (!browser.runtime.onMessage.hasListener(OnRuntimeMessage)) {
+      browser.runtime.onMessage.addListener(OnRuntimeMessage);
     }
 
-    if (!(await GetPlaceholderOption("showFilterText", true))) {
-      document.body.classList.add("hide-placeholder-text");
+    if (ENABLED) {
+      document.body.classList.add("enable-metadata-indicators");
+
+      if (!(await GetPlaceholderOption("preventClick", true))) {
+        document.body.classList.add("clickable-placeholders");
+      }
+
+      if (!(await GetPlaceholderOption("showFilterText", true))) {
+        document.body.classList.add("hide-placeholder-text");
+      }
+
+      // setup observers for nodes loaded after initial render next
+      WatchForNewNodes(SELECTORS.join(", "));
+
+      // get all existing nodes on the page and work with them
+      await HandleNodes(document.querySelectorAll(SELECTORS.join(", ")));
     }
-
-    // setup observers for nodes loaded after initial render next
-    WatchForNewNodes(SELECTORS.join(", "));
-
-    // get all existing nodes on the page and work with them
-    await HandleNodes(document.querySelectorAll(SELECTORS.join(", ")));
-  }
-})();
+  },
+});

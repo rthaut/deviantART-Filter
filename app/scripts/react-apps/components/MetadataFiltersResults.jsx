@@ -1,3 +1,4 @@
+import { browser } from "wxt/browser";
 import React from "react";
 import PropTypes from "prop-types";
 

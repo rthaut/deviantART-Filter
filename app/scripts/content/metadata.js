@@ -1,3 +1,4 @@
+import { browser } from "wxt/browser";
 import { FETCH_METADATA } from "../constants/messages";
 
 /**

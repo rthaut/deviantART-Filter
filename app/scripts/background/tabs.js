@@ -1,3 +1,4 @@
+import { browser } from "wxt/browser";
 import { REGEX } from "../constants/url";
 
 /**

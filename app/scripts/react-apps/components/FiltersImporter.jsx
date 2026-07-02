@@ -1,3 +1,4 @@
+import { browser } from "wxt/browser";
 import React, { useEffect } from "react";
 import { useList } from "react-use";
 import { useDropzone } from "react-dropzone";

@@ -4,7 +4,7 @@ const svg2png = require("svg2png");
 
 const sizes = [16, 19, 24, 32, 38, 48, 64, 96, 128];
 const inputFile = path.resolve("images/logo/logo-orange.svg");
-const outputDir = path.resolve("app/images/");
+const outputDir = path.resolve("public/images/");
 
 sizes.forEach((size) => {
   const input = fs.readFileSync(inputFile);

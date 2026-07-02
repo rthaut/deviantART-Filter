@@ -1,3 +1,4 @@
+import { browser } from "wxt/browser";
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
