@@ -17,7 +17,7 @@ jobs:
     - uses: actions/setup-node@v6
       with:
         node-version: 'lts/*'
-    - uses: dropseed/nextrelease@v1
+    - uses: dropseed/nextrelease@v2
       with:
         prepare_cmd: |
           sed -i -e "s/v$LAST_VERSION/v$NEXT_VERSION/g" README.md
