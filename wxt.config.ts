@@ -41,6 +41,9 @@ export default defineConfig({
             gecko: {
               id: "{a2ce7c11-e47d-42cf-b6db-ede36265cf6c}",
               strict_min_version: "62.0",
+              data_collection_permissions: {
+                required: ["none"],
+              },
             },
           },
         }

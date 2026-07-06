@@ -43,6 +43,14 @@ const targets = {
           "62.0",
         "Firefox minimum version should be preserved",
       );
+      const requiredDataCollection =
+        manifest.browser_specific_settings?.gecko?.data_collection_permissions
+          ?.required;
+      assert(
+        requiredDataCollection?.length === 1 &&
+          requiredDataCollection[0] === "none",
+        "Firefox data collection classification should be none",
+      );
     },
   },
 };
