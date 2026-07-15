@@ -1,3 +1,4 @@
+import { browser } from "wxt/browser";
 import { differenceBy, find, findIndex, mapKeys, uniqBy } from "lodash-es";
 
 export const SUPPORTED_FILTERS = ["users", "keywords"];

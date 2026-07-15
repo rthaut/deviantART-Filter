@@ -1,3 +1,4 @@
+import { browser } from "wxt/browser";
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
 /* eslint-disable no-async-promise-executor */

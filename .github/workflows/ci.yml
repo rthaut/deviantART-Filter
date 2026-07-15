@@ -27,8 +27,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run lint
-        run: npm run lint
-
-      - name: Run Firefox extension validation
-        run: npm run test:firefox
+      - name: Run validation
+        run: npm test

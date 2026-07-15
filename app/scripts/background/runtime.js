@@ -1,3 +1,4 @@
+import { browser } from "wxt/browser";
 import semverClean from "semver/functions/clean";
 import semverDiff from "semver/functions/diff";
 import semverLT from "semver/functions/lt";

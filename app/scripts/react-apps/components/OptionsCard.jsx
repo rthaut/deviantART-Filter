@@ -1,3 +1,4 @@
+import { browser } from "wxt/browser";
 import React from "react";
 import { useConfirm } from "material-ui-confirm";
 import { useSnackbar } from "notistack";

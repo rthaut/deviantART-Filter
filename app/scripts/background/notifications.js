@@ -1,3 +1,4 @@
+import { browser } from "wxt/browser";
 import { OpenOrShowURL } from "./tabs";
 
 import { TAG_FILTERS_MIGRATED } from "../constants/notifications";
@@ -9,7 +10,7 @@ import { TAG_FILTERS_MIGRATED } from "../constants/notifications";
 export const OnNotificationClicked = (notificationId) => {
   switch (notificationId) {
     case TAG_FILTERS_MIGRATED:
-      OpenOrShowURL(browser.runtime.getURL("pages/manage.html#/keywords"));
+      OpenOrShowURL(browser.runtime.getURL("manage.html#/keywords"));
       break;
   }
 

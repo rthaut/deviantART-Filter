@@ -1,3 +1,4 @@
+import { browser } from "wxt/browser";
 import * as FILTERS from "./filters";
 import * as MESSAGES from "../constants/messages";
 

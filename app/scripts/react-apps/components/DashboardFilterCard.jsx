@@ -1,3 +1,4 @@
+import { browser } from "wxt/browser";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";

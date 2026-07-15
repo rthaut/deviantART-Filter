@@ -1,3 +1,4 @@
+import { browser } from "wxt/browser";
 import React from "react";
 import { Button } from "@mui/material";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";

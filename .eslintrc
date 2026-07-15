@@ -1,5 +1,6 @@
 {
   "env": {
+    "browser": true,
     "es6": true,
     "node": true
   },
@@ -9,7 +10,8 @@
     "plugin:prettier/recommended"
   ],
   "parserOptions": {
-    "ecmaVersion": 2019
+    "ecmaVersion": 2020,
+    "sourceType": "module"
   },
   "root": true,
   "rules": {
