@@ -52,7 +52,7 @@
     "@mui/icons-material": "5.18.0",
     "@mui/lab": "5.0.0-alpha.177",
     "@mui/material": "5.18.0",
-    "lodash-es": "4.17.21",
+    "lodash-es": "4.18.1",
     "material-ui-confirm": "3.0.9",
     "notistack": "2.0.8",
     "react": "17.0.2",
