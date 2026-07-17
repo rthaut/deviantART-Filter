@@ -71,7 +71,13 @@ export default defineConfig({
                 : "49.0",
         }),
   }),
-  vite: () => ({
+  vite: ({ browser }) => ({
+    build: {
+      // Vite ignores browserslist; set the transpilation target explicitly so
+      // built bundles honor each browser's minimum supported version (without
+      // this, `?.`/`??`/`??=` are emitted untranspiled and break Firefox 62)
+      target: browser === "firefox" ? "firefox62" : "chrome88",
+    },
     resolve: {
       alias: {
         scripts: "/app/scripts",
