@@ -23,6 +23,36 @@ export const OpenOrShowURL = async (url) => {
 };
 
 /**
+ * Disables the MV3 action button globally so it starts out hidden/disabled
+ * everywhere, emulating the default state of an MV2 page action; `OnTabUpdate`
+ * re-enables it per-tab on DeviantArt. No-op on browsers with a real page
+ * action (Firefox MV2).
+ */
+export const InitPageActionEmulation = () => {
+  if (browser.pageAction === undefined) {
+    browser.action.disable();
+  }
+};
+
+/**
+ * Shows the page action for a tab (or, on MV3, enables the action button)
+ * @param {number} tabId the ID of the tab
+ */
+const ShowPageAction = (tabId) =>
+  browser.pageAction !== undefined
+    ? browser.pageAction.show(tabId)
+    : browser.action.enable(tabId);
+
+/**
+ * Hides the page action for a tab (or, on MV3, disables the action button)
+ * @param {number} tabId the ID of the tab
+ */
+const HidePageAction = (tabId) =>
+  browser.pageAction !== undefined
+    ? browser.pageAction.hide(tabId)
+    : browser.action.disable(tabId);
+
+/**
  * Event handler for tab updates
  * @param {number} tabId the ID of the tab that was updated
  * @param {object} changeInfo properties about the tab's changes
@@ -30,8 +60,8 @@ export const OpenOrShowURL = async (url) => {
  */
 export const OnTabUpdate = (tabId, changeInfo, tab) => {
   if (REGEX.test(tab.url)) {
-    browser.pageAction.show(tabId);
+    ShowPageAction(tabId);
   } else {
-    browser.pageAction.hide(tabId);
+    HidePageAction(tabId);
   }
 };

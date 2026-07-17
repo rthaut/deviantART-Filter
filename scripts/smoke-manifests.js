@@ -2,8 +2,8 @@ const fs = require("fs");
 const path = require("path");
 
 const root = path.resolve(__dirname, "..");
+const hostPermission = "*://*.deviantart.com/*";
 const requiredPermissions = [
-  "*://*.deviantart.com/*",
   "activeTab",
   "contextMenus",
   "notifications",
@@ -13,25 +13,28 @@ const requiredPermissions = [
 
 const targets = {
   chrome: {
-    directory: "chrome-mv2",
+    directory: "chrome-mv3",
+    manifestVersion: 3,
     extraChecks(manifest) {
       assert(
-        manifest.minimum_chrome_version === "49.0",
-        "Chrome minimum version should be preserved",
+        manifest.minimum_chrome_version === "88.0",
+        "Chrome minimum version should be 88 for MV3",
       );
     },
   },
   edge: {
-    directory: "edge-mv2",
+    directory: "edge-mv3",
+    manifestVersion: 3,
     extraChecks(manifest) {
       assert(
-        manifest.minimum_chrome_version === "79.0",
-        "Edge minimum version should be preserved",
+        manifest.minimum_chrome_version === "88.0",
+        "Edge minimum version should be 88 for MV3",
       );
     },
   },
   firefox: {
     directory: "firefox-mv2",
+    manifestVersion: 2,
     extraChecks(manifest) {
       assert(
         manifest.browser_specific_settings?.gecko?.id ===
@@ -55,17 +58,19 @@ const targets = {
   },
 };
 
-for (const [browser, { directory, extraChecks }] of Object.entries(targets)) {
+for (const [
+  browser,
+  { directory, manifestVersion, extraChecks },
+] of Object.entries(targets)) {
   const outputDir = path.join(root, ".output", directory);
   const manifestPath = path.join(outputDir, "manifest.json");
   const manifest = readJson(manifestPath);
 
-  assert(manifest.manifest_version === 2, `${browser} should remain MV2`);
+  assert(
+    manifest.manifest_version === manifestVersion,
+    `${browser} should be MV${manifestVersion}`,
+  );
   assert(manifest.default_locale === "en", `${browser} locale should exist`);
-  assert(manifest.background?.scripts?.length, `${browser} needs background`);
-  assert(manifest.page_action, `${browser} should use page_action`);
-  assert(!manifest.action, `${browser} should not use MV3 action`);
-  assert(!manifest.browser_action, `${browser} should not use browser_action`);
 
   for (const permission of requiredPermissions) {
     assert(
@@ -74,10 +79,49 @@ for (const [browser, { directory, extraChecks }] of Object.entries(targets)) {
     );
   }
 
+  if (manifestVersion === 3) {
+    assert(
+      manifest.background?.service_worker,
+      `${browser} needs a background service worker`,
+    );
+    assert(manifest.action, `${browser} should use MV3 action`);
+    assert(!manifest.page_action, `${browser} should not use page_action`);
+    assert(
+      !manifest.permissions.includes(hostPermission),
+      `${browser} host match pattern should not be in permissions`,
+    );
+    assert(
+      manifest.host_permissions?.includes(hostPermission),
+      `${browser} missing host permission: ${hostPermission}`,
+    );
+    const warEntries = manifest.web_accessible_resources ?? [];
+    assert(
+      warEntries.some(
+        (entry) =>
+          entry.resources?.includes("create-filters.html") &&
+          entry.matches?.includes(hostPermission),
+      ),
+      `${browser} create-filters page should be web accessible on DeviantArt`,
+    );
+  } else {
+    assert(manifest.background?.scripts?.length, `${browser} needs background`);
+    assert(manifest.page_action, `${browser} should use page_action`);
+    assert(!manifest.action, `${browser} should not use MV3 action`);
+    assert(
+      manifest.permissions.includes(hostPermission),
+      `${browser} missing permission: ${hostPermission}`,
+    );
+    assert(
+      manifest.web_accessible_resources?.includes("create-filters.html"),
+      `${browser} create-filters page should be web accessible`,
+    );
+  }
+  assert(!manifest.browser_action, `${browser} should not use browser_action`);
+
   const contentScript = manifest.content_scripts?.[0];
   assert(contentScript, `${browser} needs a content script`);
   assert(
-    contentScript.matches?.includes("*://*.deviantart.com/*"),
+    contentScript.matches?.includes(hostPermission),
     `${browser} content script should match DeviantArt`,
   );
   assert(
@@ -90,11 +134,6 @@ for (const [browser, { directory, extraChecks }] of Object.entries(targets)) {
   );
   assert(contentScript.js?.length, `${browser} content script JS missing`);
   assert(contentScript.css?.length, `${browser} content script CSS missing`);
-
-  assert(
-    manifest.web_accessible_resources?.includes("create-filters.html"),
-    `${browser} create-filters page should be web accessible`,
-  );
 
   for (const file of [
     "manage.html",
@@ -109,7 +148,7 @@ for (const [browser, { directory, extraChecks }] of Object.entries(targets)) {
   }
 
   extraChecks(manifest);
-  console.log(`Validated ${browser} manifest`);
+  console.log(`Validated ${browser} manifest (MV${manifestVersion})`);
 }
 
 function readJson(file) {
