@@ -15,26 +15,40 @@ const iconPaths = {
 export default defineConfig({
   srcDir: "app",
   modules: ["@wxt-dev/module-react", "@wxt-dev/webextension-polyfill"],
-  manifest: ({ browser }) => ({
+  manifest: ({ browser, manifestVersion }) => ({
     name: "__MSG_ExtensionName__",
     short_name: "__MSG_ExtensionShortName__",
     description: "__MSG_ExtensionDescription__",
     default_locale: "en",
     homepage_url: "https://rthaut.github.io/deviantART-Filter",
     icons: iconPaths,
-    page_action: {
+    // MV3 has no page_action; the action button is emulated as a page action
+    // at runtime (disabled globally, enabled per-tab on deviantart.com)
+    [manifestVersion === 3 ? "action" : "page_action"]: {
       default_icon: iconPaths,
       default_title: "__MSG_BrowserActionTitle__",
     },
     permissions: [
-      "*://*.deviantart.com/*",
       "activeTab",
       "contextMenus",
       "notifications",
       "storage",
       "tabs",
+      // MV3 moves host match patterns into host_permissions
+      ...(manifestVersion === 3 ? [] : ["*://*.deviantart.com/*"]),
     ],
-    web_accessible_resources: ["create-filters.html"],
+    ...(manifestVersion === 3
+      ? { host_permissions: ["*://*.deviantart.com/*"] }
+      : {}),
+    web_accessible_resources:
+      manifestVersion === 3
+        ? [
+            {
+              resources: ["create-filters.html"],
+              matches: ["*://*.deviantart.com/*"],
+            },
+          ]
+        : ["create-filters.html"],
     ...(browser === "firefox"
       ? {
           browser_specific_settings: {
@@ -48,10 +62,22 @@ export default defineConfig({
           },
         }
       : {
-          minimum_chrome_version: browser === "edge" ? "79.0" : "49.0",
+          // MV3 requires Chrome 88+ (Edge 88+ is the matching Chromium)
+          minimum_chrome_version:
+            manifestVersion === 3
+              ? "88.0"
+              : browser === "edge"
+                ? "79.0"
+                : "49.0",
         }),
   }),
-  vite: () => ({
+  vite: ({ browser }) => ({
+    build: {
+      // Vite ignores browserslist; set the transpilation target explicitly so
+      // built bundles honor each browser's minimum supported version (without
+      // this, `?.`/`??`/`??=` are emitted untranspiled and break Firefox 62)
+      target: browser === "firefox" ? "firefox62" : "chrome88",
+    },
     resolve: {
       alias: {
         scripts: "/app/scripts",
