@@ -67,7 +67,7 @@
     "@wxt-dev/module-react": "^1.2.2",
     "@wxt-dev/webextension-polyfill": "^1.0.0",
     "browser-sync": "^3.0.2",
-    "eslint": "^8.57.0",
+    "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-react": "^7.37.5",
