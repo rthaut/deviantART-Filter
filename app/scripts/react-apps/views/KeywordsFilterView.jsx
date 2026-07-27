@@ -1,6 +1,4 @@
 import { browser } from "wxt/browser";
-/* eslint-disable react/display-name */
-/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Grid, Chip } from "@mui/material";
 import { MTableEditField } from "@material-table/core";
