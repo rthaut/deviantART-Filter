@@ -2,7 +2,7 @@ import { browser } from "wxt/browser";
 import React, { useEffect, useState } from "react";
 import {
   HashRouter as Router,
-  Switch as RouterSwitch,
+  Routes,
   Route,
 } from "react-router-dom";
 
@@ -144,17 +144,11 @@ const ManagementAppMain = () => {
       >
         <Offset />
         <Container maxWidth="lg" sx={{ marginTop: 4, marginBottom: 4 }}>
-          <RouterSwitch>
-            <Route path="/users">
-              <UsersFilterView />
-            </Route>
-            <Route path="/keywords">
-              <KeywordsFilterView />
-            </Route>
-            <Route path="/">
-              <DashboardView />
-            </Route>
-          </RouterSwitch>
+          <Routes>
+            <Route path="/users" element={<UsersFilterView />} />
+            <Route path="/keywords" element={<KeywordsFilterView />} />
+            <Route path="/" element={<DashboardView />} />
+          </Routes>
         </Container>
         {info && (
           <Box color="text.secondary">
