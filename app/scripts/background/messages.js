@@ -42,12 +42,18 @@ export const OnRuntimeMessage = (message, sender) => {
     case MESSAGES.EXPORT_FILTERS:
       return FILTERS.GetAllFilters();
 
-    case MESSAGES.FETCH_METADATA:
-      return fetch(
-        new URL(
-          `https://backend.deviantart.com/oembed?url=${message.data.url}`,
-        ),
-      )
+    case MESSAGES.FETCH_METADATA: {
+      const deviationURL = new URL(message.data.url);
+      if (!/(^|\.)deviantart\.com$/.test(deviationURL.hostname)) {
+        return Promise.reject(
+          new Error(`Invalid Deviation URL: ${message.data.url}`),
+        );
+      }
+
+      const oembedURL = new URL("https://backend.deviantart.com/oembed");
+      oembedURL.searchParams.set("url", deviationURL.toString());
+
+      return fetch(oembedURL)
         .then((response) => response.json())
         .catch(() =>
           Promise.reject(
@@ -56,6 +62,7 @@ export const OnRuntimeMessage = (message, sender) => {
             ),
           ),
         );
+    }
 
     case MESSAGES.HIDE_FILTER_DEVIATION_MODAL:
       // send the message right back to the original tab
