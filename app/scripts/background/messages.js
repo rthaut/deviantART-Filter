@@ -1,5 +1,6 @@
 import { browser } from "wxt/browser";
 import * as FILTERS from "./filters";
+import { GetOEmbedURL } from "./oembed";
 import * as MESSAGES from "../constants/messages";
 
 export const OnRuntimeMessage = (message, sender) => {
@@ -43,11 +44,7 @@ export const OnRuntimeMessage = (message, sender) => {
       return FILTERS.GetAllFilters();
 
     case MESSAGES.FETCH_METADATA:
-      return fetch(
-        new URL(
-          `https://backend.deviantart.com/oembed?url=${message.data.url}`,
-        ),
-      )
+      return fetch(GetOEmbedURL(message.data.url))
         .then((response) => response.json())
         .catch(() =>
           Promise.reject(
