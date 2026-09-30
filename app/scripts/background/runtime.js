@@ -49,7 +49,7 @@ const OnUpdated = async (previousVersion) => {
   }
 
   if (showUpdatedPageToUser) {
-    await ShowUpdatedPage(currentVersion, previousVersion);
+    await ShowUpdatedPage(currentVersion);
   }
 };
 
@@ -95,9 +95,10 @@ const ShowInstalledPage = () => {
   });
 };
 
-const ShowUpdatedPage = (currentVersion, previousVersion) => {
+// Release notes are published as GitHub Releases (from CHANGELOG.md)
+const ShowUpdatedPage = (currentVersion) => {
   return browser.tabs.create({
-    url: `https://rthaut.github.io/deviantART-Filter/releases/v${currentVersion}/?from=v${previousVersion}`,
+    url: `https://github.com/rthaut/deviantART-Filter/releases/tag/v${currentVersion}`,
     active: false,
   });
 };
