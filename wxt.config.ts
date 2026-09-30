@@ -15,6 +15,14 @@ const iconPaths = {
 export default defineConfig({
   srcDir: "app",
   modules: ["@wxt-dev/module-react", "@wxt-dev/webextension-polyfill"],
+  zip: {
+    // Fixed names so `npm run zip:*` output does not depend on WXT's defaults
+    artifactTemplate: "{{name}}-{{version}}-{{browser}}.zip",
+    sourcesTemplate: "{{name}}-{{version}}-sources.zip",
+    // Store screenshots, promo art, and videos are not needed to build the
+    // extension, and they make up most of the sources zip for AMO review
+    excludeSources: ["promo/**", "screenshots/**", "videos/**"],
+  },
   manifest: ({ browser, manifestVersion }) => ({
     name: "__MSG_ExtensionName__",
     short_name: "__MSG_ExtensionShortName__",
