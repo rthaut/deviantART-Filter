@@ -6,12 +6,18 @@ on:
     branches: [master]
     tags: ["*"]
 
+permissions:
+  contents: write
+
 jobs:
   sync:
+    # The release commit's tag does not exist yet when this runs, so the
+    # nextrelease workflow syncs that release after it pushes the tag.
+    if: ${{ github.event_name != 'push' || github.ref_type == 'tag' || !startsWith(github.event.head_commit.message, 'Release version ') }}
     runs-on: ubuntu-latest
     steps:
-    - uses: dropseed/changerelease@3b121c9e98fa055f59a32b023cb4fd2325f4d9dc # v1.6.0
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        tag_prefix: v
-        changelog: CHANGELOG.md
+      - uses: dropseed/changerelease@3b121c9e98fa055f59a32b023cb4fd2325f4d9dc # v1.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag_prefix: v
+          changelog: CHANGELOG.md
