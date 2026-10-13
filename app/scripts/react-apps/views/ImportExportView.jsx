@@ -8,7 +8,7 @@ import FiltersImporter from "../components/FiltersImporter";
 const ImportExportView = () => {
   return (
     <Grid container spacing={3}>
-      <Grid item md={12} lg={3}>
+      <Grid size={{ md: 12, lg: 3 }}>
         <Card>
           <CardContent>
             <Typography
@@ -26,7 +26,7 @@ const ImportExportView = () => {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item md={12} lg={9}>
+      <Grid size={{ md: 12, lg: 9 }}>
         <Card>
           <CardContent>
             <Typography

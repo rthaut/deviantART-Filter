@@ -2,6 +2,8 @@ import { browser } from "wxt/browser";
 import React, { useEffect, useState } from "react";
 
 import {
+  Alert,
+  AlertTitle,
   Box,
   Button,
   CircularProgress,
@@ -9,11 +11,9 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Grid,
+  Stack,
   Typography,
 } from "@mui/material";
-
-import { Alert, AlertTitle } from "@mui/lab";
 
 import {
   FETCH_METADATA,
@@ -194,14 +194,9 @@ const CreateFiltersAppMain = () => {
         )}
 
         {working ? (
-          <Grid
-            container
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
             <CircularProgress />
-          </Grid>
+          </Stack>
         ) : results ? (
           <MetadataFiltersResults results={results} />
         ) : (

@@ -151,10 +151,15 @@ const ManagementAppMain = () => {
           </Routes>
         </Container>
         {info && (
-          <Box color="text.secondary">
+          <Box sx={{ color: "text.secondary" }}>
             <Divider />
             <Container sx={{ paddingTop: 2 }}>
-              <Typography paragraph variant="caption" align="right">
+              <Typography
+                component="p"
+                variant="caption"
+                align="right"
+                sx={{ marginBottom: 2 }}
+              >
                 <Link
                   href={info.homepageUrl}
                   target="_blank"

@@ -19,14 +19,13 @@ export const Processing = ({ text, color = "inherit", ...props }) => {
       container
       spacing={2}
       direction="row"
-      justifyContent="center"
-      alignItems="center"
+      sx={{ justifyContent: "center", alignItems: "center" }}
       {...props}
     >
-      <Grid item>
+      <Grid>
         <CircularProgress color={color} size={24} />
       </Grid>
-      <Grid item>
+      <Grid>
         <Typography component="p" variant="subtitle1">
           {text}
         </Typography>
@@ -75,7 +74,8 @@ const ImportFilterResultsTable = ({ results }) => {
                     result.results ? Object.keys(result.results).length + 1 : 2
                   }
                 >
-                  {result.file.path}
+                  {/* react-dropzone prefixes picked and dropped files with "./" */}
+                  {result.file.path.replace(/^\.\//, "")}
                 </TableCell>
               </TableRow>
               {result.results ? (
