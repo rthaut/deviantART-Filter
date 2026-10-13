@@ -17,8 +17,8 @@ const targets = {
     manifestVersion: 3,
     extraChecks(manifest) {
       assert(
-        manifest.minimum_chrome_version === "88.0",
-        "Chrome minimum version should be 88 for MV3",
+        manifest.minimum_chrome_version === "117.0",
+        "Chrome minimum version should be 117",
       );
     },
   },
@@ -27,8 +27,8 @@ const targets = {
     manifestVersion: 3,
     extraChecks(manifest) {
       assert(
-        manifest.minimum_chrome_version === "88.0",
-        "Edge minimum version should be 88 for MV3",
+        manifest.minimum_chrome_version === "121.0",
+        "Edge minimum version should be 121",
       );
     },
   },
@@ -43,7 +43,7 @@ const targets = {
       );
       assert(
         manifest.browser_specific_settings?.gecko?.strict_min_version ===
-          "62.0",
+          "121.0",
         "Firefox minimum version should be preserved",
       );
       const requiredDataCollection =

@@ -62,7 +62,7 @@ export default defineConfig({
           browser_specific_settings: {
             gecko: {
               id: "{a2ce7c11-e47d-42cf-b6db-ede36265cf6c}",
-              strict_min_version: "62.0",
+              strict_min_version: "121.0",
               data_collection_permissions: {
                 required: ["none"],
               },
@@ -70,21 +70,20 @@ export default defineConfig({
           },
         }
       : {
-          // MV3 requires Chrome 88+ (Edge 88+ is the matching Chromium)
-          minimum_chrome_version:
-            manifestVersion === 3
-              ? "88.0"
-              : browser === "edge"
-                ? "79.0"
-                : "49.0",
+          // MUI 9 supports Chrome 117+ and Edge 121+
+          minimum_chrome_version: browser === "edge" ? "121.0" : "117.0",
         }),
   }),
   vite: ({ browser }) => ({
     build: {
       // Vite ignores browserslist; set the transpilation target explicitly so
-      // built bundles honor each browser's minimum supported version (without
-      // this, `?.`/`??`/`??=` are emitted untranspiled and break Firefox 62)
-      target: browser === "firefox" ? "firefox62" : "chrome88",
+      // built bundles honor each browser's minimum supported version
+      target:
+        browser === "firefox"
+          ? "firefox121"
+          : browser === "edge"
+            ? "edge121"
+            : "chrome117",
     },
     resolve: {
       alias: {

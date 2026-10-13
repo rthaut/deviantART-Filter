@@ -45,9 +45,9 @@
     "url": "https://github.com/rthaut/deviantART-Filter/issues"
   },
   "browserslist": [
-    "chrome >= 49.0",
-    "edge >= 79.0",
-    "firefox >= 62.0"
+    "chrome >= 117.0",
+    "edge >= 121.0",
+    "firefox >= 121.0"
   ],
   "dependencies": {
     "@emotion/react": "11.14.0",
