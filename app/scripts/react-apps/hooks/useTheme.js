@@ -15,6 +15,15 @@ export const useTheme = () => {
           primary: deepOrange,
           secondary: grey,
         },
+        components: {
+          // MUI 9 shrank the default to 36px; the sidebar and tag list are
+          // laid out for the old width
+          MuiListItemIcon: {
+            styleOverrides: {
+              root: { minWidth: 56 },
+            },
+          },
+        },
       }),
     [darkMode],
   );

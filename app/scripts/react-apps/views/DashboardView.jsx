@@ -10,21 +10,21 @@ import OptionsCard from "../components/OptionsCard";
 const DashboardView = () => {
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12} md={6}>
+      <Grid size={{ xs: 12, md: 6 }}>
         <DashboardFilterCard
           filterKey="users"
           title={browser.i18n.getMessage("FilterTitle_User")}
           link="/users"
         />
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid size={{ xs: 12, md: 6 }}>
         <DashboardFilterCard
           filterKey="keywords"
           title={browser.i18n.getMessage("FilterTitle_Keyword")}
           link="/keywords"
         />
       </Grid>
-      <Grid item xs={12} md={4} lg={3}>
+      <Grid size={{ xs: 12, md: 4, lg: 3 }}>
         <Card>
           <CardContent>
             <Typography component="h2" variant="h6" gutterBottom>
@@ -42,7 +42,7 @@ const DashboardView = () => {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={12} md={8} lg={9}>
+      <Grid size={{ xs: 12, md: 8, lg: 9 }}>
         <Card>
           <CardContent>
             <Typography component="h2" variant="h6" gutterBottom>
@@ -52,7 +52,7 @@ const DashboardView = () => {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={12} md={8} lg={6}>
+      <Grid size={{ xs: 12, md: 8, lg: 6 }}>
         <OptionsCard />
       </Grid>
     </Grid>
